@@ -5,6 +5,8 @@
 html, body {
     background-color: #e9e9d7;
     color: #353535;
+    font-size: 14px;
+    line-height: 18px;
     margin: 0; padding: 0;
 }
 header, aside, nav, section, article {
@@ -17,35 +19,28 @@ header {
 }
 h1 {
     border-bottom: 1px solid #ddd;
-    font-size: 2.61em;
+    font-size: 34px;
     font-weight: bold;
     margin: 0 0 .75em 0;
     padding: 0 0 3px 0;
 }
 h2 {
     border-bottom: 1px solid #ddd;
-    font-size: 2em; /* 26px */
+    font-size: 26px;
     font-weight: bold;
     margin: 0 0 7px 0;
     padding: 2px 0 3px 0;
 }
 h3 {
     border-bottom: 1px solid #ddd;
-    font-size: 1.615em; /* 21px */
+    font-size: 21px;
     font-weight: bold;
     margin: 0 0 7px 0;
     padding: 2px 0 3px 0;
 }
 h4 {
     border-bottom: 1px solid #ddd;
-    font-size: 1.23em; /* 16px */
-    font-weight: bold;
-    margin: 0 0 7px 0;
-    padding: 2px 0 3px 0;
-}
-h5 {
-    border-bottom: 1px solid #ddd;
-    font-size: 1em;
+    font-size: 16px
     font-weight: bold;
     margin: 0 0 7px 0;
     padding: 2px 0 3px 0;
