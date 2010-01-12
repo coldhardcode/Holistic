@@ -337,3 +337,49 @@ div.pager a:hover {
     color: #3470a9;
     text-decoration: none;
 }
+
+nav {
+    left: 0;
+    margin: 0; padding: 1em 0 1em 1em;
+    position: absolute;
+    text-align: left;
+    top: 80px;
+    width: 140px;
+}
+nav h4 {
+    margin: 0; padding: 0 0 7px 0;
+}
+nav ul {
+/*    margin: 0; padding: 0 0 18px 0;*/
+}
+nav ul li {
+    list-style-type: none;
+}
+header nav ul li {
+    display: inline;
+    font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
+    font-size: 21px;
+    font-weight: bold;
+    padding: 0;
+}
+header nav a {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #e07b16;
+    padding: 7px;
+    text-decoration: none;
+}
+header nav a:hover {
+    border: 2px solid #ffffff;
+    color: #312a24;
+    padding: 5px;
+    text-decoration: none;
+}
+#wrapper {
+    padding: 12px 120px 0 180px;
+}
+#liner {
+    text-align: left;
+/*    padding: 12px 60px 0 120px;*/
+}

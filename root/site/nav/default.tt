@@ -4,4 +4,8 @@
   <p>This is a notice.</p>
  </aside>
  <h3>[% c.loc('Navigation') %]</h3>
+ <ul>
+  <li><a href="#">Nav Link 1</a></li>
+  <li><a href="#">Nav Link 2</a></li>
+ </ul>
 </nav>

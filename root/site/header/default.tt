@@ -1,8 +1,8 @@
 <header>
  <a href="[% c.uri_for('/') %]"><img src="[% static('images/ayalike.png') %]" alt="Holistic"></a>
-</header>
 [% # Include the navigation
 IF page.nav && page.nav != 'none';
     PROCESS "site/nav/${page.nav}.tt";
 END;
 ~%]
+</header>

@@ -65,7 +65,9 @@ END;
  <![endif]-->
     [% # Drop in the header if appropriate
     header %]
-    <div id="doc3" class="[% page.content_class %]">[% content %]</div>
+    <div id="wrapper"><div id="liner">
+    [% content %]
+    </div></div>
     [% footer;
 
     # Add footer scripts
