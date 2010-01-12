@@ -65,9 +65,9 @@ END;
  <![endif]-->
     [% # Drop in the header if appropriate
     header %]
-    <div id="wrapper"><div id="liner">
+    <div id="content">
     [% content %]
-    </div></div>
+    </div>
     [% footer;
 
     # Add footer scripts
