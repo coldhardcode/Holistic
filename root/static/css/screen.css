@@ -1,1 +1,250 @@
-/* screen.css */
+html, body {
+    background: url('images/back.png');
+    color: gray;
+    font-family: verdana;
+    height: 100%;
+}
+a {
+    /* FIXME */
+    color: #0474b5;
+}
+a:visited {
+    /* FIXME */
+    color: #0474b5;
+}
+#doc3, #bd {
+    margin: 0;
+    height: 94%;
+}
+
+.missing {
+    color: red;
+}
+
+.error {
+    color: red;
+}
+
+/* Global Page Elements */
+
+div#bd {
+    min-width: 600px;
+}
+div#hd {
+    background: url('images/header-grad.png');
+    border-bottom: 1px solid white;
+}
+div#ft {
+    color: gray;
+    text-align: center;
+}
+
+div#welcome {
+    background-color: white;
+    border-bottom: 1px solid #656E75;
+    color: gray;
+    font-size: 77%;
+    font-weight: bold;
+    padding-bottom: 3px;
+    padding-right: 10px;
+    text-align: right;
+}
+
+#standard, h1 {
+    color: #656E75;
+    border-bottom: 2px solid #656E75;
+    font-size: 167%;
+    font-weight: bold;
+    padding-bottom: 5px;
+    padding-left: 5px;
+} 
+
+#sidebar {
+    padding-top: 15px;
+    padding-left: 5px;
+}
+
+#content {
+    padding-left: 5px;
+    padding-top: 15px;
+}
+
+.featurebox {
+    background: url('images/right-round.png') top right no-repeat;
+    font-size: 93%;
+    margin-bottom: 10px;
+}
+.featurebox h3 {
+    background: url('images/left-round.png') top left no-repeat;
+    border-bottom: 1px solid gray;
+    color: #fff;
+    font-size: 116%;
+    font-weight: bold;
+    padding: 2px;
+    padding-left: 5px;
+}
+.featurebox p {
+    background-color: #fff;
+    padding: 5px;
+}
+.featurebox form {
+    background-color: #fff;
+}
+.featurebox ul {
+    background-color: #fff;
+    padding: 5px;
+}
+
+#success_msg {
+    background-color: #fff;
+    border: 1px solid #9C9284;
+    color: #669900;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-right: 20px;
+    text-align: center;
+}
+#error_msg {
+    background-color: #fff;
+    border: 1px solid #9C9284;
+    color: red;
+    padding: 5px;
+    margin: 0 20px 5px 20px;
+    text-align: center;
+}
+#warning_msg {
+    background-color: #fff;
+    border: 1px solid #9C9284;
+    color: red;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-right: 20px;
+    text-align: center;
+}
+#context_menu {
+    background-color: #fff;
+    border: 1px solid #9C9284;
+    color: #669900;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+#context_menu ul li {
+    display: inline;
+}
+
+/* Menu */
+
+/* 'Form' Table */
+table.form {
+    background: url('images/right-round.png') top right no-repeat;
+    width: 75%;
+    margin-bottom: 15px;
+}
+table.form thead th {
+    background: url('images/left-round.png') top left no-repeat;
+    color: #fff;
+    font-size: 116%;
+    font-weight: bold;
+    padding-left: 5px;
+    padding-bottom: 2px;
+}
+table.form tbody {
+    background-color: #fff;
+}
+table.form tbody td {
+    padding-top: 5px;
+    vertical-align: top;
+}
+table.form tbody td input {
+    width: 75%;
+}
+table.form tbody td.label {
+    padding-right: 5px;
+    text-align: right;
+    width: 30%;
+}
+table.form label {
+    font-weight: bold;
+    padding: 7px 5px 5px 0;
+    padding-left: 25px;
+    display: block;
+    text-align: right;
+    vertical-align: top;
+}
+table.form input {
+    margin-top: 10px;
+}
+table.form tr.group th {
+    border-bottom: 1px solid #656E75;
+    border-top: 1px dashed #656E75;
+    color: #656E75;
+    font-size: 116%;
+    font-weight: bold;
+    padding-left: 5px;
+    padding-top: 2px;
+    text-align: left;    
+}
+table.form tfoot td {
+    background-color: #fff;
+    text-align: right;
+    padding: 0 12px 5px;
+}
+
+/* Data Table */
+table.data {
+    background: url('images/right-round.png') top right no-repeat;
+    border-collapse: separate;
+    margin-bottom: 15px;
+    width: 95%;
+}
+table.data thead th {
+    background: url('images/left-round.png') top left no-repeat;
+    color: #fff;
+    font-size: 123.1%;
+    font-weight: bold;
+    padding: 2px 0px 2px 5px;
+/*    padding-left: 5px;
+    padding-bottom: 2px;
+*/}
+table.data tbody th {
+    background-color: #ddd;
+    border-bottom: 1px solid #656E75;
+    font-size: 85%;
+    font-weight: bold;
+    padding: 2px 5px 2px 5px;
+}
+table.data tbody td {
+    background-color: #fff;
+    border-left: 1px solid #D9D9D9;
+    padding: 2px 5px 2px 5px;
+    vertical-align: top;
+}
+table.data tbody tr.odd td {
+    background-color: #d8dde5;
+}
+table.data tfoot td {
+    background-color: #fff;
+    border-top: 1px solid #656E75;
+    text-align: right;
+    padding-bottom: 2px;
+    padding-right: 5px;
+}
+table.data tr.warning td {
+    background-color: #FFD4C8;
+}
+table.data tfoot input {
+    margin: 5px 5px 5px 5px;
+}
+
+/* Wrapper Specific Stuff */
+
+/* single-center  */
+div.narrow_center {
+    margin: 0 auto;
+    padding: 50px;
+    text-align: left;
+    width: 425px;
+}
+div.narrow_center table.form {
+    width: 425px;
+}

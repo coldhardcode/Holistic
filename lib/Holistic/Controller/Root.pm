@@ -28,10 +28,12 @@ The root page (/)
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-
-    # Hello World
-    $c->response->body( $c->welcome_message );
 }
+
+sub setup : Chained('.') PathPart('') CaptureArgs(0) { }
+
+sub auth : Chained('.') PathPart('') CaptureArgs(0) { }
+sub xhr  : Chained('.') PathPart('') CaptureArgs(0) { }
 
 =head2 default
 

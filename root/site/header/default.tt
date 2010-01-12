@@ -1,7 +1,6 @@
-<div id="header">
-   <h1>This is your header</h1>
-   <p>Edit root/site/header/default.tt</p>
-</div>
+<header>
+ <h1>Holistic</h1>
+</header>
 [% # Include the navigation
 IF page.nav && page.nav != 'none';
     PROCESS "site/nav/${page.nav}.tt";

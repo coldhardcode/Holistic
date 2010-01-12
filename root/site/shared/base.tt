@@ -25,7 +25,7 @@ IF !page || !ref(page) == 'HASH';
     page = {};
 END;
 DEFAULT page.title  = c.config.name || 'Holistic';
-DEFAULT page.layout = '1column';
+DEFAULT page.layout = 'default';
 DEFAULT page.header = 'default';
 DEFAULT page.nav    = 'default';
 DEFAULT page.footer = 'default';
