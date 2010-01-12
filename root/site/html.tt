@@ -11,12 +11,12 @@ IF page.footer && page.header != 'none';
 END;
 
 ~%]
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html lang="[% page.language %]">
  <head>
+  <meta charset="utf-8">
   <title>[% page.title %]</title>
-   <meta http-equiv="Content-Language" content="[% page.language %]">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Language" content="[% page.language %]">
 [%
 # Add all javascript refs in page.head.scripts (see page.body.scripts)
 page.head.scripts = page.head.scripts.unique;
@@ -36,11 +36,11 @@ FOREACH stylesheet IN page.head.stylesheets;
     stylesheet = stylesheet.match('^(https?://|/)') ?
                     stylesheet :
                     static("css/$stylesheet", 1); -%]
-   <link rel="stylesheet" href="[% stylesheet %]" media="screen">
+   <link rel="stylesheet" href="[% stylesheet %]" type="text/css" media="screen">
 [%
 END;
 %]
-   <link rel="stylesheet" href="[% static( 'css/screen.css', 1 ) %]" media="screen">
+   <link rel="stylesheet" href="[% static( 'css/screen.css', 1 ) %]" type="text/css" media="screen">
  </head>
  <!--[if !IE]> <-->
  <body
@@ -65,7 +65,7 @@ END;
  <![endif]-->
     [% # Drop in the header if appropriate
     header %]
-    <div class="[% page.content_class %]">[% content %]</div>
+    <div id="doc3" class="[% page.content_class %]">[% content %]</div>
     [% footer;
 
     # Add footer scripts

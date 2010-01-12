@@ -47,6 +47,12 @@ sub default :Path {
     $c->response->status(404);
 }
 
+sub guide : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'guide.tt';
+}
+
 =head2 end
 
 Attempt to render a view, if needed.

@@ -1,0 +1,132 @@
+<aside class="gmessage"><p>Foo</p></aside>
+<aside class="rmessage"><p>Foo</p></aside>
+<aside class="omessage"><p>Foo</p></aside>
+<h1>Heading 1</h1>
+<h2>Heading 2</h2>
+<h3>Heading 3</h3>
+<h4>Heading 4</h4>
+<h5>Heading 5</h5>
+<h3>Paragraphs</h3>
+<p>Normal paragraph: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p class="subdued">Subdued paragraph: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p class="error">Error paragraph: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p class="important">Important paragraph: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p class="success">Success paragraph: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p class="caption">Caption paragraph: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p><small>Paragraph + Small: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</small></p>
+<p>This is a <a href="#">link</a>.</p>
+<h3>Lists</h3>
+<p>What follows is an unordered list!</p>
+<ul>
+ <li>List item.</li>
+ <li>List item.</li>
+ <li>List item.</li>
+ <li>List item.</li>
+</ul>
+<p>What follows is an ordered list!</p>
+<ol>
+ <li>List item.</li>
+ <li>List item.</li>
+ <li>List item.</li>
+ <li>List item.</li>
+</ol>
+<dl>
+ <dt>This is a definition term in a list.</dt>
+ <dd>This is a definition definition in a list.</dd>
+ <dt>This is a definition term in a list.</dt>
+ <dd>This is a definition definition in a list.</dd>
+ <dt>This is a definition term in a list.</dt>
+ <dd>This is a definition definition in a list.</dd>
+</dl>
+<div class="pager">
+ <p>Page 1 of 5</p>
+ <div>
+  <span>Previous</span>
+  <span>1</span>
+  <a href="#">2</a>
+  <a href="#">3</a>
+  <a href="#">4</a>
+  <a href="#">5</a>
+  <a href="#">Next</a>
+ </div>
+</div>
+<br>
+<table>
+ <thead>
+  <tr>
+   <th colspan="3">Table Header</th>
+  <tr>
+ </thead>
+ <tfoot>
+   <tr>
+    <td colspan="3">Table Footer</td>
+   </tr>
+ </tfoot>
+ <tbody>
+  <tr class="head">
+   <th>Column Head</th>
+   <th>Column Head</th>
+   <th>Column Head</th>
+  </tr>
+  <tr>
+   <th>Row Head</th>
+   <td>Row 1A</td>
+   <td>Row 1B</td>
+  </tr>
+  <tr class="odd">
+   <th>Row Head</th>
+   <td>Row 2A</td>
+   <td>Row 2B</td>
+  </tr>
+  <tr>
+   <th>Row Head</th>
+   <td>Row 3A</td>
+   <td>Row 3B</td>
+  </tr>
+ </tbody>
+</table>
+<h3>A Form</h3>
+<form>
+ <fieldset>
+  <legend>Legend 1</legend>
+  <div class="expl"><span class="req">*</span> Denotes required field.</div>
+  <label><em>Field1<span class="req">*</span>:</em><input type="text"></label>
+  <label><em>Field Deux:</em><input type="text"></label>
+  <label><em>Select Box:</em>
+   <select>
+    <option>Value 1</option>
+    <option>Value 2</option>
+    <option>Value 4</option>
+   </select>
+  </label>
+  <label><em>Readonly Field:</em> <span>Readonly Value</span></label>
+ </fieldset>
+ <fieldset>
+  <legend>Legend 2</legend>
+  <label>
+   <em>Check Boxes</em>
+   <fieldset class="cwrap">
+    <label><input type="checkbox"> Option 1</label>
+    <label><input type="checkbox"> Option 2</label>
+    <label><input type="checkbox"> Option 3</label>
+   </fieldset>
+  </label>
+  <label>
+   <em>Radio Buttons</em>
+   <fieldset class="cwrap">
+    <label><input type="radio" name="radio"> Option 1</label>
+    <label><input type="radio" name="radio"> Option 2</label>
+    <label><input type="radio" name="radio"> Option 3</label>
+   </fieldset>
+  </label>
+  <label>
+   <em>TextArea</em>
+   <textarea rows="6" cols="20">1234</textarea>
+  </label>
+ </fieldset>
+ <div class="submit">
+   <input type="submit" value="Submit">
+ </div>
+
+</form>
+

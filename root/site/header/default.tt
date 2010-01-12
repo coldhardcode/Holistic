@@ -1,5 +1,5 @@
 <header>
- <h1>Holistic</h1>
+ <a href="[% c.uri_for('/') %]"><img src="[% static('images/ayalike.png') %]" alt="Holistic"></a>
 </header>
 [% # Include the navigation
 IF page.nav && page.nav != 'none';

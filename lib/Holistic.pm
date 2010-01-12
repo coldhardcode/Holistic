@@ -16,6 +16,7 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+    I18N
 /;
 
 extends 'Catalyst';
