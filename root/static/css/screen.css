@@ -116,7 +116,6 @@ table tfoot td {
     padding: 7px;
     text-align: right;
 }
-
 legend {
     font-size: 1.615em;
     font-weight: bold;
@@ -202,6 +201,25 @@ fieldset.cwrap label {
 fieldset.cwrap input {
     padding: 5px;
 }
+nav {
+    background: #3470a9 url('/static/images/b-round-box-right.png') no-repeat right top;
+    left: 0;
+    margin: 0; padding: 1em 0 1em 1em;
+    position: absolute;
+    text-align: left;
+    top: 102px;
+    width: 140px;
+}
+nav h4 {
+    margin: 0; padding: 0 0 7px 0;
+}
+nav ul {
+    margin: 0; padding: 0 0 18px 0;
+}
+nav ul li {
+    list-style-type: none;
+}
+
 div.submit {
     clear: left;
     padding: 0 0 0 16em;
@@ -274,31 +292,48 @@ img.preview {
     border: 2px solid black;
     padding: 5px;
 }
-div.pager {
+nav.pager {
+    background: none;
     background-color: #eee;
     border: 1px solid #ddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    display: block;
     padding: 9px;
+    position: relative;
     text-align: right;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
-div.pager p {
+nav.pager p {
     display: inline;
     float: left;
     font-size: 1.23em;
     font-weight: bold;
+    margin: 0; padding: 0;
 }
-div.pager span,
-div.pager a {
+nav.pager ol {
+    margin: 0; padding: 0;
+}
+nav.pager ol li {
+    display: inline;
+    list-style: none;
+}
+nav.pager span,
+nav.pager a {
     background: #fff;
     border: 1px solid #ddd;
-    color: #919191;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #3470a9;
     padding: 5px;
     margin: 3px 0 ;
     text-decoration: none;
 }
-div.pager a {
-    color: #3470a9;
-}
-div.pager a:hover {
+nav.pager a:hover {
     background-color: #3470a9;
     color: #fff;
 }
@@ -311,26 +346,8 @@ div.pager a:hover {
     text-decoration: none;
 }
 
-nav {
-    background: #3470a9 url('/static/images/b-round-box-right.png') no-repeat right top;
-    left: 0;
-    color: #fff;
-    color: #f3f3f3;
-    margin: 0; padding: 1em 0 1em 1em;
-    position: absolute;
-    text-align: left;
-    top: 102px;
-    width: 140px;
-}
-nav h4 {
-    margin: 0; padding: 0 0 7px 0;
-}
-nav ul {
-    margin: 0; padding: 0 0 18px 0;
-}
-nav ul li {
-    list-style-type: none;
-}
+
+
 header nav ul li {
     display: inline;
     font-family: Helvetica Neue, Arial, Helvetica, sans-serif;

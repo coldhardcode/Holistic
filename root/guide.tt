@@ -39,18 +39,22 @@
  <dt>This is a definition term in a list.</dt>
  <dd>This is a definition definition in a list.</dd>
 </dl>
-<div class="pager">
+<form>
+ <input type="search" placeholder="Search!">
+ <input type="submit" value="Go">
+</form>
+<nav class="pager">
  <p>Page 1 of 5</p>
- <div>
-  <span>Previous</span>
-  <span>1</span>
-  <a href="#">2</a>
-  <a href="#">3</a>
-  <a href="#">4</a>
-  <a href="#">5</a>
-  <a href="#">Next</a>
- </div>
-</div>
+ <ol>
+  <li>Previous</li>
+  <li>1</li>
+  <li><a href="#">2</a></li>
+  <li><a href="#">3</a></li>
+  <li><a href="#">4</a></li>
+  <li><a href="#">5</a></li>
+  <li><a href="#">Next</a></li>
+ </ol>
+</nav>
 <br>
 <table>
  <thead>
@@ -91,8 +95,12 @@
  <fieldset>
   <legend>Legend 1</legend>
   <div class="expl"><span class="req">*</span> Denotes required field.</div>
-  <label><em>Field1<span class="req">*</span>:</em><input type="text"></label>
+  <label><em>Field1<span class="req">*</span>:</em><input type="text" placeholder="HTML5 Placeholder"></label>
   <label><em>Field Deux:</em><input type="text"></label>
+  <label><em>Email:</em><input type="email"></label>
+  <label><em>URL:</em><input type="url"></label>
+  <label><em>Number:</em><input type="number" min="0" max="10" step="1" value="6"></label>
+  <label><em>Slider:</em><input type="range" min="0" max="10" step="1" value="6"></label>
   <label><em>Select Box:</em>
    <select>
     <option>Value 1</option>
