@@ -1,8 +1,11 @@
+<h1>Holistic Style Guide</h1>
+<h2>Global Messaging</h2>
 <section id="global">
  <aside class="gmessage"><p>I'm a positive message.</p></aside>
  <aside class="rmessage"><p>I'm an error message.</p></aside>
  <aside class="omessage"><p>I'm a warning message.</p></aside>
 </section>
+<h2>Headings</h2>
 <h1>Heading 1</h1>
 <h2>Heading 2</h2>
 <h3>Heading 3</h3>
@@ -39,6 +42,7 @@
  <dt>This is a definition term in a list.</dt>
  <dd>This is a definition definition in a list.</dd>
 </dl>
+<h3>High Level Controls</h3>
 <form>
  <input type="search" placeholder="Search!">
  <input type="submit" value="Go">
@@ -56,6 +60,22 @@
  </ol>
 </nav>
 <br>
+<h3>Various and Sundry Bits</h3>
+<section>
+ <h4>A Thing</h4>
+ <details>XX
+  <dt>A Thing's Details</dt>
+  <dl>
+   <dt>Name:</dt><dd>A Thing</dd>
+   <dt>Size:</dt><dd>1234 bytes</dd>
+   <dt>Rank:</dt><dd>Leftenant</dd>
+   <dt>Serial #:</dt><dd>1897712-010182</dd>
+  </dl>
+ </details>
+</section>
+<blockquote>
+ <p>XX This is a block quote.  It's a big ass box full of text that is quoted.  Neat!</p>
+</blockquote>
 <table>
  <thead>
   <tr>
@@ -90,7 +110,7 @@
   </tr>
  </tbody>
 </table>
-<h3>A Form</h3>
+<h3>Forms</h3>
 <form>
  <fieldset>
   <legend>Legend 1</legend>
@@ -103,9 +123,14 @@
   <label><em>Slider:</em><input type="range" min="0" max="10" step="1" value="6"></label>
   <label><em>Select Box:</em>
    <select>
+    <optgroup label="Number Values">
     <option>Value 1</option>
     <option>Value 2</option>
     <option>Value 4</option>
+    <optgroup label="Letter Values">
+    <option>Value A</option>
+    <option>Value B</option>
+    <option>Value D</option>
    </select>
   </label>
   <label><em>Readonly Field:</em> <span>Readonly Value</span></label>
