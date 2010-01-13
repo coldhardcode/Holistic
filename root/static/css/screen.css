@@ -17,33 +17,28 @@ header {
     background: #e5e5d4 url('/static/images/header_back.png');
     height: 90px;
 }
-h1 {
-    border-bottom: 1px solid #ddd;
-    font-size: 34px;
+h1, h2, h3, h4, h5, h6, legend {
     font-weight: bold;
-    margin: 0 0 .75em 0;
-    padding: 0 0 3px 0;
+    padding: 0 0 18px 0;
+}
+h1 {
+    font-size: 34px;
+    line-height: 54px;
 }
 h2 {
-    border-bottom: 1px solid #ddd;
     font-size: 26px;
-    font-weight: bold;
-    margin: 0 0 7px 0;
-    padding: 2px 0 3px 0;
+    line-height: 36px;
 }
 h3 {
-    border-bottom: 1px solid #ddd;
     font-size: 21px;
-    font-weight: bold;
-    margin: 0 0 7px 0;
-    padding: 2px 0 3px 0;
+    line-height: 36px;
 }
 h4 {
-    border-bottom: 1px solid #ddd;
-    font-size: 16px
-    font-weight: bold;
-    margin: 0 0 7px 0;
-    padding: 2px 0 3px 0;
+    font-size: 16px;
+    line-height: 18px;
+}
+h5, h6 {
+    line-height: 18px;
 }
 a {
     color: #3470a9;
@@ -85,6 +80,7 @@ table {
 }
 table thead th {
     background-color: #ab0706;
+    border-color: #fff;
     color: #fff;
     font-size: 2em;
     font-weight: bold;
@@ -112,6 +108,7 @@ table tbody tr.odd td {
 }
 table tfoot td {
     background-color: #ddd;
+    border-color: #fff;
     font-weight: bold;
     padding: 7px;
     text-align: right;
