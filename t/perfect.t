@@ -52,3 +52,44 @@ my $ticket2 = Holistic::Ticket->new(
 
 # Migrate the work unit
 $ticket2->migrate( $subticket2, traits => [ 'Work Escalation' ] );
+
+# Something like a status bot would be cool.  I envision dialog like this:
+# <frank> bot: working ticket #123
+# <bot> ok
+# <joetheboss> what's frank working on?
+# <bot> as of 1 hour, 27 minutes ago, on ticket #123 <link>
+# <joetheboss> who is working on #122?
+# <bot> nobody is working on #122, but bill was 3 hours ago. #122 is 
+#      currently assigned to bill.
+# <frank> &
+# <bot> ok, frank.  pausing work on #123
+#
+# If someone signs off, and a persistent mode is checked, work is automatically
+# paused.  We can have the states list similar to the Brittle effects.
+$subticket2->add_to_states({
+    traits      => [ 'WIP' ],
+    actor       => $frank,
+    start_time  => $now
+});
+
+$subticket2->add_to_states({
+    traits      => [ 'Rest' ],
+    actor       => $frank,
+    start_time  => $now
+});
+
+# We can have auto-triggers, so when a state with the trait of Testing it
+# can automatically reassign
+$subticket2->add_to_states({
+    # In this case, Frank it testing it out.
+    traits      => [ 'WIP', 'Testing' ],
+    actor       => $frank,
+    start_time  => $now
+});
+
+# From a UI perspective, each actor role (tester, worker, developer, etc) should
+# have a flexible UI built up by them or the managers.  Complete with state
+# hot buttons, to automatically add the most common states to the tickets.
+#
+# Of course, the coolest thing would be to just use the bot.
+$goal->make_pretty_reports;
