@@ -44,6 +44,9 @@ requires 'DBIx::Class';
 
 requires 'YAML';
 requires 'YAML::Syck';
+requires 'YAML::XS';
+
+requires 'parent';
 
 test_requires 'Test::More' => '0.88';
 catalyst;
