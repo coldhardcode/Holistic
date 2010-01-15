@@ -175,7 +175,6 @@ fieldset label em {
 fieldset label em.req {
     text-transform: uppercase;
 }
-fieldset input,
 fieldset input[type="url"],
 fieldset input[type="email"],
 fieldset input[type="text"],
