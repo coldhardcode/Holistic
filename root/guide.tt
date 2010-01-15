@@ -114,53 +114,94 @@
 <form>
  <fieldset>
   <legend>Legend 1</legend>
-  <div class="expl"><span class="req">*</span> Denotes required field.</div>
-  <label><em>Field1<span class="req">*</span>:</em><input type="text" placeholder="HTML5 Placeholder"></label>
-  <label><em>Field Deux:</em><input type="text"></label>
-  <label><em>Email:</em><input type="email"></label>
-  <label><em>URL:</em><input type="url"></label>
-  <label><em>Number:</em><input type="number" min="0" max="10" step="1" value="6"></label>
-  <label><em>Slider:</em><input type="range" min="0" max="10" step="1" value="6"></label>
-  <label><em>Select Box:</em>
-   <select>
-    <optgroup label="Number Values">
-    <option>Value 1</option>
-    <option>Value 2</option>
-    <option>Value 4</option>
-    <optgroup label="Letter Values">
-    <option>Value A</option>
-    <option>Value B</option>
-    <option>Value D</option>
-   </select>
-  </label>
-  <label><em>Readonly Field:</em> <span>Readonly Value</span></label>
+  <table>
+   <thead>
+    <tr>
+	 <th><div class="expl"><span class="req">*</span> Denotes required field.</div></th>
+	</tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td><label for="field1">Field1<span class="req">*</span>:</label></td>
+     <td><input id="field1" type="text" placeholder="HTML5 Placeholder"></td>
+    </tr>
+    <tr class="missing">
+	 <td><label for="field2">Field Deux:</label></td>
+	 <td><input id="field2" type="text"></td>
+	</tr>
+    <tr>
+     <td><label for="email">Email:</td>
+	 <td><input id="email" type="email"></label></td>
+	</tr>
+    <tr>
+	 <td><label for="url">URL:</label></td>
+	 <td><input id="url" type="url"></td>
+	</tr>
+    <tr>
+     <td><label>Number:</label></td>
+     <td><input type="number" min="0" max="10" step="1" value="6"></td>
+    </tr>
+    <tr>
+     <td><label for="slider">Slider:</label>
+	 <td><input id="slider" type="range" min="0" max="10" step="1" value="6"></td>
+	</tr>
+    <tr>
+     <td><label for="selector">Select Box:</label></td>
+     <td>
+	  <select>
+       <optgroup label="Number Values">
+       <option>Value 1</option>
+       <option>Value 2</option>
+       <option>Value 4</option>
+       <optgroup label="Letter Values">
+       <option>Value A</option>
+       <option>Value B</option>
+       <option>Value D</option>
+      </select>
+     </td>
+    </tr>
+    <tr>
+     <td><label>Readonly Field:</label></td>
+     <td><span>Readonly Value</span></td>
+    </tr>
+   </tdbody>
+  </table>
  </fieldset>
  <fieldset>
   <legend>Legend 2</legend>
-  <label>
-   <em>Check Boxes</em>
-   <fieldset class="cwrap">
-    <label><input type="checkbox"> Option 1</label>
-    <label><input type="checkbox"> Option 2</label>
-    <label><input type="checkbox"> Option 3</label>
-   </fieldset>
-  </label>
-  <label>
-   <em>Radio Buttons</em>
-   <fieldset class="cwrap">
-    <label><input type="radio" name="radio"> Option 1</label>
-    <label><input type="radio" name="radio"> Option 2</label>
-    <label><input type="radio" name="radio"> Option 3</label>
-   </fieldset>
-  </label>
-  <label>
-   <em>TextArea</em>
-   <textarea rows="6" cols="20">1234</textarea>
-  </label>
+  <table>
+   <tbody>
+	<tr>
+     <td><label>Check Boxes</label></td>
+     <td>
+	  <fieldset class="cwrap">
+       <label><input type="checkbox"> Option 1</label>
+       <label><input type="checkbox"> Option 2</label>
+       <label><input type="checkbox"> Option 3</label>
+      </fieldset>
+     </td>
+    </tr>
+    <tr>
+     <td><label>Radio Buttons</label></td>
+     <td>
+      <fieldset class="cwrap">
+       <label><input type="radio" name="radio"> Option 1</label>
+       <label><input type="radio" name="radio"> Option 2</label>
+       <label><input type="radio" name="radio"> Option 3</label>
+      </fieldset>
+     </td>
+    </tr>
+    <tr>
+     <td><label>TextArea</label></td>
+     <td><textarea rows="6" cols="20">1234</textarea></td>
+    </tr>
+   </tbody>
+   <tfoot>
+	<td colspan="2'">
+     <input type="submit" value="Submit">
+    </td>
+   </tfoot>
+  </table>
  </fieldset>
- <div class="submit">
-   <input type="submit" value="Submit">
- </div>
-
 </form>
 

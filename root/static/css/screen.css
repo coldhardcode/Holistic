@@ -1,7 +1,3 @@
-/*
- * TODO:
- * Pixels for font sizes
- */
 html, body {
     background-color: #e9e9d7;
     color: #353535;
@@ -64,7 +60,7 @@ ol li {
     list-style-position: inside;
 }
 dl {
-    padding: 0 0 13px 0;
+    margin: 0; padding: 0;
 }
 dl dt {
     font-weight: bold;
@@ -130,24 +126,33 @@ fieldset {
 fieldset h2 {
     margin: 0 0 1em 2em;
 }
-fieldset label {
-    display: block;
-    text-align: bottom;
+fieldset table thead th,
+fieldset table tr td {
+	background-color: #eee;
+	border-width: 0;
+	color: #353535;
+	font-size: 14px;
+	vertical-align: center;
 }
-fieldset label.missing {
+fieldset table label {
+	display: block;
+	text-align: right;
+}
+fieldset table tr td {
+	text-align: left;
+}
+fieldset tr.missing label,
+fieldset tr.error label {
 	color: #b31d1c;
+}
+fieldset tr.missing input,
+fieldset tr.error input,
+fieldset tr.missing select,
+fieldset tr.error input {
+	border: 2px solid #b31d1c;
 }
 fieldset label.error {
 	color: #b31d1c;
-}
-fieldset label span {
-    float: left;
-}
-div.expl {
-    left: auto;
-    position: absolute;
-    right: 0.4em;
-    top: 1.5em;
 }
 span.req {
     color: #b31d1c;
@@ -200,6 +205,7 @@ fieldset.cwrap input {
 }
 nav {
     background: #3470a9 url('/static/images/b-round-box-right.png') no-repeat right top;
+	color: #fff;
     left: 0;
     margin: 0; padding: 1em 0 1em 1em;
     position: absolute;
@@ -207,8 +213,9 @@ nav {
     top: 102px;
     width: 140px;
 }
-nav h4 {
+nav h3 {
     margin: 0; padding: 0 0 7px 0;
+	text-shadow: #000 2px 2px 0px;
 }
 nav ul {
     margin: 0; padding: 0 0 18px 0;
@@ -271,20 +278,6 @@ p.subdued {
 	background-color: #de691f;
 	background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
 }
-
-div.rounded h3 {
-    padding: 0 0 7px 0;
-}
-#focus {
-    background: #fff url('/static/images/w-round-box-left.png') no-repeat left top;
-    color: #353535;
-    padding: 5px 0 1em 1em;
-    margin: 0 0 1em 0;
-}
-img.preview {
-    border: 2px solid black;
-    padding: 5px;
-}
 nav.pager {
     background: none;
     background-color: #eee;
@@ -330,17 +323,6 @@ nav.pager a:hover {
     background-color: #3470a9;
     color: #fff;
 }
-#sitemap {
-    background-color: #fff;
-    padding: 5px;
-}
-#sitemap a {
-    color: #3470a9;
-    text-decoration: none;
-}
-
-
-
 header nav ul li {
     display: inline;
     font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
