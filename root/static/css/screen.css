@@ -155,6 +155,9 @@ fieldset tr.error input {
 fieldset label.error {
 	color: #b31d1c;
 }
+fieldset label input {
+	margin: 0 .5em 0 0;
+}
 span.req {
     color: #b31d1c;
     float: none;

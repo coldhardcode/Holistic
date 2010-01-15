@@ -185,7 +185,7 @@
      <td><label>Radio Buttons</label></td>
      <td>
       <fieldset class="cwrap">
-       <label><input type="radio" name="radio"> Option 1</label>
+       <label><input type="radio" name="radio"> <span class="fuck">Option 1</span></label>
        <label><input type="radio" name="radio"> Option 2</label>
        <label><input type="radio" name="radio"> Option 3</label>
       </fieldset>
