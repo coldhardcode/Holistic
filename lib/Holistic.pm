@@ -13,10 +13,15 @@ use Catalyst::Runtime 5.80;
 #                 directory
 
 use Catalyst qw/
-    -Debug
     ConfigLoader
+
+    I18N Unicode
     Static::Simple
-    I18N
+
+    Authentication
+    Session Session::Store::FastMmap Session::State::Cookie
+   
+    +Holistic::Plugin::Message 
 /;
 
 extends 'Catalyst';
@@ -37,6 +42,62 @@ __PACKAGE__->config(
     name => 'Holistic',
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
+    default_view => 'TT',
+
+    authentication => {
+        default_realm => 'progressive',
+        realms => {
+            progressive => {
+                class => 'Progressive',
+                realms => [ 'temp', 'local', 'rpx' ],
+                authinfo_munge => {
+                    'local'     => { 'realm' => 'local' },
+                    'temp'      => { 'realm' => 'temp' },
+                    'rpx'       => { 'realm' => 'rpx' },
+                }
+            },
+            rpx => {
+                credential => {
+                    class           => 'Password',
+                    password_field  => 'secret',
+                    password_type   => 'hashed',
+                    password_hash_type => 'SHA-1',
+                },
+                store => {
+                    class       => 'DBIx::Class',
+                    user_class  => 'Schema::Person::Identity',
+                    id_field    => 'id',
+                }
+            }, 
+            local => {
+                credential => {
+                    class           => 'Password',
+                    password_field  => 'secret',
+                    password_type   => 'hashed',
+                    password_hash_type => 'SHA-1',
+                },
+                store => {
+                    class       => 'DBIx::Class',
+                    user_class  => 'Schema::Person::Identity',
+                    id_field    => 'id',
+                }
+            },
+
+            temp => {
+                credential => {
+                    class => 'Password',
+                    password_field => 'secret',
+                    password_type  => 'hashed',
+                    password_hash_type => 'SHA-1',
+                },
+                store => {
+                    class    => 'DBIx::Class',
+                    user_class => 'Schema::Person::Identity',
+                    id_field   => 'id',
+                }
+            },
+        }
+    },
 );
 
 # Start the application

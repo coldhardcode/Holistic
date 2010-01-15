@@ -1,2 +1,19 @@
 ---
 name: Holistic
+
+Model::Schema:
+    connect_info: &1
+        - dbi:SQLite:__path_to(t/var/test.db)__
+        - "" 
+        - ""
+# Shortcut to the connect_info, for easier parsing into CLI apps
+connect_info: *1
+
+formats:
+    date:
+        date: '%D'
+        short: '%b %e, %G'
+        long: '%b %d, %Y at %l:%M %p'
+        comment: '%c'
+
+
