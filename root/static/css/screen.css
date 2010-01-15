@@ -179,6 +179,8 @@ fieldset input[type="password"],
 fieldset input[type="url"],
 fieldset input[type="email"],
 fieldset input[type="text"],
+fieldset input[type="number"],
+fieldset input[type="range"],
 fieldset select,
 fieldset textarea {
     margin: 0 0 1em 0;
