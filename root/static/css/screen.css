@@ -247,33 +247,29 @@ p.subdued {
     padding: 12px 120px 0 180px;
 }
 #global aside {
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
     color: #fff;
     display: block;
     margin: 0 0 1em 0; padding: 0 0 0 0;
     overflow: hidden;
-    width: 50%;
 }
 #global aside p {
     margin: 0; padding: .25em .5em;
     font-size: 1.23em;
 }
 #global aside.gmessage {
-    background: #339900 url('/static/images/g-round-box-right.png') no-repeat right top;
-}
-#global aside.gmessage p {
-    background: url('/static/images/g-round-box-left.png') no-repeat left top;
+	background-color: #55aa2a;
+	background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
 }
 #global aside.rmessage {
-    background: #b82c2b url('/static/images/round-box-right.png') no-repeat right top;
-}
-#global aside.rmessage p {
-    background: url('/static/images/round-box-left.png') no-repeat left top;
+	background-color: #b31f1e;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ba3433), to(#b31f1e));
 }
 #global aside.omessage {
-    background: #b82c2b url('/static/images/o-round-box-right.png') no-repeat right top;
-}
-#global aside.omessage p {
-    background: url('/static/images/o-round-box-left.png') no-repeat left top;
+	background-color: #de691f;
+	background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
 }
 
 div.rounded h3 {
