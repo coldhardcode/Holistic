@@ -175,11 +175,17 @@ fieldset label em {
 fieldset label em.req {
     text-transform: uppercase;
 }
-fieldset input,
+fieldset input[type="password"],
+fieldset input[type="url"],
+fieldset input[type="email"],
+fieldset input[type="text"],
 fieldset select,
 fieldset textarea {
-    float: left;
     margin: 0 0 1em 0;
+	width: 12.25em;
+}
+fieldset textarea {
+	width: 25em;
 }
 fieldset dl {
     clear: both;
