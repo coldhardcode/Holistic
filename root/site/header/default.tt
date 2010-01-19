@@ -1,5 +1,5 @@
 <header>
- <a href="[% c.uri_for('/') %]"><img src="[% static('images/ayalike.png') %]" alt="Holistic"></a>
+ <a href="[% c.uri_for('/') %]"><img src="[% static('images/logo.png') %]" alt="Holistic"></a>
 [% # Include the navigation
 IF page.nav && page.nav != 'none';
     PROCESS "site/nav/${page.nav}.tt";
