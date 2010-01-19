@@ -207,7 +207,14 @@ fieldset tfoot input {
 	margin: 0 0 0 7em;
 }
 nav {
-    background: #3470a9 url('/static/images/b-round-box-right.png') no-repeat right top;
+	background-color: #3470a9;
+	background: -webkit-gradient(linear, left top, left bottom, from(#598ab9), to(#3470a9));
+    -webkit-border-top-right-radius: 7px;
+    -webkit-border-bottom-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    -moz-border-radius-bottomright: 7px;
+    border-top-right-radius: 0 0 0 7px;
+    border-bottom-right-radius: 0 0 0 7px;
 	color: #fff;
     left: 0;
     margin: 0; padding: 1em 0 1em 1em;
@@ -218,7 +225,7 @@ nav {
 }
 nav h3 {
     margin: 0; padding: 0 0 7px 0;
-	text-shadow: #000 2px 2px 0px;
+  text-shadow: #31465b 2px 2px 2px;
 }
 nav ul {
     margin: 0; padding: 0 0 18px 0;
@@ -226,12 +233,17 @@ nav ul {
 nav ul li {
     list-style-type: none;
 }
-
-div.submit {
-    clear: left;
-    padding: 0 0 0 16em;
+header nav ul li {
+    display: block;
+    font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
+    padding: 0;
 }
-
+header nav a {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    color: #eee;
+    padding: 7px;
+}
 p.caption {
     color: #919191;
     font-size: 0.769em;
@@ -325,25 +337,4 @@ nav.pager a {
 nav.pager a:hover {
     background-color: #3470a9;
     color: #fff;
-}
-header nav ul li {
-    display: inline;
-    font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
-    font-size: 21px;
-    font-weight: bold;
-    padding: 0;
-}
-header nav a {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    color: #e07b16;
-    padding: 7px;
-    text-decoration: none;
-}
-header nav a:hover {
-    border: 2px solid #ffffff;
-    color: #312a24;
-    padding: 5px;
-    text-decoration: none;
 }
