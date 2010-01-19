@@ -1,6 +1,6 @@
 <h1>Holistic Style Guide</h1>
 <h2>Global Messaging</h2>
-<section id="global">
+<section class="message">
  <aside class="gmessage"><p>I'm a positive message.</p></aside>
  <aside class="rmessage"><p>I'm an error message.</p></aside>
  <aside class="omessage"><p>I'm a warning message.</p></aside>
@@ -124,31 +124,38 @@
     <tr>
      <td><label for="field1">Field1<span class="req">*</span>:</label></td>
      <td><input id="field1" type="text" placeholder="HTML5 Placeholder"></td>
+     <td></td>
     </tr>
     <tr class="missing">
-	 <td><label for="field2">Field Deux:</label></td>
-	 <td><input id="field2" type="text"></td>
-	</tr>
+     <td><label for="field2">Field Deux:</label></td>
+     <td class="message"><input id="field2" type="text">
+      <div><aside class="rmessage"><p>I'm an error message.</p></aside></div>
+     </td>
+    </tr>
     <tr>
      <td><label for="email">Email:</td>
-	 <td><input id="email" type="email"></label></td>
-	</tr>
+     <td><input id="email" type="email"></label></td>
+     <td></td>
+    </tr>
     <tr>
-	 <td><label for="url">URL:</label></td>
-	 <td><input id="url" type="url"></td>
-	</tr>
+     <td><label for="url">URL:</label></td>
+     <td><input id="url" type="url"></td>
+     <td></td>
+    </tr>
     <tr>
      <td><label>Number:</label></td>
      <td><input type="number" min="0" max="10" step="1" value="6"></td>
+     <td></td>
     </tr>
     <tr>
      <td><label for="slider">Slider:</label>
-	 <td><input id="slider" type="range" min="0" max="10" step="1" value="6"></td>
-	</tr>
+     <td><input id="slider" type="range" min="0" max="10" step="1" value="6"></td>
+     <td></td>
+    </tr>
     <tr>
      <td><label for="selector">Select Box:</label></td>
      <td>
-	  <select>
+      <select>
        <optgroup label="Number Values">
        <option>Value 1</option>
        <option>Value 2</option>
@@ -159,10 +166,12 @@
        <option>Value D</option>
       </select>
      </td>
+     <td></td>
     </tr>
     <tr>
      <td><label>Readonly Field:</label></td>
      <td><span>Readonly Value</span></td>
+     <td></td>
     </tr>
    </tdbody>
   </table>
@@ -171,15 +180,16 @@
   <legend>Legend 2</legend>
   <table>
    <tbody>
-	<tr>
+    <tr>
      <td><label>Check Boxes</label></td>
      <td>
-	  <fieldset class="cwrap">
+      <fieldset class="cwrap">
        <label><input type="checkbox"> Option 1</label>
        <label><input type="checkbox"> Option 2</label>
        <label><input type="checkbox"> Option 3</label>
       </fieldset>
      </td>
+     <td></td>
     </tr>
     <tr>
      <td><label>Radio Buttons</label></td>
@@ -190,10 +200,12 @@
        <label><input type="radio" name="radio"> Option 3</label>
       </fieldset>
      </td>
+     <td></td>
     </tr>
     <tr>
      <td><label>TextArea</label></td>
      <td><textarea rows="6" cols="20">1234</textarea></td>
+     <td></td>
     </tr>
    </tbody>
    <tfoot>

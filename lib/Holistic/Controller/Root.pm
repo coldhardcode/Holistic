@@ -54,6 +54,12 @@ sub guide : Local {
     $c->stash->{template} = 'guide.tt';
 }
 
+sub ticket : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'ticket.tt';
+}
+
 =head2 end
 
 Attempt to render a view, if needed.

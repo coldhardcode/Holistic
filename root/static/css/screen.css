@@ -268,7 +268,7 @@ p.subdued {
 #content {
     padding: 12px 120px 0 180px;
 }
-#global aside {
+.message aside {
     -webkit-border-radius: 7px;
     -moz-border-radius: 7px;
     border-radius: 7px;
@@ -277,21 +277,30 @@ p.subdued {
     margin: 0 0 1em 0; padding: 0 0 0 0;
     overflow: hidden;
 }
-#global aside p {
+.message aside p {
     margin: 0; padding: .25em .5em;
     font-size: 1.23em;
 }
-#global aside.gmessage {
+.message aside.gmessage {
 	background-color: #55aa2a;
 	background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
 }
-#global aside.rmessage {
+.message aside.rmessage {
 	background-color: #b31f1e;
 	background: -webkit-gradient(linear, left top, left bottom, from(#ba3433), to(#b31f1e));
 }
-#global aside.omessage {
+.message aside.omessage {
 	background-color: #de691f;
 	background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
+}
+td.message div {
+    background: transparent url('/static/images/point.png') no-repeat top 5px;
+    margin: -12px 0 0 0; padding: 9px 0 0 0;
+}
+td.message aside {
+    font-size: 12px;
+    text-align: center;
+    margin: 0; padding: 0;
 }
 nav.pager {
     background: none;

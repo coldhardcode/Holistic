@@ -1,0 +1,18 @@
+[% MACRO text_field(info) BLOCK %]
+<tr>
+ <td>
+  <label id="form_[% info.name %]_label" for="form_[% info.name %]">[% c.loc(info.label) ~%]:
+   [%~ IF info.tooltip %]<script type="text/javascript">new YAHOO.widget.Tooltip('tt_[% info.name %]_label', { context: 'form_[% info.name %]_label', text: "[% info.tooltip | replace('"', '\"') %]" } );</script>[?][% END ~%]
+   [% IF info.required %]<span class="req">*</span>[% END %]
+  </label>
+ </td>
+ <td>
+  <input type="[% info.type || 'text' %]" id="form_[% info.name %]" name="[% info.name %]" [% IF info.hint %] placeholder="[% c.loc(info.hint) %]"[% END %] value="[% info.value | html %]"
+   [%~ IF info.autocomplete == 0 %] autocomplete="false"[% END ~%]
+   [%~ IF info.disabled     == 1 %] disabled="disabled"[% END ~%]
+   [%~ IF info.tabindex %] tabindex="[% info.tabindex %]"[% END ~%]
+   [%~ IF info.maxlength %] maxlength="[% info.maxlength %]"[% END ~%]>
+ </td>
+ <td>Extra stuff here?</td>
+</tr>
+[% END; %]
