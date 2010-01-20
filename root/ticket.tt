@@ -4,10 +4,6 @@
   <table>
    <tbody>
     [% text_field({ label => 'Summary', name => 'ticket.summary', hint => 'Short Summary of Issue', required => 1 }); %]
-    <tr>
-     <td><label for="ticket.summary">Summary<span class="req">*</span>:</label></td>
-     <td><input id="ticket.summary" type="text" placeholder="Short Summary of Issue"></td>
-    </tr>
    </tbody>
   </table>
  </fieldset>

@@ -6,13 +6,15 @@
    [% IF info.required %]<span class="req">*</span>[% END %]
   </label>
  </td>
- <td>
-  <input type="[% info.type || 'text' %]" id="form_[% info.name %]" name="[% info.name %]" [% IF info.hint %] placeholder="[% c.loc(info.hint) %]"[% END %] value="[% info.value | html %]"
+ <td[% IF info.extra %] class="message"[% END %]>
+  <input[% IF info.double %] class="double"[% END %] type="[% info.type || 'text' %]" id="form_[% info.name %]" name="[% info.name %]" [% IF info.hint %] placeholder="[% c.loc(info.hint) %]"[% END %] value="[% info.value | html %]"
    [%~ IF info.autocomplete == 0 %] autocomplete="false"[% END ~%]
    [%~ IF info.disabled     == 1 %] disabled="disabled"[% END ~%]
    [%~ IF info.tabindex %] tabindex="[% info.tabindex %]"[% END ~%]
    [%~ IF info.maxlength %] maxlength="[% info.maxlength %]"[% END ~%]>
+   [% IF info.extra %]
+   <div><aside class="rmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+   [% END %]
  </td>
- <td>Extra stuff here?</td>
 </tr>
 [% END; %]

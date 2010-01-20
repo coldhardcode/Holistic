@@ -192,6 +192,16 @@ fieldset textarea {
     margin: 0 0 1em 0;
     width: 12.25em;
 }
+fieldset input[type="url"].double,
+fieldset input[type="email"].double,
+fieldset input[type="text"].double,
+fieldset input[type="number"].double,
+fieldset input[type="range"].double,
+fieldset select.double,
+fieldset textarea.double {
+    width: 24.5em;
+}
+
 fieldset textarea {
     width: 25em;
 }
