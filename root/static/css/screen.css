@@ -126,21 +126,27 @@ fieldset {
 fieldset h2 {
     margin: 0 0 1em 2em;
 }
+fieldset table {
+    margin: 0; padding: 0;
+}
 fieldset table thead th,
 fieldset table tr td {
-	background-color: #eee;
-	border-width: 0;
-	color: #353535;
-	font-size: 14px;
-	vertical-align: center;
+background-color: #eee;
+    border-width: 0;
+    color: #353535;
+    font-size: 14px;
+    vertical-align: center;
+}
+fieldset table thead th {
+    text-align: right;
 }
 fieldset table label {
-	display: block;
-	text-align: right;
+    display: block;
+    text-align: right;
 }
 fieldset table tr td {
-	text-align: left;
-	vertical-align: top;
+    text-align: left;
+    vertical-align: top;
 }
 fieldset tr.missing label,
 fieldset tr.error label {
@@ -151,13 +157,13 @@ fieldset tr.missing input,
 fieldset tr.error input,
 fieldset tr.missing select,
 fieldset tr.error input {
-	border: 2px solid #b31d1c;
+    border: 2px solid #b31d1c;
 }
 fieldset label.error {
-	color: #b31d1c;
+    color: #b31d1c;
 }
 fieldset label input {
-	margin: 0 .5em 0 0;
+    margin: 0 .5em 0 0;
 }
 span.req {
     color: #b31d1c;
@@ -184,10 +190,10 @@ fieldset input[type="range"],
 fieldset select,
 fieldset textarea {
     margin: 0 0 1em 0;
-	width: 12.25em;
+    width: 12.25em;
 }
 fieldset textarea {
-	width: 25em;
+    width: 25em;
 }
 fieldset.cwrap {
     background-color: #fff;
@@ -205,18 +211,18 @@ fieldset.cwrap input {
     padding: 5px;
 }
 fieldset tfoot input {
-	margin: 0 0 0 7em;
+    margin: 0 0 0 7em;
 }
 nav {
-	background-color: #3470a9;
-	background: -webkit-gradient(linear, left top, left bottom, from(#598ab9), to(#3470a9));
+    background-color: #3470a9;
+    background: -webkit-gradient(linear, left top, left bottom, from(#598ab9), to(#3470a9));
     -webkit-border-top-right-radius: 7px;
     -webkit-border-bottom-right-radius: 7px;
     -moz-border-radius-topright: 7px;
     -moz-border-radius-bottomright: 7px;
     border-top-right-radius: 0 0 0 7px;
     border-bottom-right-radius: 0 0 0 7px;
-	color: #fff;
+    color: #fff;
     left: 0;
     margin: 0; padding: 1em 0 1em 1em;
     position: absolute;
@@ -226,7 +232,7 @@ nav {
 }
 nav h3 {
     margin: 0; padding: 0 0 7px 0;
-  text-shadow: #31465b 2px 2px 2px;
+    text-shadow: #31465b 2px 2px 2px;
 }
 nav ul {
     margin: 0; padding: 0 0 18px 0;
@@ -283,16 +289,16 @@ p.subdued {
     font-size: 1.23em;
 }
 .message aside.gmessage {
-	background-color: #55aa2a;
-	background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
+    background-color: #55aa2a;
+    background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
 }
 .message aside.rmessage {
-	background-color: #b31f1e;
-	background: -webkit-gradient(linear, left top, left bottom, from(#ba3433), to(#b31f1e));
+    background-color: #b31f1e;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ba3433), to(#b31f1e));
 }
 .message aside.omessage {
-	background-color: #de691f;
-	background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
+    background-color: #de691f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
 }
 td.message div {
     background: transparent url('/static/images/point.png') no-repeat top 5px;
