@@ -3,7 +3,16 @@
  <fieldset>
   <table>
    <tbody>
-    [% text_field({ label => 'Summary', name => 'ticket.summary', hint => 'Short Summary of Issue', required => 1 }); %]
+    <tr>
+     [% text_field({ label => 'Summary', name => 'ticket.summary', hint => 'Short Summary of Issue', required => 1, double => 1 }); %]
+    </tr>
+    <tr>
+     [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
+    <tr>
+    <tr>
+     [% select_field({ label => 'Poopy', name => 'ticket.summary', hint => 'Short Summary of Issue', required => 1 }); %]
+     [% text_field({ label => 'Summary', name => 'ticket.summary', hint => 'Short Summary of Issue', required => 1 }); %]
+    </tr>
    </tbody>
   </table>
  </fieldset>

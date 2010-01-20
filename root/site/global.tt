@@ -1,12 +1,39 @@
-[% MACRO text_field(info) BLOCK %]
-<tr>
+[% MACRO label_field(info) BLOCK %]
  <td>
-  <label id="form_[% info.name %]_label" for="form_[% info.name %]">[% c.loc(info.label) ~%]:
+  <label id="form_[% info.name %]_label" for="form_[% info.name %]">[% c.loc(info.label) ~%]
    [%~ IF info.tooltip %]<script type="text/javascript">new YAHOO.widget.Tooltip('tt_[% info.name %]_label', { context: 'form_[% info.name %]_label', text: "[% info.tooltip | replace('"', '\"') %]" } );</script>[?][% END ~%]
-   [% IF info.required %]<span class="req">*</span>[% END %]
+   [% IF info.required %]<span class="req">[% c.loc('FIELD REQUIRED SPLAT') %]</span>[% END %]:
   </label>
  </td>
- <td[% IF info.extra %] class="message"[% END %]>
+[% END; %]
+
+[% MACRO select_field(info) BLOCK; %]
+ [%~ IF info.dynamic_array =%]<script type="text/javascript">if ( typeof dynamic_forms === 'undefined' ) dynamic_forms = {}; dynamic_forms['[% info.value_from %]'] = { 'source': '[% info.dynamic_array %]', 'update': '[% info.name %]', 'value': "[% info.value || html %]" };</script>[% IF info.array.size == 0; info.array.push(c.loc('Please select [_1]', [ info.value_from ] ) ); END; END %]
+ [% label_field(info) %]
+ <td[% IF info.extra %] class="message"[% END %][% IF info.double %] colspan="3"[% END %]>
+  <select id="form_[% info.name %]" name="[% info.name %]">
+   [% IF info.default_option %]<option value="[% info.default_option.0 %]">[% info.default_option.1 %]</option>[% END %]
+   [% FOREACH item = info.array;
+        IF info.value_method;
+          SET this_value = item.${info.value_method}; 
+        ELSE;
+          SET this_value = item;
+        END;
+        IF info.label_method;
+          SET this_name = item.${info.label_method};
+        ELSE;
+          SET this_name = item;
+        END;
+        %]<option value="[% this_value %]" [% IF this_value == info.value %]selected="selected"[% END %] >[% this_name %]</option>
+   [% END %]
+  </select>
+ </td>
+[% END; %]
+
+
+[% MACRO text_field(info) BLOCK %]
+ [% label_field(info) %]
+ <td[% IF info.extra %] class="message"[% END %][% IF info.double %] colspan="3"[% END %]>
   <input[% IF info.double %] class="double"[% END %] type="[% info.type || 'text' %]" id="form_[% info.name %]" name="[% info.name %]" [% IF info.hint %] placeholder="[% c.loc(info.hint) %]"[% END %] value="[% info.value | html %]"
    [%~ IF info.autocomplete == 0 %] autocomplete="false"[% END ~%]
    [%~ IF info.disabled     == 1 %] disabled="disabled"[% END ~%]
@@ -16,5 +43,24 @@
    <div><aside class="rmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
    [% END %]
  </td>
-</tr>
+[% END; %]
+
+[% MACRO textarea_field(info) BLOCK; %]
+[% label_field(info) %] 
+<td[% IF info.extra %] class="message"[% END %][% IF info.double %] colspan="3"[% END %]>
+ <textarea [%= ~%]
+  [% IF info.double %] class="double"[% END %]
+  id="form_[% info.name %]" name="[% info.name %]"
+  [% IF info.hint               %] placeholder="[% c.loc(info.hint) %]"[% END %]
+  [%~ IF info.disabled     == 1 %] disabled="disabled"[% END ~%]
+  [%~ IF info.autocomplete == 0 %] autocomplete="false"[% END ~%]
+  [%~ IF info.tabindex %] tabindex="[% info.tabindex %]"[% END ~%]
+  [%~ IF info.rows %] rows="[% info.rows %]"[% END ~%]
+  >
+  [%~ info.value | html ~%]
+ </textarea>
+ [% IF info.extra %]
+  <div><aside class="rmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+ [% END %]
+</td>
 [% END; %]

@@ -199,7 +199,7 @@ fieldset input[type="number"].double,
 fieldset input[type="range"].double,
 fieldset select.double,
 fieldset textarea.double {
-    width: 24.5em;
+    width: 32em;
 }
 
 fieldset textarea {
