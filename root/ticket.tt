@@ -18,6 +18,11 @@
   </table>
  </fieldset>
 </form>
+<h3>TODO</h3>
+<ul>
+ <li>Hiders</li>
+ <li>"centered" system changes</li>
+</ul>
 <h3>[% c.loc('History') %]</h3>
 <ul class="comments">
  <li class="visitor"><div>2 days ago...</div><cite><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"></cite><p>I am the first comment.  I am by someone who isn't the reporter. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></li>
