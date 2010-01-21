@@ -119,8 +119,12 @@ legend {
 fieldset {
     background-color: #eee;
     border: 1px solid #ddd;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    display: inline;
     margin: 0 0 1em 0;
-    padding: 1em 0 1em 0;
+    padding: 1em;
     position: relative;
 }
 fieldset h2 {
@@ -220,8 +224,8 @@ fieldset.cwrap label {
 fieldset.cwrap input {
     padding: 5px;
 }
-fieldset tfoot input {
-    margin: 0 0 0 7em;
+fieldset tfoot tr td {
+    text-align: right;
 }
 nav {
     background-color: #3470a9;
@@ -256,8 +260,6 @@ header nav ul li {
     padding: 0;
 }
 header nav a {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
     color: #eee;
     padding: 7px;
 }
@@ -363,4 +365,44 @@ nav.pager a {
 nav.pager a:hover {
     background-color: #3470a9;
     color: #fff;
+}
+ul.comments {
+    margin: 0; padding: 0 5px 0 5px;
+    border-left: 1px solid #78766f;
+    border-right: 1px solid #78766f;
+}
+ul.comments li {
+    list-style: none;
+    margin: 0 6em 1.5em 0; padding: 0;
+}
+ul.comments li div {
+    color: #78766f;
+    font-size: 12px;
+}
+ul.comments li cite {
+    float: left;
+    width: 40px;
+    margin: .5em .5em 0 0;
+}
+ul.comments li p {
+    background: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin: 0 0 0 45px; padding: .5em;
+    text-align: left;
+}
+ul.comments li.visitor {
+    margin: 0 0 1em 0;
+}
+ul.comments li.visitor div {
+    text-align: right;
+}
+ul.comments li.visitor cite {
+    float: right;
+    margin: .5em 0 0 .5em;
+}
+ul.comments li.visitor p {
+    margin: 0 45px 0 6em;
 }

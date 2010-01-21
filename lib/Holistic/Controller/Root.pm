@@ -54,6 +54,12 @@ sub guide : Local {
     $c->stash->{template} = 'guide.tt';
 }
 
+sub login : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'login.tt';
+}
+
 sub ticket : Local {
     my ($self, $c) = @_;
 

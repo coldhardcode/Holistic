@@ -200,7 +200,7 @@
     </tr>
    </tbody>
    <tfoot>
-	<td colspan="2'">
+    <td colspan="2'">
      <input type="submit" value="Submit">
     </td>
    </tfoot>

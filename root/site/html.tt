@@ -15,7 +15,7 @@ END;
 <html lang="[% page.language %]">
  <head>
   <meta charset="utf-8">
-  <title>[% page.title %]</title>
+  <title>Holistic[% IF page.title %]: [% page.title %][% END %]</title>
   <meta http-equiv="Content-Language" content="[% page.language %]">
 [%
 # Add all javascript refs in page.head.scripts (see page.body.scripts)
