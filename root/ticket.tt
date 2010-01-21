@@ -22,7 +22,7 @@
 <ul>
  <li>Hiders</li>
  <li>"centered" system changes</li>
- <li>Comment memos</li>
+ <li>Comment sources</li>
 </ul>
 <h3>[% c.loc('History') %]</h3>
 <ul class="comments">
