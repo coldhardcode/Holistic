@@ -1,3 +1,4 @@
+@charset "utf-8";
 html, body {
     background-color: #e9e9d7;
     color: #353535;
@@ -12,6 +13,9 @@ header, aside, nav, section, article {
 header {
     background: #e5e5d4 url('/static/images/header_back.png');
     height: 90px;
+}
+time {
+    display: block;
 }
 h1, h2, h3, h4, h5, h6, legend {
     font-weight: bold;
@@ -375,7 +379,7 @@ ul.comments li {
     list-style: none;
     margin: 0 6em 1.5em 0; padding: 0;
 }
-ul.comments li div {
+ul.comments li time {
     color: #78766f;
     font-size: 12px;
 }
@@ -396,7 +400,7 @@ ul.comments li p {
 ul.comments li.visitor {
     margin: 0 0 1em 0;
 }
-ul.comments li.visitor div {
+ul.comments li.visitor time {
     text-align: right;
 }
 ul.comments li.visitor cite {
