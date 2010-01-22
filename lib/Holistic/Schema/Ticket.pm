@@ -7,6 +7,9 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
+with 'Holistic::Role::ACL',
+     'Holistic::Role::Discussable';
+
 __PACKAGE__->table('tickets');
 #$CLASS->resultset_class('Holistic::ResultSet::Ticket');
 
@@ -24,6 +27,11 @@ __PACKAGE__->set_primary_key('pk1');
 __PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1');
 
 __PACKAGE__->might_have('final_state', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1');
+
+sub add_state {
+    my ( $self, $info ) = @_;
+
+}
 
 sub state {
     my ( $self ) = @_;
@@ -94,6 +102,17 @@ sub state {
     return $final_state;
 }
 
+# ACL Methods
+sub action_list {
+    return {
+        'comment' => [ 'Owner', 'Member', 'Manager' ],
+    }
+}
+
+sub is_member {
+    my ( $self, $person, $role ) = @_;
+    return 1;
+}
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

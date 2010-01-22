@@ -24,6 +24,15 @@ sub ticket_create : Plan(1) {
     my $state = $ticket->state;
 
     ok( !$state, 'no state yet');
+
+    my $comment = $ticket->add_comment({
+        person  => $self->person,
+        subject => 'Lorem Ipsum',
+        body    => 'Bitches' 
+    });
+
+    ok( $comment, 'created comment' );
+    cmp_ok($ticket->comments->count, '==', 1, 'one comment');
 }
 
 1;

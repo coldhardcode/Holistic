@@ -6,9 +6,21 @@ use MooseX::MethodAttributes::Role;
 
 with 'Holistic::Test::Schema'; # We require schema
 
+has 'person' => (
+    is => 'rw',
+);
+
 sub person_create : Plan(1) {
     my ( $self ) = @_;
-    ok(0, 'I am an asshole');
+
+    my $person = $self->schema->resultset('Person')->create({
+        name  => 'J. Shirley',
+        token => 'jshirley',
+        email => 'jshirley@coldhardcode.com',
+    });
+
+    ok( $person, 'created person' );
+    $self->person( $person );
 }
 
 1;

@@ -1,4 +1,4 @@
-package Holistic::Roles::Discussable;
+package Holistic::Role::Discussable;
 
 use Moose::Role;
 use Carp;

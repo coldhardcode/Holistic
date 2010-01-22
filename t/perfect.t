@@ -66,13 +66,13 @@ $ticket2->migrate( $subticket2, traits => [ 'Work Escalation' ] );
 #
 # If someone signs off, and a persistent mode is checked, work is automatically
 # paused.  We can have the states list similar to the Brittle effects.
-$subticket2->add_to_states({
+$subticket2->add_state({
     traits      => [ 'WIP' ],
     actor       => $frank,
     timestamp   => $now
 });
 
-$subticket2->add_to_states({
+$subticket2->add_state({
     traits      => [ 'Rest' ],
     actor       => $frank,
     timestamp   => $now
