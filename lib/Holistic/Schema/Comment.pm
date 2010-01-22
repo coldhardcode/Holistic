@@ -22,7 +22,7 @@ $CLASS->add_columns(
         default_value   => 0,
         size            => 16,
     },  
-    person_pk1 => {
+    identity_pk1 => {
         data_type       => 'INTEGER',
         is_nullable     => 0,
         default_value   => 0,
@@ -68,7 +68,10 @@ $CLASS->has_many(
 $CLASS->many_to_many('comments', 'discussable_comment', 'comment');
 $CLASS->many_to_many('comment_objects', 'discussable_comments', 'discussable');
 
-$CLASS->belongs_to( 'person', 'Holistic::Schema::Person', 'person_pk1' );
+$CLASS->belongs_to(
+    'identity', 'Holistic::Schema::Person::Identity', 
+    { 'foreign.pk1' => 'self.identity_pk1' }
+);
 
 $CLASS->might_have(
     'parent' => 'Holistic::Schema::Comment',

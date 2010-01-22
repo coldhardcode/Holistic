@@ -102,15 +102,20 @@ sub add_comment {
     if ( $data->{subject} and not $data->{name} ) {
         $data->{name} = delete $data->{subject};
     }
-    for ( qw/name body person/ ) { 
-        Carp::croak( "Need $_ to create comment" ) unless exists $data->{$_} 
+    for ( qw/name body identity/ ) { 
+        Carp::croak( "Need $_ to create comment" ) unless $data->{$_}
     }
 
     use Moose::Util;
-    if ( Moose::Util::does_role($self, 'Holistic::Roles::ACL') ) {
+    # Only do ACL checks on local idents, if it isn't local it is coming from
+    # conduits like git, etc.
+    if (
+        Moose::Util::does_role($self, 'Holistic::Roles::ACL')
+            &&
+        $data->{identity}->realm eq 'local'
+    ) {
         Carp::croak
-            "Permission check failed, person does not have comment permissions"
-        unless $self->check_access( $data->{person}, 'comment' );
+        unless $self->check_access( $data->{identity}->person, 'comment' );
     }
 
     my $discussion = $schema->resultset('Comment')->create($data);

@@ -9,6 +9,13 @@ my $CLASS = __PACKAGE__;
 $CLASS->table('person_identities');
 
 $CLASS->add_columns(
+    'pk1',
+    {
+        data_type   => 'integer',
+        is_nullable => 0,
+        size        => 16,
+        is_auto_increment => 1,
+    },
     'person_pk1',
     { data_type => 'integer', size => 16, is_nullable => 0 },
     'realm',
@@ -32,12 +39,21 @@ $CLASS->add_columns(
         set_on_create => 1 },
 );
 
-$CLASS->set_primary_key(qw/person_pk1 realm id/);
+$CLASS->set_primary_key(qw/pk1/);
 
 $CLASS->belongs_to('person', 'Holistic::Schema::Person', 'person_pk1');
 
+$CLASS->has_many(
+    'comments', 'Holistic::Schema::Comment', 
+    { 'foreign.identity_pk1' => 'self.pk1' }
+);
+
 $CLASS->add_unique_constraint(
     realm_id_constraint => [ qw/realm id/ ]
+);
+
+$CLASS->add_unique_constraint(
+    person_realm_id_constraint => [ qw/person_pk1 realm id/ ]
 );
 
 # TODO: Decide on indexes

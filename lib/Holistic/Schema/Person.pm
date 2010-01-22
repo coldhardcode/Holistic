@@ -48,7 +48,7 @@ $CLASS->set_primary_key('pk1');
 
 __PACKAGE__->has_many('identities', 'Holistic::Schema::Person::Identity', 'person_pk1');
 
-__PACKAGE__->has_many('comments', 'Holistic::Schema::Comment', 'person_pk1');
+__PACKAGE__->many_to_many('comments' => 'identities' => 'comments' );
 
 =head2 connected_to_user($user)
 

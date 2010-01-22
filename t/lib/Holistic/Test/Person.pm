@@ -21,6 +21,13 @@ sub person_create : Plan(1) {
 
     ok( $person, 'created person' );
     $self->person( $person );
+
+    $person->add_to_identities(
+        { realm => 'local', id => 'jshirley', secret => 'test' }
+    );
+    $person->add_to_identities(
+        { realm => 'git', id => 'jshirley@foo', secret => 'public key?' }
+    );
 }
 
 1;
