@@ -170,9 +170,6 @@ fieldset tr.error input {
 fieldset label.error {
     color: #b31d1c;
 }
-fieldset label input {
-    margin: 0 .5em 0 0;
-}
 span.req {
     color: #b31d1c;
     float: none;
@@ -197,7 +194,7 @@ fieldset input[type="number"],
 fieldset input[type="range"],
 fieldset select,
 fieldset textarea {
-    margin: 0 0 1em 0;
+    margin: 0; padding: 0;
     width: 12.25em;
 }
 fieldset input[type="url"].double,
