@@ -12,7 +12,7 @@
     </tr>
     <tr>
      [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
-    <tr>
+    </tr>
     <tr>
      [% select_field({ label => 'Type', name => 'ticket.type', required => 1, array => [ 'Defect', 'Enhancement', 'Task' ] }); %]
      [% select_field({ label => 'Priority', name => 'ticket.priority', required => 1, array => [ 'Highest', 'High', 'Normal', 'Low', 'Lowest', 'Low' ] }); %]
@@ -54,3 +54,4 @@
   <p>I am a comment.  I am by someone who isn't the reporter. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
  </li>
 </ul>
+
