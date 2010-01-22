@@ -69,13 +69,13 @@ $ticket2->migrate( $subticket2, traits => [ 'Work Escalation' ] );
 $subticket2->add_to_states({
     traits      => [ 'WIP' ],
     actor       => $frank,
-    start_time  => $now
+    timestamp   => $now
 });
 
 $subticket2->add_to_states({
     traits      => [ 'Rest' ],
     actor       => $frank,
-    start_time  => $now
+    timestamp   => $now
 });
 
 # We can have auto-triggers, so when a state with the trait of Testing it
@@ -84,8 +84,11 @@ $subticket2->add_to_states({
     # In this case, Frank it testing it out.
     traits      => [ 'WIP', 'Testing' ],
     actor       => $frank,
-    start_time  => $now
+    timestamp   => $now
 });
+
+# Rolled up Holistic::State object
+my $state = $subticket2->state;
 
 # From a UI perspective, each actor role (tester, worker, developer, etc) should
 # have a flexible UI built up by them or the managers.  Complete with state

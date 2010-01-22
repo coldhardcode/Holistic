@@ -16,4 +16,10 @@ formats:
         long: '%b %d, %Y at %l:%M %p'
         comment: '%c'
 
-
+# Creating verification profiles works here.
+Model::Verifier:
+    profiles:
+        admin_profile:
+            email:
+                required: 1
+                type: Str

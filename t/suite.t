@@ -4,7 +4,7 @@ my $suite = Holistic::Test::Suite->new;
 
 $suite->run(
     #with => [ 'Person', 'Group', 'Ticket' ],
-    with => [ 'Person' ],
+    with => [ 'Person', 'Ticket' ],
     config => {
         connect_info => [
             'dbi:SQLite:t/var/test.db',

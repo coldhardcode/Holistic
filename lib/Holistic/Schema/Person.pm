@@ -7,6 +7,8 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
+with 'Holistic::Role::Actor';
+
 use Data::FormValidator::Constraints;
 
 my $CLASS = __PACKAGE__;
