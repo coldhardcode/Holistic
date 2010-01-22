@@ -42,27 +42,6 @@ END;
 %]
    <link rel="stylesheet" href="[% static( 'css/screen.css', 1 ) %]" type="text/css" media="screen">
  </head>
- <!--[if !IE]> <-->
- <body
-    [%~ IF page.body.id %] id="[% page.body.id %]"[% END %]
-    [%~ page.body.classes.size ?
-            ' class="' _ page.body.classes.unique.join(' ') _ '"' : '' %]>
- <!--><![endif]-->
- <!--[if IE 5]>
- <body
-    [%~ IF page.body.id %] id="[% page.body.id %]"[% END =%]
-    class="[% page.body.classes.join(' ') %] IE IE5">
- <![endif]-->
- <!--[if IE 6]>
- <body
-    [%~ IF page.body.id %] id="[% page.body.id %]"[% END =%]
-    class="[% page.body.classes.join(' ') %] IE IE6">
- <![endif]-->
- <!--[if IE 7]>
- <body
-    [%~ IF page.body.id %] id="[% page.body.id %]"[% END =%]
-    class="[% page.body.classes.join(' ') %] IE IE7">
- <![endif]-->
     [% # Drop in the header if appropriate
     header %]
     <div id="content">
