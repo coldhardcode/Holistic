@@ -50,7 +50,7 @@ sub default :Path {
 
 sub guide : Local {
     my ($self, $c) = @_;
-
+$c->log->_dump( $c->model('Verifier')->profiles );
     $c->stash->{template} = 'guide.tt';
 }
 
