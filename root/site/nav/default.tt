@@ -1,11 +1,9 @@
 <nav>
- <aside>
-  <h3>[% c.loc('Notice') %]</h3>
-  <p>This is a notice.</p>
- </aside>
  <h3>[% c.loc('Navigation') %]</h3>
  <ul>
-  <li><a href="#">Nav Link 1</a></li>
-  <li><a href="#">Nav Link 2</a></li>
+  <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
+  <li><a href="[% c.uri_for('/roadmap') %]">Roadmap</a></li>
+  <li><a href="[% c.uri_for('/ticket') %]">Ticket</a></li>
+  <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
  </ul>
 </nav>
