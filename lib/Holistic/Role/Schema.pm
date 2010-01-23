@@ -7,7 +7,10 @@ use Carp;
 has 'schema' => (
     is => 'rw',
     isa => 'DBIx::Class::Schema',
-    lazy_build => 1
+    lazy_build => 1,
+    handles => {
+        'resultset' => 'resultset'
+    }
 );
 
 has 'schema_class' => (
