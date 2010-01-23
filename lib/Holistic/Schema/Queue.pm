@@ -7,6 +7,8 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
+__PACKAGE__->load_components(qw/DynamicDefault/);
+
 __PACKAGE__->table('queues');
 
 __PACKAGE__->add_columns(
@@ -17,7 +19,8 @@ __PACKAGE__->add_columns(
     'token',
     { data_type => 'varchar', size => '255', is_nullable => 0 },
     'type_pk1',
-    { data_type => 'integer', size => '16', is_foreign_key => 1 },
+    { data_type => 'integer', size => '16', is_foreign_key => 1,
+        dynamic_default_on_create => \&_default_type },
     'parent_pk1',
     { data_type => 'integer', size => '16', default_value => 0 },
     'dt_created',
@@ -44,17 +47,11 @@ __PACKAGE__->belongs_to(
 );
 
 
-around 'insert' => sub {
-    my ( $orig, $self, @args ) = @_;
+sub _default_type {
+    my ( $self ) = @_;
 
-    if ( not $self->type_pk1 ) {
-        if ( not $args[0]->{type} and not $args[0]->{type_pk1} ) {
-            $self->type_pk1( $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->id );
-        }
-    }
-
-    $self->$orig(@args);
-};
+    return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->id;
+}
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
