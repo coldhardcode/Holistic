@@ -12,7 +12,22 @@
    <dt>Dependencies</dt>
    <dd><p class="jay">Dependencies are tracked via a simple link table, needs to be fleshed out more but this is the simple thing.</p></dd>
    <dt>Attention</dt>
-   <dd></dd>
+   <dd><div class="jay">Ok, attention works.  Here's what I have so far:
+        <pre><code>
+        $ticket-&gt;needs_attention($identity);
+        # And just check:
+        if ( defined ( my $identity = $ticket-&gt;needs_attention ) {
+            email($identity, 'hey, asshole.');
+        }
+        # After it is ready to be cleared:
+        $ticket-&gt;clear_attention;
+
+        </code></pre>
+     I still am looking at good ways to fetch all tickets that need attention,
+     and filter by queues, etc.  Since queues are multi-depth it makes the
+     query slightly more difficult.  Or at least big.
+     </div>
+   </dd>
   </dl>
  </dd>
  <dt>Milestones</dt>

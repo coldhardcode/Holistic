@@ -164,6 +164,29 @@ sub needs_attention {
     return undef;
 }
 
+sub clear_attention {
+    my ( $self, $success ) = @_;
+
+    $success = 1 if not defined $success;
+
+    my $rs = $self->states(
+        {},
+        { order_by => [ { '-desc' => 'me.pk1' } ], rows => 2 }
+    );
+
+    my $status = $self->result_source->schema->resultset('Ticket::Status')->find_or_create({ name => 'Attention Required' });
+    my ( $attn_state, $prev_state ) = $rs->all;
+    if ( $attn_state->status_pk1 == $status->pk1 ) {
+        my %cols = $prev_state->get_columns;
+            delete $cols{$_} for qw/dt_created pk1 ticket_pk1/;
+        $cols{success} = $success;
+        $self->add_state({ %cols });
+        return 1;
+    }
+
+    return 0;
+}
+
 sub status {
     my ( $self ) = @_;
     my $state = $self->state;
@@ -181,7 +204,7 @@ sub add_state {
 
     $self->result_source->schema->txn_do(sub {
         my $final = $self->final_state;
-        $final->delete if defined $final;
+        $final->delete if defined $final and $final->in_storage;
         $self->add_to_states($info);
     });
 }

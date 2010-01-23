@@ -110,6 +110,10 @@ sub ticket_create : Plan(11) {
     my $ident = $schmuck->add_to_identities({ realm => 'local', id => 'joe' });
     $ticket->needs_attention( $ident );
     cmp_ok( $ticket->needs_attention->pk1, '==', $ident->pk1, 'ticket needs attention');
+    ok( $ticket->clear_attention(0), 'clear attention' );
+    ok( !$ticket->clear_attention, 'clear attention twice is dumb' );
+
+    cmp_ok( $ticket->state->success, '==', 0, 'ticket is in failure state');
 }
 
 1;
