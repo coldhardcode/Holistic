@@ -14,12 +14,17 @@ header {
     background: #e5e5d4 url('/static/images/header_back.png');
     height: 90px;
 }
-time {
-    display: block;
+footer {
+    text-align: center;
+}
+footer p {
+    color: #78766f;
+    font-size: 12px;
+    margin: 3em 0 1em 0; padding: 0;
 }
 h1, h2, h3, h4, h5, h6, legend {
     font-weight: bold;
-    margin: 0; padding: 0 0 18px 0;
+    margin: 0 0 18px 0; padding: 0;
 }
 h1 {
     font-size: 34px;
@@ -32,6 +37,10 @@ h2 {
 h3 {
     font-size: 21px;
     line-height: 36px;
+}
+h3 small {
+    font-size: 14px;
+    font-weight: normal;
 }
 h4 {
     font-size: 16px;
@@ -86,12 +95,14 @@ table thead th {
     font-weight: bold;
     padding: 7px 5px 5px 7px;
 }
+table tbody tr.closed {
+    text-decoration: line-through;
+}
 table tbody tr.head th {
     background-color: #3470a9;
     border-top: 1px solid #fff;
     color: #f3f3f3;
-    font-size: 1.23em;
-    padding: 7px;
+    padding: 4px 5px;
 }
 table tbody th {
     background-color: #ddd;
@@ -110,8 +121,19 @@ table tfoot td {
     background-color: #ddd;
     border-color: #fff;
     font-weight: bold;
+    line-height: 16px;
     padding: 7px;
     text-align: right;
+    vertical-align: center;
+}
+table tfoot td details {
+    font-weight: normal;
+}
+table tfoot td meter {
+    float: left;
+}
+table tfoot td img {
+    vertical-align: bottom;
 }
 legend {
     font-size: 1.615em;
@@ -290,8 +312,14 @@ p.subdued {
 }
 .message aside {
     -webkit-border-radius: 7px;
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-top-right-radius: 0;
     -moz-border-radius: 7px;
+    -moz-border-radius-lefright: 0;
+    -moz-border-radius-topright: 0;
     border-radius: 7px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
     color: #fff;
     display: block;
     margin: 0 0 1em 0; padding: 0 0 0 0;
@@ -312,10 +340,6 @@ p.subdued {
 .message aside.omessage {
     background-color: #de691f;
     background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
-}
-td.message div {
-    background: transparent url('/static/images/point.png') no-repeat top 5px;
-    margin: -12px 0 0 0; padding: 9px 0 0 0;
 }
 td.message aside {
     font-size: 12px;
@@ -378,6 +402,7 @@ ul.comments li {
 }
 ul.comments li time {
     color: #78766f;
+    display: block;
     font-size: 12px;
 }
 ul.comments li cite {
@@ -406,4 +431,17 @@ ul.comments li.visitor cite {
 }
 ul.comments li.visitor p {
     margin: 0 45px 0 6em;
+}
+ul.roadmap {
+    margin: 0; padding: 0;
+}
+ul.roadmap li {
+    list-style: none;
+    margin: 0; padding: 0;
+}
+ul.roadmap h3 {
+    border-bottom: 1px solid #353535;
+}
+ul.roadmap table {
+    margin: 0 0 2em 0;
 }
