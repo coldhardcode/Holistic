@@ -6,6 +6,8 @@
  <dd><p class="jay">I created a 'system' identity and person, gets deployed in testing.</p></dd>
  <dt>Comment sources</dt>
  <dd></dd>
+ <dt>Status identifiers need to be 'id' based, and passed to <code>c.loc</code></dt>
+ <dd><p class="jay">Right now they're human readable, and probably need a lookup table off schema.  Something like <code>$schema-&gt;status('ATTN_NEEDED')</code> which returns the right thing would be nice.  Thoughts?</p></dd>
  <dt>Tickets</dt>
  <dd>
   <dl>
@@ -25,7 +27,7 @@
         </code></pre>
      I still am looking at good ways to fetch all tickets that need attention,
      and filter by queues, etc.  Since queues are multi-depth it makes the
-     query slightly more difficult.  Or at least big.
+     query slightly more difficult.  Or at least big.  For now <code>$queue-&gt;tickets-&gt;search({ 'status.name' =&gt; 'Attention Required' });</code> works.
      </div>
    </dd>
   </dl>

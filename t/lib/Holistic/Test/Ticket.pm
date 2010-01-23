@@ -13,7 +13,7 @@ has 'ticket' => (
     isa => 'Holistic::Schema::Ticket'
 );
 
-sub ticket_create : Plan(11) {
+sub ticket_create : Plan(17) {
     my ( $self ) = @_;
 
     my $queue;
@@ -114,6 +114,11 @@ sub ticket_create : Plan(11) {
     ok( !$ticket->clear_attention, 'clear attention twice is dumb' );
 
     cmp_ok( $ticket->state->success, '==', 0, 'ticket is in failure state');
+
+    $ticket->needs_attention( $ident );
+
+    cmp_ok( $queue->all_tickets->search({ 'status.name' => 'Attention Required' })->count, '==', 1, 'ticket count on queue' );
+
 }
 
 1;

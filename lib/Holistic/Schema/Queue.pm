@@ -98,9 +98,17 @@ sub all_tickets {
         push @pk1s, grep { defined } map { $row->get_column("pk$_") } 1 .. 5;
     }
 
-    $self->result_source->schema->resultset('Ticket')->search({
-        'me.parent_pk1' => \@pk1s
-    });
+    $self->result_source->schema->resultset('Ticket')->search(
+        { 'me.parent_pk1' => \@pk1s },
+        {
+            prefetch => {
+                'final_state' => [
+                    'identity', 'destination_identity', 'status' 
+                ],
+            },
+            group_by => [ 'me.pk1' ]
+        }
+    );
 }
 
 no Moose;
