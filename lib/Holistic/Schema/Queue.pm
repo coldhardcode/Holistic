@@ -7,7 +7,7 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
-__PACKAGE__->load_components(qw/DynamicDefault/);
+__PACKAGE__->load_components(qw/Tree::AdjacencyList DynamicDefault/);
 
 __PACKAGE__->table('queues');
 
@@ -30,6 +30,7 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->set_primary_key('pk1');
+__PACKAGE__->parent_column('parent_pk1');
 
 __PACKAGE__->has_many(
     'tickets', 'Holistic::Schema::Ticket', 
@@ -51,6 +52,31 @@ sub _default_type {
     my ( $self ) = @_;
 
     return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->id;
+}
+
+sub all_tickets {
+    my ( $self ) = @_;
+
+    my $rs = $self->search_related(
+        'children',
+        { },
+        {
+            select   => [ 'me.pk1', 'children.pk1', map { "children_$_.pk1" } 2 .. 5 ],
+            as       => [ map { "pk$_" } 1 .. 6 ],
+            prefetch => [ 
+                { 'children' => { 'children' => { 'children' => { 'children' => 'children' } } } }
+            ]
+        }
+    );
+    my @pk1s;
+
+    while ( my $row = $rs->next ) {
+        push @pk1s, grep { defined } map { $row->get_column("pk$_") } 1 .. 5;
+    }
+
+    $self->result_source->schema->resultset('Ticket')->search({
+        'me.parent_pk1' => \@pk1s
+    });
 }
 
 no Moose;

@@ -48,7 +48,7 @@ sub ticket_create : Plan(4) {
     my $ticket = $self->resultset('Ticket')->create({
         name        => 'Your mom',
         token       => 'your-mom',
-        parent_pk1  => $milestone,
+        parent_pk1  => $milestone->id,
         priority    => $priority,
         type        => $type_t,
     });
@@ -81,6 +81,8 @@ sub ticket_create : Plan(4) {
         )->count,
         '==', 1, 'one comment scoped by realm'
     );
+
+    cmp_ok( $queue->all_tickets->count, '==', 1, 'ticket count on queue' );
 }
 
 1;

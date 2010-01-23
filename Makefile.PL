@@ -41,6 +41,8 @@ requires 'DateTime::Format::DateParse';
 
 # DBIC Components
 requires 'DBIx::Class';
+requires 'DBIx::Class::TimeStamp';
+requires 'DBIx::Class::DynamicDefault';
 
 requires 'YAML';
 requires 'YAML::Syck';
