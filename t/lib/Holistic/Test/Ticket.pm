@@ -14,9 +14,19 @@ has 'ticket' => (
 sub ticket_create : Plan(4) {
     my ( $self ) = @_;
 
+    my $queue = $self->schema->resultset('Queue')->find_or_create({
+        name => 'A Q'
+    });
+
+    my $priority = $self->schema->resultset('Ticket::Priority')->find_or_create({
+        name => 'Urgent'
+    });
+
     my $ticket = $self->schema->resultset('Ticket')->create({
-        name => 'Your mom',
-        token => 'your-mom'
+        name     => 'Your mom',
+        token    => 'your-mom',
+        queue    => $queue,
+        priority => $priority,
     });
 
     $self->ticket( $ticket );

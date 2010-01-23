@@ -1,5 +1,96 @@
 package Holistic::Schema::Ticket;
 
+=head1 NAME
+
+Holistic::Schema::Ticket
+
+=head1 MAGNUM OPUS
+
+The Ticket is the core and center of Holistic.  A ticket belongs in a queue,
+which has other specific and configurable rules that define certain default
+values and other attributes.
+
+The ticket is largely divided into four categories, or contexts, of information.
+
+=over
+
+=item Core Information
+
+The core information of a ticket is simple, and is all the information relating
+to the definition of the ticket.  Essentially it should be thought of as
+immutable, but that would require people always creating perfect tickets.
+
+Instead, think of it as simply the attributes of a ticket that would not be
+altered over time, unless the situation around the ticket has changed.
+
+This is the priority (if you adjust priority of a ticket, it wasn't created properly), severity, component, queue, name, description, etc.
+
+=item State
+
+As a ticket is worked on, it has transitional states.  These transitional
+states can happen between two identities, such as a hand-off, or just a marker
+pertaining to a single individual.
+
+The States are a rolled up, immutable list of timestamped objects that are
+then returned as a final "FinalState" object.  Using the C<state> method
+performs the task of rolling this up, saving the cached final state in the
+database, and returning the proper thing.
+
+The only way to traverse the state, though, is to iterate through each of the
+states.
+
+=item Activity Log
+
+All activity on the ticket that is designed for human consumption, outside of
+specific metrics.
+
+The difference between the activity log on a ticket, and the state rollup is
+designed to be rolled up to find the fully functional outcome of the ticket.
+
+The activity log is much less glamorous, it is simple the log of all actions
+taken.  Typically, an action in the activity log will generate a state, but
+a state change does not necessarily generate an activity log.
+
+=item Identities
+
+Identities are people or groups who have a vested interest in the ticket.
+
+Each ticket has a concept of membership, with varying roles based on group
+or individual aspects.
+
+=back
+
+=head2 Status
+
+Ticket status is a transitional state, and is calculated by the final state.
+
+Thus, the way to fetch the status is simply C<$ticket->state->status>, but since
+this is a common exercise, there is a convenience method C<$ticket->status>.
+
+Status is, however, read-only.  The only method to update the status is by
+adding a State object into the state stack.
+
+A simple way of updating the status would be:
+
+ $ticket->add_state({
+    identity => $ticket->state->identity,
+    status   => $schema->resultset('Status')->single({ name => 'Testing' })
+ });
+
+If you add a state, the status will be a continuation of whatever the last
+status is.  On the first state, if there is no status set at the time of
+creation then the status will be the default for the queue that the ticket
+exists in.
+
+=head3 STATUS TRANSITIONS
+
+When status is changed, if there are any rules to define what statuses can
+go into others (including reversals) the add_state method will fail with an
+exception.
+
+
+=cut
+
 use Moose;
 
 use Carp;
@@ -20,6 +111,11 @@ __PACKAGE__->add_columns(
     { data_type => 'varchar', size => '255', is_nullable => 0 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
+    'queue_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1 },
+    'priority_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1 },
+
 );
 
 __PACKAGE__->set_primary_key('pk1');
@@ -27,6 +123,11 @@ __PACKAGE__->set_primary_key('pk1');
 __PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1');
 
 __PACKAGE__->might_have('final_state', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1');
+
+__PACKAGE__->belongs_to('queue', 'Holistic::Schema::Queue', 'queue_pk1');
+__PACKAGE__->belongs_to('priority', 'Holistic::Schema::Ticket::Priority', 'priority_pk1');
+
+sub activity { shift->comments(@_); }
 
 sub add_state {
     my ( $self, $info ) = @_;
@@ -41,7 +142,7 @@ sub state {
     my $rs = $self->states(
         {},
         {
-            prefetch => [ 'actor_role', 'actor' ],
+            prefetch => [ 'identity', 'destination_identity' ],
             order_by => [ { '-asc' => 'dt_created' } ] 
         }
     );
