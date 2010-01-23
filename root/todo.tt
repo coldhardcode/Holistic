@@ -1,20 +1,31 @@
 <h1>TODO</h1>
-<ul>
- <li>Hiders</li>
- <li>"centered" system changes</li>
- <li>Comment sources</li>
- <li>
-  Tickets
-  <ul>
-   <li>Dependencies</li>
-   <li>Attention</li>
-  </ul>
- </li>
- <li>
-  Milestones
-  <ul>
-   <li>Needs an owner. Like a pumpking.</li>
-   <li>why not just make them special tickets?  it could depends on all it's children and tickets have due dates and descriptions and summaries!</li>
-  </ul>
- </li>
-</ul>
+<dl>
+ <dt>Hiders</dt>
+ <dd></dd>
+ <dt>"centered" system changes</dt>
+ <dd><p class="jay">I created a 'system' identity and person, gets deployed in testing.</p></dd>
+ <dt>Comment sources</dt>
+ <dd></dd>
+ <dt>Tickets</dt>
+ <dd>
+  <dl>
+   <dt>Dependencies</dt>
+   <dd><p class="jay">Dependencies are tracked via a simple link table, needs to be fleshed out more but this is the simple thing.</p></dd>
+   <dt>Attention</dt>
+   <dd></dd>
+  </dl>
+ </dd>
+ <dt>Milestones</dt>
+ <dd>
+  <dl>
+   <dt>Needs an owner. Like a pumpking.</dt>
+   <dd>good idea.</dd>
+   <dt>why not just make them special tickets?  it could depends on all it's children and tickets have due dates and descriptions and summaries!</dt>
+   <dd>
+    <p class="jay">A Ticket is now a subclass of Queue, with special things that are more specific to tickets.  Both Queues and tickets are in a tree, has a parent.  In most cases, a ticket will just link only upstream to a Queue.  Queue's have a type column, which can be 'milestone'. Due dates are time markers, so you can set other points (like Due, In Testing, etc).  I added a convenience method $ticket-&gt;due_date (same with $queue). </p>
+   </dd>
+  </dl>
+ </dd>
+</dl>
+
+<p>Changed this to a dl list so I can respond more sensibly.</p>
