@@ -128,7 +128,7 @@
     <tr class="missing">
      <td><label for="field2">Field Deux:</label></td>
      <td class="message"><input id="field2" type="text">
-      <div><aside class="rmessage"><p>I'm an error message.</p></aside></div>
+      <aside class="rmessage"><p>I'm an error message.</p></aside>
      </td>
     </tr>
     <tr>
