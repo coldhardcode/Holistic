@@ -14,19 +14,43 @@ has 'ticket' => (
 sub ticket_create : Plan(4) {
     my ( $self ) = @_;
 
-    my $queue = $self->schema->resultset('Queue')->find_or_create({
-        name => 'A Q'
+    my $queue;
+    if ( $self->meta->does_role('Holistic::Test::Queue') ) {
+        $queue = $self->queue;
+    }
+
+    $queue ||= $self->resultset('Queue')->find_or_create({
+        name => 'A Q',
+        token => 'a-queue'
     });
 
-    my $priority = $self->schema->resultset('Ticket::Priority')->find_or_create({
+    my $priority = $self->resultset('Ticket::Priority')->find_or_create({
         name => 'Urgent'
     });
 
-    my $ticket = $self->schema->resultset('Ticket')->create({
-        name     => 'Your mom',
-        token    => 'your-mom',
-        queue    => $queue,
-        priority => $priority,
+    my $type_ms = $self->resultset('Ticket::Type')->find_or_create({
+        name => 'Milestone'
+    });
+    my $type_wu = $self->resultset('Ticket::Type')->find_or_create({
+        name => 'Work Unit'
+    });
+    my $type_t = $self->resultset('Ticket::Type')->find_or_create({
+        name => 'Ticket'
+    });
+
+
+    my $milestone = $self->resultset('Queue')->create({
+        name        => 'Version 4.5',
+        token       => 'version-4.5',
+        parent_pk1  => $queue->id,
+    });
+
+    my $ticket = $self->resultset('Ticket')->create({
+        name        => 'Your mom',
+        token       => 'your-mom',
+        parent_pk1  => $milestone,
+        priority    => $priority,
+        type        => $type_t,
     });
 
     $self->ticket( $ticket );

@@ -10,6 +10,16 @@ The Ticket is the core and center of Holistic.  A ticket belongs in a queue,
 which has other specific and configurable rules that define certain default
 values and other attributes.
 
+=head2 QUEUES AND MILESTONES
+
+A ticket is a subclass of a queue, with additional features.  A queue is
+essentially some defined workflow that tickets go through, this can be the
+top level group queue, or a subordinate milestone object.
+
+In any case, a ticket has one of these, linked by the C<parent_pk1> column.
+
+=head2 INFORMATIONAL CATEGORIES
+
 The ticket is largely divided into four categories, or contexts, of information.
 
 =over
@@ -96,7 +106,7 @@ use Moose;
 use Carp;
 use String::Random;
 
-extends 'Holistic::Base::DBIx::Class';
+extends 'Holistic::Schema::Queue';
 
 with 'Holistic::Role::ACL',
      'Holistic::Role::Discussable';
@@ -104,15 +114,8 @@ with 'Holistic::Role::ACL',
 __PACKAGE__->table('tickets');
 #$CLASS->resultset_class('Holistic::ResultSet::Ticket');
 
+# See Holistic::Schema::Queue for all columns
 __PACKAGE__->add_columns(
-    'pk1',
-    { data_type => 'integer', size => '16', is_auto_increment => 1 },
-    'token',
-    { data_type => 'varchar', size => '255', is_nullable => 0 },
-    'name',
-    { data_type => 'varchar', size => '255', is_nullable => 0, },
-    'queue_pk1',
-    { data_type => 'integer', size => '16', is_foreign_key => 1 },
     'priority_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
 
@@ -124,8 +127,14 @@ __PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1')
 
 __PACKAGE__->might_have('final_state', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1');
 
-__PACKAGE__->belongs_to('queue', 'Holistic::Schema::Queue', 'queue_pk1');
-__PACKAGE__->belongs_to('priority', 'Holistic::Schema::Ticket::Priority', 'priority_pk1');
+__PACKAGE__->belongs_to(
+    'queue', 'Holistic::Schema::Queue',
+    { 'foreign.pk1' => 'self.parent_pk1' }
+);
+
+__PACKAGE__->belongs_to(
+    'priority', 'Holistic::Schema::Ticket::Priority', 'priority_pk1'
+);
 
 sub activity { shift->comments(@_); }
 
