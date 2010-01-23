@@ -16,6 +16,9 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
+    'rel_source',
+    { data_type => 'varchar', size => '255', is_nullable => 0,
+        dynamic_default_on_create => sub { shift->result_source->name } },
     'token',
     { data_type => 'varchar', size => '255', is_nullable => 0 },
     'type_pk1',
@@ -47,6 +50,28 @@ __PACKAGE__->belongs_to(
     { 'foreign.pk1' => 'self.type_pk1' }
 );
 
+__PACKAGE__->has_many(
+    'time_markers', 'Holistic::Schema::TimeMarker',
+    {
+        'foreign.foreign_pk1' => 'self.pk1',
+        'foreign.rel_source'  => 'self.rel_source'
+    }
+);
+
+sub due_date {
+    my ( $self, $date ) = @_;
+    my $marker = $self->time_markers({ name => 'DUE' })->first;
+    if ( defined $date ) {
+        if ( $marker ) {
+            $marker->update({ dt_marker => $date });
+        } else {
+            $marker = $self
+                ->add_to_time_markers({ dt_marker => $date, name => 'DUE' });
+        }
+    }
+
+    $marker;
+}
 
 sub _default_type {
     my ( $self ) = @_;
@@ -69,7 +94,6 @@ sub all_tickets {
         }
     );
     my @pk1s;
-
     while ( my $row = $rs->next ) {
         push @pk1s, grep { defined } map { $row->get_column("pk$_") } 1 .. 5;
     }

@@ -21,6 +21,8 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_nullable => 1, is_foreign_key => 1 },
     'status_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
+    'success',
+    { data_type => 'integer', size => '1', default_value => 1 },
     'dt_created',
     { data_type => 'datetime', is_nullable => 0, set_on_create => 1 }
 );

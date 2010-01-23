@@ -4,6 +4,8 @@ use Moose::Role;
 use Test::More;
 use MooseX::MethodAttributes::Role;
 
+use DateTime;
+
 with 'Holistic::Test::Schema'; # We require schema
 
 has 'ticket' => (
@@ -11,7 +13,7 @@ has 'ticket' => (
     isa => 'Holistic::Schema::Ticket'
 );
 
-sub ticket_create : Plan(4) {
+sub ticket_create : Plan(11) {
     my ( $self ) = @_;
 
     my $queue;
@@ -89,6 +91,25 @@ sub ticket_create : Plan(4) {
     );
 
     cmp_ok( $queue->all_tickets->count, '==', 1, 'ticket count on queue' );
+
+    my $dt_due = DateTime->now->add( weeks => 1 );
+    $queue->due_date( DateTime->now->add( months => 1 ) );
+    $ticket->due_date( $dt_due );
+
+    cmp_ok( $queue->time_markers->count, '==', 1, 'time marker ok');
+    cmp_ok( $ticket->time_markers->count, '==', 1, 'time marker ok');
+    cmp_ok( $ticket->due_date->dt_marker, '==', $dt_due, 'due date ok');
+
+    ok( ! $ticket->needs_attention, 'ticket doesnt need attention');
+    
+    my $schmuck = $self->resultset('Person')->create({
+        name  => 'Joe',
+        token => 'joe',
+        email => 'joe@joe.com',
+    });
+    my $ident = $schmuck->add_to_identities({ realm => 'local', id => 'joe' });
+    $ticket->needs_attention( $ident );
+    cmp_ok( $ticket->needs_attention->pk1, '==', $ident->pk1, 'ticket needs attention');
 }
 
 1;

@@ -137,6 +137,33 @@ __PACKAGE__->belongs_to(
 
 sub activity { shift->comments(@_); }
 
+sub needs_attention {
+    my ( $self, $identity ) = @_;
+
+    my $status = $self->result_source->schema->resultset('Ticket::Status')->find_or_create({ name => 'Attention Required' });
+    if ( defined $identity ) {
+        my $state = $self->state;
+        my $source_id;
+        if ( $state ) {
+            $source_id = $state->identity_pk1;
+        } else {
+            $source_id = $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' })->id;
+        }
+        $self->add_state({
+            identity_pk1 => $source_id,
+            identity_pk2 => $identity->pk1,
+            status_pk1   => $status->id,
+        });
+    }
+
+    my $state = $self->state;
+
+    if ( $state and $state->status_pk1 == $status->id ) {
+        return $state->destination_identity;
+    }
+    return undef;
+}
+
 sub status {
     my ( $self ) = @_;
     my $state = $self->state;
