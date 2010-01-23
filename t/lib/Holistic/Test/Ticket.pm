@@ -38,7 +38,6 @@ sub ticket_create : Plan(4) {
         name => 'Ticket'
     });
 
-
     my $milestone = $self->resultset('Queue')->create({
         name        => 'Version 4.5',
         token       => 'version-4.5',
@@ -58,6 +57,13 @@ sub ticket_create : Plan(4) {
     my $state = $ticket->state;
 
     ok( !$state, 'no state yet');
+
+    is( $ticket->status->name, 'New', 'new ticket status' );
+
+    $state = $ticket->state;
+    ok( $state, 'now we have a state' );
+    cmp_ok( $state->state_count, '==', 1, 'final state cached' );
+    #cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
 
     my $comment = $ticket->add_comment({
         identity => $self->person->identities({ realm => 'local' })->first,

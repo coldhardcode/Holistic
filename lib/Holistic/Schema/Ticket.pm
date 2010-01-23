@@ -98,7 +98,6 @@ When status is changed, if there are any rules to define what statuses can
 go into others (including reversals) the add_state method will fail with an
 exception.
 
-
 =cut
 
 use Moose;
@@ -138,9 +137,26 @@ __PACKAGE__->belongs_to(
 
 sub activity { shift->comments(@_); }
 
+sub status {
+    my ( $self ) = @_;
+    my $state = $self->state;
+    if ( not defined $state ) {
+        $state = $self->add_state({
+            identity => $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' }),
+            status => $self->result_source->schema->resultset('Ticket::Status')->find_or_create({ name => 'New' })
+        });
+    }
+    $state->status;
+}
+
 sub add_state {
     my ( $self, $info ) = @_;
 
+    $self->result_source->schema->txn_do(sub {
+        my $final = $self->final_state;
+        $final->delete if defined $final;
+        $self->add_to_states($info);
+    });
 }
 
 sub state {
@@ -152,12 +168,11 @@ sub state {
         {},
         {
             prefetch => [ 'identity', 'destination_identity' ],
-            order_by => [ { '-asc' => 'dt_created' } ] 
+            order_by => [ { '-asc' => 'me.dt_created' } ] 
         }
     );
 
     my $state_count = $rs->count;
-
     return undef if $state_count == 0;
 
     if ( not defined $final_state or $state_count != $final_state->state_count )
