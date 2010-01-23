@@ -25,12 +25,6 @@
   </table>
  </fieldset>
 </form>
-<h3>TODO</h3>
-<ul>
- <li>Hiders</li>
- <li>"centered" system changes</li>
- <li>Comment sources</li>
-</ul>
 <h3>[% c.loc('History') %]</h3>
 <ul class="comments">
  <li class="visitor">

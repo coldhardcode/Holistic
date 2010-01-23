@@ -60,10 +60,22 @@ sub login : Local {
     $c->stash->{template} = 'login.tt';
 }
 
+sub roadmap : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'roadmap.tt';
+}
+
 sub ticket : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'ticket.tt';
+}
+
+sub todo : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'todo.tt';
 }
 
 =head2 end
