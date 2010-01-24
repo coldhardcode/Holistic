@@ -84,8 +84,9 @@ dl dd {
 br {
     clear: both;
 }
-table {
-    margin: 0 0 1em 0;
+table label {
+    display: block;
+    text-align: right;
 }
 table thead th {
     background-color: #ab0706;
@@ -102,6 +103,7 @@ table tbody tr.head th {
     background-color: #3470a9;
     border-top: 1px solid #fff;
     color: #f3f3f3;
+    font-weight: normal;
     padding: 4px 5px;
 }
 table tbody th {
@@ -111,10 +113,11 @@ table tbody th {
     padding: 7px;
 }
 table tbody td {
-    padding: 7px;
     border: 1px solid #fff;
+    padding: 7px;
+    vertical-align: top;
 }
-table tbody tr.odd td {
+table tbody tr.odd {
     background-color: #eee;
 }
 table tfoot td {
@@ -168,10 +171,6 @@ background-color: #eee;
     vertical-align: center;
 }
 fieldset table thead th {
-    text-align: right;
-}
-fieldset table label {
-    display: block;
     text-align: right;
 }
 fieldset table tr td {
@@ -391,6 +390,22 @@ nav.pager a:hover {
     background-color: #3470a9;
     color: #fff;
 }
+table.summary tbody td a {
+    display: block;
+}
+table tbody tr.imp,
+table tbody tr.imp td label {
+    background-color: #de691f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
+    color: #000;
+}
+table.summary tbody tr:hover,
+table.summary tbody tr.odd:hover {
+    background-color: #ddd;
+}
+table.ticket label {
+    color: #78766f;
+}
 ul.comments {
     margin: 0; padding: 0 5px 0 5px;
     border-left: 1px solid #78766f;
@@ -441,7 +456,8 @@ ul.roadmap li {
 }
 ul.roadmap h3 {
     border-bottom: 1px solid #353535;
+    margin: 0 0 .5em 0; padding: 0;
 }
 ul.roadmap table {
-    margin: 0 0 2em 0;
+    margin: 0 0 2.5em 0;
 }

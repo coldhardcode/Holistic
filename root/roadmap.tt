@@ -1,11 +1,11 @@
 <h1>Roadmap</h1>
 <ul class="roadmap">
  <li>
-  <h3>Next Release <small>Owned by <a href="#">gphat</a>, due in <time date="2010-01-30">8 days</time>.</small></h3>
-  <table>
+  <h3><a href="#">Next Release</a> <small>Owned by <a href="#">gphat</a>, due in <time date="2010-01-30">8 days</time>.</small></h3>
+  <table class="summary">
    <tfoot>
      <tr>
-      <td colspan="7"><meter><img src="/static/images/pie33.png"> 33% Complete</meter> <details><a href="#">1 closed</a> + <a href="#">2 open</a> = <a href="#">3 total</a></details></td>
+      <td colspan="7"><meter><img src="/static/images/pie33.png"> 33% Complete</meter> <details><a href="#">1 Closed</a> + <a href="#">2 Open</a> = <a href="#">3 Total</a></details></td>
      </tr>
    </tfoot>
    <tbody>
@@ -49,11 +49,11 @@
   </table>
  </li>
  <li>
-  <h3>Release After That</h3>
-  <table>
+  <h3><a href="#">Release After That</a> <small>Owned by <a href="#">gphat</a>, due in <time date="2010-01-30">8 days</time>.</small></h3>
+  <table class="summary">
    <tfoot>
      <tr>
-      <td colspan="7"><meter><img src="/static/images/pie33.png"> 33% Complete</meter> <details><a href="#">1 closed</a> + <a href="#">2 open</a> = <a href="#">3 total</a></details></td>
+      <td colspan="7"><meter><img src="/static/images/pie33.png"> 33% Complete</meter> <details><a href="#">1 Closed</a> + <a href="#">2 Open</a> = <a href="#">3 Total</a></details></td>
      </tr>
    </tfoot>
    <tbody>
@@ -97,11 +97,11 @@
   </table>
  </li>
  <li>
-  <h3>Final Release</h3>
-  <table>
+  <h3><a href="#">Final Release</a> <small>Owned by <a href="#">gphat</a>, due in <time date="2010-01-30">8 days</time>.</small></h3>
+  <table class="summary">
    <tfoot>
      <tr>
-      <td colspan="7"><meter><img src="/static/images/pie66.png"> 66% Complete</meter> <details><a href="#">2 closed</a> + <a href="#">1 open</a> = <a href="#">3 total</a></details></td>
+      <td colspan="7"><meter><img src="/static/images/pie66.png"> 66% Complete</meter> <details><a href="#">2 Closed</a> + <a href="#">1 Open</a> = <a href="#">3 Total</a></details></td>
      </tr>
    </tfoot>
    <tbody>

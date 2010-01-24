@@ -42,6 +42,12 @@ Standard 404 error page
 
 =cut
 
+sub createticket : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'createticket.tt';
+}
+
 sub default :Path {
     my ( $self, $c ) = @_;
     $c->response->body( 'Page not found' );

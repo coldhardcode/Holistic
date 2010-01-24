@@ -1,10 +1,23 @@
 [% MACRO label_field(info) BLOCK %]
  <td>
+  [% IF info.important %]<strong>[% END %]
   <label id="form_[% info.name %]_label" for="form_[% info.name %]">[% c.loc(info.label) ~%]
    [%~ IF info.tooltip %]<script type="text/javascript">new YAHOO.widget.Tooltip('tt_[% info.name %]_label', { context: 'form_[% info.name %]_label', text: "[% info.tooltip | replace('"', '\"') %]" } );</script>[?][% END ~%]
    [% IF info.required %]<span class="req">[% c.loc('FIELD REQUIRED SPLAT') %]</span>[% END %]:
   </label>
+  [% IF info.important %]</strong>[% END %]
  </td>
+[% END; %]
+
+[% MACRO readonly_field(info) BLOCK %]
+ [% label_field(info) %]
+<td[% IF info.extra %] class="message"[% END %][% IF info.double %] colspan="3"[% END %]>
+ <input type="hidden" id="form_[% info.name %]" name="[% info.name %]" value="[% info.value | html %]"/>
+ [% info.value %]
+ [% IF info.extra %]
+ <div><aside class="rmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+ [% END %]
+</td>
 [% END; %]
 
 [% MACRO select_field(info) BLOCK; %]

@@ -3,6 +3,7 @@
  <ul>
   <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
   <li><a href="[% c.uri_for('/roadmap') %]">Roadmap</a></li>
+  <li><a href="[% c.uri_for('/createticket') %]">Create Ticket</a></li>
   <li><a href="[% c.uri_for('/ticket') %]">Ticket</a></li>
   <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
  </ul>

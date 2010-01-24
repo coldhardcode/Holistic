@@ -165,7 +165,7 @@
     </tr>
     <tr>
      <td><label>Readonly Field:</label></td>
-     <td><span>Readonly Value</span></td>
+     <td>Readonly Value</td>
     </tr>
    </tdbody>
   </table>

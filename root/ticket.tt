@@ -1,30 +1,81 @@
-[% page.title = 'Create Ticket' %]
-<h1>[% c.loc('Create Ticket') %]</h1>
-<form id="ticket">
- <fieldset>
-  <table>
-   <tbody>
-    <tr>
-     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Should this be a dropbox?', required => 1, double => 1 }); %]
-    </tr>
-    <tr>
-     [% text_field({ label => 'Summary', name => 'ticket.summary', hint => 'Short Summary of Issue', required => 1, double => 1 }); %]
-    </tr>
-    <tr>
-     [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
-    </tr>
-    <tr>
-     [% select_field({ label => 'Type', name => 'ticket.type', required => 1, array => [ 'Defect', 'Enhancement', 'Task' ] }); %]
-     [% select_field({ label => 'Priority', name => 'ticket.priority', required => 1, array => [ 'Highest', 'High', 'Normal', 'Low', 'Lowest', 'Low' ] }); %]
-    </tr>
-    <tr>
-     [% text_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', hint => 'YYYY-MM-DD' }); %]
-     [% text_field({ label => 'Tags', name => 'ticket.tags', hint => 'Space separated list' }); %]
-    </tr>
-   </tbody>
-  </table>
- </fieldset>
-</form>
+[% page.title = 'Ticket #1234' %]
+<h1>[% c.loc('Defect #1234: Open') %]</h1>
+<h2>Summary: Existing ticket systems suck, make a new one</h2>
+<table class="ticket">
+ <tbody>
+  <tr>
+   [% readonly_field({ label => 'Reporter', name => 'ticket.reporter', value => 'gphat' }); %]
+   [% readonly_field({ label => 'Owner', name => 'ticket.owner', value => 'jshirley' }); %]
+  </tr>
+  <tr class="imp">
+   [% readonly_field({ label => 'Attention', name => 'ticket.reporter', value => 'gphat', important => 1, double => 1 }); %]
+  </tr>
+  <tr>
+   [% readonly_field({ label => 'Opened', name => 'ticket.opened', value => '2010-01-22 12:01am' }); %]
+   [% readonly_field({ label => 'Last Changed', name => 'ticket.last_changed', value => '2010-01-22 12:01am' }); %]
+  </tr>
+  <tr>
+   [% readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => '2010-01-21' }); %]
+   [% readonly_field({ label => 'Priority', name => 'ticket.priority', value => 'Normal' }); %]
+  </tr>
+  <tr>
+   [% readonly_field({ label => 'Tags', double => 1, name => 'ticket.tags', value => '<a href="#">foo</a> <a href="bar">bar</a> <a href="baz">baz</a>' }); %]
+  </tr>
+ </tbody>
+</table>
+<table class="ticket">
+ <tbody>
+  <tr>
+   [% readonly_field({ label => 'Description', name => 'ticket.description', value => '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>', double => 1 }); %]
+  </tr>
+ </tbody>
+</table>
+<h3>Dependencies</h3>
+<table class="summary">
+ <tfoot>
+   <tr>
+    <td colspan="7"><meter><img src="/static/images/pie33.png"> 33% Complete</meter> <details><a href="#">1 Closed</a> + <a href="#">2 Open</a> = <a href="#">3 Total</a></details></td>
+   </tr>
+ </tfoot>
+ <tbody>
+  <tr class="head">
+   <th>Ticket</th>
+   <th>Summary</th>
+   <th>Status</th>
+   <th>Owner</th>
+   <th>Type</th>
+   <th>Priority</th>
+   <th>Component</th>
+  </tr>
+  <tr class="closed">
+   <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
+   <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
+   <td>Closed</td>
+   <td>gphat</td>
+   <td>defect</td>
+   <td>normal</td>
+   <td>Holistic</td>
+  </tr>
+  <tr class="odd">
+   <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
+   <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
+   <td>Open</td>
+   <td>gphat</td>
+   <td>defect</td>
+   <td>normal</td>
+   <td>Holistic</td>
+  </tr>
+  <tr>
+   <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
+   <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
+   <td>Open</td>
+   <td>gphat</td>
+   <td>defect</td>
+   <td>normal</td>
+   <td>Holistic</td>
+  </tr>
+ </tbody>
+</table>
 <h3>[% c.loc('History') %]</h3>
 <ul class="comments">
  <li class="visitor">
