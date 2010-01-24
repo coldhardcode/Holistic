@@ -434,6 +434,13 @@ ul.comments li p {
     margin: 0 0 0 45px; padding: .5em;
     text-align: left;
 }
+ul.comments li.system time {
+    margin: 0 0 0 9.5em;
+}
+ul.comments li.system p {
+    background-color: #ededed;
+    margin: 0 2em 0 8em;
+}
 ul.comments li.visitor {
     margin: 0 0 1em 0;
 }
