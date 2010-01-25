@@ -111,7 +111,7 @@ with 'Holistic::Role::ACL',
      'Holistic::Role::Discussable';
 
 __PACKAGE__->table('tickets');
-#$CLASS->resultset_class('Holistic::ResultSet::Ticket');
+__PACKAGE__->resultset_class('Holistic::ResultSet::Ticket');
 
 # See Holistic::Schema::Queue for all columns
 __PACKAGE__->add_columns(
@@ -121,7 +121,6 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->set_primary_key('pk1');
-
 __PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1');
 
 __PACKAGE__->might_have('final_state', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1');
@@ -134,6 +133,12 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->belongs_to(
     'priority', 'Holistic::Schema::Ticket::Priority', 'priority_pk1'
 );
+
+__PACKAGE__->has_many(
+    'ticket_tags', 'Holistic::Schema::Ticket::Tag',
+    { 'foreign.ticket_pk1' => 'self.pk1' }
+);
+__PACKAGE__->many_to_many('tags', 'ticket_tags', 'tag' );
 
 sub activity { shift->comments(@_); }
 
@@ -187,13 +192,28 @@ sub clear_attention {
     return 0;
 }
 
+sub requestor {
+    my ( $self ) = @_;
+    my $state = $self->states(
+        {
+            status => $self->result_source->schema->get_status('NEW TICKET')
+        },
+        {
+            prefetch => [ { 'identity' => 'person' } ] 
+        }
+    )->first;
+    return undef unless defined $state;
+    
+    $state->identity;
+}
+
 sub status {
     my ( $self ) = @_;
     my $state = $self->state;
     if ( not defined $state ) {
         $state = $self->add_state({
             identity => $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' }),
-            status => $self->result_source->schema->resultset('Ticket::Status')->find_or_create({ name => 'New' })
+            status => $self->result_source->schema->get_status('NEW TICKET')
         });
     }
     $state->status;
@@ -291,3 +311,34 @@ sub is_member {
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
+
+package Holistic::ResultSet::Ticket;
+
+use Moose;
+
+extends 'Holistic::Base::ResultSet';
+
+around 'create' => sub {
+    my ( $orig, $self, $data, @args ) = @_;
+
+    my $schema = $self->result_source->schema;
+    my $ident;
+    if ( $data->{identity} ) {
+        $ident = delete $data->{identity};
+    }
+    # in a txn?
+    my $ticket = $self->$orig($data, @args);
+
+    if ( $ident ) {
+        my $status = $schema->get_status('NEW TICKET');
+
+        $ticket->add_state({
+            identity_pk1 => $ident->id,
+            status_pk1   => $status->id,
+        });
+    }
+    $ticket;
+};
+
+no Moose;
+1;

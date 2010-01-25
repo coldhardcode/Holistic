@@ -13,8 +13,8 @@ has 'ticket' => (
     isa => 'Holistic::Schema::Ticket'
 );
 
-sub ticket_create : Plan(17) {
-    my ( $self ) = @_;
+sub ticket_create : Plan(19) {
+    my ( $self, $data ) = @_;
 
     my $queue;
     if ( $self->meta->does_role('Holistic::Test::Queue') ) {
@@ -22,12 +22,20 @@ sub ticket_create : Plan(17) {
     }
 
     $queue ||= $self->resultset('Queue')->find_or_create({
-        name => 'A Q',
-        token => 'a-queue'
+        name  => 'Test Queue',
+        token => 'test-suite-queue'
     });
 
+    my $identity = $data->{identity} ?
+        $self->resultset('Person::Identity')->single({ realm => 'local', id => $data->{identity} }) :
+        $self->person->identities({ realm => 'local' })->first;
+
+    if ( not defined $identity ) {
+        confess "Unable to find identity";
+    }
+
     my $priority = $self->resultset('Ticket::Priority')->find_or_create({
-        name => 'Urgent'
+        name => $data->{priority} || 'Urgent'
     });
 
     my $type_ms = $self->resultset('Ticket::Type')->find_or_create({
@@ -49,6 +57,7 @@ sub ticket_create : Plan(17) {
     my $ticket = $self->resultset('Ticket')->create({
         name        => 'Your mom',
         token       => 'your-mom',
+        identity    => $identity,
         parent_pk1  => $milestone->id,
         priority    => $priority,
         type        => $type_t,
@@ -56,16 +65,15 @@ sub ticket_create : Plan(17) {
 
     $self->ticket( $ticket );
 
+    is( $ticket->status->name, 'NEW TICKET', 'new ticket status' );
+
     my $state = $ticket->state;
 
-    ok( !$state, 'no state yet');
-
-    is( $ticket->status->name, 'New', 'new ticket status' );
-
-    $state = $ticket->state;
+    cmp_ok( $state->identity_pk1, '==', 1, 'proper identity state');
     ok( $state, 'now we have a state' );
     cmp_ok( $state->state_count, '==', 1, 'final state cached' );
-    #cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
+    cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
+    cmp_ok( $ticket->final_state->identity_pk1, '==', 1, 'final state identity' );
 
     my $comment = $ticket->add_comment({
         identity => $self->person->identities({ realm => 'local' })->first,

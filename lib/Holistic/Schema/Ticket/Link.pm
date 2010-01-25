@@ -18,8 +18,8 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
     'identity_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
-    'type',
-    { data_type => 'varchar', size => '255', is_nullable => 0, },
+    'type_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1 },
     'dt_created',
     { data_type => 'datetime', set_on_create => 1 },
 );
@@ -28,6 +28,7 @@ __PACKAGE__->set_primary_key('pk1');
 
 __PACKAGE__->belongs_to('ticket', 'Holistic::Schema::Ticket', 'ticket_pk1');
 __PACKAGE__->belongs_to('linked_ticket', 'Holistic::Schema::Ticket', 'ticket_pk2');
+__PACKAGE__->belongs_to('type', 'Holistic::Schema::Label', 'type_pk1');
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

@@ -63,6 +63,12 @@ sub deploy {
     }
 }
 
+sub get_status {
+    my ( $self, $id ) = @_;
+
+    $self->resultset('Ticket::Status')->find_or_create({ name => $id });
+}
+
 sub tokenize {
     my ( $field ) = @_;
     $field = lc($field);
