@@ -1,13 +1,12 @@
 package Holistic::Test::Suite;
 
-use Test::FITesque::Test;
-
 use Moose;
 use MooseX::Method::Signatures;
 
 method run(
     ArrayRef :$with,
     ArrayRef :$plan   = [],
+    ArrayRef :$tests  = [],
     HashRef  :$config = {}
 ) {
 
@@ -25,7 +24,7 @@ method run(
         cache        => 1,
     )->new_object( $config );
 
-    $suite->run;
+    $suite->run( $tests );
     
 }
 

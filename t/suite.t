@@ -11,6 +11,12 @@ $suite->run(
             '', '',
             { quote_char => '`', name_sep => '.' }
         ]
-    }
+    },
+    tests => [
+        'deploy',
+        { 'person_create' => { name => 'J. Shirley', ident => 'jshirley', email => 'jshirley@coldhardcode.com' } },
+        { 'person_create' => { name => 'Cory Watson', ident => 'gphat', email => 'gphat@coldhardcode.com' } },
+
+    ]
 );
 
