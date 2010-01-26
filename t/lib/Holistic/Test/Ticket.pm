@@ -5,6 +5,9 @@ use Test::More;
 use MooseX::MethodAttributes::Role;
 
 use DateTime;
+use Text::Lorem;
+
+our $lorem = Text::Lorem->new;
 
 with 'Holistic::Test::Schema'; # We require schema
 
@@ -55,8 +58,9 @@ sub ticket_create : Plan(19) {
     });
 
     my $ticket = $self->resultset('Ticket')->create({
-        name        => 'Your mom',
-        token       => 'your-mom',
+        name        => 'Test Suite Generated Ticket',
+        token       => 'test-suite-generated-ticket',
+        description => $lorem->paragraphs(2),
         identity    => $identity,
         parent_pk1  => $milestone->id,
         priority    => $priority,
@@ -74,11 +78,10 @@ sub ticket_create : Plan(19) {
     cmp_ok( $state->state_count, '==', 1, 'final state cached' );
     cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
     cmp_ok( $ticket->final_state->identity_pk1, '==', 1, 'final state identity' );
-
     my $comment = $ticket->add_comment({
-        identity => $self->person->identities({ realm => 'local' })->first,
-        subject  => 'Lorem Ipsum',
-        body     => 'Bitches' 
+        identity    => $self->person->identities({ realm => 'local' })->first,
+        subject     => 'Lorem Ipsum',
+        body        => $lorem->sentences(5),
     });
 
     ok( $comment, 'created comment' );
@@ -87,7 +90,7 @@ sub ticket_create : Plan(19) {
     $comment = $ticket->add_comment({
         identity => $self->person->identities({ realm => 'git' })->first,
         subject  => 'changeset:a2f13fh89',
-        body     => 'changeset comments'
+        body     => $lorem->sentences(2),
     });
 
     cmp_ok(
@@ -127,6 +130,7 @@ sub ticket_create : Plan(19) {
 
     cmp_ok( $queue->all_tickets->search({ 'status.name' => 'Attention Required' })->count, '==', 1, 'ticket count on queue' );
 
+    $ticket->tag(qw/foo bar baz/);
 }
 
 1;

@@ -78,6 +78,15 @@ sub ticket : Local {
     $c->stash->{template} = 'ticket.tt';
 }
 
+sub ticketlive : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{ticket} = $c->model('Schema::Ticket')->search({
+        token       => 'test-suite-generated-ticket',
+    })->first;
+    $c->stash->{template} = 'ticket-data.tt';
+}
+
 sub todo : Local {
     my ($self, $c) = @_;
 

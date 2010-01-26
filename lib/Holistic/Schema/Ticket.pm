@@ -117,7 +117,6 @@ __PACKAGE__->resultset_class('Holistic::ResultSet::Ticket');
 __PACKAGE__->add_columns(
     'priority_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
-
 );
 
 __PACKAGE__->set_primary_key('pk1');
@@ -192,19 +191,34 @@ sub clear_attention {
     return 0;
 }
 
-sub requestor {
+sub initial_state {
     my ( $self ) = @_;
+
     my $state = $self->states(
         {
-            status => $self->result_source->schema->get_status('NEW TICKET')
+            'me.status_pk1' => $self->result_source->schema->get_status('NEW TICKET')->id
         },
         {
+            order_by => [ { '-asc' => 'me.dt_created' } ],
             prefetch => [ { 'identity' => 'person' } ] 
         }
     )->first;
     return undef unless defined $state;
+
+    return $state;
+}
+
+sub requestor {
+    my ( $self ) = @_;
+
+    my $state = $self->initial_state;
+    return undef unless defined $state;
     
     $state->identity;
+}
+
+sub owner {
+    shift->state->destination_identity;
 }
 
 sub status {
@@ -295,6 +309,19 @@ sub state {
     }
 
     return $final_state;
+}
+
+sub tag {
+    my ( $self, @tags ) = @_;
+
+    $self->ticket_tags->delete;
+
+    foreach my $tag ( @tags ) {
+        my $tag = $self->result_source->schema->resultset('Tag')->find_or_create({
+            name => lc($tag)
+        });
+        $self->add_to_tags($tag);
+    }
 }
 
 # ACL Methods

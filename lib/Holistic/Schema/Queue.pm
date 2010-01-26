@@ -16,6 +16,8 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
+    'description',
+    { data_type => 'text', is_nullable => 1},
     'rel_source',
     { data_type => 'varchar', size => '255', is_nullable => 0,
         dynamic_default_on_create => sub { shift->result_source->name } },
