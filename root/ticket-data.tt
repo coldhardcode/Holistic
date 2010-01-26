@@ -51,13 +51,10 @@ END;
   </tr>
  </tbody>
 </table>
-<table class="ticket">
- <tbody>
-  <tr>
-   [% readonly_field({ label => 'Description', name => 'ticket.description', value => ticket.description, double => 1 }); %]
-  </tr>
- </tbody>
-</table>
+<dl>
+ <dt>Description</dt>
+ <dd>[% ticket.description %]</dd>
+</dl>
 <h3>Dependencies</h3>
 [% IF dependencies.count > 0 %]
 <table class="summary">
