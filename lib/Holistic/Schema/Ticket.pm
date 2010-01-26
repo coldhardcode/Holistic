@@ -139,6 +139,12 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many('tags', 'ticket_tags', 'tag' );
 
+__PACKAGE__->has_many(
+    'dependent_links', 'Holistic::Schema::Ticket::Link',
+    { 'foreign.ticket_pk1' => 'self.pk1' }
+);
+__PACKAGE__->many_to_many('dependencies', 'dependent_links', 'linked_ticket' );
+
 sub activity { shift->comments(@_); }
 
 sub needs_attention {
@@ -213,24 +219,41 @@ sub requestor {
 
     my $state = $self->initial_state;
     return undef unless defined $state;
-    
+
     $state->identity;
 }
 
 sub owner {
-    shift->state->destination_identity;
+    my ( $self ) = @_;
+    my $state =
+        $self->states({}, { order_by => [ { '-desc' => 'me.pk1' } ] })->first;
+    my $id = $state->identity_pk2 || $state->identity_pk1;
+    $self->result_source->schema->resultset('Person::Identity')
+        ->search({ 'me.pk1' => $id }, { prefetch => [ 'person' ] })
+        ->first;
 }
 
 sub status {
     my ( $self ) = @_;
     my $state = $self->state;
+
     if ( not defined $state ) {
         $state = $self->add_state({
             identity => $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' }),
             status => $self->result_source->schema->get_status('NEW TICKET')
         });
     }
+
     $state->status;
+}
+
+sub close {
+    my ( $self, $identity ) = @_;
+
+    return $self->add_state({
+        identity => $identity,
+        status => $self->result_source->schema->get_status('CLOSED')
+    });
 }
 
 sub add_state {
@@ -258,7 +281,6 @@ sub state {
 
     my $state_count = $rs->count;
     return undef if $state_count == 0;
-
     if ( not defined $final_state or $state_count != $final_state->state_count )
     {
         my %merge;
@@ -350,17 +372,17 @@ around 'create' => sub {
 
     my $schema = $self->result_source->schema;
     my $ident;
-    if ( $data->{identity} ) {
+    if ( exists $data->{identity} ) {
         $ident = delete $data->{identity};
     }
     # in a txn?
     my $ticket = $self->$orig($data, @args);
 
-    if ( $ident ) {
+    if ( defined $ident ) {
         my $status = $schema->get_status('NEW TICKET');
-
+ 
         $ticket->add_state({
-            identity_pk1 => $ident->id,
+            identity_pk1 => $ident->pk1,
             status_pk1   => $status->id,
         });
     }

@@ -7,7 +7,7 @@ state     = ticket.state;
 requestor = ticket.requestor;
 owner     = ticket.owner;
 attention = ticket.needs_attention;
-
+dependencies = ticket.dependencies_rs;
 activity_log = ticket.comments;
 
 tag_list = [];
@@ -16,6 +16,15 @@ FOREACH tag IN ticket.tags;
 END;
 
 %]
+<div class="todo">
+<h1>TODO</h1>
+<ul>
+ <li>Fancy date management, like the whole "2 days ago" thing.</li>
+ <li>Better owner management, it needs some work.</li>
+ <li>Membership of groups, so the ticket-&gt;queue-&gt;is_member method works for aligning the comments</li>
+</ul>
+</div>
+
 <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
 <h2>Summary: [% ticket.name %]</h2>
 <table class="ticket">
@@ -50,6 +59,7 @@ END;
  </tbody>
 </table>
 <h3>Dependencies</h3>
+[% IF dependencies.count > 0 %]
 <table class="summary">
  <tfoot>
    <tr>
@@ -66,35 +76,19 @@ END;
    <th>Priority</th>
    <th>Component</th>
   </tr>
-  <tr class="closed">
-   <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
-   <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
-   <td>Closed</td>
-   <td>gphat</td>
-   <td>defect</td>
-   <td>normal</td>
-   <td>Holistic</td>
+[% FOREACH dep IN dependencies.all %]
+  <tr class="[% IF dep.status.name == 'CLOSED'%]closed[% END; IF loop.index % 2  %] odd[% END %]">
+    <th><a href="[% c.action_uri('Ticket', 'object', [ dep.id ]) %]">[% dep.id %]</a></th>
+    <td><a href="[% c.action_uri('Ticket', 'object', [ dep.id ]) %]">[% dep.name | html %]</a></td>
+    <td>[% c.loc(dep.status.name) %]</td>
+    <td>[% dep.owner.person.token %]</td>
+    <td>[% c.loc(dep.type.name) %]</td>
+    <td>[% c.loc(dep.priority.name) %]</td>
+    <td>XX Holistic</td>
   </tr>
-  <tr class="odd">
-   <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
-   <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
-   <td>Open</td>
-   <td>gphat</td>
-   <td>defect</td>
-   <td>normal</td>
-   <td>Holistic</td>
-  </tr>
-  <tr>
-   <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
-   <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
-   <td>Open</td>
-   <td>gphat</td>
-   <td>defect</td>
-   <td>normal</td>
-   <td>Holistic</td>
-  </tr>
- </tbody>
+[% END %]
 </table>
+[% END %]
 <h3>[% c.loc('History') %]</h3>
 <ul class="comments">
 [% FOREACH message IN activity_log.reverse %]
@@ -112,25 +106,4 @@ END;
         <p>[% message.body %]</p>
     </li>
 [% END %]
- <li class="visitor">
-  <time datetime="2010-01-19T07:13Z">2 days ago via <a href="#">git changeset a5febc0</a>...</time>
-  <cite><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"></cite>
-  <p>I am the first comment.  I am by someone who isn't the reporter. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
- </li>
- <li>
-  <time datetime="2010-01-19T07:15Z">2 days ago via IRC #dev...</time>
-  <cite><img src="http://www.gravatar.com/avatar/714a9312e3e32ef04a6525969a9422be?s=40"></cite>
-  <p>I am the second comment. I am a response by the reporter.  Or maybe I'm just in the same group as them. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
- </li>
- <li class="visitor">
-  <time datetime="2010-01-20T07:13Z">1 day ago via <a href="#">twitter @gphat</a>...</time>
-  <cite><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"></cite>
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
- </li>
- <li class="visitor">
-  <time datetime="2010-01-21T20:13Z">15 minutes ago via web...</time>
-  <cite><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"></cite>
-  <p>I am a comment.  I am by someone who isn't the reporter. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
- </li>
-</ul>
-
+</ul> 

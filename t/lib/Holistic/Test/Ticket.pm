@@ -73,11 +73,13 @@ sub ticket_create : Plan(19) {
 
     my $state = $ticket->state;
 
-    cmp_ok( $state->identity_pk1, '==', 1, 'proper identity state');
+    cmp_ok( $state->identity_pk1, '==', $identity->pk1, 'proper identity state');
     ok( $state, 'now we have a state' );
+
     cmp_ok( $state->state_count, '==', 1, 'final state cached' );
     cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
-    cmp_ok( $ticket->final_state->identity_pk1, '==', 1, 'final state identity' );
+    cmp_ok( $ticket->final_state->identity_pk1, '==', $identity->pk1, 'final state identity' );
+    cmp_ok( $ticket->requestor->pk1, '==', $identity->pk1, 'requestor identity' );
     my $comment = $ticket->add_comment({
         identity    => $self->person->identities({ realm => 'local' })->first,
         subject     => 'Lorem Ipsum',
@@ -131,6 +133,37 @@ sub ticket_create : Plan(19) {
     cmp_ok( $queue->all_tickets->search({ 'status.name' => 'Attention Required' })->count, '==', 1, 'ticket count on queue' );
 
     $ticket->tag(qw/foo bar baz/);
+
+    $ticket;
+}
+
+sub ticket_dependencies : Plan(19) {
+    my ( $self, $data ) = @_;
+
+    my $ticket = $self->ticket;
+
+    my $requestor = $ticket->requestor;
+    my @identities = ( $requestor, $requestor, $requestor, $requestor, $requestor );
+
+    for ( 0 .. 4 ) {
+        my $new = $self->resultset('Ticket')->create({
+            name  => $lorem->words(4),
+            token => $lorem->words(4),
+            description => $lorem->paragraphs(2),
+            identity    => $identities[$_],
+            queue       => $ticket->queue,
+            priority    => $ticket->priority,
+            type        => $ticket->type
+        });
+        $ticket->add_to_dependent_links({
+            linked_ticket => $new,
+            identity_pk1  => $identities[$_]->id,
+            type          => $self->resultset('Label')->find_or_create({ name => 'Blocking' }),
+        });
+        if ( $_ == 0 ) {
+            $new->close( $identities[$_] );
+        }
+    }
 }
 
 1;

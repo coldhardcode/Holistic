@@ -1,2 +1,11 @@
 msgid "FIELD REQUIRED SPLAT"
 msgstr "&#10036;"
+
+msgid "CLOSED"
+msgstr "Closed"
+
+msgid "NEW TICKET"
+msgstr "Triage"
+
+msgid "OPEN"
+msgstr "Open"
