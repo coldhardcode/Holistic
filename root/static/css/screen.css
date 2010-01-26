@@ -448,6 +448,37 @@ ul.comments li.visitor cite {
 ul.comments li.visitor p {
     margin: 0 45px 0 6em;
 }
+ul.log {
+    margin: 0; padding: 0 5px 0 5px;
+}
+ul.log h5 {
+    margin: 0; padding: 0;
+}
+ul.log li {
+    list-style: none;
+    margin: 0 6em 1.5em 0; padding: 0;
+}
+ul.log li time {
+    color: #78766f;
+    font-size: 12px;
+    display: inline;
+    width: 5em;
+}
+ul.log li cite {
+    float: left;
+    width: 40px;
+    margin: .5em .5em 0 0;
+}
+ul.log li p {
+    background: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 12px;
+    margin: 0 0 0 45px; padding: .5em;
+    text-align: left;
+}
 ul.roadmap {
     margin: 0; padding: 0;
 }

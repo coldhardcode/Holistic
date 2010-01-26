@@ -1,6 +1,16 @@
 <h1>TODO</h1>
 <dl>
- <dt>Hiders</dt>
+ <dt>Wiki</dt>
+ <dd></dd>
+ <dt>Who's doing what? (by group) (for managers)</dt>
+ <dd></dd>
+ <dt>Pager above tickets when viewing by milestone, etc (next & prev)</dt>
+ <dd></dd>
+ <dt>"My" view, tickets sorted by date, priority and attention</dt>
+ <dd></dd>
+ <dt>RSS</dt>
+ <dd></dd>
+ <dt>Comment Hiders</dt>
  <dd></dd>
  <dt>"centered" system changes</dt>
  <dd><p class="jay">I created a 'system' identity and person, gets deployed in testing.</p></dd>

@@ -42,6 +42,12 @@ Standard 404 error page
 
 =cut
 
+sub log : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'log.tt';
+}
+
 sub createticket : Local {
     my ($self, $c) = @_;
 
