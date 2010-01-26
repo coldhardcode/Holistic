@@ -390,18 +390,11 @@ nav.pager a:hover {
     background-color: #3470a9;
     color: #fff;
 }
-table.summary tbody td a {
-    display: block;
-}
 table tbody tr.imp,
 table tbody tr.imp td label {
     background-color: #de691f;
     background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
     color: #000;
-}
-table.summary tbody tr:hover,
-table.summary tbody tr.odd:hover {
-    background-color: #ddd;
 }
 table.ticket label {
     color: #78766f;
@@ -466,5 +459,12 @@ ul.roadmap h3 {
     margin: 0 0 .5em 0; padding: 0;
 }
 ul.roadmap table {
-    margin: 0 0 2.5em 0;
+    margin: 0 0 2.5em 1em;
+}
+table.summary tbody td a {
+    display: block;
+}
+table.summary tbody tr:hover,
+table.summary tbody tr.odd:hover {
+    background-color: #ddd;
 }
