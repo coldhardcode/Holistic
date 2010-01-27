@@ -84,6 +84,9 @@ dl dd {
 br {
     clear: both;
 }
+strong {
+    font-weight: bold;
+}
 table label {
     display: block;
     text-align: right;
@@ -448,37 +451,36 @@ ul.comments li.visitor cite {
 ul.comments li.visitor p {
     margin: 0 45px 0 6em;
 }
-ul.log {
-    margin: 0; padding: 0 5px 0 5px;
+
+
+dl.log dt {
+    font-weight: normal;
 }
-ul.log h5 {
-    margin: 0; padding: 0;
+dl.log a {
+    color: inherit;
+    display: block;
+    padding: 5px;
+    text-decoration: none;
 }
-ul.log li {
-    list-style: none;
-    margin: 0 6em 1.5em 0; padding: 0;
+dl.log a:hover {
+    background-color: #eeeee1;
 }
-ul.log li time {
+dl.log img {
+    padding: 0 7px;
+}
+dl.log time {
     color: #78766f;
     font-size: 12px;
-    display: inline;
-    width: 5em;
+    width: 7em;
 }
-ul.log li cite {
-    float: left;
-    width: 40px;
-    margin: .5em .5em 0 0;
-}
-ul.log li p {
-    background: #fff;
-    border: 1px solid #ddd;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+dl.log dd {
+    color: #78766f;
     font-size: 12px;
-    margin: 0 0 0 45px; padding: .5em;
-    text-align: left;
+    margin: 0 0 0 8em; padding: 5px 0;
 }
+
+
+
 ul.roadmap {
     margin: 0; padding: 0;
 }
