@@ -1,6 +1,7 @@
 <nav>
  <h3>[% c.loc('Navigation') %]</h3>
  <ul>
+  <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
   <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
   <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
   <li><a href="[% c.uri_for('/roadmap') %]">Roadmap</a></li>
