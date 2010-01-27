@@ -50,13 +50,15 @@
 <nav class="pager">
  <p>Page 1 of 5</p>
  <ol>
-  <li>Previous</li>
+  <li class="first"><a href="#"><img src="/static/images/actions/resultset_first.png"></a></li>
+  <li class="first">Previous</li>
   <li>1</li>
   <li><a href="#">2</a></li>
   <li><a href="#">3</a></li>
   <li><a href="#">4</a></li>
   <li><a href="#">5</a></li>
-  <li><a href="#">Next</a></li>
+  <li class="last"><a href="#">Next</a></li>
+  <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
  </ol>
 </nav>
 <br>

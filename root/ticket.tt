@@ -1,8 +1,10 @@
 <nav class="pager">
  <p>Ticket 2 of 5 in <a href="#">Milestone Fuck Your Mother</a></p>
  <ol>
+  <li class="first"><a href="#"><img src="/static/images/actions/resultset_first.png"></a></li>
   <li><a href="#">Previous</a></li>
   <li><a href="#">Next</a></li>
+  <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
  </ol>
 </nav>
 [% page.title = 'Ticket #1234' %]

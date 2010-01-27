@@ -364,6 +364,9 @@ nav.pager {
     left: 0;
     width: 100%;
 }
+nav.pager img {
+    vertical-align: text-bottom;
+}
 nav.pager p {
     display: inline;
     float: left;
@@ -393,6 +396,12 @@ nav.pager ol li a {
 nav.pager ol li a:hover {
     background-color: #3470a9;
     color: #fff;
+}
+nav.pager ol li.first {
+    margin: 0 7px 0 0;
+}
+nav.pager ol li.last {
+    margin: 0 0 0 7px;
 }
 table tbody tr.imp,
 table tbody tr.imp td label {
