@@ -1,3 +1,10 @@
+<nav class="pager">
+ <p>Ticket 2 of 5 in <a href="#">Milestone Fuck Your Mother</a></p>
+ <ol>
+  <li><a href="#">Previous</a></li>
+  <li><a href="#">Next</a></li>
+ </ol>
+</nav>
 [% page.title = 'Ticket #1234' %]
 <h1>[% c.loc('Defect #1234: Open') %]</h1>
 <h2>Summary: Existing ticket systems suck, make a new one</h2>

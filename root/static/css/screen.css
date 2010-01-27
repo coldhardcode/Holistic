@@ -379,7 +379,7 @@ nav.pager ol li {
     list-style: none;
 }
 nav.pager span,
-nav.pager a {
+nav.pager ol li a {
     background: #fff;
     border: 1px solid #ddd;
     -webkit-border-radius: 5px;
@@ -390,7 +390,7 @@ nav.pager a {
     margin: 3px 0 ;
     text-decoration: none;
 }
-nav.pager a:hover {
+nav.pager ol li a:hover {
     background-color: #3470a9;
     color: #fff;
 }
