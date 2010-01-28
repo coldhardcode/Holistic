@@ -42,6 +42,12 @@ $CLASS->add_columns(
         is_nullable => 0,
         size        => undef,
         set_on_create => 1
+    },
+    dt_updated => {
+        data_type   => 'DATETIME',
+        is_nullable => 0,
+        size        => undef,
+        set_on_create => 1, set_on_update => 1
     }
 );
 $CLASS->set_primary_key('pk1');
@@ -49,6 +55,9 @@ $CLASS->set_primary_key('pk1');
 __PACKAGE__->has_many('identities', 'Holistic::Schema::Person::Identity', 'person_pk1');
 
 __PACKAGE__->many_to_many('comments' => 'identities' => 'comments' );
+
+__PACKAGE__->has_many('group_links', 'Holistic::Schema::Person::Group', 'person_pk1');
+__PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
 
 =head2 connected_to_user($user)
 

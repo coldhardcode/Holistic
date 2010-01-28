@@ -16,6 +16,9 @@ $suite->run(
         'deploy',
         { 'person_create' => { name => 'J. Shirley', ident => 'jshirley', email => 'jshirley@coldhardcode.com' } },
         { 'person_create' => { name => 'Cory Watson', ident => 'gphat', email => 'gphat@coldhardcode.com' } },
+        { 'group_create' => { name => 'Developers' } },
+        { 'group_join' => { ident => 'jshirley', role => 'Chief Asshole' } },
+        { 'group_join' => { ident => 'gphat', role => 'Pickshur Makur' } },
         'ticket_create',
         'ticket_dependencies',
     ]

@@ -69,6 +69,12 @@ sub get_status {
     $self->resultset('Ticket::Status')->find_or_create({ name => $id });
 }
 
+sub get_role {
+    my ( $self, $id ) = @_;
+
+    $self->resultset('Role')->find_or_create({ name => $id });
+}
+
 sub tokenize {
     my ( $field ) = @_;
     $field = lc($field);

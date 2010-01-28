@@ -16,7 +16,7 @@ has 'ticket' => (
     isa => 'Holistic::Schema::Ticket'
 );
 
-sub ticket_create : Plan(19) {
+sub ticket_create : Plan(20) {
     my ( $self, $data ) = @_;
 
     my $queue;
@@ -137,7 +137,7 @@ sub ticket_create : Plan(19) {
     $ticket;
 }
 
-sub ticket_dependencies : Plan(19) {
+sub ticket_dependencies : Plan(1) {
     my ( $self, $data ) = @_;
 
     my $ticket = $self->ticket;
@@ -164,6 +164,7 @@ sub ticket_dependencies : Plan(19) {
             $new->close( $identities[$_] );
         }
     }
+    cmp_ok( $ticket->dependencies->count, '==', 5, 'right dependency count');
 }
 
 1;

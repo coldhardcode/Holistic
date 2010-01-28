@@ -62,4 +62,5 @@ sub sqlt_deploy_hook {
     $sqlt_table->add_index( name => 'person_pk1_idx', fields => [ 'person_pk1' ]);
 }
 
-1;
+no Moose;
+__PACKAGE__->meta->make_immutable(inline_constructor => 0);

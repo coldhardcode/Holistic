@@ -145,6 +145,13 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many('dependencies', 'dependent_links', 'linked_ticket' );
 
+{
+    local %ENV;
+    $ENV{DBIC_OVERWRITE_HELPER_METHODS_OK} = 1;
+    __PACKAGE__->has_many('group_links', 'Holistic::Schema::Ticket::Group', 'ticket_pk1');
+    __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
+}
+
 sub activity { shift->comments(@_); }
 
 sub needs_attention {

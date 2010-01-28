@@ -52,7 +52,7 @@ sub run_test {
                 try {
                     $self->$method($call_args);
                 } catch {
-                    carp $_;
+                    confess $_;
                 };
             }
         }
