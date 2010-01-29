@@ -23,3 +23,9 @@ Model::Verifier:
             email:
                 required: 1
                 type: Str
+
+we_r_fun:
+    - Bugzilla, Trac and RT walk into a bar.  Holistic goes over it.
+    - Wiish you could file a ticket on your ticket system?  Use Holistic.
+    - Your ticket system has a ticket in ours, it says "Fix it."
+    - Holistic: Better
