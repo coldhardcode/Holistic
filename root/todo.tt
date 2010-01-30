@@ -4,7 +4,9 @@
  <dd></dd>
  <dt>Who's doing what? (by group) (for managers)</dt>
  <dd></dd>
- <dt>Pager above tickets when viewing by milestone, etc (next & prev)</dt>
+ <dt>Group/Member Management Screen</dt>
+ <dd>From IRC: left side is list of people, right is list of groups.  clicking on name lights up their groups.</dd>
+ <dt>Pager above tickets when viewing by milestone, etc (next &amp; prev)</dt>
  <dd></dd>
  <dt>"My" view, tickets sorted by date, priority and attention</dt>
  <dd></dd>
