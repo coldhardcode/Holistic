@@ -1,0 +1,2 @@
+[% page.title = c.loc('Wizard: New Product') %]
+<h1>New Product</h1>

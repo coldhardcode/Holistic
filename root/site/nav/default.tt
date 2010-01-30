@@ -8,5 +8,7 @@
   <li><a href="[% c.uri_for('/createticket') %]">Create Ticket</a></li>
   <li><a href="[% c.uri_for('/ticket') %]">Ticket</a></li>
   <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
+  <li><a href="[% c.uri_for('/who') %]">Who</a></li>
+  <li><a href="[% c.uri_for('/wizard') %]">Wizard</a></li>
  </ul>
 </nav>

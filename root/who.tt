@@ -1,0 +1,91 @@
+<h1>[% c.loc("Who's Doing What?") %]</h1>
+<ul class="roadmap">
+ <li>
+  <h3><a href="#"><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"> gphat</a></h3>
+  <table class="summary">
+   <tfoot>
+     <tr>
+      <td colspan="7"><details><a href="#">1 Attention</a> + <a href="#">2 Normal</a> = <a href="#">3 Total</a></details></td>
+     </tr>
+   </tfoot>
+   <tbody>
+    <tr class="head">
+     <th>Ticket</th>
+     <th>Summary</th>
+     <th>Status</th>
+     <th>Type</th>
+     <th>Priority</th>
+     <th>Component</th>
+    </tr>
+    <tr class="imp">
+     <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+    <tr class="odd">
+     <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+    <tr>
+     <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+ <li>
+  <h3><a href="#"><img src="http://www.gravatar.com/avatar/714a9312e3e32ef04a6525969a9422be?s=40"> jshirley</a></h3>
+  <table class="summary">
+   <tfoot>
+     <tr>
+      <td colspan="7"><details><a href="#">1 High</a> + <a href="#">2 Normal</a> = <a href="#">3 Total</a></details></td>
+     </tr>
+   </tfoot>
+   <tbody>
+    <tr class="head">
+     <th>Ticket</th>
+     <th>Summary</th>
+     <th>Status</th>
+     <th>Type</th>
+     <th>Priority</th>
+     <th>Component</th>
+    </tr>
+    <tr>
+     <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td><strong>high</strong></td>
+     <td>Holistic</td>
+    </tr>
+    <tr class="odd">
+     <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
+     <td>Closed</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+    <tr>
+     <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+</ul>

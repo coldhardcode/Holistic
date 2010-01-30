@@ -105,6 +105,18 @@ sub todo : Local {
     $c->stash->{template} = 'todo.tt';
 }
 
+sub who : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'who.tt';
+}
+
+sub wizard : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'wizard.tt';
+}
+
 =head2 end
 
 Attempt to render a view, if needed.
