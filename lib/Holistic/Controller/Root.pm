@@ -33,6 +33,7 @@ sub index :Path :Args(0) {
 sub setup : Chained('.') PathPart('') CaptureArgs(0) { }
 
 sub register : Chained('.') PathPart('') CaptureArgs(0) { }
+sub ticket   : Chained('.') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('.') PathPart('') CaptureArgs(0) { }
 sub xhr      : Chained('.') PathPart('') CaptureArgs(0) { }
 
