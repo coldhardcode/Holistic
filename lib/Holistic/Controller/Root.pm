@@ -55,6 +55,12 @@ sub default :Path {
     $c->response->status(404);
 }
 
+sub group_management : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'group_management.tt';
+}
+
 sub guide : Local {
     my ($self, $c) = @_;
 $c->log->_dump( $c->model('Verifier')->profiles );
@@ -73,10 +79,22 @@ sub login : Local {
     $c->stash->{template} = 'login.tt';
 }
 
+sub milestone : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'milestone.tt';
+}
+
 sub my : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'my.tt';
+}
+
+sub product : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'product.tt';
 }
 
 sub roadmap : Local {
