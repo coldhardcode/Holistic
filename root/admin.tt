@@ -1,0 +1,7 @@
+<h1>[% c.loc('Administrata') %]</h1>
+<ul>
+ <li><a href="[% c.uri_for('/group') %]">Add Group</a></li>
+ <li><a href="[% c.uri_for('/group_management') %]">Group Management</a></li>
+ <li><a href="[% c.uri_for('/product') %]">Product</a></li>
+ <li><a href="[% c.uri_for('/settings') %]">Settings</a></li>
+</ul>

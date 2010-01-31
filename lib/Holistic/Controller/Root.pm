@@ -43,6 +43,12 @@ Standard 404 error page
 
 =cut
 
+sub admin : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'admin.tt';
+}
+
 sub createticket : Local {
     my ($self, $c) = @_;
 
@@ -53,6 +59,12 @@ sub default :Path {
     my ( $self, $c ) = @_;
     $c->response->body( 'Page not found' );
     $c->response->status(404);
+}
+
+sub group : Local {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'group.tt';
 }
 
 sub group_management : Local {

@@ -1,0 +1,20 @@
+<h1>[% c.loc('Create Group') %]</h1>
+<form id="group">
+ <fieldset>
+  <table>
+   <tfoot>
+    <td colspan="2'">
+     <input type="submit" value="Submit">
+    </td>
+   </tfoot>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Name', name => 'group.name', hint => 'Name', required => 1 }); %]
+    </tr>
+    <tr>
+     [% text_field({ label => 'Email', name => 'group.email', hint => 'Email', required => 1 }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>
