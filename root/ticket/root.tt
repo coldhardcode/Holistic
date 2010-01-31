@@ -1,2 +1,2 @@
 <h1>XX Tickets</h1>
-[% PROCESS "site/shared/ticket_table.tt" %]
+[% PROCESS "site/shared/ticket_table.tt", tickets = ticket_rs.all %]

@@ -1,7 +1,11 @@
-[%
-    tickets_open   = 0;
-    tickets_closed = 0;
-%]
+[%~
+
+USE Number.Format;
+
+tickets_open   = 0;
+tickets_closed = 0;
+
+~%]
 <table class="summary">
  <tbody>
   <tr class="head">
@@ -14,20 +18,26 @@
    <th>[% c.loc('Component') %]</th>
   </tr>
 [% FOREACH ticket IN tickets;
-
+    classes = [];
+    
     ticket_uri = c.uri_for_action('/ticket/object', [ ticket.id ]);
     IF ticket.status.name == 'CLOSED';
+        classes.push('closed');
         tickets_closed = tickets_closed + 1;
     ELSE;
         tickets_open = tickets_open + 1;
     END;
+    IF ticket.needs_attention;
+        classes.push('imp');
+    END;
+    IF loop.index % 2 == 0;
+        classes.push('odd');
+    END;
+
     tickets_total  = tickets_total + 1;
 
 ~%]
-  <tr class="[%~
-        IF ticket.needs_attention %]imp[% END ~%]
-        [%~ IF loop.index % 2 == 0 =%] odd
-        [%~ END ~%]">
+  <tr class="[% classes.join(' ') %]">
    <th><a href="[% ticket_uri %]">[% ticket.id %]</a></th>
    <td><a href="[% ticket_uri %]">[% ticket.name | html %]</a></td>
    <td>[% c.loc(ticket.status.name) %]</td>
