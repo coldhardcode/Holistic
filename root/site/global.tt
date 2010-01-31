@@ -1,3 +1,15 @@
+[% USE time_dir = Time.Duration %]
+
+[% MACRO pretty_date(dt) BLOCK;
+    SET now_secs = now.epoch;
+    SET then_secs = dt.epoch;
+    IF(now_secs > then_secs);
+      time_dir.ago(now_secs - then_secs);
+    ELSE;
+      time_dir.from_now(then_secs - now_secs);
+    END;
+END %]
+
 [% MACRO label_field(info) BLOCK %]
  <td>
   [% IF info.important %]<strong>[% END %]

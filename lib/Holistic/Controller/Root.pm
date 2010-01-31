@@ -30,12 +30,16 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 }
 
-sub setup : Chained('.') PathPart('') CaptureArgs(0) { }
+sub setup : Chained('.') PathPart('') CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{now} = DateTime->now;
+}
 
 
 sub admin    : Chained('.') PathPart('admin') CaptureArgs(0) { }
 sub register : Chained('.') PathPart('') CaptureArgs(0) { }
-sub ticket   : Chained('.') PathPart('') CaptureArgs(0) { }
+sub ticket   : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('.') PathPart('') CaptureArgs(0) { }
 sub xhr      : Chained('.') PathPart('') CaptureArgs(0) { }
 

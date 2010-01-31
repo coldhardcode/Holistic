@@ -21,7 +21,6 @@ END;
 <div class="todo">
 <h1>TODO</h1>
 <ul>
- <li>Fancy date management, like the whole "2 days ago" thing.</li>
  <li>Better owner management, it needs some work.</li>
  <li>Membership of groups, so the ticket-&gt;queue-&gt;is_member method works for aligning the comments</li>
 </ul>
@@ -57,13 +56,15 @@ END;
  <dt>Description</dt>
  <dd>[% ticket.description %]</dd>
 </dl>
+[% IF dependencies.count %]
 <h3>Dependencies</h3>
 [% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
+[% END %]
 <h3>[% c.loc('History') %]</h3>
 <ul class="comments">
 [% FOREACH message IN activity_log.reverse %]
     <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
-        <time datetime="[% message.dt_created %]">[% message.dt_created %] via
+        <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
         [%=
             IF message.identity.realm == 'local';
                 "the web";
