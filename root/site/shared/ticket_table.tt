@@ -1,0 +1,29 @@
+<table class="summary">
+ <tbody>
+  <tr class="head">
+   <th>Ticket</th>
+   <th>Summary</th>
+   <th>Status</th>
+   <th>Date Due</th>
+   <th>Type</th>
+   <th>Priority</th>
+   <th>Component</th>
+  </tr>
+[% FOREACH ticket IN ticket_rs.all;
+    ticket_uri = c.uri_for_action('/ticket/object', [ ticket.id ]);
+~%]
+  <tr class="[%~
+        IF ticket.needs_attention %]imp[% END ~%]
+        [%~ IF loop.index % 2 == 0 =%] odd
+        [%~ END ~%]">
+   <th><a href="[% ticket_uri %]">[% ticket.id %]</a></th>
+   <td><a href="[% ticket_uri %]">[% ticket.name | html %]</a></td>
+   <td>[% ticket.status.name %]</td>
+   <td>XX</td>
+   <td>XX</td>
+   <td>XX</td>
+   <td>XX</td>
+  </tr>
+[% END %]
+ </tbody>
+</table>

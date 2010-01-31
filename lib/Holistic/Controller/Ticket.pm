@@ -4,6 +4,13 @@ use Moose;
 
 BEGIN { extends 'Holistic::Base::Controller::REST'; }
 
+__PACKAGE__->config(
+    actions    => { 'setup' => { PathPart => 'ticket' } },
+    class      => 'Schema::Ticket',
+    rs_key     => 'ticket_rs',
+    object_key => 'ticket',
+);
+
 =head1 NAME
 
 Holistic::Controller::Register - Catalyst Controller
@@ -15,18 +22,6 @@ Catalyst Controller.
 =head1 METHODS
 
 =cut
-
-
-sub setup : Chained('.') PathPart('register') CaptureArgs(0) {
-}
-
-sub object_setup : Chained('setup') PathPart('id') CaptureArgs(1) {
-    my ( $self, $c, $pk1 ) = @_;
-}
-
-sub object : Chained('object_setup') PathPart('') Args(0) {
-
-}
 
 sub object_alias_setup : Chained('setup') PathPart('-') Args(2) {
     my ( $self, $c, $pk1, $token ) = @_;

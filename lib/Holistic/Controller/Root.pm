@@ -85,7 +85,7 @@ sub roadmap : Local {
     $c->stash->{template} = 'roadmap.tt';
 }
 
-sub ticket : Local {
+sub ticketguide : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'ticket.tt';

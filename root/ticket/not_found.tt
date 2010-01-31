@@ -1,0 +1,2 @@
+<h1>That ticket doesn't exist...</h1>
+<p>But fortunately, <a href="[% c.uri_for_action('/ticket/create_form') %]">you can create one</a>.  That is, after all, what we do here.</p>

@@ -17,6 +17,12 @@ __PACKAGE__->config(
     create_string => 'Your object has been created',
 );
 
+has 'access_check' => (
+    is  => 'rw',
+    isa => 'CodeRef',
+    predicate => 'has_access_check'
+);
+
 has 'order_by' => (
     is  => 'rw',
     isa => 'Str',
@@ -81,6 +87,13 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     $c->stash->{ $self->rs_key } = $rs;
 }
 
+sub create_form : Chained('setup') PathPart('create') Args(0) { 
+    my ( $self, $c ) = @_;
+
+    if ( $self->has_check_access ) {
+    }
+    $c->stash->{template} = $c->action->namespace . "/create_form.tt";
+}
 
 sub root : Chained('setup') PathPart('') Args(0) ActionClass('REST') {
     my ( $self, $c ) = @_;
@@ -334,6 +347,7 @@ sub setup_search {
 
 sub not_found : Private { 
     my ( $self, $c ) = @_;
+
     $c->res->status(404);
     $c->stash->{template} = $c->action->namespace . "/not_found.tt";
 }
