@@ -58,49 +58,7 @@ END;
  <dd>[% ticket.description %]</dd>
 </dl>
 <h3>Dependencies</h3>
-[% IF dependencies.count > 0;
-    dep_open   = 0;
-    dep_closed = 0; 
-%]
-<table class="summary">
- <tbody>
-  <tr class="head">
-   <th>Ticket</th>
-   <th>Summary</th>
-   <th>Status</th>
-   <th>Owner</th>
-   <th>Type</th>
-   <th>Priority</th>
-   <th>Component</th>
-  </tr>
-[% FOREACH dep IN dependencies.all;
-    IF dep.status.name == 'CLOSED';
-        dep_closed = dep_closed + 1;
-    ELSE;
-        dep_open = dep_open + 1;
-    END;
-    dep_total  = dep_total + 1; %]
-  <tr class="[% IF dep.status.name == 'CLOSED'%]closed[% END; IF loop.index % 2  %] odd[% END %]">
-    <th><a href="[% c.action_uri('Ticket', 'object', [ dep.id ]) %]">[% dep.id %]</a></th>
-    <td><a href="[% c.action_uri('Ticket', 'object', [ dep.id ]) %]">[% dep.name | html %]</a></td>
-    <td>[% c.loc(dep.status.name) %]</td>
-    <td>[% dep.owner.person.token %]</td>
-    <td>[% c.loc(dep.type.name) %]</td>
-    <td>[% c.loc(dep.priority.name) %]</td>
-    <td>XX Holistic</td>
-  </tr>
-[% END %]
- <tfoot>
-   <tr>
-    <td colspan="7"><meter><img src="/static/images/pie33.png">
-        [%= ( dep_closed / dep_total ) * 100 | format_number ~%]
-        % Complete</meter>[%~ =%]
-        <details><a href="#">[% c.loc('[_1] Closed', [ dep_closed ]) %]</a> + <a href="#">[% c.loc('[_1] Open', [ dep_open ] ) %]</a> = <a href="#">[% c.loc('[_1] Total', [ dep_total ] ) %]</a></details></td>
-   </tr>
- </tfoot>
-
-</table>
-[% END %]
+[% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
 <h3>[% c.loc('History') %]</h3>
 <ul class="comments">
 [% FOREACH message IN activity_log.reverse %]
