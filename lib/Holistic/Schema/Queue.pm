@@ -63,6 +63,9 @@ __PACKAGE__->has_many(
 __PACKAGE__->has_many('group_links', 'Holistic::Schema::Ticket::Group', 'group_pk1');
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
 
+__PACKAGE__->has_many('product_links', 'Holistic::Schema::Product::Queue', 'queue_pk1');
+__PACKAGE__->many_to_many('products' => 'product_links' => 'product');
+
 sub due_date {
     my ( $self, $date ) = @_;
     my $marker = $self->time_markers({ name => 'DUE' })->first;
