@@ -122,7 +122,9 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key('pk1');
 __PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1');
 
-__PACKAGE__->might_have('final_state', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1');
+__PACKAGE__->might_have(
+    'final_state', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1',
+);
 
 __PACKAGE__->belongs_to(
     'queue', 'Holistic::Schema::Queue',
@@ -157,11 +159,11 @@ sub activity { shift->comments(@_); }
 sub needs_attention {
     my ( $self, $identity ) = @_;
 
-    my $status = $self->result_source->schema->resultset('Ticket::Status')->find_or_create({ name => 'Attention Required' });
+    my $status = $self->result_source->schema->get_status('Attention Required');
     if ( defined $identity ) {
         my $state = $self->state;
         my $source_id;
-        if ( $state ) {
+        if ( defined $state ) {
             $source_id = $state->identity_pk1;
         } else {
             $source_id = $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' })->id;
@@ -172,7 +174,6 @@ sub needs_attention {
             status_pk1   => $status->id,
         });
     }
-
     my $state = $self->state;
 
     if ( $state and $state->status_pk1 == $status->id ) {
@@ -184,14 +185,14 @@ sub needs_attention {
 sub clear_attention {
     my ( $self, $success ) = @_;
 
-    $success = 1 if not defined $success;
+    $success = defined $success && $success ? 1 : 0;
 
     my $rs = $self->states(
         {},
         { order_by => [ { '-desc' => 'me.pk1' } ], rows => 2 }
     );
 
-    my $status = $self->result_source->schema->resultset('Ticket::Status')->find_or_create({ name => 'Attention Required' });
+    my $status = $self->result_source->schema->get_status('Attention Required');
     my ( $attn_state, $prev_state ) = $rs->all;
     if ( $attn_state->status_pk1 == $status->pk1 ) {
         my %cols = $prev_state->get_columns;
@@ -288,8 +289,14 @@ sub state {
 
     my $state_count = $rs->count;
     return undef if $state_count == 0;
-    if ( not defined $final_state or $state_count != $final_state->state_count )
-    {
+
+    if ( defined $final_state && $final_state->state_count != $state_count ) {
+        $final_state->delete if $final_state->in_storage;
+        $final_state = undef;
+    } elsif ( defined $final_state ) {
+        $final_state->discard_changes;
+    }
+    if ( not defined $final_state ) {
         my %merge;
         my @columns = $rs->result_source->columns;
 
@@ -334,9 +341,9 @@ sub state {
         }
 
         $merge{state_count} = $state_count;
-        $final_state = $self->create_related('final_state', \%merge);
+        $self->final_state( $self->create_related('final_state', \%merge) );
+        $final_state = $self->final_state;
     }
-
     return $final_state;
 }
 
