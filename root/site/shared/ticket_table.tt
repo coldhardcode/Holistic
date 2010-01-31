@@ -3,11 +3,6 @@
     tickets_closed = 0;
 %]
 <table class="summary">
- <!-- <tfoot>
-  <tr>
-   <td colspan="7"><meter><img src="/static/images/pie66.png"> 66% Complete</meter> <details><a href="#">2 Closed</a> + <a href="#">1 Open</a> = <a href="#">3 Total</a></details></td>
-  </tr>
- </tfoot> -->
  <tbody>
   <tr class="head">
    <th>[% c.loc('Ticket') %]</th>
