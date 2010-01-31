@@ -14,6 +14,7 @@ requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::I18N';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Template::Plugin::Lingua::EN::Inflect';
+requires 'Template::Plugin::Number::Format';
 
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Action::REST';
