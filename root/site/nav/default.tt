@@ -1,11 +1,15 @@
 <nav>
  <h3>[% c.loc('Navigation') %]</h3>
  <ul>
-  <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
   <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
-  <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
-  <li><a href="[% c.uri_for('/roadmap') %]">Roadmap</a></li>
   <li><a href="[% c.uri_for('/createticket') %]">Create Ticket</a></li>
+  <li><a href="[% c.uri_for('/group_management') %]">Group Management</a></li>
+  <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
+  <li><a href="[% c.uri_for('/milestone') %]">Milestone</a></li>
+  <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
+  <li><a href="[% c.uri_for('/product') %]">Product</a></li>
+  <li><a href="[% c.uri_for('/roadmap') %]">Roadmap</a></li>
+  <li><a href="[% c.uri_for('/settings') %]">Settings</a></li>
   <li><a href="[% c.uri_for('/ticket') %]">Ticket</a></li>
   <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
   <li><a href="[% c.uri_for('/who') %]">Who</a></li>
