@@ -1,7 +1,7 @@
 <nav>
  <h3>[% c.loc('Navigation') %]</h3>
  <ul>
-  <li><a href="[% c.uri_for('/admin') %]">Administrata</a></li>
+  <li><a href="[% c.uri_for('/admin') %]">[% c.loc('Administration') %]</a></li>
   <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
   <li><a href="[% c.uri_for('/createticket') %]">Create Ticket</a></li>
   <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>

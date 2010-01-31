@@ -9,3 +9,6 @@ msgstr "Triage"
 
 msgid "OPEN"
 msgstr "Open"
+
+msgid "CRUMBS_SEP"
+msgstr ":"

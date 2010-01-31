@@ -1,3 +1,4 @@
+[% page.crumbs.push({ 'Group Management' => '' }) %]
 <h1>[% c.loc('Group Management') %]</h1>
 <article class="group_man">
  <section class="users">

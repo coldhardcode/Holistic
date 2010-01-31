@@ -32,6 +32,8 @@ sub index :Path :Args(0) {
 
 sub setup : Chained('.') PathPart('') CaptureArgs(0) { }
 
+
+sub admin    : Chained('.') PathPart('admin') CaptureArgs(0) { }
 sub register : Chained('.') PathPart('') CaptureArgs(0) { }
 sub ticket   : Chained('.') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('.') PathPart('') CaptureArgs(0) { }
@@ -43,12 +45,6 @@ Standard 404 error page
 
 =cut
 
-sub admin : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'admin.tt';
-}
-
 sub createticket : Local {
     my ($self, $c) = @_;
 
@@ -59,18 +55,6 @@ sub default :Path {
     my ( $self, $c ) = @_;
     $c->response->body( 'Page not found' );
     $c->response->status(404);
-}
-
-sub group : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'group.tt';
-}
-
-sub group_management : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'group_management.tt';
 }
 
 sub guide : Local {
@@ -101,12 +85,6 @@ sub my : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'my.tt';
-}
-
-sub product : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'product.tt';
 }
 
 sub roadmap : Local {

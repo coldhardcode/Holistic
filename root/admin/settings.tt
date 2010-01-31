@@ -1,3 +1,4 @@
+[% page.crumbs.push({ 'Settings' => '' }) %]
 <h1>[% c.loc('Settings') %]</h1>
 <form id="settings">
  <fieldset>

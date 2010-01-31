@@ -253,7 +253,7 @@ fieldset.cwrap input {
 fieldset tfoot tr td {
     text-align: right;
 }
-nav {
+header nav {
     background-color: #3470a9;
     background: -webkit-gradient(linear, left top, left bottom, from(#598ab9), to(#3470a9));
     -webkit-border-top-right-radius: 7px;
@@ -270,14 +270,14 @@ nav {
     top: 102px;
     width: 140px;
 }
-nav h3 {
+header nav h3 {
     margin: 0; padding: 0 0 7px 0;
     text-shadow: #31465b 2px 2px 2px;
 }
-nav ul {
+header nav ul {
     margin: 0; padding: 0 0 18px 0;
 }
-nav ul li {
+header nav ul li {
     list-style-type: none;
 }
 header nav ul li {
@@ -532,4 +532,13 @@ article.group_man section.users ul li.selected {
 article.group_man section.users ul li.selected a {
     background: transparent url('/static/images/actions/bullet_go.png') no-repeat center left;
     padding: 0 0 0 15px;
+}
+#content nav ul {
+    font-size: 12px;
+    margin: 0; padding: 0 0 1em 0;
+}
+#content nav ul li {
+    display: inline;
+    list-style: none;
+    padding: 0 .25em 0 0; margin: 0;
 }

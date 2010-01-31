@@ -1,3 +1,4 @@
+[% page.crumbs.push({ 'Create Group' => '' }) %]
 <h1>[% c.loc('Create Group') %]</h1>
 <form id="group">
  <fieldset>
