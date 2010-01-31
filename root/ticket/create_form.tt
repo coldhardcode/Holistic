@@ -1,0 +1,27 @@
+[% page.title = 'Create Ticket' %]
+<h1>[% c.loc('Create Ticket') %]</h1>
+<form id="ticket" method="post" action="[% c.uri_for_action('/ticket/root') %]">
+ <fieldset>
+  <table>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Should this be a dropbox?', required => 1, double => 1 }); %]
+    </tr>
+    <tr>
+     [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1 }); %]
+    </tr>
+    <tr>
+     [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
+    </tr>
+    <tr>
+     [% select_field({ label => 'Type', name => 'ticket.type_pk1', required => 1, array => c.model('Schema::Ticket::Type').all, value_method => 'id', label_method => 'name' }); %]
+     [% select_field({ label => 'Priority', name => 'ticket.priority_pk1', required => 1, array => c.model('Schema::Ticket::Priority').all, value_method => 'id', label_method => 'name' }); %]
+    </tr>
+    <tr>
+     [% text_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', hint => 'YYYY-MM-DD' }); %]
+     [% text_field({ label => 'Tags', name => 'ticket.tags', hint => 'Comma separated list' }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>

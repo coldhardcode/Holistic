@@ -40,6 +40,7 @@ requires 'DateTimeX::Easy';
 requires 'DateTime::Format::DBI';
 requires 'DateTime::Format::SQLite';
 requires 'DateTime::Format::DateParse';
+requires 'MooseX::Type::DateTime';
 
 # DBIC Components
 requires 'DBIx::Class';

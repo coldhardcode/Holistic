@@ -52,11 +52,10 @@ END %]
  <td[% IF info.extra %] class="message"[% END %][% IF info.double %] colspan="3"[% END %]>
   <select id="form_[% info.name %]" name="[% info.name %]">
    [% IF info.default_option %]<option value="[% info.default_option.0 %]">[% info.default_option.1 %]</option>[% END %]
-     [% FOREACH item = info.array; %]
-
-     [% IF item.keys %]
+   [% FOREACH item = info.array; 
+     IF !c.tt_blessed(item) && item.keys %]
        <optgroup label="[% item.keys.0 %]">
-       [% FOREACH item = item.values.0;
+     [% FOREACH item = item.values.0;
         IF info.value_method;
           SET this_value = item.${info.value_method};
         ELSE;
@@ -67,12 +66,11 @@ END %]
         ELSE;
           SET this_name = item;
         END;
-        %]<option value="[% this_value %]" [% IF this_value == info.value %]selected="selected"[% END %] >[% this_name %]</option>
-        [% END %]
+      %]<option value="[% this_value %]" [% IF this_value == info.value %]selected="selected"[% END %] >[% c.loc(this_name); " " %]</option>
+      [% END %]
         </optgroup>
-     [% ELSE %]
-
-        [% IF info.value_method;
+      [% ELSE;
+        IF info.value_method;
           SET this_value = item.${info.value_method};
         ELSE;
           SET this_value = item;
@@ -82,9 +80,9 @@ END %]
         ELSE;
           SET this_name = item;
         END;
-        %]<option value="[% this_value %]" [% IF this_value == info.value %]selected="selected"[% END %] >[% this_name %]</option>
-       [% END %]
+      %]<option value="[% this_value %]" [% IF this_value == info.value %]selected="selected"[% END %] >[% this_name %]</option>
      [% END %]
+   [% END %]
   </select>
  </td>
 [% END; %]

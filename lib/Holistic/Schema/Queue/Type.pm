@@ -18,7 +18,8 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key('pk1');
 
-__PACKAGE__->has_many('queues', 'Holistic::Schema::Queue', 'type_pk1');
+__PACKAGE__->has_many('queues',  'Holistic::Schema::Queue', 'type_pk1');
+__PACKAGE__->has_many('tickets', 'Holistic::Schema::Ticket', 'type_pk1');
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

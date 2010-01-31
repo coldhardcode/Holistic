@@ -90,7 +90,12 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
 sub create_form : Chained('setup') PathPart('create') Args(0) { 
     my ( $self, $c ) = @_;
 
-    if ( $self->has_check_access ) {
+    if ( $self->has_access_check ) {
+        try {
+            $self->access_check( $c );
+        } catch {
+            $c->detach('access_denied');
+        };
     }
     $c->stash->{template} = $c->action->namespace . "/create_form.tt";
 }
@@ -282,31 +287,44 @@ sub update : Private {
     $c->message( $c->loc( $self->update_string ) );
 }
 
+# Just designed to override this.
+sub prepare_data { shift; @_; }
 sub create : Private {
     my ( $self, $c, $data ) = @_;
-    
+
+    $data = $self->prepare_data( $c, $data );
+
     if ( $c->debug ) {
         $c->log->debug("Creating new " . $self->rs_key . " object:");
         $c->log->_dump( $data );
     }
-    my $object = $c->stash->{$self->rs_key}->new_result( $data );
-    eval { $object->validate( $object->update_profile, $data ); };
-    if ( $@ ) {
-        if ( ref $@ ) {
-            $c->stash->{form} = $@;
-            $c->detach;
+
+    my $result = $c->stash->{$self->rs_key}->verify( $data );
+    unless ( $result->success ) {
+        if ( $c->debug ) {
+            $c->log->debug("Validation error:");
+            $c->log->_dump({ invalids => [ $result->invalids ], missings => [ $result->missings ]});
         }
-        die $@;
+        die $result;
     }
-    $object->insert;
-    $c->stash->{$self->object_key} = $object;
-    $c->message( $self->create_string );
+
+    my %filter = map { $_ => $result->get_value($_) } $result->valids;
+    $c->model('Schema')->schema->txn_do( sub {
+        my $object = $c->stash->{$self->rs_key}->create( \%filter );
+        $c->stash->{$self->object_key} = $object;
+        $c->forward('post_create', [ $data, $object ]);
+        $c->message( $self->create_string );
+    } );
 }
+
+sub post_create : Private { }
+sub post_update : Private { }
 
 sub post_action : Private {
     my ( $self, $c ) = @_;
 
-    if ( $c->req->looks_like_browser ) {
+    #if ( $c->req->looks_like_browser ) {
+    if ( 1 ) {
         $c->res->redirect( $c->req->uri, 303 );
     } else {
         my $object = $c->stash->{$self->object_key};
@@ -343,6 +361,13 @@ sub setup_search {
     my %join_params = ();
 
     $rs->search({ %search_params }, { %join_params });
+}
+
+sub access_denied : Private {
+    my ( $self, $c ) = @_;
+    $c->res->status(403);
+    $c->stash->{template} = $c->action->namespace . "/create_form.tt";
+    $c->detach;
 }
 
 sub not_found : Private { 

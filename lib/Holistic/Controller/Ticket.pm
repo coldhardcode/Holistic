@@ -32,5 +32,29 @@ sub object_alias_setup : Chained('setup') PathPart('-') Args(2) {
     $c->detach('object');
 }
 
+sub post_create : Private {
+    my ( $self, $c, $data, $ticket ) = @_;
+    $ticket->due_date( $data->{date_due} );
+    if ( $data->{tags} ) {
+        $ticket->tag(map { $_ =~ s/^\s*|\s*//g; $_; } split(/,/, $data->{tags}));
+    }
+}
+
+sub prepare_data {
+    my ( $self, $c, $data ) = @_;
+
+    # XX - we need to get a queue filter to create a ticket under a product and
+    #      queue.
+    $data->{ticket}->{parent_pk1} = 0;
+    if ( defined ( my $reporter = $data->{ticket}->{reporter} ) ) {
+        my $identity = $c->model('Schema::Person::Identity')->search({ realm => 'local', id => lc($reporter) })->first;
+        if ( defined $identity ) {
+            $data->{ticket}->{identity} = $identity->pk1;
+            $c->log->debug("We have an identity ($identity) to set...");
+        }
+    }
+    $data->{ticket};
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );

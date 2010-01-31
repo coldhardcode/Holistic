@@ -1,6 +1,7 @@
 package Holistic;
 use Moose;
 use namespace::autoclean;
+use Scalar::Util 'blessed';
 
 use Catalyst::Runtime 5.80;
 
@@ -13,7 +14,7 @@ use Catalyst::Runtime 5.80;
 #                 directory
 
 use Catalyst qw/
-    ConfigLoader
+    ConfigLoader Params::Nested
 
     I18N Unicode
     Static::Simple
@@ -103,6 +104,9 @@ __PACKAGE__->config(
 # Start the application
 __PACKAGE__->setup();
 
+sub tt_ref { my ( $c, $item ) = @_; ref($item); }
+sub tt_isa { my ( $c, $item, $isa ) = @_; blessed $item && $item->isa($item); }
+sub tt_blessed { my ( $c, $item ) = @_; blessed $item; }
 
 =head1 NAME
 

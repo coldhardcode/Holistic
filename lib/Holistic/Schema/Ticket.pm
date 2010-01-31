@@ -372,6 +372,45 @@ sub is_member {
     return 1;
 }
 
+# Verification Code
+sub _build__verify_profile {
+    my ( $self ) = @_;
+    my $rs = $self->schema->resultset('Person::Identity');
+    return {
+        'profile' => {
+            'priority_pk1' => {
+                'required' => 1,
+                'type' => 'Int'
+            },
+            'type_pk1' => {
+                'required' => 1,
+                'type' => 'Int'
+            },
+            'name' => {
+                'required' => 1,
+                'type' => 'Str',
+                'max_length' => '255',
+                'min_length' => 1
+            },
+            'description' => {
+                'required'   => 1,
+                'type'       => 'Str',
+                'min_length' => 1
+            },
+            'identity' => {
+                'required'   => 1,
+                'type'       => 'Holistic::Schema::Person::Identity',
+                'coercion'   => Data::Verifier::coercion(
+                    from => 'Int',
+                    via  => sub { $rs->find( $_ ); }
+                )
+            },
+        },
+        'filters' => [ 'trim' ]
+    };
+}
+
+
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
 
