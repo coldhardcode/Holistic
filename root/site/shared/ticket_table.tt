@@ -1,13 +1,19 @@
+[% DEFAULT ]
 <table class="summary">
+ <tfoot>
+  <tr>
+   <td colspan="7"><meter><img src="/static/images/pie66.png"> 66% Complete</meter> <details><a href="#">2 Closed</a> + <a href="#">1 Open</a> = <a href="#">3 Total</a></details></td>
+  </tr>
+ </tfoot>
  <tbody>
   <tr class="head">
-   <th>Ticket</th>
-   <th>Summary</th>
-   <th>Status</th>
-   <th>Date Due</th>
-   <th>Type</th>
-   <th>Priority</th>
-   <th>Component</th>
+   <th>[% c.loc('Ticket') %]</th>
+   <th>[% c.loc('Summary') %]</th>
+   <th>[% c.loc('Status') %]</th>
+   <th>[% c.loc('Date Due') %]</th>
+   <th>[% c.loc('Type') %]</th>
+   <th>[% c.loc('Priority') %]</th>
+   <th>[% c.loc('Component') %]</th>
   </tr>
 [% FOREACH ticket IN ticket_rs.all;
     ticket_uri = c.uri_for_action('/ticket/object', [ ticket.id ]);

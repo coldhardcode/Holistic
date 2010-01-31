@@ -1,4 +1,4 @@
-<h1>Roadmap</h1>
+<h1>[% c.loc('Roadmap') %]</h1>
 <ul class="roadmap">
  <li>
   <h3><a href="#">Next Release</a> <small>Owned by <a href="#">gphat</a>, due in <time date="2010-01-30">8 days</time>.</small></h3>
@@ -10,13 +10,13 @@
    </tfoot>
    <tbody>
     <tr class="head">
-     <th>Ticket</th>
-     <th>Summary</th>
-     <th>Status</th>
-     <th>Owner</th>
-     <th>Type</th>
-     <th>Priority</th>
-     <th>Component</th>
+     <th>[% c.loc('Ticket') %]</th>
+     <th>[% c.loc('Summary') %]</th>
+     <th>[% c.loc('Status') %]</th>
+     <th>[% c.loc('Owner') %]</th>
+     <th>[% c.loc('Type') %]</th>
+     <th>[% c.loc('Priority') %]</th>
+     <th>[% c.loc('Product') %]</th>
     </tr>
     <tr class="closed">
      <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
