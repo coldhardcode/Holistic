@@ -1,0 +1,23 @@
+<h1>[% c.loc('Create Product') %]</h1>
+<form id="product">
+ <fieldset>
+  <table>
+   <tfoot>
+    <td colspan="2'">
+     <input type="submit" value="Submit">
+    </td>
+   </tfoot>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Name', name => 'product.name', hint => 'Name', required => 1 }); %]
+    </tr>
+    <tr>
+     [% textarea_field({ label => 'Description', name => 'product.description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
+    </tr>
+    <tr>
+     [% select_field({ label => 'Owner', name => 'settings.default_product', required => 1, array => [ { 'People' => [ 'gphat', 'jshirley' ] }, { 'Groups' => [ 'Group A', 'Group B' ] } ], double => 1 }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>

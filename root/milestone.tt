@@ -1,0 +1,26 @@
+<h1>[% c.loc('Create Milestone') %]</h1>
+<form id="milestone">
+ <fieldset>
+  <table>
+   <tfoot>
+    <td colspan="2'">
+     <input type="submit" value="Submit">
+    </td>
+   </tfoot>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Name', name => 'milestone.name', hint => 'Name', required => 1 }); %]
+    </tr>
+    <tr>
+     [% text_field({ label => 'Due Date', name => 'milestone.due_date' }); %]
+    </tr>
+    <tr>
+     [% textarea_field({ label => 'Description', name => 'milestone.description', hint => 'Explanation of Issue', rows => 8 }); %]
+    </tr>
+    <tr>
+     [% select_field({ label => 'Owner', name => 'settings.default_product', required => 1, array => [ { 'People' => [ 'gphat', 'jshirley' ] }, { 'Groups' => [ 'Group A', 'Group B' ] } ] }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>

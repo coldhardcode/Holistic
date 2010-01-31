@@ -1,0 +1,17 @@
+<h1>[% c.loc('Settings') %]</h1>
+<form id="settings">
+ <fieldset>
+  <table>
+   <tfoot>
+    <td colspan="2'">
+     <input type="submit" value="Submit">
+    </td>
+   </tfoot>
+   <tbody>
+    <tr>
+     [% select_field({ label => 'Default Product', name => 'settings.default_product', required => 1, array => [ 'Product 1', 'Product 2', 'Product 3' ], double => 1 }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>
