@@ -17,7 +17,6 @@
     <label><input id="group_group3" type="checkbox"> Group 3</label>
    </fieldset>
    <input type="submit" value="Submit">
-  </section>
+  </form>
+ </section>
 </article>
-</form>
-</section>
