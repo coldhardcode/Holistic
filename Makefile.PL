@@ -23,6 +23,7 @@ requires 'Catalyst::Action::REST';
 requires 'Catalyst::Model::DBIC::Schema';
 
 requires 'Catalyst::View::TT';
+requires 'Catalyst::View::Graphics::Primitive';
 
 # Moose
 requires 'Moose';
@@ -46,6 +47,9 @@ requires 'MooseX::Type::DateTime';
 requires 'DBIx::Class';
 requires 'DBIx::Class::TimeStamp';
 requires 'DBIx::Class::DynamicDefault';
+
+# Pretty baubels
+requires 'Chart::Clicker';
 
 requires 'YAML';
 requires 'YAML::Syck';

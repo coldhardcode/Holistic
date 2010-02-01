@@ -1,6 +1,8 @@
 ---
 name: Holistic
 
+default_view: TT
+
 Model::Schema:
     connect_info: &1
         - dbi:SQLite:__path_to(t/var/test.db)__
@@ -23,6 +25,12 @@ Model::Verifier:
             email:
                 required: 1
                 type: Str
+
+View::GP:
+    driver: Cairo
+    driver_args:
+        format: png
+    content_type: image/png
 
 we_r_fun:
     - Bugzilla, Trac and RT walk into a bar.  Holistic goes over it.
