@@ -127,6 +127,11 @@ __PACKAGE__->might_have(
 );
 
 __PACKAGE__->belongs_to(
+    'type', 'Holistic::Schema::Ticket::Type',
+    { 'foreign.pk1' => 'self.type_pk1' }
+);
+
+__PACKAGE__->belongs_to(
     'queue', 'Holistic::Schema::Queue',
     { 'foreign.pk1' => 'self.parent_pk1' }
 );

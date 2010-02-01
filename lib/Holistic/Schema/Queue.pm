@@ -102,12 +102,12 @@ sub all_tickets {
             ]
         }
     );
-    my @pk1s;
+    my @pk1s = $self->pk1;
     while ( my $row = $rs->next ) {
         push @pk1s, grep { defined } map { $row->get_column("pk$_") } 1 .. 5;
     }
 
-    $self->result_source->schema->resultset('Ticket')->search(
+    $self->result_source->schema->resultset('Ticket')->search_rs(
         { 'me.parent_pk1' => \@pk1s },
         {
             prefetch => {

@@ -16,8 +16,12 @@ has 'ticket' => (
     isa => 'Holistic::Schema::Ticket'
 );
 
-sub ticket_create : Plan(20) {
+sub ticket_create : Plan(21) {
     my ( $self, $data ) = @_;
+
+    my $type_ms = $self->resultset('Queue::Type')->find_or_create({
+        name => 'Milestone'
+    });
 
     my $queue;
     if ( $self->meta->does_role('Holistic::Test::Queue') ) {
@@ -26,7 +30,8 @@ sub ticket_create : Plan(20) {
 
     $queue ||= $self->resultset('Queue')->find_or_create({
         name  => 'Test Queue',
-        token => 'test-suite-queue'
+        token => 'test-suite-queue',
+        type  => $type_ms
     });
 
     my $identity = $data->{identity} ?
@@ -41,19 +46,20 @@ sub ticket_create : Plan(20) {
         name => $data->{priority} || 'Urgent'
     });
 
-    my $type_ms = $self->resultset('Ticket::Type')->find_or_create({
-        name => 'Milestone'
+    my $type_def = $self->resultset('Ticket::Type')->find_or_create({
+        name => 'Defect'
     });
-    my $type_wu = $self->resultset('Ticket::Type')->find_or_create({
-        name => 'Work Unit'
+    my $type_en = $self->resultset('Ticket::Type')->find_or_create({
+        name => 'Enhancement'
     });
-    my $type_t = $self->resultset('Ticket::Type')->find_or_create({
-        name => 'Ticket'
+    my $type_task = $self->resultset('Ticket::Type')->find_or_create({
+        name => 'Task'
     });
 
     my $milestone = $self->resultset('Queue')->create({
         name        => 'Version 4.5',
         token       => 'version-4.5',
+        type        => $type_ms,
         parent_pk1  => $queue->id,
     });
 
@@ -64,7 +70,7 @@ sub ticket_create : Plan(20) {
         identity    => $identity,
         parent_pk1  => $milestone->id,
         priority    => $priority,
-        type        => $type_t,
+        type        => $type_task,
     });
 
     $self->ticket( $ticket );
@@ -104,6 +110,7 @@ sub ticket_create : Plan(20) {
     );
 
     cmp_ok( $queue->all_tickets->count, '==', 1, 'ticket count on queue' );
+    cmp_ok( $milestone->all_tickets->count, '==', 1, 'ticket count on milestone' );
 
     my $dt_due = DateTime->now->add( weeks => 1 );
     $queue->due_date( DateTime->now->add( months => 1 ) );
@@ -137,12 +144,12 @@ sub ticket_create : Plan(20) {
     $ticket;
 }
 
-sub ticket_dependencies : Plan(1) {
+sub ticket_dependencies : Plan(2) {
     my ( $self, $data ) = @_;
 
     my $ticket = $self->ticket;
 
-    my $requestor = $ticket->requestor;
+    my $requestor  = $ticket->requestor;
     my @identities = ( $requestor, $requestor, $requestor, $requestor, $requestor );
 
     for ( 0 .. 4 ) {
@@ -153,7 +160,8 @@ sub ticket_dependencies : Plan(1) {
             identity    => $identities[$_],
             queue       => $ticket->queue,
             priority    => $ticket->priority,
-            type        => $ticket->type
+            type        => $ticket->type,
+            parent_pk1  => $ticket->parent_pk1
         });
         $ticket->add_to_dependent_links({
             linked_ticket => $new,
@@ -164,6 +172,8 @@ sub ticket_dependencies : Plan(1) {
             $new->close( $identities[$_] );
         }
     }
+
+    cmp_ok( $ticket->queue->all_tickets, '==', 6, 'ticket count on queue');
     cmp_ok( $ticket->dependencies->count, '==', 5, 'right dependency count');
 }
 

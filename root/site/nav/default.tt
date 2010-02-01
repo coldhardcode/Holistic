@@ -1,14 +1,18 @@
 <nav>
  <h3>[% c.loc('Navigation') %]</h3>
  <ul>
+  <li>Real Shit
+    <ul>
+        <li><a href="[% c.uri_for_action('/ticket/create_form') %]">Create Ticket</a></li>
+        <li><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></li>
+    </ul>
+  </li>
   <li><a href="[% c.uri_for('/admin') %]">[% c.loc('Administration') %]</a></li>
   <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
-  <li><a href="[% c.uri_for_action('/ticket/create_form') %]">Create Ticket</a></li>
   <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
   <li><a href="[% c.uri_for('/milestone') %]">Milestone</a></li>
   <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
   <li><a href="[% c.uri_for('/roadmap') %]">Roadmap</a></li>
-  <li><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></li>
   <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
   <li><a href="[% c.uri_for('/who') %]">Who</a></li>
   <li><a href="[% c.uri_for('/wizard') %]">Wizard</a></li>

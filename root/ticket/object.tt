@@ -6,6 +6,8 @@ page.title = ticket.name;
 
 state     = ticket.state;
 
+queue     = ticket.queue;
+siblings  = queue.all_tickets;
 requestor = ticket.requestor;
 owner     = ticket.owner;
 attention = ticket.needs_attention;
@@ -18,6 +20,15 @@ FOREACH tag IN ticket.tags;
 END;
 
 %]
+<nav class="pager">
+ <p>Ticket 2 of [% siblings.count %] in <a href="#">[% queue.type.name %] [% queue.name %] [% queue.id %]</a></p>
+ <ol>
+  <li class="first"><a href="#"><img src="/static/images/actions/resultset_first.png"></a></li>
+  <li><a href="#">Previous</a></li>
+  <li><a href="#">Next</a></li>
+  <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
+ </ol>
+</nav>
 <div class="todo">
 <h1>TODO</h1>
 <ul>
