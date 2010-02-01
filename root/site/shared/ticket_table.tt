@@ -43,7 +43,7 @@ tickets_closed = 0;
    <td><a href="[% ticket_uri %]">[% ticket.name | html %]</a></td>
    <td>[% c.loc(ticket.status.name) %]</td>
    <td>[% ticket.owner.person.token | html %]</td>
-   <td>[% due_date = ticket.due_date; IF due_date; pretty_date(due_date.dt_marker); ELSE; "&mdash;"; END %]</td>
+   <td>[% due_date = ticket.due_date; IF due_date; %]<time datetime="[% due_date.dt_marker %]">[% pretty_date(due_date.dt_marker); %]</time>[% ELSE; "&mdash;"; END %]</time></td>
    <td>[% c.loc(ticket.type.name) %]</td>
    <td>[% c.loc(ticket.priority.name) %]</td>
    <td>XX</td>
@@ -53,7 +53,7 @@ tickets_closed = 0;
 [% IF tickets_total %]
  <tfoot>
    <tr>
-    <td colspan="9"><meter><img src="/static/images/pie33.png">
+    <td colspan="8"><meter><img src="/static/images/pie33.png">
         [%= ( tickets_closed / tickets_total ) * 100 | format_number ~%]
         % Complete</meter>[%~ =%]
         <details><a href="#">[% c.loc('[_1] Closed', [ tickets_closed ]) %]</a> + <a href="#">[% c.loc('[_1] Open', [ tickets_open ] ) %]</a> = <a href="#">[% c.loc('[_1] Total', [ tickets_total ] ) %]</a></details></td>
