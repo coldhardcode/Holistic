@@ -36,10 +36,11 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     $c->stash->{now} = DateTime->now;
 }
 
+sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 sub admin    : Chained('.') PathPart('admin') CaptureArgs(0) { }
 sub register : Chained('.') PathPart('') CaptureArgs(0) { }
-sub ticket   : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('.') PathPart('') CaptureArgs(0) { }
 sub xhr      : Chained('.') PathPart('') CaptureArgs(0) { }
 

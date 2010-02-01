@@ -1,0 +1,17 @@
+[%~
+
+top_rs = queue_rs.search_rs({'me.parent_pk1' => 0 });
+
+~%]
+[% MACRO queue_children(rs) BLOCK %]
+<ul>
+[% WHILE ( queue = rs.next ) %]
+    <li>
+        [%~ c.loc(queue.type.name) =%]
+        <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.name | html %]</a>
+        [% queue_children(queue.children_rs) ~%]
+    </li>
+[% END %]
+</ul>
+[% END %]
+[% queue_children(top_rs) %]

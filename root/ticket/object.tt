@@ -21,7 +21,7 @@ END;
 
 %]
 <nav class="pager">
- <p>Ticket 2 of [% siblings.count %] in <a href="#">[% queue.type.name %] [% queue.name %] [% queue.id %]</a></p>
+ <p>Ticket 2 of [% siblings.count %] in <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.type.name %] [% queue.name %]</a></p>
  <ol>
   <li class="first"><a href="#"><img src="/static/images/actions/resultset_first.png"></a></li>
   <li><a href="#">Previous</a></li>

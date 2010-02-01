@@ -1,0 +1,7 @@
+[%~
+
+tickets = queue.all_tickets;
+
+~%]
+<h1>[% c.loc(queue.type.name) %] [% queue.name | html %]</h1>
+[% PROCESS "site/shared/ticket_table.tt", tickets = tickets.all %]
