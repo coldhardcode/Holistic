@@ -54,7 +54,6 @@ tickets_closed = 0;
  <tfoot>
    <tr>
     [%= SET complete_percent = ( tickets_closed / tickets_total ) * 100 ~%]
-    [% complete_percent = 100 %]
     <td colspan="8">
      <meter>
       [% IF complete_percent == 100 %]
