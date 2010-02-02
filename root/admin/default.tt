@@ -1,7 +1,18 @@
 <h1>[% c.loc('Administration') %]</h1>
 <ul>
- <li><a href="[% c.uri_for('/admin/group') %]">Add Group</a></li>
- <li><a href="[% c.uri_for('/admin/group_management') %]">Group Management</a></li>
+ <li>General
+  <ul>
+   <li><a href="[% c.uri_for('/admin/settings') %]">Settings</a></li>
+  </ul>
+ </li>
+ <li>Users &amp; Groups
+  <ul>
+   <li><a href="[% c.uri_for('/admin/group') %]">Add Group</a></li>
+   <li><a href="[% c.uri_for('/admin/group_management') %]">Group Management</a></li>
+  </ul>
+ </li>
  <li><a href="[% c.uri_for('/admin/product') %]">Product</a></li>
- <li><a href="[% c.uri_for('/admin/settings') %]">Settings</a></li>
 </ul>
+<section class="message">
+ <aside class="gmessage"><p>This is Holistic v[% holistic_version %].</p></aside>
+</section>

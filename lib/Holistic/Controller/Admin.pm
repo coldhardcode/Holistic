@@ -26,6 +26,8 @@ sub setup : Chained('../admin') PathPart('') CaptureArgs(0) {
 sub default : Chained('setup') PathPart('') Args(0) {
     my ($self, $c) = @_;
 
+    $c->stash->{holistic_version} = $Holistic::VERSION;
+
     $c->stash->{template} = 'admin/default.tt';
 }
 
