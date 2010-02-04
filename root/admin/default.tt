@@ -14,5 +14,5 @@
  <li><a href="[% c.uri_for('/admin/product') %]">Product</a></li>
 </ul>
 <section class="message">
- <aside class="gmessage"><p>This is Holistic v[% holistic_version %].</p></aside>
+ <aside class="gmessage"><p>[% c.loc('This is Holistic v[_1].', holistic_version) %]</p></aside>
 </section>
