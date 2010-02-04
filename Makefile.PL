@@ -35,6 +35,9 @@ requires 'Data::Verifier';
 requires 'Message::Stack';
 requires 'Data::Manager';
 
+# Search
+requires 'Data::SearchEngine';
+
 # DateTime
 requires 'DateTime';
 requires 'DateTimeX::Easy';
@@ -50,6 +53,9 @@ requires 'DBIx::Class::DynamicDefault';
 
 # Pretty baubels
 requires 'Chart::Clicker';
+
+# Random Stuff
+requires 'Time::HiRes';
 
 requires 'YAML';
 requires 'YAML::Syck';
