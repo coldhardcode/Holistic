@@ -5,4 +5,29 @@ IF page.nav && page.nav != 'none';
     PROCESS "site/nav/${page.nav}.tt";
 END;
 ~%]
+ <form action="[% c.uri_for_action('/search/default') %]">
+  <fieldset>
+   <label>[% c.loc('Search:') %] <input type="search" name="search" value="" placeholder="[% c.loc('search terms') %]"></label> <input type="image" src="[% static('/static/images/buttons/go-small.png') %]" alt="[% c.loc('Search') %]">
+  </fielset>
+ </form>
 </header>
+<nav id="sidebar">
+ <h3>[% c.loc('Navigation') %]</h3>
+ <ul>
+  <li>Real Shit
+    <ul>
+        <li><a href="[% c.uri_for_action('/ticket/create_form') %]">Create Ticket</a></li>
+        <li><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></li>
+    </ul>
+  </li>
+  <li><a href="[% c.uri_for('/admin') %]">[% c.loc('Administration') %]</a></li>
+  <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
+  <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
+  <li><a href="[% c.uri_for('/milestone') %]">Milestone</a></li>
+  <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
+  <li><a href="[% c.uri_for('/roadmap') %]">Roadmap</a></li>
+  <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
+  <li><a href="[% c.uri_for('/who') %]">Who</a></li>
+  <li><a href="[% c.uri_for('/wizard') %]">Wizard</a></li>
+ </ul>
+</nav>

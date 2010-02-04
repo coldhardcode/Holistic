@@ -2,6 +2,7 @@
 html, body {
     background-color: #e9e9d7;
     color: #353535;
+    font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
     font-size: 14px;
     line-height: 18px;
     margin: 0; padding: 0;
@@ -26,6 +27,7 @@ footer p {
 h1, h2, h3, h4, h5, h6, legend {
     font-weight: bold;
     margin: 0 0 18px 0; padding: 0;
+    text-shadow: #fff 0 -1px;
 }
 h1 {
     font-size: 34px;
@@ -155,15 +157,15 @@ legend {
     margin: 0 0 7px 1em;
     padding: 2px 5px 3px 5px;
 }
-header nav {
+#sidebar {
     background-color: #3470a9;
     background: -webkit-gradient(linear, left top, left bottom, from(#598ab9), to(#3470a9));
     -webkit-border-top-right-radius: 7px;
     -webkit-border-bottom-right-radius: 7px;
     -moz-border-radius-topright: 7px;
     -moz-border-radius-bottomright: 7px;
-    border-top-right-radius: 0 0 0 7px;
-    border-bottom-right-radius: 0 0 0 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
     color: #fff;
     left: 0;
     margin: 0; padding: 1em 0 1em 1em;
@@ -172,24 +174,80 @@ header nav {
     top: 102px;
     width: 140px;
 }
-header nav h3 {
-    margin: 0; padding: 0 0 7px 0;
-    text-shadow: #31465b 2px 2px 2px;
+header nav {
+    border-width: 0;
+    display: inline;
+    padding: 0 0 0 0;
+    position: absolute;
+    top: 21px;
+    left: 225px;
+    text-shadow: #000 0 -1px;
+    vertical-align: bottom;
 }
 header nav ul {
-    margin: 0; padding: 0 0 18px 0;
-}
-header nav ul li {
-    list-style-type: none;
+    padding: 0; margin: 0;
 }
 header nav ul li {
     display: block;
-    font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
+    float: left;
+    padding: 0; margin: 0;
+}
+header nav ul li a {
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: #fff;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    margin: 0; padding: 2px 0 0 0;
+    width: 8em;
+}
+header nav ul li a:hover {
+    background-color: #fff;
+    color: #3470a9;
+    padding: 7px 0;
+    text-shadow: none;
+}
+header form {
+    float: right;
+    color: #fff;
+}
+header form fieldset {
+    border: none;
+    background: none;
+    padding: 0; margin: 30px 1em 0 0;
+}
+header form fieldset input {
+    vertical-align: bottom;
+}
+#sidebar {
+    text-shadow: #31465b 0 -1px;
+}
+#sidebar h3 {
+    margin: 0; padding: 0 0 7px 0;
+    text-shadow: #31465b 0 1px;
+}
+#sidebar ul {
+    margin: 0; padding: 0 0 18px 0;
+}
+#sidebar ul li {
+    list-style-type: none;
+}
+#sidebar ul li {
+    display: block;
     margin: 0 0 .25em 0; padding: 0;
 }
-header nav a {
+#sidebar a {
     color: #eee;
     padding: 7px;
+    text-decoration: none;
+}
+#sidebar a:hover {
+    text-decoration: underline;
 }
 p.caption {
     color: #919191;
@@ -231,14 +289,17 @@ p.subdued {
 .message aside.gmessage {
     background-color: #55aa2a;
     background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
+    text-shadow: #558342 0 -1px;
 }
 .message aside.rmessage {
     background-color: #b31f1e;
     background: -webkit-gradient(linear, left top, left bottom, from(#ba3433), to(#b31f1e));
+    text-shadow: #84372b 0 -1px;
 }
 .message aside.omessage {
     background-color: #de691f;
     background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
+    text-shadow: #95582d 0 -1px;
 }
 nav.pager {
     background: none;
@@ -249,11 +310,8 @@ nav.pager {
     border-radius: 5px;
     color: #353535;
     display: block;
-    padding: 9px;
-    position: relative;
+    margin: 0 0 1em 0; padding: 9px;
     text-align: right;
-    top: 0;
-    left: 0;
     width: 100%;
 }
 nav.pager img {
@@ -345,15 +403,7 @@ span.req {
     color: #b31d1c;
     float: none;
     font-weight: bold;
-}
-fieldset label em {
-    clear: left;
-    display: block;
-    float: left;
-    font-weight: bold;
-    padding: 0 7px 1em 5px;
-    text-align: right;
-    width: 15em;
+    text-shadow: #fff 0 -1px;
 }
 fieldset label em.req {
     text-transform: uppercase;
