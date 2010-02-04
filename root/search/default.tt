@@ -1,0 +1,10 @@
+[% SET pager = results.pager %]
+[% IF pager.total_entries %]
+  [% INCLUDE site/shared/pager.tt pager = results.pager %]
+  [% INCLUDE site/shared/ticket_table.tt %]
+  [% INCLUDE site/shared/pager.tt pager = results.pager %]
+[% ELSE %]
+<section class="message">
+ <aside class="omessage"><p>[% c.loc("Your search for '[_1]' returned no results.", results.query.original_query) %]</p></aside>
+</section>
+[% END %]
