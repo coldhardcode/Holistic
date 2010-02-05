@@ -21,24 +21,16 @@ END;
 
 %]
 <nav class="pager">
- <p>Ticket 2 of [% siblings.count %] in <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.type.name %] [% queue.name %]</a></p>
+ <p>[% c.loc('Ticket [_1] of [_2] in', 2, siblings.count) %] <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.type.name %] [% queue.name %]</a></p>
  <ol>
   <li class="first"><a href="#"><img src="/static/images/actions/resultset_first.png"></a></li>
-  <li><a href="#">Previous</a></li>
-  <li><a href="#">Next</a></li>
+  <li><a href="#">[% c.loc('Previous') %]</a></li>
+  <li><a href="#">[% c.loc('Next') %]</a></li>
   <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
  </ol>
 </nav>
-<div class="todo">
-<h1>TODO</h1>
-<ul>
- <li>Better owner management, it needs some work.</li>
- <li>Membership of groups, so the ticket-&gt;queue-&gt;is_member method works for aligning the comments</li>
-</ul>
-</div>
-
 <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
-<h2>Summary: [% ticket.name %]</h2>
+<h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
 <table class="ticket">
  <tbody>
   <tr>
@@ -64,11 +56,11 @@ END;
  </tbody>
 </table>
 <dl>
- <dt>Description</dt>
+ <dt>[% c.loc('Description') %]</dt>
  <dd>[% ticket.description %]</dd>
 </dl>
 [% IF dependencies.count %]
-<h3>Dependencies</h3>
+<h3>[% c.loc('Dependencies') %]</h3>
 [% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
 [% END %]
 <h3>[% c.loc('History') %]</h3>
@@ -88,4 +80,13 @@ END;
         <p>[% message.body %]</p>
     </li>
 [% END %]
-</ul> 
+</ul>
+<h3>[% c.loc('Comment') %]</h3>
+asds
+<div class="todo">
+<h1>TODO</h1>
+<ul>
+ <li>Better owner management, it needs some work.</li>
+ <li>Membership of groups, so the ticket-&gt;queue-&gt;is_member method works for aligning the comments</li>
+</ul>
+</div>
