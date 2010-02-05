@@ -55,6 +55,9 @@ h5, h6 {
 a {
     color: #3470a9;
 }
+a[name] {
+    color: #353535;
+}
 p {
     line-height: 1.307em;
     padding: 0 0 1em 0;
@@ -299,6 +302,11 @@ p.subdued {
     background-color: #de691f;
     background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
     text-shadow: #95582d 0 -1px;
+}
+.message aside a {
+    color: #fff;
+    display: block;
+    text-decoration: none;
 }
 nav.pager {
     background: none;

@@ -29,6 +29,9 @@ END;
   <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
  </ol>
 </nav>
+<section class="message">
+ <aside class="omessage"><p><a href="#comment">XX [% c.loc('This ticket requires your attention!') %]</a></p></aside>
+</section>
 <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
 <h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
 <table class="ticket">
@@ -81,8 +84,23 @@ END;
     </li>
 [% END %]
 </ul>
-<h3>[% c.loc('Comment') %]</h3>
-asds
+<h3><a name="comment">[% c.loc('Add A Comment') %]</a></h3>
+<form>
+ <fieldset>
+  <table>
+   <tfoot>
+    <td colspan="4">
+     <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="Submit Form">
+    </td>
+   </tfoot>
+   <tbody>
+    <tr>
+      [% textarea_field({ label => 'Comment', name => 'ticket.comment', hint => 'Your Comment', required => 1, rows => 8 }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>
 <div class="todo">
 <h1>TODO</h1>
 <ul>
