@@ -72,7 +72,7 @@ asda
   <li><a href="#">[% c.loc('Worklog') %]</a></li>
  </ul>
 </nav>
-<section>
+<section class="tab">
   <ul class="comments">
   [% FOREACH message IN activity_log.reverse %]
       <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
@@ -108,7 +108,7 @@ asda
    </fieldset>
   </form>
 </section>
-<section>
+<section class="tab">
  [% IF dependencies.count %]
  [% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
  [% END %]

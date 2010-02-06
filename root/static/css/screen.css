@@ -406,7 +406,7 @@ nav.tabs ul li {
     border-bottom-right-radius: 0;
     float: left;
     list-style: none;
-    margin: 0; padding: 0;
+    margin: 0; padding: .25em .5em;
 }
 nav.tabs ul li.selected {
     background-color: #fff;
@@ -415,6 +415,10 @@ nav.tabs ul li a {
     color: #353535;
     margin: .5em; padding: 0;
     text-decoration: none;
+}
+section.tab {
+    border: 1px solid #353535;
+    margin: 0; padding: 1em;
 }
 fieldset {
     background-color: #eee;
