@@ -65,45 +65,54 @@ asda
  <dt>[% c.loc('Description') %]</dt>
  <dd>[% ticket.description %]</dd>
 </dl>
-[% IF dependencies.count %]
-<h3>[% c.loc('Dependencies') %]</h3>
-[% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
-[% END %]
-<h3>[% c.loc('History') %]</h3>
-<ul class="comments">
-[% FOREACH message IN activity_log.reverse %]
-    <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
-        <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
-        [%=
-            IF message.identity.realm == 'local';
-                "the web";
-            ELSIF message.identity.realm == 'git';
-                "<a href=\"#\">git</a>";
-            END;
-        ~%]
-        </time>
-        <cite><img src="[% message.identity.person.gravatar_url %]"></cite>
-        <p>[% message.body %]</p>
-    </li>
-[% END %]
-</ul>
-<h3><a name="comment">[% c.loc('Add A Comment') %]</a></h3>
-<form>
- <fieldset>
-  <table>
-   <tfoot>
-    <td colspan="4">
-     <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="Submit Form">
-    </td>
-   </tfoot>
-   <tbody>
-    <tr>
-      [% textarea_field({ label => 'Comment', name => 'ticket.comment', hint => 'Your Comment', required => 1, rows => 8 }); %]
-    </tr>
-   </tbody>
-  </table>
- </fieldset>
-</form>
+<nav class="tabs">
+ <ul>
+  <li class="selected"><a href="#">[% c.loc('Comments') %]</a></li>
+  <li><a href="#">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
+  <li><a href="#">[% c.loc('Worklog') %]</a></li>
+ </ul>
+</nav>
+<section>
+  <ul class="comments">
+  [% FOREACH message IN activity_log.reverse %]
+      <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
+          <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
+          [%=
+              IF message.identity.realm == 'local';
+                  "the web";
+              ELSIF message.identity.realm == 'git';
+                  "<a href=\"#\">git</a>";
+              END;
+          ~%]
+          </time>
+          <cite><img src="[% message.identity.person.gravatar_url %]"></cite>
+          <p>[% message.body %]</p>
+      </li>
+  [% END %]
+  </ul>
+  <h3><a name="comment">[% c.loc('Add A Comment') %]</a></h3>
+  <form>
+   <fieldset>
+    <table>
+     <tfoot>
+      <td colspan="4">
+       <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="Submit Form">
+      </td>
+     </tfoot>
+     <tbody>
+      <tr>
+        [% textarea_field({ label => 'Comment', name => 'ticket.comment', hint => 'Your Comment', required => 1, rows => 8 }); %]
+      </tr>
+     </tbody>
+    </table>
+   </fieldset>
+  </form>
+</section>
+<section>
+ [% IF dependencies.count %]
+ [% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
+ [% END %]
+</section>
 <div class="todo">
 <h1>TODO</h1>
 <ul>

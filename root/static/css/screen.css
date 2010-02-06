@@ -11,6 +11,7 @@ header, aside, nav, section, article {
     display: block;
     margin: 0; padding: 0;
 }
+section { clear: left; }
 header {
     background: #e5e5d4 url('/static/images/header_back.png');
     height: 90px;
@@ -246,31 +247,6 @@ header form fieldset {
 header form fieldset input {
     vertical-align: bottom;
 }
-nav.bar {
-    text-shadow: #31465b 0 -1px;
-}
-nav.bar h3 {
-    margin: 0; padding: 0 0 7px 0;
-    text-shadow: #31465b 0 1px;
-}
-nav.bar ul {
-    margin: 0; padding: 0 0 18px 0;
-}
-nav.bar ul li {
-    list-style-type: none;
-}
-nav.bar ul li {
-    display: block;
-    margin: 0 0 .25em 0; padding: 0;
-}
-nav.bar a {
-    color: #eee;
-    padding: 7px;
-    text-decoration: none;
-}
-nav.bar a:hover {
-    text-decoration: underline;
-}
 #tickbar a {
     color: #353535;
     text-shadow: none;
@@ -335,6 +311,31 @@ p.subdued {
     display: block;
     text-decoration: none;
 }
+nav.bar {
+    text-shadow: #31465b 0 -1px;
+}
+nav.bar h3 {
+    margin: 0; padding: 0 0 7px 0;
+    text-shadow: #31465b 0 1px;
+}
+nav.bar ul {
+    margin: 0; padding: 0 0 18px 0;
+}
+nav.bar ul li {
+    list-style-type: none;
+}
+nav.bar ul li {
+    display: block;
+    margin: 0 0 .25em 0; padding: 0;
+}
+nav.bar a {
+    color: #eee;
+    padding: 7px;
+    text-decoration: none;
+}
+nav.bar a:hover {
+    text-decoration: underline;
+}
 nav.pager {
     background: none;
     background-color: #eee;
@@ -386,6 +387,34 @@ nav.pager ol li.first {
 }
 nav.pager ol li.last {
     margin: 0 0 0 7px;
+}
+nav.tabs ul {
+    margin: 0; padding: 0;
+}
+nav.tabs ul li {
+    background-color: #ccc;
+    border: 1px solid #353535;
+    border-width: 1px 1px 0 1px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-border-bottom-left-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    -moz-border-radius-bottomright: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    float: left;
+    list-style: none;
+    margin: 0; padding: 0;
+}
+nav.tabs ul li.selected {
+    background-color: #fff;
+}
+nav.tabs ul li a {
+    color: #353535;
+    margin: .5em; padding: 0;
+    text-decoration: none;
 }
 fieldset {
     background-color: #eee;
