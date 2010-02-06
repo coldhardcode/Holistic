@@ -3,6 +3,7 @@
 USE Number.Format;
 
 page.title = ticket.name;
+page.layout = 'ticket';
 
 state     = ticket.state;
 
@@ -32,6 +33,8 @@ END;
 <section class="message">
  <aside class="omessage"><p><a href="#comment">XX [% c.loc('This ticket requires your attention!') %]</a></p></aside>
 </section>
+asda
+[% PROCESS site/nav/ticket.tt %]
 <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
 <h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
 <table class="ticket">

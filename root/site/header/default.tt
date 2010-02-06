@@ -11,7 +11,7 @@ END;
   </fielset>
  </form>
 </header>
-<nav id="sidebar">
+<nav class="bar" id="sidebar">
  <h3>[% c.loc('Navigation') %]</h3>
  <ul>
   <li>Real Shit

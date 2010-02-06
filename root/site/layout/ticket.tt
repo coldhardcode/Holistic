@@ -12,7 +12,7 @@
  </ul>
 </nav>
 [% END %]
-<div id="content">
+<div id="tickcontent">
 [%~ 
 # Nothing fancy here.  Just dump the content.
 content

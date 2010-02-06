@@ -177,6 +177,26 @@ legend {
     top: 102px;
     width: 140px;
 }
+#tickbar {
+    background-color: #fff;
+    -webkit-border-top-left-radius: 7px;
+    -webkit-border-bottom-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-bottomleft: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border: 1px solid #353535;
+    border-width: 1px 0 1px 1px;
+    color: #353535;
+    font-size: 12px;
+    right: 0;
+    margin: 0; padding: 1em 0 1em 1em;
+    position: fixed;
+    text-align: left;
+    top: 102px;
+    width: 120px;
+}
+
 header nav {
     border-width: 0;
     display: inline;
@@ -226,30 +246,34 @@ header form fieldset {
 header form fieldset input {
     vertical-align: bottom;
 }
-#sidebar {
+nav.bar {
     text-shadow: #31465b 0 -1px;
 }
-#sidebar h3 {
+nav.bar h3 {
     margin: 0; padding: 0 0 7px 0;
     text-shadow: #31465b 0 1px;
 }
-#sidebar ul {
+nav.bar ul {
     margin: 0; padding: 0 0 18px 0;
 }
-#sidebar ul li {
+nav.bar ul li {
     list-style-type: none;
 }
-#sidebar ul li {
+nav.bar ul li {
     display: block;
     margin: 0 0 .25em 0; padding: 0;
 }
-#sidebar a {
+nav.bar a {
     color: #eee;
     padding: 7px;
     text-decoration: none;
 }
-#sidebar a:hover {
+nav.bar a:hover {
     text-decoration: underline;
+}
+#tickbar a {
+    color: #353535;
+    text-shadow: none;
 }
 p.caption {
     color: #919191;
@@ -274,6 +298,9 @@ p.subdued {
 }
 #content {
     padding: 12px 120px 0 180px;
+}
+#tickcontent {
+    padding: 12px 180px 0 180px;
 }
 .message aside {
     -webkit-border-radius: 7px;

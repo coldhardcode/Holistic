@@ -44,9 +44,7 @@ END;
  </head>
     [% # Drop in the header if appropriate
     header %]
-    <div id="content">
     [% content %]
-    </div>
     [% footer;
 
     # Add footer scripts
