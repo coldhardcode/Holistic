@@ -184,8 +184,8 @@ legend {
     -webkit-border-bottom-left-radius: 7px;
     -moz-border-radius-topleft: 7px;
     -moz-border-radius-bottomleft: 7px;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
     border: 1px solid #353535;
     border-width: 1px 0 1px 1px;
     color: #353535;
@@ -197,8 +197,11 @@ legend {
     top: 102px;
     width: 120px;
 }
-
-header nav {
+#tickbar a {
+    color: #353535;
+    text-shadow: none;
+}
+header > nav {
     border-width: 0;
     display: inline;
     padding: 0 0 0 0;
@@ -208,15 +211,15 @@ header nav {
     text-shadow: #000 0 -1px;
     vertical-align: bottom;
 }
-header nav ul {
+header > nav ul {
     padding: 0; margin: 0;
 }
-header nav ul li {
+header > nav ul li {
     display: block;
     float: left;
     padding: 0; margin: 0 5px 0 0;
 }
-header nav ul li a {
+header > nav ul li a {
     -webkit-border-bottom-left-radius: 5px;
     -webkit-border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
@@ -232,7 +235,7 @@ header nav ul li a {
     width: 8em;
     text-shadow: none;
 }
-header nav ul li a:hover {
+header > nav ul li a:hover {
     padding: 5px 0 4px 0;
 }
 header form {
@@ -246,10 +249,6 @@ header form fieldset {
 }
 header form fieldset input {
     vertical-align: bottom;
-}
-#tickbar a {
-    color: #353535;
-    text-shadow: none;
 }
 p.caption {
     color: #919191;
