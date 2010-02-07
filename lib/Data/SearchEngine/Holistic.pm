@@ -16,7 +16,6 @@ sub search {
 
     my @items = ();
     for(1..5) {
-        print STDERR "asdasd\n";
         push(@items, Data::SearchEngine::Item->new(
             id => 'X',
             score => 1
