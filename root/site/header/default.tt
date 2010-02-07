@@ -8,7 +8,7 @@ END;
  <form action="[% c.uri_for_action('/search/default') %]">
   <fieldset>
    <label>[% c.loc('Search:') %] <input type="search" name="search" value="" placeholder="[% c.loc('search terms') %]"></label> <input type="image" src="[% static('/static/images/buttons/go-small.png') %]" alt="[% c.loc('Search') %]">
-  </fielset>
+  </fieldset>
  </form>
 </header>
 <nav class="bar" id="sidebar">
