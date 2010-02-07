@@ -110,7 +110,7 @@ table thead th {
     color: #fff;
     font-size: 2em;
     font-weight: bold;
-    padding: 7px 5px 5px 7px;
+    padding: .5em;
 }
 table tbody tr.closed {
     text-decoration: line-through;
@@ -660,4 +660,63 @@ article.group_man section.users ul li.selected a {
     display: inline;
     list-style: none;
     padding: 0 .25em 0 0; margin: 0;
+}
+table.cal {
+    border: 1px solid #fff;
+    width: 100%;
+}
+table.cal thead a {
+    background: #eee;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #3470a9;
+    margin: 0 2em; padding: 0;
+    text-decoration: none;
+}
+table.cal thead td {
+    border: none;
+    padding: .5em .5em 2px .5em;
+    text-align: center;
+    width: 14%;
+}
+table.cal tbody tr.current td {
+    background-color: #ddd;
+}
+table.cal tbody tr td.current {
+    background-color: #eee;
+}
+table.cal tbody td {
+    height: 5em;
+    padding: 0; margin: 0;
+}
+table.cal tbody td a {
+    display: block;
+    color: #353535;
+    margin: 5px 5px 0 0;
+    text-align: right;
+}
+table.cal tbody td.other a {
+    color: #999;
+}
+table.cal tbody td ul {
+    margin: 0; padding: 0;
+}
+table.cal tbody td ul li {
+    display: block;
+    list-style: none;
+    margin: 0; padding: 0;
+    text-align: left;
+}
+table.cal tbody td ul li a {
+    background-color: #55aa2a;
+    color: #fff;
+    display: block;
+    font-size: 12px;
+    margin: 0; padding: 0 5px;
+    text-decoration: none;
+}
+table.cal tbody td ul li a:hover {
+    text-decoration: underline;
 }

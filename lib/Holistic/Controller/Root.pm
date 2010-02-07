@@ -36,6 +36,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     $c->stash->{now} = DateTime->now;
 }
 
+sub calendar  : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub chart     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub search    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }

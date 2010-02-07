@@ -1,5 +1,6 @@
 <nav>
  <ul>
+  <li><a href="[% c.uri_for('/calendar') %]">[% c.loc('Calendar') %]</a></li>
   <li><a href="[% c.uri_for('/roadmap') %]">[% c.loc('Roadmap') %]</a></li>
   <li><a href="[% c.uri_for('/ticket/create') %]">[% c.loc('Create Ticket') %]</a></li>
  </ul>

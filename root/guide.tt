@@ -209,4 +209,75 @@
   </table>
  </fieldset>
 </form>
-
+<table class="cal">
+ <thead>
+  <tr>
+   <th colspan="7">
+    <a href="#"><img src="/static/images/actions/resultset_first.png"></a>
+    February
+    <a href="#"><img src="/static/images/actions/resultset_last.png"></a>
+   </th>
+  </tr>
+  <tr>
+   <td>Sunday</td>
+   <td>Monday</td>
+   <td>Tuesday</td>
+   <td>Wednesday</td>
+   <td>Thursday</td>
+   <td>Friday</td>
+   <td>Saturday</td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td class="other"><a href="#">31</a></td>
+   <td><a href="#">1</a></td>
+   <td><a href="#">2</a></td>
+   <td><a href="#">3</a></td>
+   <td><a href="#">4</a></td>
+   <td><a href="#">5</a></td>
+   <td><a href="#">6</a></td>
+  </tr>
+  <tr>
+   <td><a href="#">7</a></td>
+   <td><a href="#">8</a></td>
+   <td><a href="#">9</a></td>
+   <td><a href="#">10</a></td>
+   <td><a href="#">11</a></td>
+   <td><a href="#">12</a></td>
+   <td><a href="#">13</a></td>
+  </tr>
+  <tr>
+   <td><a href="#">14</a></td>
+   <td><a href="#">15</a></td>
+   <td><a href="#">16</a></td>
+   <td>
+    <a href="#">17</a>
+    <ul>
+     <li><a href="#">Foo Bar Baz</a></li>
+    </ul>
+   </td>
+   <td><a href="#">18</a></td>
+   <td><a href="#">19</a></td>
+   <td><a href="#">20</a></td>
+  </tr>
+  <tr>
+   <td><a href="#">21</a></td>
+   <td><a href="#">22</a></td>
+   <td><a href="#">23</a></td>
+   <td><a href="#">24</a></td>
+   <td><a href="#">25</a></td>
+   <td><a href="#">26</a></td>
+   <td><a href="#">27</a></td>
+  </tr>
+  <tr>
+   <td><a href="#">28</a></td>
+   <td class="other"><a href="#">1</a></td>
+   <td class="other"><a href="#">2</a></td>
+   <td class="other"><a href="#">3</a></td>
+   <td class="other"><a href="#">4</a></td>
+   <td class="other"><a href="#">5</a></td>
+   <td class="other"><a href="#">6</a></td>
+  </tr>
+ </tbody>
+</table>
