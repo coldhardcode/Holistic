@@ -36,15 +36,16 @@ sub default : Chained('base') PathPart('') Args() {
         my $prev_day = $fdom->clone->subtract_duration(
             DateTime::Duration->new(days => 1)
         );
-        my $currday = $prev_day->clone->subtract_duration(
-            DateTime::Duration->new(days => $prev_day->day_of_week)
-        );
-        while($currday->day != $fdom->day) {
-            push(@days, $currday);
-            $currday = $currday->clone->add_duration(DateTime::Duration->new(
+        my $currday = $prev_day;
+        push(@days, $currday);
+        while($currday->day_of_week != 7) {
+            $currday = $currday->clone->subtract_duration(DateTime::Duration->new(
                 days => 1
             ));
+            push(@days, $currday);
         }
+        # Reverse the days, since we counted back.
+        @days = reverse(@days);
         $c->stash->{prev_day} = $prev_day;
     }
 
