@@ -19,6 +19,7 @@ sub default : Chained('base') PathPart('') Args() {
     if($year && $month) {
         $now = DateTime->new(year => $year, month => $month, day => 1);
     }
+    $c->stash->{req_day} = $now;
 
     my $ldom = DateTime->last_day_of_month(
         month => $now->month,
@@ -36,7 +37,7 @@ sub default : Chained('base') PathPart('') Args() {
             DateTime::Duration->new(days => 1)
         );
         my $currday = $prev_day->clone->subtract_duration(
-            DateTime::Duration->new(days => 6 - $prev_day->day_of_week)
+            DateTime::Duration->new(days => $prev_day->day_of_week)
         );
         while($currday->day != $fdom->day) {
             push(@days, $currday);
@@ -77,11 +78,12 @@ sub default : Chained('base') PathPart('') Args() {
 sub day : Chained('base') PathPart('day') Args() {
     my ($self, $c, $year, $month, $day) = @_;
 
-    my $day = DateTime->now;
+    my $req_day = $c->stash->{now};
     if($year && $month && $day) {
-        $day = DateTime->new(year => $year, month => $month, day => $day);
+        $req_day = DateTime->new(year => $year, month => $month, day => $day);
     }
 
+    $c->stash->{req_day} = $req_day;
     $c->stash->{template} = 'calendar/day.tt';
 }
 

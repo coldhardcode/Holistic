@@ -1,5 +1,5 @@
 [% page.title = c.loc('Activity Log') %]
-<h1>Activity Log <a href="#"><img src="[% static('/static/images/actions/feed.png') %]" alt="[% c.loc('Feed') %]"></a></h1>
+<h1>[% req_day %]</h1>
 <h3>Today: 2010-01-27</h3>
 <dl class="log">
  <dt>
