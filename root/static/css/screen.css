@@ -681,11 +681,8 @@ table.cal thead td {
     text-align: center;
     width: 14%;
 }
-table.cal tbody tr.current td {
-    background-color: #ddd;
-}
 table.cal tbody tr td.current {
-    background-color: #eee;
+    background-color: #ddd;
 }
 table.cal tbody td {
     height: 5em;
