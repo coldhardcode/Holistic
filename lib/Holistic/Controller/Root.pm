@@ -2,6 +2,9 @@ package Holistic::Controller::Root;
 use Moose;
 use namespace::autoclean;
 
+use Message::Stack;
+use Message::Stack::DataVerifier;
+
 BEGIN { extends 'Catalyst::Controller' }
 
 #
@@ -34,6 +37,16 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ($self, $c) = @_;
 
     $c->stash->{now} = DateTime->now;
+
+    if ( defined ( my $errors = $c->flash->{errors} ) ) {
+        my $stack = Message::Stack->new;
+        
+        foreach my $scope ( keys %{ $errors } ) {
+            $c->stash->{errors}->{$scope} = $errors->{$scope};
+            Message::Stack::DataVerifier->parse( $stack, $scope, $errors->{$scope} );
+        }
+        $c->stash->{stack} = $stack;
+    }
 }
 
 sub calendar  : Chained('setup') PathPart('') CaptureArgs(0) { }
@@ -41,8 +54,8 @@ sub chart     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub search    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub admin     : Chained('setup') PathPart('') CaptureArgs(0) { }
 
-sub admin    : Chained('.') PathPart('admin') CaptureArgs(0) { }
 sub register : Chained('.') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('.') PathPart('') CaptureArgs(0) { }
 sub xhr      : Chained('.') PathPart('') CaptureArgs(0) { }

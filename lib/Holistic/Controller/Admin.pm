@@ -17,7 +17,7 @@ Catalyst Controller.
 =cut
 
 
-sub setup : Chained('../admin') PathPart('') CaptureArgs(0) {
+sub setup : Chained('.') PathPart('admin') CaptureArgs(0) {
     my ($self, $c) = @_;
 
     push(@{ $c->stash->{page}->{crumbs} }, { 'Admin' => '/admin' });
@@ -54,8 +54,6 @@ sub settings : Chained('setup') PathPart('settings') Args(0) {
 
     $c->stash->{template} = 'admin/settings.tt';
 }
-
-
 
 no Moose;
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );

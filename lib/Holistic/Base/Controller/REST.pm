@@ -97,6 +97,7 @@ sub create_form : Chained('setup') PathPart('create') Args(0) {
             $c->detach('access_denied');
         };
     }
+    $c->stash->{scope} = 'create';
     $c->stash->{template} = $c->action->namespace . "/create_form.tt";
 }
 
@@ -232,6 +233,7 @@ sub root_POST {
 sub object_setup : Chained('setup') PathPart('id') CaptureArgs(1) { 
     my ( $self, $c, $id ) = @_;
     my $obj = $c->stash->{ $self->rs_key }->find( $id );
+    $c->stash->{scope} = 'update';
 
     unless ( $obj ) {
         $c->forward('not_found');
@@ -305,7 +307,15 @@ sub create : Private {
             $c->log->debug("Validation error:");
             $c->log->_dump({ invalids => [ $result->invalids ], missings => [ $result->missings ]});
         }
-        die $result;
+
+        $c->flash->{errors}->{'create'} = $result;
+        my @args = ();
+        push @args, $c->req->captures if $c->req->captures;
+        #push @args, @{ $c->req->args } if $c->req->args;
+        $c->log->debug( $c->action );
+        $c->log->_dump( \@args );
+        $c->res->redirect( $c->uri_for( $c->controller->action_for('create_form'), @args ) );
+        $c->detach;
     }
 
     my %filter = map { $_ => $result->get_value($_) } $result->valids;

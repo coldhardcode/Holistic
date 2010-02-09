@@ -34,6 +34,7 @@ sub object_alias_setup : Chained('setup') PathPart('-') Args(2) {
 
 sub post_create : Private {
     my ( $self, $c, $data, $ticket ) = @_;
+
     $ticket->due_date( $data->{date_due} );
     if ( $data->{tags} ) {
         $ticket->tag(map { $_ =~ s/^\s*|\s*//g; $_; } split(/,/, $data->{tags}));

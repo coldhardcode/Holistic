@@ -1,5 +1,16 @@
-[% page.title = 'Create Ticket' %]
+[%~
+
+page.title = 'Create Ticket';
+results    = errors.${scope};
+stack      = stack;
+
+~%]
 <h1>[% c.loc('Create Ticket') %]</h1>
+[% IF stack.has_scope(scope) %]
+<section class="message">
+    <aside class="rmessage">Please correct the errors below.</aside>
+</section>
+[% END %]
 <form id="ticket" method="post" action="[% c.uri_for_action('/ticket/root') %]">
  <fieldset>
   <table>
@@ -10,10 +21,10 @@
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Should this be a dropbox?', required => 1, double => 1 }); %]
+     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Should this be a dropbox?', required => 1, double => 1, extra => stack.for_subject('reporter').first_message.id, value => results.get_original_value('reporter') }); %]
     </tr>
     <tr>
-     [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1 }); %]
+     [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1, extra => stack.for_subject('name').first_message.id, value => results.get_value('name') }); %]
     </tr>
     <tr>
      [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
