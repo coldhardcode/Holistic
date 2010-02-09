@@ -86,10 +86,11 @@ ol li {
     list-style-position: inside;
 }
 dl {
-    margin: 0; padding: 0;
+    margin: 0 0 1em 0; padding: 0;
 }
 dl dt {
     font-weight: bold;
+    padding: 0 0 .5em 0;
 }
 dl dd {
     padding: 0 0 1em 1em;
@@ -537,6 +538,9 @@ table tbody tr.imp,
 table tbody tr.imp td label {
     background-color: #de691f;
     color: #000;
+}
+table.ticket {
+    margin: 0 0 1.5em 0;
 }
 table.ticket label {
     color: #78766f;
