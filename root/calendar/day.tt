@@ -1,6 +1,5 @@
 [% page.title = c.loc('Activity Log') %]
-<h1>[% req_day %]</h1>
-<h3>Today: 2010-01-27</h3>
+<h1>XX Formatting [% req_day %]</h1>
 <dl class="log">
  <dt>
   <a href="[% c.uri_for('/ticket') %]"> 
