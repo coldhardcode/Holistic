@@ -61,8 +61,21 @@ __PACKAGE__->has_many(
     }
 );
 
-__PACKAGE__->has_many('group_links', 'Holistic::Schema::Ticket::Group', 'group_pk1');
+__PACKAGE__->has_many('group_links', __PACKAGE__ . '::Group',
+    { 'foreign.foreign_pk1' => 'self.pk1' }
+);
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
+
+sub assignable_persons {
+    my $self = shift;
+
+    $self->groups
+        ->search_related('person_links')
+        ->search_related('person',
+            { 'identities.realm' => 'local' },
+            { prefetch => [ 'identities' ] }
+        )->search_rs( @_ );
+}
 
 __PACKAGE__->has_many('product_links', 'Holistic::Schema::Product::Queue', 'queue_pk1');
 __PACKAGE__->many_to_many('products' => 'product_links' => 'product');

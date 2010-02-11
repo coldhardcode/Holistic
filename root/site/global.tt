@@ -39,7 +39,9 @@ END %]
  [% label_field(info) %]
 <td[% IF info.extra %] class="message"[% END %][% IF info.double %] colspan="3"[% END %]>
  <input type="hidden" id="form_[% info.name %]" name="[% info.name %]" value="[% info.value | html %]"/>
+ [%~ IF info.link %]<a href="[% info.link %]">[%~ END ~%]
  [% info.value %]
+ [%~ IF info.link ~%]</a>[%~ END ~%]
  [% IF info.extra %]
  <div><aside class="rmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
  [% END %]

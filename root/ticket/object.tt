@@ -40,7 +40,11 @@ END;
  <tbody>
   <tr>
    [% readonly_field({ label => 'Reporter', name => 'ticket.reporter', value => requestor.person.name }); %]
-   [% readonly_field({ label => 'Owner', name => 'ticket.owner', value => owner.name }); %]
+   [% select_field({
+        label => 'Owner', name => 'ticket.owner', value => owner.name,
+        array => ticket.assignable_persons.all,
+        value_method => 'pk1', label_method => 'name'
+      }) %]
   </tr>
 [% IF attention %]
   <tr class="imp">
@@ -52,7 +56,7 @@ END;
    [% readonly_field({ label => 'Last Changed', name => 'ticket.last_changed', value => ticket.state.dt_created }); %]
   </tr>
   <tr>
-   [% readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => ticket.due_date.dt_marker }); %]
+   [% readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => ticket.due_date.dt_marker, link => c.uri_for_action('/calendar/root', ticket.due_date.dt_marker.year, ticket.due_date.dt_marker.month ) }); %]
    [% readonly_field({ label => 'Priority', name => 'ticket.priority', value => 'Normal' }); %]
   </tr>
   <tr>

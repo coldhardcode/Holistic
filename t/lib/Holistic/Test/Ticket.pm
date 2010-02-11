@@ -34,6 +34,17 @@ sub ticket_create : Plan(23) {
         type  => $type_ms
     });
 
+    if ( $self->meta->does_role('Holistic::Test::Person') ) {
+        my $group = $self->group;
+        $queue->group_links->create({ group => $group });
+        cmp_ok(
+            $group->persons->count, '==', $queue->assignable_persons->count,
+            'group assignable persons ok'
+        );
+    } else {
+        ok(1, 'skipping group test, no group!');
+    }
+
     my $identity = $data->{identity} ?
         $self->resultset('Person::Identity')->single({ realm => 'local', id => $data->{identity} }) :
         $self->person->identities({ realm => 'local' })->first;

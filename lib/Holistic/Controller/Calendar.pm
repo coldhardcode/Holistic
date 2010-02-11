@@ -1,23 +1,22 @@
 package Holistic::Controller::Calendar;
 
-use parent 'Catalyst::Controller';
+#use Moose;
 
-use Moose;
+use parent 'Holistic::Base::Controller';
 
 use DateTime;
 use DateTime::Duration;
 
-sub base : Chained('../calendar') PathPart('calendar') CaptureArgs(0) {
-    my ( $self, $c ) = @_;
+sub setup : Chained('.') PathPart('calendar') CaptureArgs(0) { }
 
-}
-
-sub default : Chained('base') PathPart('') Args() {
+sub root : Chained('setup') PathPart('') Args() {
     my ($self, $c, $year, $month) = @_;
 
     my $now = $c->stash->{now};
-    if($year && $month) {
-        $now = DateTime->new(year => $year, month => $month, day => 1);
+    if ( $year && $month ) {
+        $now->year($year);
+        $now->month($month);
+        $now->day(1);
     }
     $c->stash->{req_day} = $now;
 
@@ -76,19 +75,20 @@ sub default : Chained('base') PathPart('') Args() {
     $c->stash->{template} = 'calendar/default.tt';
 }
 
-sub day : Chained('base') PathPart('day') Args() {
+sub day : Chained('setup') PathPart('') Args(3) {
     my ($self, $c, $year, $month, $day) = @_;
 
+    # Use ->{now} because it is timezone'd already.
     my $req_day = $c->stash->{now};
-    if($year && $month && $day) {
-        $req_day = DateTime->new(year => $year, month => $month, day => $day);
-    }
+        $req_day->year( $year );
+        $req_day->month( $month );
+        $req_day->day( $day );
 
     $c->stash->{req_day} = $req_day;
     $c->stash->{template} = 'calendar/day.tt';
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
+#no Moose;
+#__PACKAGE__->meta->make_immutable;
 
 1;

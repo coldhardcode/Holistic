@@ -8,6 +8,9 @@ Model::Schema:
         - dbi:SQLite:__path_to(t/var/test.db)__
         - "" 
         - ""
+        -
+            quote_char: '`'
+            name_sep: .
 # Shortcut to the connect_info, for easier parsing into CLI apps
 connect_info: *1
 

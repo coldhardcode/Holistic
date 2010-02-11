@@ -32,6 +32,16 @@ sub object_alias_setup : Chained('setup') PathPart('-') Args(2) {
     $c->detach('object');
 }
 
+sub assign : Chained('object_setup') PathPargs(0) Args(0) ActionClass('REST') { }
+sub assign_POST {
+    my ( $self, $c ) = @_;
+
+    my $data = $c->req->data || $c->req->params;
+    if ( defined $data->{identity_pk1} ) {
+
+    }
+}
+
 sub post_create : Private {
     my ( $self, $c, $data, $ticket ) = @_;
 

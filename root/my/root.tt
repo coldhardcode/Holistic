@@ -1,41 +1,5 @@
 <h1>[% c.loc('My Tickets') %]</h1>
-<table class="summary">
- <tbody>
-  <tr class="head">
-   <th>[% c.loc('Ticket') %]</th>
-   <th>[% c.loc('Summary') %]</th>
-   <th>[% c.loc('Status') %]</th>
-   <th>[% c.loc('Date Due') %]</th>
-   <th>[% c.loc('Type') %]</th>
-   <th>[% c.loc('Priority') %]</th>
-   <th>[% c.loc('Product') %]</th>
-  </tr>
-  <tr class="imp">
-   <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
-   <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
-   <td>Open</td>
-   <td>2010-01-11</td>
-   <td>defect</td>
-   <td>normal</td>
-   <td>Holistic</td>
-  </tr>
-  <tr class="odd">
-   <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
-   <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
-   <td>Open</td>
-   <td>2010-01-12</td>
-   <td>defect</td>
-   <td>normal</td>
-   <td>Holistic</td>
-  </tr>
-  <tr>
-   <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
-   <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
-   <td>Open</td>
-   <td>2010-01-13</td>
-   <td>defect</td>
-   <td>normal</td>
-   <td>Holistic</td>
-  </tr>
- </tbody>
-</table>
+<p class="todo">XX My means "First identity created", which is dumb.  We need auth.  Currently: [% person.name %] XX</p>
+[% PROCESS "site/shared/ticket_table.tt", tickets = person.tickets.all %]
+
+
