@@ -55,6 +55,7 @@ sub search    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub admin     : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub my        : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 sub register : Chained('.') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('.') PathPart('') CaptureArgs(0) { }
@@ -100,12 +101,6 @@ sub milestone : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'milestone.tt';
-}
-
-sub my : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'my.tt';
 }
 
 sub roadmap : Local {
