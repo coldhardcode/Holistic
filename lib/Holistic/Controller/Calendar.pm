@@ -71,8 +71,6 @@ sub root : Chained('setup') PathPart('') Args() {
         }
     }
     $c->stash->{days} = \@days;
-
-    $c->stash->{template} = 'calendar/default.tt';
 }
 
 sub day : Chained('setup') PathPart('') Args(3) {
@@ -85,7 +83,6 @@ sub day : Chained('setup') PathPart('') Args(3) {
         $req_day->day( $day );
 
     $c->stash->{req_day} = $req_day;
-    $c->stash->{template} = 'calendar/day.tt';
 }
 
 #no Moose;

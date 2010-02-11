@@ -20,6 +20,20 @@ FOREACH tag IN ticket.tags;
     tag_list.push("<a href=\"#\">" _ tag.name _ "</a>");
 END;
 
+is_editable = 1;
+
+IF c.user_exists && c.user.person_pk1 == owner.person_pk1;
+    is_owned = 1;
+END;
+# XX hard coded, bitch!
+is_owned    = 1;
+
+IF c.user_exists && c.user.person_pk1 == attention.person_pk1;
+    needs_my_attention = 1;
+END;
+# XX hard coded, bitch!
+needs_my_attention = 1;
+
 %]
 <nav class="pager">
  <p>[% c.loc('Ticket [_1] of [_2] in', 2, siblings.count) %] <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.type.name %] [% queue.name %]</a></p>
@@ -30,9 +44,12 @@ END;
   <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
  </ol>
 </nav>
+[% IF needs_my_attention %]
 <section class="message">
  <aside class="omessage"><p><a href="#comment">XX [% c.loc('This ticket requires your attention!') %]</a></p></aside>
 </section>
+[% END %]
+
 [% PROCESS site/nav/ticket.tt %]
 <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
 <h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
@@ -40,11 +57,17 @@ END;
  <tbody>
   <tr>
    [% readonly_field({ label => 'Reporter', name => 'ticket.reporter', value => requestor.person.name }); %]
-   [% select_field({
-        label => 'Owner', name => 'ticket.owner', value => owner.name,
-        array => ticket.assignable_persons.all,
-        value_method => 'pk1', label_method => 'name'
-      }) %]
+   [% IF is_editable;
+        select_field({
+            default_option => [ 0, 'Choose...' ],
+            label => 'Owner', name => 'ticket.owner',
+            value => owner.person_pk1,
+            array => ticket.assignable_persons.all,
+            value_method => 'pk1', label_method => 'name'
+        });
+    ELSE;
+        readonly_field({ label => 'Owner', name => 'ticket.owner', value => owner.name });
+    END %]
   </tr>
 [% IF attention %]
   <tr class="imp">
@@ -52,12 +75,24 @@ END;
   </tr>
 [% END %]
   <tr>
-   [% readonly_field({ label => 'Opened', name => 'ticket.opened', value => ticket.dt_created }); %]
-   [% readonly_field({ label => 'Last Changed', name => 'ticket.last_changed', value => ticket.state.dt_created }); %]
+   [% dt_created = ticket.dt_created | date_long;
+      readonly_field({ label => 'Opened', name => 'ticket.opened', value => dt_created }); %]
+   [% dt_created = ticket.state.dt_created | date_long;
+      readonly_field({ label => 'Last Changed', name => 'ticket.last_changed', value => dt_created }); %]
   </tr>
   <tr>
-   [% readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => ticket.due_date.dt_marker, link => c.uri_for_action('/calendar/root', ticket.due_date.dt_marker.year, ticket.due_date.dt_marker.month ) }); %]
-   [% readonly_field({ label => 'Priority', name => 'ticket.priority', value => 'Normal' }); %]
+   [% due_date = ticket.due_date.dt_marker | date_long;
+      readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => due_date, link => c.uri_for_action('/calendar/root', ticket.due_date.dt_marker.year, ticket.due_date.dt_marker.month, { highlight => 'ticket', 'ticket' => ticket.id } ) }); %]
+   [% IF is_editable;
+        select_field({
+            label => 'Priority', name => 'ticket.priority',
+            value => ticket.state.priority_pk1,
+            array => ticket.assignable_priorities.all,
+            value_method => 'pk1', label_method => 'name'
+        });
+    ELSE;
+        readonly_field({ label => 'Priority', name => 'ticket.priority', value => 'Normal' });
+    END %]
   </tr>
   <tr>
    [% readonly_field({ label => 'Tags', double => 1, name => 'ticket.tags', value => tag_list.join(' ') }); %]

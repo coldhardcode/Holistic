@@ -66,6 +66,10 @@ __PACKAGE__->has_many('group_links', __PACKAGE__ . '::Group',
 );
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
 
+sub assignable_priorities {
+    shift->schema->resultset('Ticket::Priority')->search_rs( @_ );
+}
+
 sub assignable_persons {
     my $self = shift;
 

@@ -2,9 +2,9 @@
  <thead>
   <tr>
    <th colspan="7">
-    <a href="[% c.uri_for_action('/calendar/default', prev_day.year, prev_day.month) %]"><img src="/static/images/actions/resultset_first.png"></a>
+    <a href="[% c.uri_for_action('/calendar/root', prev_day.year, prev_day.month) %]"><img src="/static/images/actions/resultset_first.png"></a>
     [% first_day.month_name %] [% first_day.year %]
-    <a href="[% c.uri_for_action('/calendar/default', next_day.year, next_day.month) %]"><img src="/static/images/actions/resultset_last.png"></a>
+    <a href="[% c.uri_for_action('/calendar/root', next_day.year, next_day.month) %]"><img src="/static/images/actions/resultset_last.png"></a>
    </th>
   </tr>
   <tr>
