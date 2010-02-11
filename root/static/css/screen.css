@@ -434,7 +434,7 @@ fieldset {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    display: inline;
+/*    display: inline;*/
     margin: 0 0 1em 0;
     padding: 1em;
     position: relative;
@@ -521,12 +521,14 @@ fieldset.cwrap input {
     padding: 5px;
 }
 fieldset tfoot tr td {
+    background-color: inherit;
+    border: none;
     text-align: right;
 }
 td.message aside {
     -webkit-border-top-left-radius: 0;
     -webkit-border-top-right-radius: 0;
-    -moz-border-radius-lefright: 0;
+    -moz-border-radius-topleft: 0;
     -moz-border-radius-topright: 0;
     border-top-right-radius: 0;
     border-top-left-radius: 0;

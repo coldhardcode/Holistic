@@ -202,9 +202,11 @@
     </tr>
    </tbody>
    <tfoot>
-    <td colspan="2">
-     <input type="image" src="/static/images/buttons/submit.png" value="Submit Form">
-    </td>
+    <tr>
+     <td colspan="2">
+      <input type="image" src="/static/images/buttons/submit.png" value="Submit Form">
+     </td>
+    </tr>
    </tfoot>
   </table>
  </fieldset>
