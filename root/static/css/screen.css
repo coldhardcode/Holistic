@@ -424,6 +424,12 @@ nav.tabs ul li a {
     margin: 0; padding: .25em .5em;
     text-decoration: none;
 }
+#crumbs ul {
+    margin: 1em 0 0 175px; padding: 0;
+}
+#crumbs ul li {
+    display: inline;
+}
 section.tab {
     border: 1px solid #353535;
     margin: 0; padding: 1em;
@@ -434,7 +440,6 @@ fieldset {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-/*    display: inline;*/
     margin: 0 0 1em 0;
     padding: 1em;
     position: relative;
