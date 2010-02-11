@@ -109,5 +109,10 @@ sub gravatar_url {
         "&size=$size";
 }
 
+sub tickets {
+    my ( $self ) = @_;
+    $self->identities->search_related('ticket_states')->search_related('ticket');
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

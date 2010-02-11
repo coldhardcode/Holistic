@@ -56,6 +56,12 @@ $CLASS->add_unique_constraint(
     person_realm_id_constraint => [ qw/person_pk1 realm id/ ]
 );
 
+$CLASS->has_many(
+    'ticket_states', 'Holistic::Schema::Ticket::FinalState',
+    { 'foreign.identity_pk1' => 'self.pk1' }
+);
+$CLASS->many_to_many('tickets' => 'ticket_states' => 'ticket');
+
 # TODO: Decide on indexes
 sub sqlt_deploy_hook {
     my ( $self, $sqlt_table ) = @_;

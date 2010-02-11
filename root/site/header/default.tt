@@ -19,6 +19,7 @@ END;
         <li><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></li>
     </ul>
   </li>
+  <li>Fake Shit</li>
   <li><a href="[% c.uri_for('/admin') %]">[% c.loc('Administration') %]</a></li>
   <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
   <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>

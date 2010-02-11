@@ -16,7 +16,7 @@ has 'ticket' => (
     isa => 'Holistic::Schema::Ticket'
 );
 
-sub ticket_create : Plan(21) {
+sub ticket_create : Plan(23) {
     my ( $self, $data ) = @_;
 
     my $type_ms = $self->resultset('Queue::Type')->find_or_create({
@@ -86,6 +86,9 @@ sub ticket_create : Plan(21) {
     cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
     cmp_ok( $ticket->final_state->identity_pk1, '==', $identity->pk1, 'final state identity' );
     cmp_ok( $ticket->requestor->pk1, '==', $identity->pk1, 'requestor identity' );
+    cmp_ok( $identity->tickets->count, '==', 1, 'ticket count on identity' );
+    cmp_ok( $identity->person->tickets->count, '==', 1, 'ticket count on person' );
+
     my $comment = $ticket->add_comment({
         identity    => $self->person->identities({ realm => 'local' })->first,
         subject     => 'Lorem Ipsum',
