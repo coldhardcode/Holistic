@@ -2,6 +2,7 @@
 
 USE Number.Format;
 
+page.body.scripts.push('tabview.js');
 page.title = ticket.name;
 page.layout = 'ticket';
 
@@ -103,14 +104,18 @@ needs_my_attention = 1;
  <dt>[% c.loc('Description') %]</dt>
  <dd>[% ticket.description %]</dd>
 </dl>
+
+<h2 id="tabview-heading"></h2>
+<div id="tabview-1">
 <nav class="tabs">
  <ul>
-  <li class="selected"><a href="#">[% c.loc('Comments') %]</a></li>
-  <li><a href="#">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
-  <li><a href="#">[% c.loc('Worklog') %]</a></li>
+  <li class="yui-tab yui-tab-selected selected"><a href="#comments">[% c.loc('Comments') %]</a></li>
+  <li class="yui-tab"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
+  <li class="yui-tab"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
  </ul>
 </nav>
-<section class="tab">
+<div>
+<section class="tab yui-tabpanel yui-tabpanel-selected" id="comments">
   <ul class="comments">
   [% FOREACH message IN activity_log.reverse %]
       <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
@@ -133,9 +138,9 @@ needs_my_attention = 1;
    <fieldset>
     <table>
      <tfoot>
-      <td colspan="4">
+      <tr><td colspan="4">
        <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="Submit Form">
-      </td>
+      </td></tr>
      </tfoot>
      <tbody>
       <tr>
@@ -146,11 +151,16 @@ needs_my_attention = 1;
    </fieldset>
   </form>
 </section>
-<section class="tab">
+<section class="tab yui-tabpanel" id="dependencies">
  [% IF dependencies.count %]
  [% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
  [% END %]
 </section>
+<section class="tab yui-tabpanel" id="worklog">
+ <p>Worklog Here</p>
+</section>
+</div>
+</div>
 <div class="todo">
 <h1>TODO</h1>
 <ul>
