@@ -5,10 +5,6 @@
 	margin: 10px;
 }
  
-.yui-tabview div {
-	border: solid 1px #000;
-}
- 
 .yui-tabview div div {
 	border: solid 1px #999;
 }
@@ -45,7 +41,7 @@
 	display: block;
 	text-decoration: none;
 	color: #000;
-	border: solid 1px #ccc;
+/*  border: solid 1px #ccc;*/
 	cursor: hand;	/* Needed for IE 8, which by default renders the text selection cursor. */
 }
  
@@ -56,7 +52,7 @@
 }
  
 .yui-tabview .yui-tab-focus a {
-	border-color: #B3D4FF;
+/*  border-color: #B3D4FF;*/
 }
  
 .yui-tabview .yui-tab-focus a:focus {  
@@ -65,7 +61,7 @@
  
 .yui-tabview .yui-tab-selected a {	
 	background-color: #999;
-	border-color: #999;
+/*  border-color: #999;*/
 	border-bottom-width: 2px;
 	margin-bottom: -1px;
 	*position: relative;	/* Necessary to get negative margins in IE */
@@ -85,7 +81,7 @@
 }
  
 .yui-tabview .yui-tabpanel {
-	background-color: #fff;
+	background-color: inherit;
 	display: none;
 }
  
