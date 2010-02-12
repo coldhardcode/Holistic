@@ -1,0 +1,2 @@
+<h1>;(</h1>
+<p>There be bugs, coward!  <a href="[% c.uri_for_action('/auth/login') %]">login again</a> to vanquish them.</p>

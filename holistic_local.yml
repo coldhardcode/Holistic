@@ -1,0 +1,18 @@
+---
+Plugin::Authentication:
+    realms:
+        local:
+            credential:
+                class: HTTP
+                type: basic
+                password_field: password
+                password_type:  clear
+            store:
+                class: Minimal
+                users:
+                    jshirley:
+                        password: yayme
+                    gphat:
+                        password: hater
+                    parrot:
+                        password: blah

@@ -35,8 +35,36 @@ sub index :Path :Args(0) {
 
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ($self, $c) = @_;
-
     $c->stash->{now} = DateTime->now;
+
+    if ( $c->user_exists ) {
+        my $name  = $c->user->id;
+        my $ident = $c->model('Schema::Person::Identity')
+            ->search(
+                { id => $name, realm => 'local' },
+                { prefetch => [ 'person' ] }
+            )->first;
+        # Vivify the user from external auth (most likely HTTP Auth)
+        if ( not defined $ident ) {
+            my $person = $c->model('Schema::Person')->create({
+                name  => $name,
+                token => $name,
+            });
+            $ident = $person->add_to_identities({
+                id => $c->user->id,
+                realm => 'local'
+            });
+            # XX Throw up a notice to complete their profile?
+        }
+        if ( defined $ident ) {
+            # Clobbering time.
+            $c->user( $ident );
+            $c->stash->{now}->set_time_zone( $ident->person->timezone );
+        } else {
+            $c->log->fatal("Unable to establish identity of the user");
+            $c->logout;
+        }
+    }
 
     if ( defined ( my $errors = $c->flash->{errors} ) ) {
         my $stack = Message::Stack->new;
@@ -57,9 +85,9 @@ sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub admin     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub my        : Chained('setup') PathPart('') CaptureArgs(0) { }
 
-sub register : Chained('.') PathPart('') CaptureArgs(0) { }
-sub auth     : Chained('.') PathPart('') CaptureArgs(0) { }
-sub xhr      : Chained('.') PathPart('') CaptureArgs(0) { }
+sub register : Chained('/') PathPart('') CaptureArgs(0) { }
+sub auth     : Chained('/') PathPart('') CaptureArgs(0) { }
+sub xhr      : Chained('/') PathPart('') CaptureArgs(0) { }
 
 =head2 default
 
@@ -89,12 +117,6 @@ sub log : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'log.tt';
-}
-
-sub login : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'login.tt';
 }
 
 sub milestone : Local {

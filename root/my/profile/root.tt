@@ -1,0 +1,6 @@
+[%~
+
+PROCESS "my/profile/object.tt",
+    person = person_rs.first;
+
+~%]

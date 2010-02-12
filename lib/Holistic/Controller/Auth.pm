@@ -25,7 +25,7 @@ sub _build_rpx_client {
     Net::API::RPX->new({ api_key => $self->rpx_api_key });
 }
 
-sub base : Chained('.') PathPart('') CaptureArgs(0) {
+sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
     if ( my $uri = $c->req->params->{destination} ) {
@@ -38,17 +38,38 @@ sub base : Chained('.') PathPart('') CaptureArgs(0) {
     }
 }
 
-sub disabled : Chained('base') Args(0) { }
+sub disabled : Chained('setup') Args(0) { }
 
-sub login : Chained('base') Args(0) { 
+sub login : Chained('setup') Args(0) {
     my ( $self, $c ) = @_;
 
-    if ( $c->req->method eq 'POST' ) {
-        $c->forward('do_login');
+    $c->log->debug("Already logged in? " . $c->user_exists);
+
+
+    if ( $c->config->{'Plugin::Authentication'}->{'realms'}->{'local'}->{'credential'}->{'class'} eq 'HTTP' ) {
+        if ( $c->user_exists ) {
+            $c->res->redirect( $c->uri_for_action('/my/root') );
+            $c->detach;
+        }
+        # We will always auth here, so the user can effectively logout
+        $c->authenticate({ realm => 'local' });
+    } else {
+        if ( $c->req->method eq 'POST' ) {
+            $c->forward('do_login');
+        }
     }
 }
 
-sub logout : Chained('base') Args(0) { 
+sub http_post_auth : Chained('setup') Args(0) {
+    my ( $self, $c ) = @_;
+    $c->authenticate({ realm => 'local' });
+    if ( $c->user_exists ) {
+        $c->res->redirect( $c->uri_for_action('/my/root') );
+        $c->detach;
+    }
+}
+
+sub logout : Chained('setup') Args(0) { 
     my ( $self, $c ) = @_;
 
     if ( $c->user_exists ) {
@@ -60,11 +81,11 @@ sub logout : Chained('base') Args(0) {
     $c->delete_session;
     $c->logout;
 
-    $c->res->redirect( $c->action_uri( 'Auth', 'login' ) );
-    $c->detach;
+    #$c->res->redirect( $c->uri_for_action( '/auth/login' ) );
+    #$c->detach;
 }
 
-sub rpx : Chained('base') PathPart('login/rpx') Args(0) {
+sub rpx : Chained('setup') PathPart('login/rpx') Args(0) {
     my ( $self, $c ) = @_;
 
     if ( defined ( my $rpx_token = $c->req->params->{token} ) ) {
@@ -78,7 +99,7 @@ sub rpx : Chained('base') PathPart('login/rpx') Args(0) {
                 type => 'error',
                 message => $c->loc("Sorry, we weren't able to properly log you in.  Please try again")
             });
-            $c->res->redirect( $c->action_uri( 'Auth', 'login') );
+            $c->res->redirect( $c->uri_for_action( '/auth/login') );
             $c->detach;
         }
         if ( $c->debug ) {
@@ -110,7 +131,7 @@ sub rpx : Chained('base') PathPart('login/rpx') Args(0) {
         }
         if ( not $c->stash->{login}->{destination} ) {
             $c->stash->{login}->{destination} ||= 
-                $c->action_uri('Profile', 'complete');
+                $c->uri_for_action('/my/profile');
             # Our custom message plugin
             $c->message($c->loc('Thank you for logging in, here is your profile'));
         } else {
@@ -120,7 +141,7 @@ sub rpx : Chained('base') PathPart('login/rpx') Args(0) {
         $c->detach;
     }
     $c->log->info("Invalid call to RPX endpoint, no token specified");
-    $c->res->redirect( $c->action_uri('Auth', 'login') );
+    $c->res->redirect( $c->uri_for_action('/auth/login') );
     $c->detach;
 }
 
@@ -140,7 +161,7 @@ sub do_login : Private {
             $c->message( $c->loc("You've logged in, welcome back!") );
 
             my $uri = $c->stash->{login}->{destination};
-            $uri  ||= $c->action_uri( 'Profile', 'object', [ $c->user->person_pk1 ] );
+            $uri  ||= $c->uri_for_action( '/my/profile' );
             $c->res->redirect( $uri );
             $c->detach;
         } else {
@@ -148,7 +169,7 @@ sub do_login : Private {
                 type => 'error',
                 message => $c->loc("Sorry, couldn't log you in.  Check your username and password and give it another try.")
             });
-            $c->res->redirect( $c->action_uri( 'Auth', 'login' ), 303 );
+            $c->res->redirect( $c->uri_for_action( '/auth/login' ), 303 );
             $c->detach;
         }
     }
@@ -193,7 +214,7 @@ sub do_login : Private {
             realm   => 'temp'
         });
         $c->log->debug("Temp pass for " . $id->id . ": $temp_pass");
-        $c->res->redirect( $c->action_uri( 'Auth', 'password_sent' ), 303 );
+        $c->res->redirect( $c->uri_for_action( '/auth/password_sent' ), 303 );
         $c->detach;
         $c->detach;
     } else {
@@ -202,19 +223,19 @@ sub do_login : Private {
             message => $c->loc("We could not find the email address &quot;[_1]&quot; in our system.  Please register for a new account!", [ $email ] )
 
         });
-        $c->res->redirect( $c->action_uri( 'Register', 'root' ), 303 );
+        $c->res->redirect( $c->uri_for_action( '/register/root' ), 303 );
         $c->detach;
     }
 }
 
-sub forgot_password : Chained('base') PathPart('sign-in/reminder') Args(0) ActionClass('REST') { }
+sub forgot_password : Chained('setup') PathPart('sign-in/reminder') Args(0) ActionClass('REST') { }
 sub forgot_password_GET { }
 sub forgot_password_POST { 
     my ( $self, $c ) = @_;
 
     my $data = $c->req->data || $c->req->body_params;
     unless ( defined $data->{email} ) {
-        $c->res->redirect( $c->action_uri('Auth', 'forgot_password') );
+        $c->res->redirect( $c->uri_for_action('/auth/forgot_password') );
         $c->detach;
     }
 
@@ -232,7 +253,7 @@ sub forgot_password_POST {
             type    => 'attention',
             message => $c->loc(q{Invalid email address.})
         });
-        $c->res->redirect( $c->action_uri('Auth', 'forgot_password') );
+        $c->res->redirect( $c->uri_for_action('/auth/forgot_password') );
         $c->detach;
     }
 
@@ -252,19 +273,19 @@ sub forgot_password_POST {
         { 
             name        => $person->name, 
             email       => $person->email,
-            login_link  => $c->action_uri('Auth', 'login')
+            login_link  => $c->uri_for_action('/auth/login')
         }
     );
     if ( $r ) {
         $c->message( $c->loc("You can login here with your temporary password that has been emailed.") );
-        $c->res->redirect( $c->action_uri('Auth', 'login') );
+        $c->res->redirect( $c->uri_for_action('/auth/login') );
         $c->detach;
     }
         $c->message({ 
             type => 'error',
             message => $c->loc("Sorry, there was a problem emailing your temporary password.  Please try again.") 
         });
-        $c->res->redirect( $c->action_uri('Auth', 'forgot_password') );
+        $c->res->redirect( $c->uri_for_action('/auth/forgot_password') );
         $c->detach;
 }
 

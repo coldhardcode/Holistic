@@ -76,6 +76,11 @@ has 'field_name_maps' => (
 
 sub setup : Chained('.') PathPart('') CaptureArgs(0) { 
     my ( $self, $c ) = @_;
+    $c->stash->{ $self->rs_key } = $self->_fetch_rs( $c );
+}
+
+sub _fetch_rs {
+    my ( $self, $c ) = @_;
 
     my $rs = $c->model($self->class);
 
@@ -84,7 +89,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
             $self->class . " but didn't get a resultset back\n";
     }
 
-    $c->stash->{ $self->rs_key } = $rs;
+    return $rs;
 }
 
 sub create_form : Chained('setup') PathPart('create') Args(0) { 
@@ -219,6 +224,8 @@ sub root_GET { }
 sub root_POST {
     my ( $self, $c, $data ) = @_;
     $data ||= $c->req->data || $c->req->params;
+    delete $data->{x};
+    delete $data->{y};
     if ( $c->debug ) {
         $c->log->debug("Handling POST to " . $c->req->uri);
         $c->log->_dump($data);
@@ -251,6 +258,9 @@ sub object_POST {
     my ( $self, $c, $data ) = @_;
 
     $data ||= $c->req->data || $c->req->params;
+    delete $data->{x};
+    delete $data->{y};
+
     my $obj = $c->stash->{$self->object_key};
 
     if ( $c->debug ) {

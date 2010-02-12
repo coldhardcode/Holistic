@@ -17,6 +17,11 @@ requires 'Template::Plugin::Lingua::EN::Inflect';
 requires 'Template::Plugin::Number::Format';
 requires 'Template::Plugin::Time::Duration';
 
+requires 'Catalyst::Plugin::Cache';
+requires 'Catalyst::Plugin::Authentication';
+requires 'Catalyst::Authentication::Credential::HTTP';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
+
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Action::REST';
 

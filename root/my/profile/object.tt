@@ -1,0 +1,28 @@
+<h1>[% c.loc('Halloa, [_1]', [ person.name ]) %]</h1>
+<form id="profile" method="post" action="[% c.uri_for_action('/my/profile/object', [ person.id ] ) %]">
+ <fieldset>
+  <table>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Your name', name => 'name', hint => 'How you are seen to others.', required => 1, double => 1, value => person.name }); %]
+    </tr>
+    <tr>
+     [% text_field({ label => 'Email', name => 'email', hint => 'Holistic will email you here.', required => 1, double => 1, value => person.email }); %]
+    </tr>
+[% IF !disable_password_change %]
+    <tr>
+      [% text_field({ label => 'Password', name => 'identity.password', type => 'password', required => 1, double => 1 }); %]
+    <tr>
+    <tr>
+      [% text_field({ label => 'Verify Password', name => 'identity.verify_password', type => 'password', required => 1, double => 1 }); %]
+    <tr>
+[% END %]
+   </tbody>
+   <tfoot>
+    <td colspan="4">
+     <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="Submit Form">
+    </td>
+   </tfoot>
+  </table>
+ </fieldset>
+</form>

@@ -21,7 +21,9 @@ use Catalyst qw/
 
     Authentication
     Session Session::Store::FastMmap Session::State::Cookie
-   
+
+    Cache
+
     +Holistic::Plugin::Message 
 /;
 
@@ -44,8 +46,10 @@ __PACKAGE__->config(
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
     default_view => 'TT',
-
-    authentication => {
+    'Plugin::Cache' => {
+        backend => { class => 'Cache::FastMmap' }
+    },
+    'Plugin::Authentication' => {
         default_realm => 'progressive',
         realms => {
             progressive => {
@@ -83,7 +87,6 @@ __PACKAGE__->config(
                     id_field    => 'id',
                 }
             },
-
             temp => {
                 credential => {
                     class => 'Password',

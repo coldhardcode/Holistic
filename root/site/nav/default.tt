@@ -1,7 +1,12 @@
 <nav>
  <ul>
-  <li><a href="[% c.uri_for('/calendar') %]">[% c.loc('Calendar') %]</a></li>
-  <li><a href="[% c.uri_for('/roadmap') %]">[% c.loc('Roadmap') %]</a></li>
-  <li><a href="[% c.uri_for('/ticket/create') %]">[% c.loc('Create Ticket') %]</a></li>
+  <li><a href="[% c.uri_for_action('/calendar/root') %]">[% c.loc('Calendar') %]</a></li>
+  <li><a href="[% c.uri_for_action('/roadmap') %]">[% c.loc('Roadmap') %]</a></li>
+  <li><a href="[% c.uri_for_action('/ticket/create_form') %]">[% c.loc('Create Ticket') %]</a></li>
+[% IF c.user_exists %]
+  <li><a href="[% c.uri_for_action('/auth/logout') %]">[% c.loc('Logout') %]</a></li>
+[% ELSE %]
+  <li><a href="[% c.uri_for_action('/auth/login') %]">[% c.loc('Login') %]</a></li>
+[% END %]
  </ul>
 </nav>
