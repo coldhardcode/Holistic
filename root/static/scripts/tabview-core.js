@@ -148,7 +148,7 @@ YUI().use("*", function (Y) {
  
  
     var creatingPaging = function (panel) {
- 
+        return; 
         var listitem,
             sHTML = "";
  
