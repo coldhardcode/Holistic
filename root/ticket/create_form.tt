@@ -8,7 +8,7 @@ stack      = stack;
 <h1>[% c.loc('Create Ticket') %]</h1>
 [% IF stack.has_scope(scope) %]
 <section class="message">
-    <aside class="rmessage"><p>Please correct the errors below.</p></aside>
+ <aside class="rmessage"><p>[% c.loc('Please correct the errors below.') %]</p></aside>
 </section>
 [% END %]
 <form id="ticket" method="post" action="[% c.uri_for_action('/ticket/root') %]">
