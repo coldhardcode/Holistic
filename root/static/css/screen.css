@@ -465,19 +465,19 @@ fieldset table tr td {
     text-align: left;
     vertical-align: top;
 }
-fieldset tr.missing label,
-fieldset tr.error label {
+fieldset td.error label {
     color: #b31d1c;
     font-weight: bold;
 }
-fieldset tr.missing input,
-fieldset tr.error input,
-fieldset tr.missing select,
-fieldset tr.error input {
+fieldset td.error textarea,
+fieldset td.error input {
     border: 2px solid #b31d1c;
 }
 fieldset label.error {
     color: #b31d1c;
+}
+fieldset .error {
+    font-weight: normal;
 }
 span.req {
     color: #b31d1c;

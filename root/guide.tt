@@ -127,10 +127,10 @@
      <td><label for="field1">Field1<span class="req">*</span>:</label></td>
      <td><input id="field1" type="text" placeholder="HTML5 Placeholder"></td>
     </tr>
-    <tr class="missing">
-     <td><label for="field2">Field Deux:</label></td>
-     <td class="message"><input id="field2" type="text">
-      <aside class="rmessage"><p>I'm an error message.</p></aside>
+    <tr>
+     <td class="error"><label for="field2">Field Deux:</label></td>
+     <td class="error message"><input id="field2" type="text">
+      <div><aside class="rmessage"><p>I'm an error message.</p></aside></div>
      </td>
     </tr>
     <tr>

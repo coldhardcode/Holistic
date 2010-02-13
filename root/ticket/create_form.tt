@@ -8,7 +8,7 @@ stack      = stack;
 <h1>[% c.loc('Create Ticket') %]</h1>
 [% IF stack.has_scope(scope) %]
 <section class="message">
-    <aside class="rmessage">Please correct the errors below.</aside>
+    <aside class="rmessage"><p>Please correct the errors below.</p></aside>
 </section>
 [% END %]
 <form id="ticket" method="post" action="[% c.uri_for_action('/ticket/root') %]">
@@ -21,13 +21,13 @@ stack      = stack;
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Should this be a dropbox?', required => 1, double => 1, extra => stack.for_subject('reporter').first_message.id, value => results.get_original_value('reporter') }); %]
+     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Should this be a dropbox?', required => 1, double => 1, error => stack.for_subject('reporter').first_message.id, value => results.get_original_value('reporter') }); %]
     </tr>
     <tr>
-     [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1, extra => stack.for_subject('name').first_message.id, value => results.get_value('name') }); %]
+     [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1, error => stack.for_subject('name').first_message.id, value => results.get_value('name') }); %]
     </tr>
     <tr>
-     [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
+     [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', error => stack.for_subject('description').first_message.id, required => 1, rows => 12, double => 1 }); %]
     </tr>
     <tr>
      [% select_field({ label => 'Type', name => 'ticket.type_pk1', required => 1, array => c.model('Schema::Ticket::Type').all, value_method => 'id', label_method => 'name' }); %]
