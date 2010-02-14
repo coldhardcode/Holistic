@@ -1,7 +1,7 @@
 <h1>[% c.loc("Who's Doing What?") %]</h1>
 <ul class="roadmap">
  <li>
-  <h3><a href="#"><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"> gphat</a></h3>
+  <h3><a href="[% c.uri_for_action('/who/person', 'gphat') %]"><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"> gphat</a></h3>
   <table class="summary">
    <tfoot>
      <tr>
@@ -45,7 +45,7 @@
   </table>
  </li>
  <li>
-  <h3><a href="#"><img src="http://www.gravatar.com/avatar/714a9312e3e32ef04a6525969a9422be?s=40"> jshirley</a></h3>
+  <h3><a href="[% c.uri_for_action('/who/person', 'jshirley') %]"><img src="http://www.gravatar.com/avatar/714a9312e3e32ef04a6525969a9422be?s=40"> jshirley</a></h3>
   <table class="summary">
    <tfoot>
      <tr>

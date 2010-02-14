@@ -1,0 +1,142 @@
+[% IF object == 'person' %]
+<h1>[% c.loc("What's [_1] doing?", 'gphat') %]</h1>
+[% ELSIF object == 'queue' %]
+<h1>[% c.loc("What's been done in [_1]?", 'Version 3.0') %]</h1>
+[% ELSIF object == 'product' %]
+<h1>[% c.loc("What's been done to [_1]?", 'Holistic') %]</h1>
+[% END %]
+
+<ul class="roadmap status">
+ <li>
+  <h3>[% c.loc('Recent') %]</h3>
+   <table class="summary">
+    <tfoot>
+      <tr>
+       <td colspan="7"><details><a href="#">1 Attention</a> + <a href="#">2 Normal</a> = <a href="#">3 Total</a></details></td>
+      </tr>
+    </tfoot>
+    <tbody>
+     <tr class="head">
+      <th>Ticket</th>
+      <th>Summary</th>
+      <th>Status</th>
+      <th>Type</th>
+      <th>Priority</th>
+      <th>Component</th>
+     </tr>
+     <tr class="closed">
+      <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
+      <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
+      <td>Fixed</td>
+      <td>defect</td>
+      <td>normal</td>
+      <td>Holistic</td>
+     </tr>
+     <tr class="odd closed">
+      <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
+      <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
+      <td>Won't Fix</td>
+      <td>defect</td>
+      <td>normal</td>
+      <td>Holistic</td>
+     </tr>
+     <tr class="closed">
+      <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
+      <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
+      <td>Works for Me</td>
+      <td>defect</td>
+      <td>normal</td>
+      <td>Holistic</td>
+     </tr>
+    </tbody>
+   </table>
+ </li>
+ <li class="now">
+  <h3>[% c.loc('Now') %]</h3>
+  <table class="summary">
+   <tfoot>
+     <tr>
+      <td colspan="7"><details><a href="#">1 Attention</a> + <a href="#">2 Normal</a> = <a href="#">3 Total</a></details></td>
+     </tr>
+   </tfoot>
+   <tbody>
+    <tr class="head">
+     <th>Ticket</th>
+     <th>Summary</th>
+     <th>Status</th>
+     <th>Type</th>
+     <th>Priority</th>
+     <th>Component</th>
+    </tr>
+    <tr class="imp">
+     <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+    <tr class="odd">
+     <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+    <tr>
+     <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
+     <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
+     <td>Open</td>
+     <td>defect</td>
+     <td>normal</td>
+     <td>Holistic</td>
+    </tr>
+   </tbody>
+  </table>
+ </li>
+ <li>
+  <h3>[% c.loc('Soon') %]</h3>
+   <table class="summary">
+    <tfoot>
+      <tr>
+       <td colspan="7"><details><a href="#">1 Attention</a> + <a href="#">2 Normal</a> = <a href="#">3 Total</a></details></td>
+      </tr>
+    </tfoot>
+    <tbody>
+     <tr class="head">
+      <th>Ticket</th>
+      <th>Summary</th>
+      <th>Status</th>
+      <th>Type</th>
+      <th>Priority</th>
+      <th>Component</th>
+     </tr>
+     <tr>
+      <th><a href="[% c.uri_for('/ticket') %]">1453</a></th>
+      <td><a href="[% c.uri_for('/ticket') %]">Lorem ipsum dolor sit amet</a></td>
+      <td>Open</td>
+      <td>defect</td>
+      <td>normal</td>
+      <td>Holistic</td>
+     </tr>
+     <tr class="odd">
+      <th><a href="[% c.uri_for('/ticket') %]">1768</a></th>
+      <td><a href="[% c.uri_for('/ticket') %]">Sed ut perspiciatis unde omnis iste natus</a></td>
+      <td>Open</td>
+      <td>defect</td>
+      <td>normal</td>
+      <td>Holistic</td>
+     </tr>
+     <tr>
+      <th><a href="[% c.uri_for('/ticket') %]">1921</a></th>
+      <td><a href="[% c.uri_for('/ticket') %]">modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</a></td>
+      <td>Open</td>
+      <td>defect</td>
+      <td>normal</td>
+      <td>Holistic</td>
+     </tr>
+    </tbody>
+   </table>
+ </li>
+</ul>

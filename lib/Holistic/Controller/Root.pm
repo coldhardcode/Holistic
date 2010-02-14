@@ -77,13 +77,14 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     }
 }
 
+sub admin     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub calendar  : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub chart     : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub my        : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub search    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }
-sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
-sub admin     : Chained('setup') PathPart('') CaptureArgs(0) { }
-sub my        : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub who       : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 sub register : Chained('/') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('/') PathPart('') CaptureArgs(0) { }
@@ -150,12 +151,6 @@ sub todo : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'todo.tt';
-}
-
-sub who : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'who.tt';
 }
 
 sub wizard : Local {
