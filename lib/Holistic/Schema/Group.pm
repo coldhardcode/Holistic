@@ -7,8 +7,6 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
-use Data::FormValidator::Constraints;
-
 my $CLASS = __PACKAGE__;
 
 $CLASS->table('groups');

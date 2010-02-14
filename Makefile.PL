@@ -31,6 +31,7 @@ requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Action::REST';
 
+requires 'Catalyst::Model::Adaptor';
 requires 'Catalyst::Model::DBIC::Schema';
 
 requires 'Catalyst::View::TT';
@@ -53,6 +54,7 @@ requires 'Data::SearchEngine';
 requires 'DateTime';
 requires 'DateTimeX::Easy';
 requires 'DateTime::Format::DBI';
+requires 'DateTime::Format::DateParse';
 requires 'DateTime::Format::SQLite';
 requires 'DateTime::Format::DateParse';
 requires 'MooseX::Types::DateTime';
