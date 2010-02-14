@@ -59,9 +59,8 @@
 	outline: 0;	/* Suppress default browser focus */
 }
  
-.yui-tabview .yui-tab-selected a {	
-	background-color: #999;
-/*  border-color: #999;*/
+.yui-tabview .yui-tab-selected a {
+    background-color: #fff;
 	border-bottom-width: 2px;
 	margin-bottom: -1px;
 	*position: relative;	/* Necessary to get negative margins in IE */
