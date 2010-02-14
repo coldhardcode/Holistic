@@ -113,7 +113,8 @@ table thead th {
     font-weight: bold;
     padding: .5em;
 }
-table tbody tr.closed {
+table tbody tr.closed td,
+table tbody tr.closed th {
     text-decoration: line-through;
 }
 table tbody tr.head th {
@@ -418,9 +419,6 @@ nav.tabs ul li {
     float: left;
     list-style: none;
     margin: 0; padding: 0;
-}
-nav.tabs ul li.selected {
-    background-color: #fff;
 }
 nav.tabs ul li a {
     display: block;
@@ -762,11 +760,10 @@ ul.status h3 {
 }
 ul.status li table {
     padding: 0; margin: 7px 0;
-    width: 100%;
 }
 ul.status li.now {
     background: -webkit-gradient(linear, left center, right center, from(#f8f8f2), to(#e9e9d7));
-    background: -moz-linear-gradient(top, #e9e9d7, #f8f8f2);
+    background: -moz-linear-gradient(right, #e9e9d7, #f8f8f2);
     border: 1px solid #353535;
     border-width: 1px 0 1px 1px;
 }
