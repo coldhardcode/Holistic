@@ -68,7 +68,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
 
     if ( defined ( my $errors = $c->flash->{errors} ) ) {
         my $stack = Message::Stack->new;
-        
+
         foreach my $scope ( keys %{ $errors } ) {
             $c->stash->{errors}->{$scope} = $errors->{$scope};
             Message::Stack::DataVerifier->parse( $stack, $scope, $errors->{$scope} );
@@ -84,7 +84,7 @@ sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub my        : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub search    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }
-sub who       : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub what      : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 sub register : Chained('/') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('/') PathPart('') CaptureArgs(0) { }

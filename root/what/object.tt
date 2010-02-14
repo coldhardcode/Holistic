@@ -1,9 +1,9 @@
 [% IF object == 'person' %]
 <h1>[% c.loc("What's [_1] doing?", 'gphat') %]</h1>
 [% ELSIF object == 'queue' %]
-<h1>[% c.loc("What's been done in [_1]?", 'Version 3.0') %]</h1>
+<h1>[% c.loc("What's going on in [_1]?", 'Version 3.0') %]</h1>
 [% ELSIF object == 'product' %]
-<h1>[% c.loc("What's been done to [_1]?", 'Holistic') %]</h1>
+<h1>[% c.loc("What's going on with [_1]?", 'Holistic') %]</h1>
 [% END %]
 
 <ul class="roadmap status">
