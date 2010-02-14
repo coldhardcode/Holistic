@@ -11,14 +11,20 @@ requires 'Catalyst::Runtime' => '5.80016';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::Session';
-requires 'Catalyst::Plugin::I18N';
+requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Plugin::Session::State::Cookie';
+requires 'Catalyst::Plugin::Unicode';
+requires 'Catalyst::Plugin::I18N';
+requires 'Catalyst::Plugin::Params::Nested';
+
+requires 'Catalyst::Plugin::Authentication';
+requires 'Catalyst::Plugin::Cache';
+requires 'Cache::FastMmap';
+
 requires 'Template::Plugin::Lingua::EN::Inflect';
 requires 'Template::Plugin::Number::Format';
 requires 'Template::Plugin::Time::Duration';
 
-requires 'Catalyst::Plugin::Cache';
-requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Authentication::Credential::HTTP';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 
