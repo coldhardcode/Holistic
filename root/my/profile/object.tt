@@ -20,7 +20,7 @@
    </tbody>
    <tfoot>
     <td colspan="4">
-     <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="Submit Form">
+     <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
     </td>
    </tfoot>
   </table>

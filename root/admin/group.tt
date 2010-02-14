@@ -4,9 +4,11 @@
  <fieldset>
   <table>
    <tfoot>
-    <td colspan="2'">
-     <input type="submit" value="Submit">
-    </td>
+    <tr>
+     <td colspan="2'">
+      <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="c.loc('Submit Form') %]">
+     </td>
+    </tr>
    </tfoot>
    <tbody>
     <tr>

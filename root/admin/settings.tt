@@ -4,13 +4,20 @@
  <fieldset>
   <table>
    <tfoot>
-    <td colspan="2'">
-     <input type="submit" value="Submit">
-    </td>
+    <tr>
+     <td colspan="2'">
+      <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
+     </td>
+    </tr>
    </tfoot>
    <tbody>
     <tr>
-     [% select_field({ label => 'Default Product', name => 'settings.default_product', required => 1, array => [ 'Product 1', 'Product 2', 'Product 3' ], double => 1 }); %]
+     [% select_field({ label => 'Default Product', name => 'settings.default_product', array => [ 'Product 1', 'Product 2', 'Product 3' ], double => 1 }); %]
+     <p>[% c.loc("The Default Product will be used for new tickets when Holistic has no other hints as to what to use.") %]</p>
+    </tr>
+    <tr>
+     [% checkboxes_field({ label => 'Off-days', name => 'settings.offdays', array => [ c.loc('Monday'), c.loc('Tuesday'), c.loc('Wednesday'), c.loc('Thursday'), c.loc('Friday'), c.loc('Saturday'), c.loc('Sunday') ] }) %]
+     <p>[% c.loc("Holistic works better if you knows the days the team doesn't work.") %]</p>
     </tr>
    </tbody>
   </table>

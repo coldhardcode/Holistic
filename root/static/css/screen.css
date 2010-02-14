@@ -514,18 +514,21 @@ fieldset textarea {
 }
 fieldset.cwrap {
     background-color: #fff;
+    display: block;
     float: left;
-    margin: 0 0 1em 0;
+    margin: 0 0 0 0;
     padding: 0;
 }
 fieldset.cwrap label {
     clear: both;
     display: block;
-    float: none;
+    float: left;
     padding: 5px;
 }
 fieldset.cwrap input {
-    padding: 5px;
+    clear: both;
+    float: left;
+    margin: 5px;
 }
 fieldset tfoot tr td {
     background-color: inherit;
@@ -539,6 +542,7 @@ td.message aside {
     -moz-border-radius-topright: 0;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
+    clear: both;
     font-size: 12px;
     text-align: center;
     margin: 0; padding: 0;
@@ -707,6 +711,12 @@ table.cal thead td {
 table.cal tbody tr td.current {
     background-color: #ddd;
 }
+table.cal tbody tr td.current a {
+    margin: 0; padding: 5px 5px 5px 0;
+}
+table.cal tbody tr td.do {
+    background-color: #d9d9c7;
+}
 table.cal tbody td {
     height: 5em;
     padding: 0; margin: 0;
@@ -714,7 +724,7 @@ table.cal tbody td {
 table.cal tbody td a {
     display: block;
     color: #353535;
-    margin: 5px 5px 0 0;
+    margin: 0; padding: 5px 5px 0 0;
     text-align: right;
 }
 table.cal tbody td.other a {
