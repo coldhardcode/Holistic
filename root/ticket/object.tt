@@ -109,7 +109,7 @@ needs_my_attention = 1;
 <div id="tabview-1">
 <nav class="tabs">
  <ul>
-  <li class="yui-tab yui-tab-selected selected"><a href="#comments">[% c.loc('Comments') %]</a></li>
+  <li class="yui-tab yui-tab-selected"><a href="#comments">[% c.loc('Comments') %]</a></li>
   <li class="yui-tab"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
   <li class="yui-tab"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
  </ul>
