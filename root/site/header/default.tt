@@ -26,7 +26,7 @@ END;
   <li><a href="[% c.uri_for('/milestone') %]">Milestone</a></li>
   <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
   <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
-  <li><a href="[% c.uri_for('/who') %]">Who</a></li>
+  <li><a href="[% c.uri_for_action('/what/root') %]">Who</a></li>
   <li><a href="[% c.uri_for('/wizard') %]">Wizard</a></li>
  </ul>
  <ul>
