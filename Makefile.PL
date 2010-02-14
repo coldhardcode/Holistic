@@ -41,6 +41,7 @@ requires 'Catalyst::View::Graphics::Primitive';
 requires 'Moose';
 requires 'namespace::autoclean';
 requires 'MooseX::Role::Parameterized';
+requires 'MooseX::Method::Signatures';
 
 # D:V Stuff
 requires 'Data::Verifier';
@@ -77,6 +78,7 @@ requires 'YAML::XS';
 requires 'parent';
 
 test_requires 'Test::More' => '0.88';
+test_requires 'Text::Lorem' => '0.88';
 catalyst;
 
 install_script glob('script/*.pl');
