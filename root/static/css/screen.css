@@ -560,10 +560,12 @@ table.ticket {
 table.ticket label {
     color: #78766f;
 }
+table.ticket tr.submit td {
+    border: none;
+    text-align: right;
+}
 ul.comments {
     margin: 0; padding: 0 5px 0 5px;
-    border-left: 1px solid #78766f;
-    border-right: 1px solid #78766f;
 }
 ul.comments li {
     list-style: none;
