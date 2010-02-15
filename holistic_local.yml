@@ -1,5 +1,4 @@
 ---
-wtf: indeed
 Plugin::Authentication:
     realms:
         local:
