@@ -6,6 +6,7 @@ page.body.scripts.push('tabview.js');
 page.title = ticket.name;
 
 state     = ticket.state;
+context.ticket = ticket;
 
 queue     = ticket.queue;
 siblings  = queue.all_tickets;

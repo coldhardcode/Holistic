@@ -13,7 +13,7 @@ END;
 </header>
 <nav class="bar" id="sidebar">
  <h3>[% c.loc('Navigation') %]</h3>
-[% IF ticket %]
+[% IF context.ticket %]
  <h3>[% c.loc('Ticket') %]<a href="#"><img src="/static/images/actions/arrow_up.png"></a></h3>
  <ul>
   <li><a href="#comment">[% c.loc('Comment') %]</a></li>
