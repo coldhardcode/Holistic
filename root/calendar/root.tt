@@ -1,3 +1,4 @@
+<h1>[% c.loc('Calendar') %]</h1>
 <table class="cal">
  <thead>
   <tr>
