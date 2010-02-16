@@ -41,26 +41,17 @@ body > #tickcontent {
 /* End hide from IE-mac */
 footer {
     background-color: #353535;
+    background: url('/static/images/chc-water.png') no-repeat center right,
+        -webkit-gradient(linear, left top, left bottom, from(#494949), to(#353535));
+    background: url('/static/images/chc-water.png') no-repeat center right,
+        -moz-linear-gradient(top, #494949, #353535);
     display: block;
     clear: both;
     height: 150px;
     margin-top: -150px;
+    padding-top: 1px;
     position: relative;
     text-align: center;
-}
-footer a {
-    color: #e9e9d7;
-}
-footer ul {
-    -moz-column-count: 3;
-    -webkit-column-count: 3;
-    column-count: 3;
-    padding: 7px 0 0 0;
-}
-footer p {
-    color: #78766f;
-    font-size: 12px;
-    margin: 3em 0 1em 0; padding: 0;
 }
 h1, h2, h3, h4, h5, h6, legend {
     font-weight: bold;
@@ -137,6 +128,49 @@ br {
 }
 strong {
     font-weight: bold;
+}
+footer a {
+    color: #e9e9d7;
+}
+footer nav {
+    clear: both;
+    padding: 0 4% 27px 4%; margin: 10px auto;
+}
+footer nav dl {
+    float: left;
+    margin: 0; padding: 0;
+    text-align: left;
+    width: 20%;
+}
+footer nav dl  {
+    display: block;
+    float: left;
+    margin: 0; padding: 0;
+    width: 25%;
+}
+footer nav dt,
+footer nav dd {
+    margin: 0; padding: 0;
+}
+footer nav dt {
+    color: #e9e9d7;
+    padding: 0 0 .5em 0;
+}
+footer nav dd {
+    padding: 0 0 .25em 0;
+}
+footer nav dd a {
+    color: #78766f;
+    text-decoration: none;
+}
+footer nav dd a:hover {
+    color: #e9e9d7;
+}
+footer p {
+    clear: both;
+    color: #78766f;
+    font-size: 12px;
+    margin: 0 0 0 0; padding: .75em 0 0 0;
 }
 table label {
     display: block;
@@ -335,12 +369,8 @@ p.subdued {
     display: block;
     text-decoration: none;
 }
-nav.bar {
-    text-shadow: #31465b 0 -1px;
-}
 nav.bar h3 {
     margin: 0; padding: 0 0 7px 0;
-    text-shadow: #31465b 0 1px;
 }
 nav.bar > ul {
     margin: 0; padding: 0 0 18px 0;

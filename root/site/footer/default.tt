@@ -1,16 +1,36 @@
 <footer>
- <ul>
+ <nav>
   [% IF 1 # XX need administrative check %]
-  <li><a href="[% c.uri_for('/admin') %]">[% c.loc('Administration') %]</a></li>
+  <dl>
+   <dt>[% c.loc('Administration') %]</dt>
+   <dd><a href="[% c.uri_for('/admin') %]">[% c.loc('General') %]</a></dt>
+   <dd><a href="[% c.uri_for('/admin/settings') %]">[% c.loc('Settings') %]</a></dd>
+   <dd><a href="[% c.uri_for('/admin/group_management') %]">[% c.loc('Group Management') %]</a></dd>
+  </dl>
+  [% ELSE %]
+  <dl>
+   <dt>&nbsp;</dt>
+   <dd>&nbsp;</dt>
+  </dl>
   [% END %]
-  <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
-  <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
-  <li><a href="[% c.uri_for('/milestone') %]">Milestone</a></li>
-  <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
-  <li><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></li>
-  <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
-  <li><a href="[% c.uri_for_action('/what/root') %]">Who</a></li>
-  <li><a href="[% c.uri_for('/wizard') %]">Wizard</a></li>
- </ul>
+  <dl>
+   <dt>[% c.loc('Tactical') %]</dt>
+   <dd><a href="[% c.uri_for('/my') %]">[% c.loc('My Tickets') %]</a></dd>
+   <dd><a href="[% c.uri_for('/log') %]">[% c.loc('Activity Log') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/what/root') %]">[% c.loc("What's being done?") %]</a></dd>
+  </dl>
+  <dl>
+   <dt>[% c.loc('Strategic') %]</dt>
+   <dd><a href="[% c.uri_for_action('/calendar/root') %]">[% c.loc('Calendar') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/roadmap') %]">[% c.loc('Roadmap') %]</a></dd>
+   <dd><a href="[% c.uri_for('/milestone') %]">[% c.loc('Milestone') %]</a></dd>
+  </dl>
+  <dl>
+   <dt>[% c.loc('Other') %]</dt>
+   <dd><a href="[% c.uri_for('/guide') %]">Guide</a></dd>
+   <dd><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></dd>
+   <dd><a href="[% c.uri_for('/todo') %]">TODO</a></dd>
+  </dl>
+ </nav>
  <p><b>Holistic</b> is a <a href="http://www.coldhardcode.com">Cold Hard Code</a> property. &copy; 2010 Cold Hard Code, LLC</p>
 </footer>
