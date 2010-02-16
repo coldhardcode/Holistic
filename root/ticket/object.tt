@@ -26,14 +26,10 @@ is_editable = 1;
 IF c.user_exists && c.user.person_pk1 == owner.person_pk1;
     is_owned = 1;
 END;
-# XX hard coded, bitch!
-is_owned    = 1;
 
 IF c.user_exists && c.user.person_pk1 == attention.person_pk1;
     needs_my_attention = 1;
 END;
-# XX hard coded, bitch!
-needs_my_attention = 1;
 
 %]
 [% IF 0 # commented out since this doesn't work %]
@@ -49,7 +45,7 @@ needs_my_attention = 1;
 [% END %]
 [% IF needs_my_attention %]
 <section class="message">
- <aside class="omessage"><p><a href="#comment">XX [% c.loc('This ticket requires your attention!') %]</a></p></aside>
+ <aside class="omessage"><p><a href="#comment">[% c.loc('This ticket requires your attention!') %]</a></p></aside>
 </section>
 [% END %]
 
