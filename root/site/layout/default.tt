@@ -12,9 +12,11 @@
  </ul>
 </nav>
 [% END %]
-<div id="content">
+<article id="content">
+ <div id="main" class="clearfix">
 [%~ 
 # Nothing fancy here.  Just dump the content.
 content
 ~%]
-</div>
+ </div>
+</article>

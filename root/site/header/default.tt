@@ -13,22 +13,14 @@ END;
 </header>
 <nav class="bar" id="sidebar">
  <h3>[% c.loc('Navigation') %]</h3>
+[% IF ticket %]
+ <h3>[% c.loc('Ticket') %]<a href="#"><img src="/static/images/actions/arrow_up.png"></a></h3>
  <ul>
-  <li>Real Shit
-    <ul>
-        <li><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></li>
-    </ul>
-  </li>
-  <li>Fake Shit</li>
-  <li><a href="[% c.uri_for('/admin') %]">[% c.loc('Administration') %]</a></li>
-  <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
-  <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
-  <li><a href="[% c.uri_for('/milestone') %]">Milestone</a></li>
-  <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
-  <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
-  <li><a href="[% c.uri_for_action('/what/root') %]">Who</a></li>
-  <li><a href="[% c.uri_for('/wizard') %]">Wizard</a></li>
+  <li><a href="#comment">[% c.loc('Comment') %]</a></li>
+  <li><a href="[% c.uri_for('/ticket/create', { parent => ticket.id }) %]">[% c.loc('Create Dependant') %]</a></li>
+  <li><a href="#">[% c.loc('Add to Stack') %]</a></li>
  </ul>
+[% END %]
  <ul>
   <li>[% c.loc('Ticket Stack') %]
    <ul class="tix">

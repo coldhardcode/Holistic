@@ -1,4 +1,5 @@
 @charset "utf-8";
+* { margin: 0; padding: 0 ;}
 html, body {
     background-color: #e9e9d7;
     color: #353535;
@@ -16,9 +17,45 @@ header {
     background: #e5e5d4 url('/static/images/header_back.png');
     height: 90px;
 }
-footer {
+html, body, #content, #tickcontent {
+    height: 100%;
+}
+body > #content,
+body > #tickcontent {
+    height: auto; min-height: 100%;
+}
+#main {
+    padding-bottom: 150px;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
     clear: both;
+    visibility: hidden;
+}
+.clearfix {display: inline-block;}
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
+footer {
+    background-color: #353535;
+    display: block;
+    clear: both;
+    height: 150px;
+    margin-top: -150px;
+    position: relative;
     text-align: center;
+}
+footer a {
+    color: #e9e9d7;
+}
+footer ul {
+    -moz-column-count: 3;
+    -webkit-column-count: 3;
+    column-count: 3;
+    padding: 7px 0 0 0;
 }
 footer p {
     color: #78766f;
@@ -164,43 +201,25 @@ legend {
     padding: 2px 5px 3px 5px;
 }
 #sidebar {
-    background-color: #3470a9;
-    background: -webkit-gradient(linear, left top, left bottom, from(#598ab9), to(#3470a9));
-    background: -moz-linear-gradient(top, #598ab9, #3470a9);
+    background-color: #fff;
     -webkit-border-top-right-radius: 7px;
     -webkit-border-bottom-right-radius: 7px;
     -moz-border-radius-topright: 7px;
     -moz-border-radius-bottomright: 7px;
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
-    color: #fff;
-    left: 0;
-    margin: 0; padding: 1em 0 1em 1em;
-    position: absolute;
-    text-align: left;
-    top: 102px;
-    width: 140px;
-}
-#tickbar {
-    background-color: #fff;
-    -webkit-border-top-left-radius: 7px;
-    -webkit-border-bottom-left-radius: 7px;
-    -moz-border-radius-topleft: 7px;
-    -moz-border-radius-bottomleft: 7px;
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
     border: 1px solid #353535;
-    border-width: 1px 0 1px 1px;
+    border-width: 1px 1px 1px 0;
     color: #353535;
     font-size: 12px;
-    right: 0;
+    left: 0;
     margin: 0; padding: 1em 0 1em 1em;
     position: fixed;
     text-align: left;
     top: 102px;
     width: 120px;
 }
-#tickbar a {
+#sidebar a {
     color: #353535;
     text-shadow: none;
 }
@@ -634,6 +653,15 @@ dl.log dd {
     color: #78766f;
     font-size: 12px;
     margin: 0 0 0 8em; padding: 5px 0;
+}
+details.muted dl dt {
+    display: inline;
+    color: #7d766f;
+    margin: 0; padding: 0;
+}
+details.muted dl dd {
+    display: inline;
+    padding: 0 1.5em  0 0;
 }
 ul.roadmap {
     margin: 0; padding: 0;

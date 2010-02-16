@@ -1,3 +1,16 @@
 <footer>
+ <ul>
+  [% IF 1 # XX need administrative check %]
+  <li><a href="[% c.uri_for('/admin') %]">[% c.loc('Administration') %]</a></li>
+  [% END %]
+  <li><a href="[% c.uri_for('/log') %]">Activity Log</a></li>
+  <li><a href="[% c.uri_for('/guide') %]">Guide</a></li>
+  <li><a href="[% c.uri_for('/milestone') %]">Milestone</a></li>
+  <li><a href="[% c.uri_for('/my') %]">My Shit</a></li>
+  <li><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></li>
+  <li><a href="[% c.uri_for('/todo') %]">TODO</a></li>
+  <li><a href="[% c.uri_for_action('/what/root') %]">Who</a></li>
+  <li><a href="[% c.uri_for('/wizard') %]">Wizard</a></li>
+ </ul>
  <p><b>Holistic</b> is a <a href="http://www.coldhardcode.com">Cold Hard Code</a> property. &copy; 2010 Cold Hard Code, LLC</p>
 </footer>
