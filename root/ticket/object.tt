@@ -4,7 +4,6 @@ USE Number.Format;
 
 page.body.scripts.push('tabview.js');
 page.title = ticket.name;
-page.layout = 'ticket';
 
 state     = ticket.state;
 
@@ -36,6 +35,7 @@ END;
 needs_my_attention = 1;
 
 %]
+[% IF 0 # commented out since this doesn't work %]
 <nav class="pager">
  <p>[% c.loc('Ticket [_1] of [_2] in', 2, siblings.count) %] <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.type.name %] [% queue.name %]</a></p>
  <ol>
@@ -45,15 +45,23 @@ needs_my_attention = 1;
   <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
  </ol>
 </nav>
+[% END %]
 [% IF needs_my_attention %]
 <section class="message">
  <aside class="omessage"><p><a href="#comment">XX [% c.loc('This ticket requires your attention!') %]</a></p></aside>
 </section>
 [% END %]
 
-[% PROCESS site/nav/ticket.tt %]
 <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
 <h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
+<details class="muted">
+  <dl>
+   <dt>[% c.loc('Opened:') %]</dt>
+   <dd>[% ticket.dt_created | date_long %]</dd>
+   <dt>[% c.loc('Last Changed:') %]</dt>
+   <dd>XX [% ticket.dt_created | date_long %]</dd>
+  </dl>
+</details>
 [% IF is_editable %]<form>[% END %]
 <table class="ticket">
  <tbody>
@@ -71,7 +79,7 @@ needs_my_attention = 1;
         readonly_field({ label => 'Owner', name => 'ticket.owner', value => owner.person.name });
     END %]
   </tr>
-  <tr [% IF attention ~%]class="imp"[%~ END ~%]>
+  <tr [%~ IF attention %] class="imp"[%~ END ~%]>
    [% IF is_editable;
       select_field({
          default_option => [ 0, '' ],
@@ -84,12 +92,6 @@ needs_my_attention = 1;
    ELSE;
       readonly_field({ label => 'Attention', name => 'ticket.reporter', value => attention.person.name, important => 1, double => 1 });
    END %]
-  </tr>
-  <tr>
-   [% dt_created = ticket.dt_created | date_long;
-      readonly_field({ label => 'Opened', name => 'ticket.opened', value => dt_created }); %]
-   [% dt_created = ticket.state.dt_created | date_long;
-      readonly_field({ label => 'Last Changed', name => 'ticket.last_changed', value => dt_created }); %]
   </tr>
   <tr>
    [% due_date = ticket.due_date.dt_marker | date_long;
