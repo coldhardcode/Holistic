@@ -21,7 +21,7 @@ FOREACH tag IN ticket.tags;
     tag_list.push("<a href=\"#\">" _ tag.name _ "</a>");
 END;
 
-is_editable = 1;
+is_editable = 0;
 
 IF c.user_exists && c.user.person_pk1 == owner.person_pk1;
     is_owned = 1;
@@ -43,22 +43,24 @@ END;
  </ol>
 </nav>
 [% END %]
-[% IF needs_my_attention %]
+[% IF attention %]
 <section class="message">
- <aside class="omessage"><p><a href="#comment">[% c.loc('This ticket requires your attention!') %]</a></p></aside>
+ <aside class="omessage"><p><a href="#comment">[% c.loc('This ticket is awaiting attention from <strong>[_1]</strong>!', attention.person.name) %]</a></p></aside>
 </section>
 [% END %]
 
-<h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
-<h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
-<details class="muted">
+<header>
+ <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
+ <h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
+ <details class="muted">
   <dl>
    <dt>[% c.loc('Opened:') %]</dt>
-   <dd>[% ticket.dt_created | date_long %]</dd>
+   <dd><time id="date_created" datetime="[% ticket.dt_created %]">[% ticket.dt_created | date_long %]</time></dd>
    <dt>[% c.loc('Last Changed:') %]</dt>
-   <dd>XX [% ticket.dt_created | date_long %]</dd>
+   <dd><time id="date_changed" datetime="[% ticket.dt_created %]">XX [% ticket.dt_created | date_long %]</time></dd>
   </dl>
-</details>
+ </details>
+</header>
 [% IF is_editable %]<form>[% END %]
 <table class="ticket">
  <tbody>
@@ -124,60 +126,61 @@ END;
 
 <h2 id="tabview-heading"></h2>
 <div id="tabview-1">
-<nav class="tabs">
- <ul>
-  <li class="yui-tab yui-tab-selected"><a href="#comments">[% c.loc('Comments ([_1])', activity_log.size) %]</a></li>
-  <li class="yui-tab"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
-  <li class="yui-tab"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
- </ul>
-</nav>
-<div>
-<section class="tab yui-tabpanel yui-tabpanel-selected" id="comments">
-  <ul class="comments">
-  [% FOREACH message IN activity_log.reverse %]
-      <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
-          <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
-          [%=
-              IF message.identity.realm == 'local';
-                  "the web";
-              ELSIF message.identity.realm == 'git';
-                  "<a href=\"#\">git</a>";
-              END;
-          ~%]
-          </time>
-          <cite><img src="[% message.identity.person.gravatar_url %]"></cite>
-          <p>[% message.body %]</p>
-      </li>
-  [% END %]
+ <nav class="tabs">
+  <ul>
+   <li class="yui-tab yui-tab-selected"><a href="#comments">[% c.loc('Comments ([_1])', activity_log.size) %]</a></li>
+   <li class="yui-tab"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
+   <li class="yui-tab"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
   </ul>
-  <h3><a name="comment">[% c.loc('Add A Comment') %]</a></h3>
-  <form>
-   <fieldset>
-    <table>
-     <tfoot>
-      <tr><td colspan="4">
-       <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
-      </td></tr>
-     </tfoot>
-     <tbody>
-      <tr>
-        [% textarea_field({ label => 'Comment', name => 'ticket.comment', hint => 'Your Comment', required => 1, rows => 8 }); %]
-      </tr>
-     </tbody>
-    </table>
-   </fieldset>
-  </form>
-</section>
-<section class="tab yui-tabpanel" id="dependencies">
- [% IF dependencies.count %]
- [% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
- [% END %]
-</section>
-<section class="tab yui-tabpanel" id="worklog">
- <p>Worklog Here</p>
-</section>
+ </nav>
+ <div>
+  <section class="tab yui-tabpanel yui-tabpanel-selected" id="comments">
+   <ul class="comments">
+    [% FOREACH message IN activity_log.reverse %]
+    <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
+     <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
+     [%=
+       IF message.identity.realm == 'local';
+         "the web";
+       ELSIF message.identity.realm == 'git';
+         "<a href=\"#\">git</a>";
+       END;
+     ~%]
+     </time>
+     <cite><img src="[% message.identity.person.gravatar_url %]"></cite>
+     <p>[% message.body %]</p>
+    </li>
+  [% END %]
+   </ul>
+   <h3><a name="comment">[% c.loc('Add A Comment') %]</a></h3>
+   <form>
+    <fieldset>
+     <table>
+      <tfoot>
+       <tr><td colspan="4">
+        <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
+       </td></tr>
+      </tfoot>
+      <tbody>
+       <tr>
+         [% textarea_field({ label => 'Comment', name => 'ticket.comment', hint => 'Your Comment', required => 1, rows => 8 }); %]
+       </tr>
+      </tbody>
+     </table>
+    </fieldset>
+   </form>
+  </section>
+  <section class="tab yui-tabpanel" id="dependencies">
+   [% IF dependencies.count %]
+   [% INCLUDE site/shared/ticket_table.tt tickets = dependencies.all %]
+   [% END %]
+  </section>
+  <section class="tab yui-tabpanel" id="worklog">
+   <p>Worklog Here</p>
+  </section>
+ </div>
 </div>
-</div>
+
 <div class="todo">
 <h1>TODO</h1>
 <ul>
