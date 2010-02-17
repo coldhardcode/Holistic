@@ -1,24 +1,28 @@
-[% page.crumbs.push({ 'Group Management' => '' }) %]
+[%~
+
+page.crumbs.push({ 'Group Management' => '' });
+page.body.scripts.push('group_manager.js');
+
+~%]
 <h1>[% c.loc('Group Management') %]</h1>
+<form id="user_groups">
 <article class="group_man">
  <section class="users" id="group_management_users">
   <h3>[% c.loc('Users') %]</h3>
   <ul class="people">
   [% FOREACH person IN c.model('Schema::Person').completed.all %]
-   <li><label><input style="display: none;" type="radio" name="person_pk1" value="[% person.id %]"><!--<a href="[% c.uri_for_action('/admin/person/object', [ person.id ]) %]">-->[% person.name | html %] ([% person.local_identity.id | html %])<!--</a>--></label></li>
+   <li><label><input style="display: none;" type="checkbox" name="person_pk1" value="[% person.id %]"><!--<a href="[% c.uri_for_action('/admin/person/object', [ person.id ]) %]">-->[% person.name | html %] ([% person.local_identity.id | html %])<!--</a>--></label></li>
   [% END %]
   </ul>
  </section>
  <section class="groups">
   <h3>[% c.loc('Groups') %]</h3>
-  <form id="user_groups">
    <fieldset class="cwrap">
    [% FOREACH group IN c.model('Schema::Group').search_rs({}, { order_by => [ 'name' ] }).all %]
     <label><input id="group_group[% group.id %]" name="group" value="[% group.id %]" type="checkbox" checked="checked">[% group.name %]</label>
     [% END %]
    </fieldset>
    <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
-  </form>
  </section>
 </article>
-[% page.body.scripts.push('group_manager.js') %]
+</form>
