@@ -7,8 +7,14 @@
  </li>
  <li>[% c.loc('Users &amp; Groups') %]
   <ul>
-   <li><a href="[% c.uri_for('/admin/group') %]">[% c.loc('Add Group') %]</a></li>
-   <li><a href="[% c.uri_for('/admin/group_management') %]">[% c.loc('Group Management') %]</a></li>
+  [% FOREACH group IN c.model('Schema::Group').all %]
+   <li><a href="[% c.uri_for_action('/admin/group/object', [ group.id ]) %]">[% group.name | html %]</a></li>
+  [% END %]
+   <li>Actions:
+    <ul>
+     <li><a href="[% c.uri_for_action('/admin/group/create_form') %]">[% c.loc('Add Group') %]</a></li>
+     <li><a href="[% c.uri_for('/admin/group_management') %]">[% c.loc('Group Management') %]</a></li>
+    </ul></li>
   </ul>
  </li>
  <li>[% c.loc('Products') %]

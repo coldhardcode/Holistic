@@ -23,25 +23,14 @@ sub setup : Chained('.') PathPart('admin') CaptureArgs(0) {
     push(@{ $c->stash->{page}->{crumbs} }, { 'Admin' => '/admin' });
 }
 
-sub default : Chained('setup') PathPart('') Args(0) {
+sub root : Chained('setup') PathPart('') Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{holistic_version} = $Holistic::VERSION;
-
-    $c->stash->{template} = 'admin/default.tt';
+    $c->stash->{template} = 'admin/root.tt';
 }
 
-sub group : Chained('setup') PathPart('group') Args(0) {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'admin/group.tt';
-}
-
-sub group_management : Chained('setup') PathPart('group_management') Args(0) {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'admin/group_management.tt';
-}
+sub group : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 sub product : Chained('setup') PathPart('product') Args(0) {
     my ($self, $c) = @_;

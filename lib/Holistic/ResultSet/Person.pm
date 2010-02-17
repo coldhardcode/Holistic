@@ -7,6 +7,11 @@ extends 'Holistic::Base::ResultSet';
 use Catalyst::Utils;
 use Carp;
 
+sub completed {
+    my ( $self ) = @_;
+    $self->search_rs({ 'identities.realm' => 'local' }, { prefetch => [ 'identities' ] });
+}
+
 sub register {
     my ( $self, $person, $ident ) = @_;
     my $schema = $self->result_source->schema;

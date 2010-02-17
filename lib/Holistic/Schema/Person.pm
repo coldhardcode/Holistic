@@ -66,6 +66,11 @@ Facebook ftl.
 
 =cut
 
+sub local_identity {
+    my ( $self ) = @_;
+    $self->identities({ realm => 'local' })->first;
+}
+
 sub connected_to_user {
     my ( $self, $user ) = @_;
 

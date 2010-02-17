@@ -25,7 +25,6 @@ sub prepare_arguments {
     my ( $self, $args ) = @_;
 
     my $p = Catalyst::Utils::merge_hashes( $self->profiles, $self->master->profiles );
-Holistic->log->_dump( $p ); 
     return ( profiles => $p );
     #Holistic::Verifier->new( profiles => $p );
 }
