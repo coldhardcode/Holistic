@@ -1,0 +1,26 @@
+[% page.crumbs.push({ 'Product' => '' }) %]
+<h1>[% c.loc('Create Product') %]</h1>
+<form id="product" method="post" action="[% c.uri_for_action('/admin/product/root') %]">
+ <fieldset>
+  <table>
+   <tfoot>
+    <tr>
+     <td colspan="2'">
+      <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
+     </td>
+    </tr>
+   </tfoot>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Name', name => 'name', hint => 'Name', required => 1 }); %]
+    </tr>
+    <tr>
+     [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
+    </tr>
+    <tr>
+     [% select_field({ label => 'Owner', name => 'identity_pk1', required => 1, array => [ { 'People' => [ 'gphat', 'jshirley' ] }, { 'Groups' => [ 'Group A', 'Group B' ] } ], double => 1 }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>

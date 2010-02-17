@@ -17,7 +17,7 @@
     </ul></li>
   </ul>
  </li>
- <li>[% c.loc('Products') %]
+ <li><a href="[% c.uri_for_action('/admin/product/root') %]">[% c.loc('Products') %]</a>
    <ul>
     <li><a href="[% c.uri_for('/admin/product') %]">[% c.loc('Add Product') %]</a></li>
    </ul>

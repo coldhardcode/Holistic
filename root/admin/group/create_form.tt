@@ -1,4 +1,4 @@
-<h1>[% c.loc('Log In') %]</h1>
+<h1>[% c.loc('Add Group') %]</h1>
 <form id="auth" method="post">
  <fieldset class="narrow">
   <table>
@@ -11,11 +11,8 @@
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Username', name => 'auth.username', hint => 'Username', required => 1 }); %]
+     [% text_field({ label => 'Group Name', name => 'group.name', hint => 'Just the group name', required => 1 }); %]
     </tr>
-    <tr>
-      [% text_field({ label => 'Password', name => 'auth.password', type => 'password', required => 1 }); %]
-    <tr>
    </tbody>
   </table>
  </fieldset>

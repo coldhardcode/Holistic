@@ -30,19 +30,15 @@ sub root : Chained('setup') PathPart('') Args(0) {
     $c->stash->{template} = 'admin/root.tt';
 }
 
-sub group : Chained('setup') PathPart('') CaptureArgs(0) { }
-
-sub product : Chained('setup') PathPart('product') Args(0) {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'admin/product.tt';
-}
-
 sub settings : Chained('setup') PathPart('settings') Args(0) {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'admin/settings.tt';
 }
+
+sub group   : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub person  : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub product : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 no Moose;
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );

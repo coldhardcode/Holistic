@@ -230,10 +230,11 @@ sub root_POST {
         $c->log->debug("Handling POST to " . $c->req->uri);
         $c->log->_dump($data);
     }
+
     $c->forward('create', [ $data ]);
 
     if ( defined ( my $object = $c->stash->{$self->object_key} ) ) {
-        $c->forward('post_action');
+        $c->forward('post_action', [ $object ]);
     }
 }
 
@@ -300,7 +301,8 @@ sub update : Private {
 }
 
 # Just designed to override this.
-sub prepare_data { shift; @_; }
+sub prepare_data { shift; shift; $_[0]; }
+
 sub create : Private {
     my ( $self, $c, $data ) = @_;
 
@@ -328,12 +330,17 @@ sub create : Private {
         $c->detach;
     }
 
-    my %filter = map { $_ => $result->get_value($_) } $result->valids;
-    $c->model('Schema')->schema->txn_do( sub {
+    my %filter =
+        map { $_ => $result->get_value($_) }
+        grep { defined $result->get_value($_) }
+        $result->valids;
+
+    my $object = $c->model('Schema')->schema->txn_do( sub {
         my $object = $c->stash->{$self->rs_key}->create( \%filter );
         $c->stash->{$self->object_key} = $object;
         $c->forward('post_create', [ $data, $object ]);
         $c->message( $self->create_string );
+        return $object;
     } );
 }
 
@@ -341,11 +348,18 @@ sub post_create : Private { }
 sub post_update : Private { }
 
 sub post_action : Private {
-    my ( $self, $c ) = @_;
+    my ( $self, $c, $object ) = @_;
 
     #if ( $c->req->looks_like_browser ) {
     if ( 1 ) {
-        $c->res->redirect( $c->req->uri, 303 );
+        my $uri = $c->req->uri;
+        if ( $c->controller->action_for('object') ) {
+            $uri = $c->uri_for(
+                $c->controller->action_for('object'),
+                [ @{ $c->req->captures || [] }, $object->id ]
+            );
+        }
+        $c->res->redirect( $uri, 303 );
     } else {
         my $object = $c->stash->{$self->object_key};
         if ( defined $object ) {
