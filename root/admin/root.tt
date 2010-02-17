@@ -13,7 +13,7 @@
    <li>Actions:
     <ul>
      <li><a href="[% c.uri_for_action('/admin/group/create_form') %]">[% c.loc('Add Group') %]</a></li>
-     <li><a href="[% c.uri_for('/admin/group_management') %]">[% c.loc('Group Management') %]</a></li>
+     <li><a href="[% c.uri_for_action('/admin/group/management') %]">[% c.loc('Group Management') %]</a></li>
     </ul></li>
   </ul>
  </li>
