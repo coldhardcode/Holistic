@@ -296,7 +296,9 @@ body > header > nav ul li a:hover {
     padding: 5px 0 4px 0;
 }
 body > header form {
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 3px;
     color: #fff;
 }
 body > header form fieldset {
