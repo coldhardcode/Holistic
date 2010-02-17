@@ -24,6 +24,7 @@ requires 'Cache::FastMmap';
 requires 'Template::Plugin::Lingua::EN::Inflect';
 requires 'Template::Plugin::Number::Format';
 requires 'Template::Plugin::Time::Duration';
+requires 'Template::Plugin::JSON';
 
 requires 'Catalyst::Authentication::Credential::HTTP';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
