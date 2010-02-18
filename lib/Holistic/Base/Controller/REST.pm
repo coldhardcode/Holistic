@@ -82,7 +82,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
 sub _fetch_rs {
     my ( $self, $c ) = @_;
 
-    my $rs = $c->model($self->class);
+    my $rs = $c->model($self->class)->search({}, { prefetch => $self->prefetch });
 
     unless ( $rs and $rs->isa('DBIx::Class::ResultSet') ) {
         die "Invalid configuration, asked for " . 

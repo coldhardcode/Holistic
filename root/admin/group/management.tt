@@ -6,7 +6,7 @@ page.body.scripts.push('group_manager.js');
 
 ~%]
 <h1>[% c.loc('Group Management') %]</h1>
-<form id="user_groups" method="post">
+<form id="user_groups" method="post" action="[% c.uri_for_action('/admin/group/management') %]">
 <article class="group_man">
  <section class="users" id="group_management_users">
   <h3>[% c.loc('Users') %]</h3>
@@ -20,10 +20,9 @@ page.body.scripts.push('group_manager.js');
   <h3>[% c.loc('Groups') %]</h3>
    <fieldset class="cwrap">
    [% FOREACH group IN c.model('Schema::Group').search_rs({}, { order_by => [ 'name' ] }).all %]
-    <label><input id="group_group[% group.id %]" class="groups" name="group_pk1" value="[% group.id %]" type="checkbox" checked="checked">[% group.name %]</label>
+    <label><input id="group_group[% group.id %]" class="groups" name="group_pk1" value="[% group.id %]" type="checkbox">[% group.name %]</label>
     [% END %]
    </fieldset>
-   <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
  </section>
 </article>
 </form>

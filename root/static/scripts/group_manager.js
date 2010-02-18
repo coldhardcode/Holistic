@@ -1,4 +1,4 @@
-YUI().use("event-delegate", function(Y) {
+YUI().use("io-base", "json", "event-delegate", function(Y) {
     function updateGroups(person_pk1) {
         Y.all('#user_groups input[name="group_pk1"]').set('checked', false);
         var groups = group_config[person_pk1];
@@ -10,6 +10,24 @@ YUI().use("event-delegate", function(Y) {
             Y.one('#group_group' + groups[i].group_pk1).set('checked', true);
         }
 
+    }
+
+    function save_changes(object) {
+        var post_body = Y.JSON.stringify({ persons: group_config });
+        var post_uri  = Y.one('#user_groups').get('action');
+
+	    Y.io.header('Content-Type', 'application/json');
+	    Y.on('io:start', function() { Y.log("io:start"); });
+	    Y.on('io:success', function() { Y.log("io:success"); });
+	    Y.on('io:end', function() { Y.log("io:end"); });
+
+        Y.io(post_uri,
+            {
+                method: 'POST',
+                data: post_body,
+                headers: { 'Content-Type': 'application/json'}
+            }
+        );
     }
 
     Y.delegate('change', function(e) {
@@ -34,6 +52,7 @@ YUI().use("event-delegate", function(Y) {
                 group_config[person_pk1] = selected_list;
             }
         );
+        save_changes({ persons: group_config });
     }, '#user_groups', 'input[name="group_pk1"]');
 
     Y.delegate('change', function(e) {
