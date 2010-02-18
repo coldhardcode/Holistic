@@ -6,7 +6,7 @@
    [% IF loop.last %]
    <li>[% c.loc(link.keys.0) %]</li>
    [% ELSE %]
-   <li><a href="[% c.uri_for(link.values.0) %]">[% c.loc(link.keys.0) %]</a> [% c.loc('CRUMBS_SEP') %]</li>
+   <li><a href="[% link.values.0 %]">[% c.loc(link.keys.0) %]</a> [% c.loc('CRUMBS_SEP') %]</li>
    [% END %]
   [% END %]
  </ul>

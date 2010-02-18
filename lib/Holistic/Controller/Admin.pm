@@ -20,7 +20,7 @@ Catalyst Controller.
 sub setup : Chained('.') PathPart('admin') CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    push(@{ $c->stash->{page}->{crumbs} }, { 'Admin' => '/admin' });
+    push(@{ $c->stash->{page}->{crumbs} }, { 'Admin' => $c->uri_for_action('/admin/root')->as_string });
 }
 
 sub root : Chained('setup') PathPart('') Args(0) {

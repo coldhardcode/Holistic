@@ -1,23 +1,13 @@
-[% page.crumbs.push({ 'Create Group' => '' }) %]
-<h1>[% c.loc('Create Group') %]</h1>
-<form id="group">
- <fieldset>
-  <table>
-   <tfoot>
-    <tr>
-     <td colspan="2'">
-      <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="c.loc('Submit Form') %]">
-     </td>
-    </tr>
-   </tfoot>
-   <tbody>
-    <tr>
-     [% text_field({ label => 'Name', name => 'group.name', hint => 'Name', required => 1 }); %]
-    </tr>
-    <tr>
-     [% text_field({ label => 'Email', name => 'group.email', hint => 'Email', required => 1 }); %]
-    </tr>
-   </tbody>
-  </table>
- </fieldset>
-</form>
+[% page.crumbs.push({ 'Groups' => '' }) %]
+<h1>[% c.loc('Groups') %]</h1>
+<ul>
+  [% FOREACH group IN group_rs.all %]
+   <li><a href="[% c.uri_for_action('/admin/group/object', [ group.id ]) %]">[% group.name | html %]</a></li>
+  [% END %]
+   <li>Actions:
+    <ul>
+     <li><a href="[% c.uri_for_action('/admin/group/create_form') %]">[% c.loc('Add Group') %]</a></li>
+     <li><a href="[% c.uri_for_action('/admin/group/management') %]">[% c.loc('Group Management') %]</a></li>
+    </ul></li>
+  </ul>
+

@@ -1,0 +1,22 @@
+[%~
+
+name = group.name | html;
+page.crumbs.push(
+    { 'Groups' => c.uri_for_action('/admin/group/root').as_string  },
+    { $name => '' }
+);
+persons = group.persons_rs.all;
+%]
+<h1>[% c.loc('Group: [_1]', [ group.name ]) %]</h1>
+<p>XX</p>
+<h2>[% c.loc('Group Members') %]</h2>
+[% IF persons %]
+    <ul>
+    [% FOREACH person IN persons %]
+        <li>[% person.name %]</li>
+    [% END %]
+    </ul>
+[% ELSE %]
+<p>XX No members</p>
+[% END %]
+

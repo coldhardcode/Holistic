@@ -1,5 +1,5 @@
 <h1>[% c.loc('Add Group') %]</h1>
-<form id="auth" method="post">
+<form id="auth" method="post" action="[% c.uri_for_action('/admin/group/root') %]">
  <fieldset class="narrow">
   <table>
    <tfoot>
@@ -11,7 +11,7 @@
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Group Name', name => 'group.name', hint => 'Just the group name', required => 1 }); %]
+     [% text_field({ label => 'Group Name', name => 'name', hint => 'Just the group name', required => 1 }); %]
     </tr>
    </tbody>
   </table>
