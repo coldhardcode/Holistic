@@ -12,4 +12,12 @@ sub verify {
     return $self->new_result({})->verify( @_ );
 }
 
+sub search_ordered {
+    my ( $self, @columns ) = @_;
+    @columns = { '-asc' => 'me.name' }
+        unless @columns;
+
+    $self->search_rs({}, { order_by => [ @columns ] });
+}
+
 1;

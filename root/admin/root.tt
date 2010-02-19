@@ -7,7 +7,7 @@
  </li>
  <li>[% c.loc('Users &amp; Groups') %]
   <ul>
-  [% FOREACH group IN c.model('Schema::Group').all %]
+  [% FOREACH group IN c.model('Schema::Group').search_ordered.all %]
    <li><a href="[% c.uri_for_action('/admin/group/object', [ group.id ]) %]">[% group.name | html %]</a></li>
   [% END %]
    <li>Actions:
@@ -19,7 +19,7 @@
  </li>
  <li><a href="[% c.uri_for_action('/admin/product/root') %]">[% c.loc('Products') %]</a>
    <ul>
-    <li><a href="[% c.uri_for('/admin/product') %]">[% c.loc('Add Product') %]</a></li>
+    <li><a href="[% c.uri_for_action('/admin/product/create_form') %]">[% c.loc('Add Product') %]</a></li>
    </ul>
  </li>
 </ul>

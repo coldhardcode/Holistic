@@ -11,5 +11,7 @@ __PACKAGE__->config(
     object_key => 'product',
 );
 
+sub queue : Chained('.') PathPart('') CaptureArgs(0) { }
+
 no Moose;
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
