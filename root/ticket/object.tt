@@ -125,15 +125,15 @@ END;
 </dl>
 
 <h2 id="tabview-heading"></h2>
-<div id="tabview-1">
+<div class="tabs" id="tabview-1">
  <nav class="tabs">
   <ul>
-   <li class="yui-tab yui-tab-selected"><a href="#comments">[% c.loc('Comments ([_1])', activity_log.size) %]</a></li>
+   <li class="yui-tab yui-tab-selected first"><a href="#comments">[% c.loc('Comments ([_1])', activity_log.size) %]</a></li>
    <li class="yui-tab"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
-   <li class="yui-tab"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
+   <li class="yui-tab last"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
   </ul>
  </nav>
- <div>
+ <div class="panels">
   <section class="tab yui-tabpanel yui-tabpanel-selected" id="comments">
    <ul class="comments">
     [% FOREACH message IN activity_log.reverse %]
@@ -180,7 +180,7 @@ END;
   </section>
  </div>
 </div>
-
+<br/>
 <div class="todo">
 <h1>TODO</h1>
 <ul>

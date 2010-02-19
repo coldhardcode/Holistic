@@ -235,6 +235,9 @@ legend {
     margin: 0 0 7px 1em;
     padding: 2px 5px 3px 5px;
 }
+br {
+    clear: both;
+}
 #sidebar {
     background-color: #fff;
     -webkit-border-top-right-radius: 7px;
@@ -249,7 +252,7 @@ legend {
     font-size: 12px;
     left: 0;
     margin: 0; padding: 1em 0 1em 1em;
-    position: fixed;
+    position: absolute;
     text-align: left;
     top: 102px;
     width: 120px;
@@ -470,31 +473,56 @@ nav.pager ol li.first {
 nav.pager ol li.last {
     margin: 0 0 0 7px;
 }
-nav.tabs ul {
-    margin: 0; padding: 0;
+div.tabs {
+    position: relative;
 }
-nav.tabs ul li {
+div.tabs nav ul {
+    float: left;
+    margin: 0; padding: 0;
+    position: absolute;
+    left: -9.1em;
+}
+div.tabs nav ul li {
     background-color: #ccc;
     border: 1px solid #353535;
-    border-width: 1px 1px 0 1px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-border-bottom-left-radius: 0;
-    -webkit-border-bottom-right-radius: 0;
-    -moz-border-radius-bottomleft: 0;
-    -moz-border-radius-bottomright: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    float: left;
+    border-width: 0 1px 1px 1px;
     list-style: none;
     margin: 0; padding: 0;
+    text-align: right;
+    width: 9em;
 }
-nav.tabs ul li a {
+div.tabs nav ul li.first {
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-bottomleft: 0;
+    -webkit-border-bottom-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 5px;
+    border-width: 1px 1px 1px 1px;
+}
+div.tabs nav ul li.last {
+    -moz-border-radius-topleft: 0;
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 0;
+    border-width: 0 1px 1px 1px;
+}
+div.tabs nav ul li a {
     display: block;
     color: #353535;
     margin: 0; padding: .25em .5em;
     text-decoration: none;
+}
+div.tabs nav ul li a:hover {
+    background-color: #fff;
+}
+div.tabs div.panels {
+    clear: right;
+    display: inline;
+    float: left;
+    width: 75%;
 }
 #crumbs ul {
     margin: 1em 0 0 175px; padding: 0;
