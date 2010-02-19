@@ -29,8 +29,8 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
+# TraitFor is being a bitch
 use Catalyst::Request::REST::ForBrowsers;
-
 Holistic->request_class( 'Catalyst::Request::REST::ForBrowsers' );
 
 our $VERSION = '0.01';
