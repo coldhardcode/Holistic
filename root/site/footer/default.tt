@@ -10,7 +10,7 @@
   [% ELSE %]
   <dl>
    <dt>&nbsp;</dt>
-   <dd>&nbsp;</dt>
+   <dt>&nbsp;</dt>
   </dl>
   [% END %]
   <dl>
