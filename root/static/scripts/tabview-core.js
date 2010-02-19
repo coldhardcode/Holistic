@@ -1,5 +1,4 @@
 YUI().use("*", function (Y) {
- 
     var tabView = Y.one("#tabview-1"),
         tabList = tabView.one("ul"),
 

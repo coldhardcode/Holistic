@@ -6,7 +6,7 @@ use inc::Module::Install;
 name 'Holistic';
 all_from 'lib/Holistic.pm';
 
-requires 'Catalyst::Runtime' => '5.80016';
+requires 'Catalyst::Runtime' => '5.80020';
 
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
@@ -62,7 +62,7 @@ requires 'DateTime::Format::DateParse';
 requires 'MooseX::Types::DateTime';
 
 # DBIC Components
-requires 'DBIx::Class';
+requires 'DBIx::Class' => '0.08119';
 requires 'DBIx::Class::TimeStamp';
 requires 'DBIx::Class::DynamicDefault';
 
