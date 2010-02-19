@@ -3,7 +3,7 @@
   [% IF 1 # XX need administrative check %]
   <dl>
    <dt>[% c.loc('Administration') %]</dt>
-   <dd><a href="[% c.uri_for('/admin') %]">[% c.loc('General') %]</a></dt>
+   <dd><a href="[% c.uri_for('/admin') %]">[% c.loc('General') %]</a></dd>
    <dd><a href="[% c.uri_for('/admin/settings') %]">[% c.loc('Settings') %]</a></dd>
    <dd><a href="[% c.uri_for('/admin/group/management') %]">[% c.loc('Group Management') %]</a></dd>
   </dl>
