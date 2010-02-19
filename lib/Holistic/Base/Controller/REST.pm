@@ -254,7 +254,6 @@ sub object_setup : Chained('setup') PathPart('id') CaptureArgs(1) {
 sub object : Chained('object_setup') PathPart('') Args(0) ActionClass('REST') { }
 
 sub object_GET { }
-
 sub object_POST {
     my ( $self, $c, $data ) = @_;
 
@@ -279,19 +278,15 @@ sub object_POST {
 sub update : Private {
     my ( $self, $c, $object, $data ) = @_;
 
-    eval { $data = $object->validate( $data ); };
-    if ( $@ ) {
-        if ( ref $@ eq 'HASH' ) {
-            $c->stash->{form} = $@;
-            $c->detach;
-        } else {
-            $c->log->error($@);
-            $c->message({
-                type => 'error',
-                message => $c->loc('Sorry, there was a problem.  Please try again.')
-            });
-        }
+    my $result = $object->verify( $data );
+    unless ( $result->success ) {
+        $c->log->debug("Failed verification") if $c->debug;
+        $c->flash->{errors}->{'update'} = $result;
+        $c->res->redirect( $c->req->uri );
+        $c->detach;
     }
+    $c->log->_dump( $object->_verify_profile );
+    $data = { map { $_ => $result->get_value($_) } $result->valids };
     if ( $c->debug ) {
         $c->log->debug("Updating $object with:");
         $c->log->_dump($data);
@@ -350,15 +345,15 @@ sub post_update : Private { }
 sub post_action : Private {
     my ( $self, $c, $object ) = @_;
 
-    #if ( $c->req->looks_like_browser ) {
-    if ( 1 ) {
+    if ( $c->req->looks_like_browser ) {
         my $uri = $c->req->uri;
-        if ( $c->controller->action_for('object') ) {
-            $uri = $c->uri_for(
-                $c->controller->action_for('object'),
+        if ( defined $object and defined $c->controller->action_for('object') ) {
+            $uri = $c->uri_for_action(
+                $self->action_for('object'),
                 [ @{ $c->req->captures || [] }, $object->id ]
             );
         }
+        $c->log->debug("Redir => $uri");
         $c->res->redirect( $uri, 303 );
     } else {
         my $object = $c->stash->{$self->object_key};

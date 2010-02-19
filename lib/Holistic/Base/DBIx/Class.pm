@@ -51,6 +51,14 @@ sub _build__verify_profile {
         if ( $parts{type} ) {
             # No op, coming from verify_properties
         }
+        # Skip if we have a dynamic setup
+        elsif ( $info->{set_on_create} or
+                $info->{set_on_update} or
+                $info->{dynamic_default_on_create} or
+                $info->{dynamic_default_on_update}
+        ) {
+            next;
+        }
         elsif ( $info->{data_type} =~ /^text|varchar|char$/ ) {
             $type = 'Str';
             if ( exists $info->{size} ) {
