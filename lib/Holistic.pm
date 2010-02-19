@@ -29,6 +29,10 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
+use Catalyst::Request::REST::ForBrowsers;
+
+Holistic->request_class( 'Catalyst::Request::REST::ForBrowsers' );
+
 our $VERSION = '0.01';
 $VERSION = eval $VERSION;
 
