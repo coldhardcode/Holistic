@@ -353,7 +353,6 @@ sub post_action : Private {
                 [ @{ $c->req->captures || [] }, $object->id ]
             );
         }
-        $c->log->debug("Redir => $uri");
         $c->res->redirect( $uri, 303 );
     } else {
         my $object = $c->stash->{$self->object_key};
