@@ -1,4 +1,7 @@
 <h1>[% c.loc("Who's Doing What?") %]</h1>
+<p>XX Here to provide a link only...</p>
+<a href="[% c.uri_for_action('/what/product', 'product') %]">Product</a>
+<a href="[% c.uri_for_action('/what/queue', 'queue') %]">Queue</a>
 <ul class="roadmap">
  <li>
   <h3><a href="[% c.uri_for_action('/what/person', 'gphat') %]"><img src="http://www.gravatar.com/avatar/99b4faa5341a11f4d759c165269da294?s=40"> gphat</a></h3>

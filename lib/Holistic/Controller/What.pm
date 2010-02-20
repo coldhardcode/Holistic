@@ -24,7 +24,7 @@ sub product : Chained('setup') PathPart('product') Args(1) {
     my ($self, $c, $person) = @_;
 
     $c->stash->{object} = 'product';
-    $c->stash->{template} = 'what/object.tt';
+    $c->stash->{template} = 'what/product.tt';
 }
 
 sub queue : Chained('setup') PathPart('queue') Args(1) {

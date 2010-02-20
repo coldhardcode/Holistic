@@ -3,8 +3,8 @@
 html, body {
     background-color: #e9e9d7;
     color: #353535;
-    font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-family: 'HelveticaNueue-Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 16px;
     line-height: 18px;
     margin: 0; padding: 0;
 }
@@ -581,10 +581,9 @@ fieldset table {
 }
 fieldset table thead th,
 fieldset table tr td {
-background-color: #eee;
+    background-color: #eee;
     border-width: 0;
     color: #353535;
-    font-size: 14px;
     vertical-align: center;
 }
 fieldset table thead th {
@@ -988,6 +987,9 @@ section.product li {
     color: #fff;
 }
 #future > li:first-child h4,
-#future > li:first-child time {
+#future > li:first-child > time {
     text-shadow: #95582d 0 -1px;
+}
+#future > li:first-child > ul li {
+    background-color: #fff;
 }

@@ -12,18 +12,18 @@
    <h4>Version 1.0</h4>
    <time datetime="">2010-03-10</time>
    <ul>
-    <li>Proof of Concept</li>
-    <li>Code Freeze</li>
-    <li>Due Date</li>
+     <li>Proof of Concept <time>2010-03-10</time></li>
+     <li>Code Freeze <time>2010-03-10</time></li>
+     <li>Due Date <time>2010-03-10</time></li>
    </ul>
   </li>
   <li>
    <h4>Version 2.0</h4>
    <time datetime="">2010-03-10</time>
    <ul>
-    <li>Proof of Concept</li>
-    <li>Code Freeze</li>
-    <li>Due Date</li>
+     <li>Proof of Concept <time>2010-03-10</time></li>
+     <li>Code Freeze <time>2010-03-10</time></li>
+     <li>Due Date <time>2010-03-10</time></li>
    </ul>
   </li>
   <li>
