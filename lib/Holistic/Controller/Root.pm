@@ -90,6 +90,12 @@ sub register : Chained('/') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('/') PathPart('') CaptureArgs(0) { }
 sub xhr      : Chained('/') PathPart('') CaptureArgs(0) { }
 
+sub product   : Chained('setup') PathPart('product') Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{template} = 'product.tt';
+}
+
 =head2 default
 
 Standard 404 error page
