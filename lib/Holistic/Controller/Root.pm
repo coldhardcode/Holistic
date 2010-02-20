@@ -85,10 +85,10 @@ sub my        : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub search    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub what      : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub util      : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 sub register : Chained('/') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('/') PathPart('') CaptureArgs(0) { }
-sub xhr      : Chained('/') PathPart('') CaptureArgs(0) { }
 
 =head2 default
 

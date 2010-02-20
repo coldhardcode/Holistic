@@ -2,6 +2,7 @@
 name: Holistic
 
 default_view: TT
+timezone: America/Los_Angeles
 
 Model::Schema:
     connect_info: &1

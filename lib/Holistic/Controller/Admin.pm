@@ -2,7 +2,7 @@ package Holistic::Controller::Admin;
 
 use Moose;
 
-BEGIN { extends 'Catalyst::Controller' }
+BEGIN { extends 'Holistic::Base::Controller' }
 
 =head1 NAME
 
