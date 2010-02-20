@@ -177,6 +177,7 @@ footer p {
 table {
     border-collapse: separate;
     font-size: 14px;
+    width: 100%;
 }
 table label {
     display: block;

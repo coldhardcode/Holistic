@@ -7,9 +7,9 @@ top_rs = queue_rs.search_rs({'me.parent_pk1' => 0 });
 <ul>
 [% WHILE ( queue = rs.next ) %]
     <li>
-        [%~ c.loc(queue.type.name) =%]
-        <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.name | html %]</a>
-        [% queue_children(queue.children_rs) ~%]
+      [% SET product = queue.products_rs.first.name %]
+      [%~ c.loc(queue.type.name) =%] <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.name | html %]</a> [% IF product %] : ([% product %])[% END %]
+      [% queue_children(queue.children_rs) ~%]
     </li>
 [% END %]
 </ul>
