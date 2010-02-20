@@ -473,23 +473,17 @@ nav.pager ol li.first {
 nav.pager ol li.last {
     margin: 0 0 0 7px;
 }
-div.tabs {
-    position: relative;
-}
 div.tabs nav ul {
-    float: left;
     margin: 0; padding: 0;
-    position: absolute;
-    left: -9.1em;
 }
 div.tabs nav ul li {
     background-color: #ccc;
     border: 1px solid #353535;
-    border-width: 0 1px 1px 1px;
+    border-width: 1px 1px 0 1px;
+    float: left;
     list-style: none;
     margin: 0; padding: 0;
     text-align: right;
-    width: 9em;
 }
 div.tabs nav ul li.first {
     -moz-border-radius-topleft: 5px;
@@ -498,16 +492,19 @@ div.tabs nav ul li.first {
     -webkit-border-bottom-left-radius: 0;
     border-bottom-left-radius: 0;
     border-top-left-radius: 5px;
-    border-width: 1px 1px 1px 1px;
+    border-width: 1px 0 0 1px;
 }
 div.tabs nav ul li.last {
     -moz-border-radius-topleft: 0;
     -webkit-border-top-left-radius: 0;
-    -webkit-border-bottom-left-radius: 5px;
-    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
     border-bottom-left-radius: 5px;
-    border-top-left-radius: 0;
-    border-width: 0 1px 1px 1px;
+    border-top-left-radius: 5px;
+    border-width: 1px 1px 0 0;
+}
+div.tabs nav ul li.yui-tab-selected {
+    background-color: #fff;
 }
 div.tabs nav ul li a {
     display: block;
@@ -517,12 +514,6 @@ div.tabs nav ul li a {
 }
 div.tabs nav ul li a:hover {
     background-color: #fff;
-}
-div.tabs div.panels {
-    clear: right;
-    display: inline;
-    float: left;
-    width: 75%;
 }
 #crumbs ul {
     margin: 1em 0 0 175px; padding: 0;
