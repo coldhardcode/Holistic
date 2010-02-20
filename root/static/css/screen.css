@@ -917,7 +917,6 @@ section.product time {
 }
 section.product hr {
     border: 1px solid #353535;
-    margin: 0 0 2em 0;
 }
 section.product > ul {
     margin: 0; padding: 0;
@@ -980,6 +979,20 @@ section.product li {
     right: 0;
     top: .6em;
     margin: 0 .75em 0 0;
+}
+section.product ul:nth-of-type(2) {
+    margin: 2em 0 0 0;
+}
+#future.today {
+    margin: 0;
+}
+#future.today li:first-child {
+    -moz-border-radius-topleft: 0;
+    -webkit-border-top-left-radius: 0;
+    -moz-border-radius-topright: 0;
+    -webkit-border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 #future > li:first-child {
     background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));

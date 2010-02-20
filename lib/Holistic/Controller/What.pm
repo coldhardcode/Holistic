@@ -21,8 +21,12 @@ sub person : Chained('setup') PathPart('person') Args(1) {
 }
 
 sub product : Chained('setup') PathPart('product') Args(1) {
-    my ($self, $c, $person) = @_;
+    my ($self, $c, $id) = @_;
 
+    # XX no error checking
+    my $product = $c->model('Schema::Product')->find($id);
+
+    $c->stash->{product} = $product;
     $c->stash->{object} = 'product';
     $c->stash->{template} = 'what/product.tt';
 }
