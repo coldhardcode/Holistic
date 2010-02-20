@@ -39,7 +39,8 @@ __PACKAGE__->has_one(
 
 __PACKAGE__->belongs_to(
     'destination_identity', 'Holistic::Schema::Person::Identity',
-    { 'foreign.pk1' => 'self.identity_pk2' }
+    { 'foreign.pk1' => 'self.identity_pk2' },
+    { join_type => 'left' }
 );
 
 sub actor_object {

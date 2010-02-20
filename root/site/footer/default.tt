@@ -29,6 +29,7 @@
    <dt>[% c.loc('Other') %]</dt>
    <dd><a href="[% c.uri_for('/guide') %]">Guide</a></dd>
    <dd><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></dd>
+   <dd><a href="[% c.uri_for_action('/product') %]">Product</a></dd>
    <dd><a href="[% c.uri_for('/todo') %]">TODO</a></dd>
   </dl>
  </nav>

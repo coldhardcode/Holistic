@@ -287,7 +287,6 @@ sub state {
 
     my $state_count = $rs->count;
     return undef if $state_count == 0;
-
     if ( defined $final_state && $final_state->state_count != $state_count ) {
         $final_state->delete if $final_state->in_storage;
         $final_state = undef;
@@ -337,7 +336,6 @@ sub state {
                 $merge{$column} = $row->$column;
             }
         }
-
         $merge{state_count} = $state_count;
         $self->final_state( $self->create_related('final_state', \%merge) );
         $final_state = $self->final_state;
@@ -428,11 +426,10 @@ around 'create' => sub {
     }
     # in a txn?
     my $ticket = $self->$orig($data, @args);
-
+    $ticket->discard_changes;
     if ( defined $ident ) {
         my $status = $schema->get_status('NEW TICKET');
- 
-        $ticket->add_state({
+        my $state = $ticket->add_state({
             identity_pk1 => $ident->pk1,
             status_pk1   => $status->id,
         });
