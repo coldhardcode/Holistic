@@ -1,11 +1,13 @@
 <footer>
  <nav>
-  [% IF 1 # XX need administrative check %]
+ [% IF 1 # XX need administrative check
+ %]
   <dl>
    <dt>[% c.loc('Administration') %]</dt>
-   <dd><a href="[% c.uri_for('/admin') %]">[% c.loc('General') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/admin/root') %]">[% c.loc('General') %]</a></dd>
    <dd><a href="[% c.uri_for('/admin/settings') %]">[% c.loc('Settings') %]</a></dd>
-   <dd><a href="[% c.uri_for('/admin/group/management') %]">[% c.loc('Group Management') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/admin/group/root') %]">[% c.loc('Groups') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/admin/product/root') %]">[% c.loc('Products') %]</a></dd>
   </dl>
   [% ELSE %]
   <dl>
@@ -24,6 +26,7 @@
    <dd><a href="[% c.uri_for_action('/calendar/root') %]">[% c.loc('Calendar') %]</a></dd>
    <dd><a href="[% c.uri_for_action('/roadmap') %]">[% c.loc('Roadmap') %]</a></dd>
    <dd><a href="[% c.uri_for('/milestone') %]">[% c.loc('Milestone') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/what/product', 1) %]">Product</a></dd>
   </dl>
   <dl>
    <dt>[% c.loc('Other') %]</dt>
