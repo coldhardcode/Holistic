@@ -67,7 +67,7 @@ after 'table' => sub {
         },
     );
 
-    $class->might_have(
+    $class->belongs_to(
         'discussable'   => $class->discussable_result_source,
         { 'foreign.pk1' => 'self.discussable_pk1' },
         { proxy => [ qw/comments/ ] }

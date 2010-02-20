@@ -2,7 +2,8 @@ package Holistic::Base::DBIx::Class;
 
 use Moose;
 use MooseX::Types::DateTime 'DateTime';
-
+use DateTime::Format::MySQL;
+use Try::Tiny;
 use Data::Verifier;
 
 extends 'DBIx::Class';
@@ -41,6 +42,7 @@ sub _build__verify_profile {
     foreach my $column ( $self->columns ) {
         my $info = $self->column_info( $column );
         next if $info->{is_auto_increment};
+        next if $info->{is_foreign_key};
 
         my %parts = ();
 
@@ -68,7 +70,20 @@ sub _build__verify_profile {
         }
         elsif ( $info->{data_type} =~ /^date|datetime$/ ) {
             $type = 'DateTime';
-            $parts{coerce} = 1;
+            my $method = "parse_$info->{data_type}";
+            $parts{coercion} = Data::Verifier::coercion(
+                from => 'Str',
+                via  => sub {
+                    my $fmt = $_;
+                    my $dt;
+                    try {
+                        $dt = DateTime::Format::MySQL->$method($fmt);
+                    } catch {
+                        $dt = DateTime::Format::MySQL->parse_date($fmt);
+                    };
+                    $dt;
+                }
+            );
         }
         elsif ( $info->{data_type} =~ /^int|integer$/ ) {
             $type = 'Int';

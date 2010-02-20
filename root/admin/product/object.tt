@@ -26,3 +26,5 @@ page.crumbs.push({ 'Product' => '' });
   </table>
  </fieldset>
 </form>
+
+<p>XX <a href="[% c.uri_for_action("/admin/product/queue/root", [ product.id ] ) %]">Product Queues</a></p>

@@ -279,6 +279,7 @@ sub update : Private {
     my ( $self, $c, $object, $data ) = @_;
 
     my $result = $object->verify( $data );
+
     unless ( $result->success ) {
         $c->log->debug("Failed verification") if $c->debug;
         $c->flash->{errors}->{'update'} = $result;
@@ -303,11 +304,6 @@ sub create : Private {
 
     $data = $self->prepare_data( $c, $data );
 
-    if ( $c->debug ) {
-        $c->log->debug("Creating new " . $self->rs_key . " object:");
-        $c->log->_dump( $data );
-    }
-
     my $result = $c->stash->{$self->rs_key}->verify( $data );
     unless ( $result->success ) {
         if ( $c->debug ) {
@@ -329,6 +325,10 @@ sub create : Private {
         map { $_ => $result->get_value($_) }
         grep { defined $result->get_value($_) }
         $result->valids;
+    if ( $c->debug ) {
+        $c->log->debug("Creating new " . $self->rs_key . " object:");
+        $c->log->_dump({ %filter });
+    }
 
     my $object = $c->model('Schema')->schema->txn_do( sub {
         my $object = $c->stash->{$self->rs_key}->create( \%filter );

@@ -1,0 +1,28 @@
+[%~
+
+~%]
+<h1>XX [% c.loc('[_1] : Create Queue', [ product.name ] ) %] </h1>
+<form id="queue" method="post" action="[% c.uri_for_action('/admin/product/queue/root', [ product.id ]) %]">
+ <fieldset>
+  <table>
+   <tfoot>
+    <tr>
+     <td colspan="2'">
+      <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
+     </td>
+    </tr>
+   </tfoot>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Name', name => 'name', hint => 'Name', required => 1 }); %]
+    </tr>
+    <tr>
+     [% select_field({ label => 'Type', name => 'type_pk1', required => 1, array => types.all, label_method => 'name', value_method => 'id', value => type.id }); %]
+    </tr>
+    <tr>
+     [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>

@@ -23,7 +23,7 @@ __PACKAGE__->has_one(
     { 'foreign.pk1' => 'self.identity_pk1' }
 );
 
-__PACKAGE__->might_have(
+__PACKAGE__->belongs_to(
     'destination_identity', 'Holistic::Schema::Person::Identity',
     { 'foreign.pk1' => 'self.identity_pk2' }
 );

@@ -14,10 +14,10 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'foreign_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
-    'name',
-    { data_type => 'varchar', size => '255', is_nullable => 0, },
     'rel_source',
-    { data_type => 'varchar', size => '255', is_nullable => 0, },
+    { data_type => 'varchar', size => '255', is_foreign_key => 1 },
+    'name',
+    { data_type => 'varchar', size => '255', is_nullable => 0 },
     'dt_marker',
     { data_type => 'datetime', is_nullable => 0, },
 );
