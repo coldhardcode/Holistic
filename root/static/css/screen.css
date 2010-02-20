@@ -197,11 +197,16 @@ table tbody tr.closed th {
 table tbody tr.head th {
     background-color: #3470a9;
     border: none;
+    border-right: 1px solid #4c81b3;
     color: #f3f3f3;
+    font-size: 12px;
     font-weight: bold;
     padding: 4px 5px;
     text-align: left;
     text-transform: uppercase;
+}
+table tbody tr.head th:last-child {
+    border: none;
 }
 table tbody tr.head th:first-child {
     -moz-border-radius-topleft: 7px;
@@ -299,13 +304,16 @@ br {
     color: #353535;
     text-shadow: none;
 }
+body > header {
+    font-size: 14px;
+}
 body > header > nav {
     border-width: 0;
     display: inline;
+    left: 225px;
     padding: 0 0 0 0;
     position: absolute;
     top: 21px;
-    left: 225px;
     text-shadow: #000 0 -1px;
     vertical-align: bottom;
 }
