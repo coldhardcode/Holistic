@@ -42,10 +42,27 @@ sub assign_POST {
     }
 }
 
+sub create_form : Chained('setup') PathPart('create') Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $rs = $c->model('Schema::Queue')->search({}, { prefetch => [ 'type' ] });
+    $c->stash->{queue_rs} = $rs;
+    if ( my $id = $c->req->params->{'queue_pk1'} ) {
+        my $queue = $rs->search({ 'me.pk1' => $id })->first;
+        # XX Check access?
+        if ( defined $queue ) {
+            $c->stash->{queue} = $queue;
+        }
+    }
+}
+
 sub post_create : Private {
     my ( $self, $c, $data, $ticket ) = @_;
 
-    $ticket->due_date( $data->{date_due} );
+    if ( $data->{due_date} ) {
+        # XX Need to parse this and validate
+        $ticket->due_date( $data->{due_date} );
+    }
     if ( $data->{tags} ) {
         $ticket->tag(map { $_ =~ s/^\s*|\s*//g; $_; } split(/,/, $data->{tags}));
     }

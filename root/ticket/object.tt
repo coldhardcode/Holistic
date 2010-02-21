@@ -51,6 +51,7 @@ END;
 
 <header>
  <h1>[% c.loc('[_1] #[_2]:', [ ticket.type.name, ticket.id ] ) %] [% c.loc(ticket.status.name) %]</h1>
+ <h2><a href="[% c.uri_for_action('/queue/object', [ ticket.parent_pk1 ]) %]">[% c.loc('Queue: [_1]', ticket.queue.name) %]</a></h2>
  <h2>[% c.loc('Summary: [_1]', ticket.name) %]</h2>
  <details class="muted">
   <dl>
@@ -93,8 +94,14 @@ END;
    END %]
   </tr>
   <tr>
-   [% due_date = ticket.due_date.dt_marker | date_long;
-      readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => due_date, link => c.uri_for_action('/calendar/root', ticket.due_date.dt_marker.year, ticket.due_date.dt_marker.month, { highlight => 'ticket', 'ticket' => ticket.id } ) }); %]
+   [% dt = ticket.due_date; due_date = dt;
+      IF dt.defined && dt.dt_marker.defined;
+        link = c.uri_for_action('/calendar/root', dt.dt_marker.year, dt.dt_marker.month, { highlight => 'ticket', 'ticket' => ticket.id } );
+        due_date = dt.dt_marker | date_long;
+      ELSE;
+        due_date = c.loc('Unscheduled');
+      END;
+      readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => due_date, link => link }); %]
    [% IF is_editable;
         select_field({
             label => 'Priority', name => 'ticket.priority',
