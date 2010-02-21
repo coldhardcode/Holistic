@@ -677,6 +677,8 @@ fieldset tfoot tr td {
     border: none;
     text-align: right;
 }
+input.placeholder { color: #ccc; }
+
 td.message aside {
     -webkit-border-top-left-radius: 0;
     -webkit-border-top-right-radius: 0;

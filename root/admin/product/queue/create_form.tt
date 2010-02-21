@@ -1,7 +1,11 @@
 [%~
 
 ~%]
-<h1>XX [% c.loc('[_1] : Create Queue', [ product.name ] ) %] </h1>
+[% IF type %]
+<h1>[% c.loc("[_1] : Create ${type.name}", [ product.name ] ) %] </h1>
+[% ELSE %]
+<h1>[% c.loc('[_1] : Create Ticket Queue', [ product.name ] ) %] </h1>
+[% END %]
 <form id="queue" method="post" action="[% c.uri_for_action('/admin/product/queue/root', [ product.id ]) %]">
  <fieldset>
   <table>

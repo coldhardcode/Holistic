@@ -38,7 +38,8 @@ DEFAULT page.head.scripts     = [];
 DEFAULT page.body             = {};
 DEFAULT page.body.classes     = ['yui-skin-sam'];
 DEFAULT page.body.scripts     = [
-    'http://yui.yahooapis.com/combo?3.0.0/build/yui/yui-min.js'
+    'http://yui.yahooapis.com/combo?3.0.0/build/yui/yui-min.js',
+    'placeholder.js'
 ];
 DEFAULT page.crumbs           = [];
 DEFAULT page.content_class    = 'content';
