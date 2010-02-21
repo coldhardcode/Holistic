@@ -17,7 +17,7 @@
  <li>[% c.loc('Status') %]
    <ul>
    [% FOREACH status = s_things %]
-    <li><a href="[% c.req.uri_with({ 'status' => status }) %]">[% c.loc('[_1] ([_2])', status, statuses.${status}) %]</a></li>
+    <li><a href="[% c.req.uri_with({ 'status' => status }) %]">[% c.loc('[_1] ([_2])', c.loc(status), statuses.${status}) %]</a></li>
    [% END %]
    </ul>
  </li>

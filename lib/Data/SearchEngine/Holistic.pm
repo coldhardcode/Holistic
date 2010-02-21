@@ -35,17 +35,13 @@ sub search {
 
         my $products = $tick->products;
         while(my $prod = $products->next) {
-            # if(defined($facets{product}->{$prod->id})) {
-                $facets{product}->{$prod->id}++;
-            # } else {
-            #     $facets{product}->{$prod->id} = 1;
-            # }
+            $facets{product}->{$prod->name}++;
         }
 
-        $facets{status}->{$tick->status->id}++;
-        $facets{owner}->{$tick->owner->person->id}++;
-        $facets{priority}->{$tick->priority->id}++;
-        $facets{type}->{$tick->type->id}++;
+        $facets{status}->{$tick->status->name}++;
+        $facets{owner}->{$tick->owner->person->token}++;
+        $facets{priority}->{$tick->priority->name}++;
+        $facets{type}->{$tick->type->name}++;
 
         push(@items, Data::SearchEngine::Holistic::Item->new(
             id => $tick->id,
