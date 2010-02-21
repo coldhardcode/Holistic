@@ -7,7 +7,7 @@ with 'Data::SearchEngine';
 
 use Data::SearchEngine::Holistic::Item;
 use Data::SearchEngine::Paginator;
-use Data::SearchEngine::Results;
+use Data::SearchEngine::Holistic::Results;
 
 has schema => (
     is => 'ro',
@@ -26,12 +26,27 @@ sub search {
                 name => { -like => '%'.$oquery->query.'%' },
                 description => { -like => '%'.$oquery->query.'%' }
             ]
-        },{
-            page => $oquery->page,
-            rows => $oquery->count
+        }, {
         }
     );
+
+    my %facets = ();
     while(my $tick = $rs->next) {
+
+        my $products = $tick->products;
+        while(my $prod = $products->next) {
+            # if(defined($facets{product}->{$prod->id})) {
+                $facets{product}->{$prod->id}++;
+            # } else {
+            #     $facets{product}->{$prod->id} = 1;
+            # }
+        }
+
+        $facets{status}->{$tick->status->id}++;
+        $facets{owner}->{$tick->owner->person->id}++;
+        $facets{priority}->{$tick->priority->id}++;
+        $facets{type}->{$tick->type->id}++;
+
         push(@items, Data::SearchEngine::Holistic::Item->new(
             id => $tick->id,
             ticket => $tick,
@@ -39,14 +54,15 @@ sub search {
         ));
     }
 
-    return Data::SearchEngine::Results->new(
+    my $results = Data::SearchEngine::Holistic::Results->new(
         query => $oquery,
         pager => Data::SearchEngine::Paginator->new(
             entries_per_page => $oquery->count,
             total_entries => scalar(@items)
         ),
         items => \@items,
-        elapsed => time - $start
+        elapsed => time - $start,
+        facets => \%facets
     );
 }
 

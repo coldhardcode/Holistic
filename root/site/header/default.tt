@@ -12,7 +12,9 @@ END;
  </form>
 </header>
 <nav class="bar" id="sidebar">
- <h3>[% c.loc('Navigation') %]</h3>
+[% IF results %]
+ [% PROCESS site/nav/search_refine.tt %]
+[% END %]
 [% IF context.ticket %]
  <h3>[% c.loc('Ticket') %]<a href="#"><img src="/static/images/actions/arrow_up.png"></a></h3>
  <ul>
