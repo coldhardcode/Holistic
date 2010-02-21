@@ -70,6 +70,8 @@ requires 'DBIx::Class::DynamicDefault';
 requires 'Chart::Clicker';
 
 # Random Stuff
+requires 'Lingua::EN::Words2Nums';
+
 requires 'Time::HiRes';
 
 requires 'YAML';
