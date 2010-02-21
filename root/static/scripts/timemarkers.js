@@ -15,6 +15,15 @@ YUI({
     }
 }).use('node', 'anim', 'io-base', 'json', 'event-delegate', function(Y) {
     var form = Y.one('#time_markers');
+    var labels       = form.one('select[name="name"]');
+    labels.on('change', function() {
+        if ( this.get('value') === '___add___' ) {
+            var new_name = prompt('Enter new label');
+            var node = this.one('optgroup');
+            node.insert('<option value="' + new_name + '">' + new_name + '</option>', 1);
+            this.set('value', new_name);
+        }
+    });
     var dt_marker    = form.one('input[name="dt_marker"]');
     var dt_verifier  = form.one('input[name="dt_verifier_uri"]').get('value');
     var calendar_pop = form.one('img.calendar');

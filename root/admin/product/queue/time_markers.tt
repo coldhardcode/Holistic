@@ -15,10 +15,7 @@ page.body.scripts.push('timemarkers.js');
         <select name="name">
             <option value="@due">[% c.loc('Due Date') %]</option>
             <optgroup label="[% c.loc('Custom Labels') %]">
-                <option value="Cycle 1">Cycle 1</option>
-                <option value="Cycle 2">Cycle 2</option>
-                <option value="Cycle 3">Cycle 3</option>
-                <option value="">[% c.loc('Add Label') %]</option>
+                <option value="___add___">[% c.loc('Add Label') %]</option>
             </optgroup>
         </select>
         <input type="text" name="dt_marker" value="" placeholder="Date Marker">
