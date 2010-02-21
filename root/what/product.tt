@@ -33,4 +33,7 @@
    </ul>
   </li>
  </ul>
-</section>
+ </section>
+ <script type="text/javascript">
+  dt_verifier_uri = "[% c.uri_for_action('/util/date_verifier') %]";
+ </script>

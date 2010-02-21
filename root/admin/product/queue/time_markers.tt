@@ -1,0 +1,24 @@
+[%~
+page.head.stylesheets.push('timemarkers.css');
+page.body.scripts.push('timemarkers.js');
+~%]
+<form id="time_markers" method="post" action="[% c.uri_for_action('/admin/product/queue/timemarker/root', [ product.id, queue.id ] ) %]">
+ <input type="hidden" name="dt_verifier_uri" value="[% c.uri_for_action('/util/verify_date') %]">
+ <section class="product">
+  <ul>
+   <li><h4>Timeline</h4>
+    <ul>
+     [% FOREACH marker IN time_markers %]
+     <li>[% marker.name | html %] - [% marker.dt_marker | date_short %]</li>
+     [% END %]
+     <li class="incoming yui-skin-sam">
+        <input type="text" name="name" value="" placeholder="Label">
+        <input type="text" name="dt_marker" value="" placeholder="Date Effective">
+        <input type="image" src="[% static('/static/images/buttons/go-small.png') %]" alt="Add a time marker">
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </section>
+</form>
+

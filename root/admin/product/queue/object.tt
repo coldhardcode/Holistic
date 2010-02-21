@@ -7,17 +7,7 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
 <p><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">Tickets</a></p>
 
 <h2>Time Markers Here</h2>
-<ul>
-    [% FOREACH marker IN time_markers %]
-    <li>[% marker.name | html %] - [% marker.dt_marker | date_short %]</li>
-    [% END %]
-    <li>
-        <form id="marker" method="post" action="[% c.uri_for_action('/admin/product/queue/timemarker/root', [ product.id, queue.id ] ) %]">
-            <input type="text" name="name" value="">
-            <input type="text" name="dt_marker" value="">
-        </form>
-    </li>
-</ul>
+[% PROCESS "admin/product/queue/time_markers.tt" %]
 <h2>Edit</h2>
 <form id="queue" method="post" action="[% c.uri_for_action('/admin/product/queue/object', [ product.id, queue.id ]) %]">
  <fieldset>
