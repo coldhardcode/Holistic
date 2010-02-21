@@ -19,7 +19,6 @@
     [% FOREACH marker IN time_markers %]
     <li>[% marker.name | html %] <time datetime="[% marker.dt_marker %]">[% marker.dt_marker | date_short %]</time></li>
     [% END %]
-    <li>
    </ul>
   </li>
   [% END %]
