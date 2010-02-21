@@ -5,7 +5,9 @@ YUI().use("node", function(Y) {
     Y.all('form').each( function() {
         var form = this;
         form.all('input[placeholder]').each( function() {
-            if ( this.get('value') === '' ) {
+            if ( this.get('value') === '' ||
+                 this.get('value') === this.getAttribute('placeholder') 
+            ) {
                 this.addClass('placeholder');
                 this.set('value', this.getAttribute('placeholder'));
             }

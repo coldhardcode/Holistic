@@ -13,11 +13,15 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
 
 ~%]
 <h1>[% c.loc('[_2] [_1]', [ queue.type.name, queue.name ] ) %]</h1>
-<p><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">Tickets</a></p>
 
-<h2>Time Markers Here</h2>
+<ul>
+    <li><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% c.loc('Status') %]</a></li>
+    <li><a href="[% c.uri_for_action('/ticket/create_form', { queue_pk1 => queue.id }) %]">[% c.loc('Create Ticket') %]</a></li>
+</ul>
+
 [% PROCESS "admin/product/queue/time_markers.tt" %]
-<h2>Edit</h2>
+
+<h2>[% c.loc('Edit Details') %]</h2>
 <form id="queue" method="post" action="[% c.uri_for_action('/admin/product/queue/object', [ product.id, queue.id ]) %]">
  <fieldset>
   <table>

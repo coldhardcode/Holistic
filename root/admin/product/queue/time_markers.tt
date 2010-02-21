@@ -6,15 +6,24 @@ page.body.scripts.push('timemarkers.js');
  <input type="hidden" name="dt_verifier_uri" value="[% c.uri_for_action('/util/verify_date') %]">
  <section class="product">
   <ul>
-   <li><h4>Timeline</h4>
+   <li><h4>[% c.loc('Points in time') %]</h4>
     <ul>
      [% FOREACH marker IN time_markers %]
-     <li>[% marker.name | html %] - [% marker.dt_marker | date_short %]</li>
+     <li>[% IF marker.name.match('^@'); c.loc(marker.name); ELSE; marker.name | html; END %] - [% marker.dt_marker | date_short %]</li>
      [% END %]
      <li class="incoming yui-skin-sam">
-        <input type="text" name="name" value="" placeholder="Label">
-        <input type="text" name="dt_marker" value="" placeholder="Date Effective">
-        <input type="image" src="[% static('/static/images/buttons/go-small.png') %]" alt="Add a time marker">
+        <select name="name">
+            <option value="@due">[% c.loc('Due Date') %]</option>
+            <optgroup label="[% c.loc('Custom Labels') %]">
+                <option value="Cycle 1">Cycle 1</option>
+                <option value="Cycle 2">Cycle 2</option>
+                <option value="Cycle 3">Cycle 3</option>
+                <option value="">[% c.loc('Add Label') %]</option>
+            </optgroup>
+        </select>
+        <input type="text" name="dt_marker" value="" placeholder="Date Marker">
+        <img class="calendar" src="[% static('images/icons/calendar_add.png') %]" alt="Calendar">
+        <input type="submit" value="Add">
      </li>
     </ul>
    </li>

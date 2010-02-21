@@ -3,3 +3,7 @@
     height: 1px;
 }
 
+#cal1Cont { position: absolute; z-index: 2 }
+.yui-calcontainer table { font-size: 12px; width: auto; }
+.yui-calcontainer table thead th { font-size: 12px; color: #000; background: inherit; }
+.yui-calcontainer table tbody td { padding: none; }

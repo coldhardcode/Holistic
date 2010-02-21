@@ -17,9 +17,6 @@
     <tr>
      [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
     </tr>
-    <tr>
-     [% select_field({ label => 'Owner', name => 'identity_pk1', required => 1, array => [ { 'People' => [ 'gphat', 'jshirley' ] }, { 'Groups' => [ 'Group A', 'Group B' ] } ], double => 1 }); %]
-    </tr>
    </tbody>
   </table>
  </fieldset>

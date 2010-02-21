@@ -12,3 +12,6 @@ msgstr "Open"
 
 msgid "CRUMBS_SEP"
 msgstr ":"
+
+msgid "@due"
+msgstr "Due Date"

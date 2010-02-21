@@ -286,13 +286,16 @@ sub update : Private {
         $c->res->redirect( $c->req->uri );
         $c->detach;
     }
-    $c->log->_dump( $object->_verify_profile );
-    $data = { map { $_ => $result->get_value($_) } $result->valids };
+    my %filtered =
+        map { $_ => $result->get_value($_) }
+        grep { defined $result->get_value($_) }
+        $result->valids;
+
     if ( $c->debug ) {
         $c->log->debug("Updating $object with:");
-        $c->log->_dump($data);
+        $c->log->_dump(\%filtered);
     }
-    $object->update( $data );
+    $object->update( \%filtered );
     $c->message( $c->loc( $self->update_string ) );
 }
 
