@@ -15,15 +15,19 @@ sub base : Chained('../search') PathPart('search') CaptureArgs(0) {
 sub default : Chained('base') PathPart('') Args(0) {
     my ($self, $c) = @_;
 
+    my $search = Data::SearchEngine::Holistic->new(
+        schema => $c->model('Schema')->schema
+    );
+
     my $q = $c->req->params->{search};
     my $query = Data::SearchEngine::Query->new(
         original_query => $q,
         query => $q,
         page => $c->req->params->{page} || 1,
-        count => $c->req->params->{count} || 10
+        count => $c->req->params->{count} || 10,
     );
 
-    $c->stash->{results} = Data::SearchEngine::Holistic->new->search($query);
+    $c->stash->{results} = $search->search($query);
     $c->stash->{template} = 'search/default.tt';
 }
 

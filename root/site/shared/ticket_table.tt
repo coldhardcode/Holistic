@@ -46,7 +46,7 @@ tickets_closed = 0;
    <td>[% due_date = ticket.due_date; IF due_date; %]<time datetime="[% due_date.dt_marker %]">[% pretty_date(due_date.dt_marker); %]</time>[% ELSE; "&mdash;"; END %]</td>
    <td>[% c.loc(ticket.type.name) %]</td>
    <td>[% c.loc(ticket.priority.name) %]</td>
-   <td>XX</td>
+   <td>X</td>
   </tr>
 [% END %]
  </tbody>

@@ -1,7 +1,7 @@
 [% SET pager = results.pager %]
 [% IF pager.total_entries %]
   [% INCLUDE site/shared/pager.tt pager = results.pager %]
-  [% INCLUDE site/shared/ticket_table.tt %]
+  [% INCLUDE site/shared/ticket_table.tt tickets = results.items %]
   [% INCLUDE site/shared/pager.tt pager = results.pager %]
 [% ELSE %]
 <section class="message">

@@ -5,9 +5,14 @@ use Time::HiRes qw(time);
 
 with 'Data::SearchEngine';
 
-use Data::SearchEngine::Item;
+use Data::SearchEngine::Holistic::Item;
 use Data::SearchEngine::Paginator;
 use Data::SearchEngine::Results;
+
+has schema => (
+    is => 'ro',
+    required => 1
+);
 
 sub search {
     my ($self, $oquery) = @_;
@@ -15,9 +20,11 @@ sub search {
     my $start = time;
 
     my @items = ();
-    for(1..5) {
-        push(@items, Data::SearchEngine::Item->new(
-            id => 'X',
+    my $rs = $self->schema->resultset('Ticket')->search(undef, { page => $oquery->page, rows => $oquery->count });
+    while(my $tick = $rs->next) {
+        push(@items, Data::SearchEngine::Holistic::Item->new(
+            id => $tick->id,
+            ticket => $tick,
             score => 1
         ));
     }

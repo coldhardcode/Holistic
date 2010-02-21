@@ -534,6 +534,7 @@ div.tabs nav ul li {
     border: 1px solid #353535;
     border-width: 1px 1px 0 1px;
     float: left;
+    font-size: 14px;
     list-style: none;
     margin: 0; padding: 0;
     text-align: right;
