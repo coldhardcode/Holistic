@@ -20,7 +20,17 @@ sub search {
     my $start = time;
 
     my @items = ();
-    my $rs = $self->schema->resultset('Ticket')->search(undef, { page => $oquery->page, rows => $oquery->count });
+    my $rs = $self->schema->resultset('Ticket')->search(
+        {
+            '-or' => [
+                name => { -like => '%'.$oquery->query.'%' },
+                description => { -like => '%'.$oquery->query.'%' }
+            ]
+        },{
+            page => $oquery->page,
+            rows => $oquery->count
+        }
+    );
     while(my $tick = $rs->next) {
         push(@items, Data::SearchEngine::Holistic::Item->new(
             id => $tick->id,
