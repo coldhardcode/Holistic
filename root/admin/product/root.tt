@@ -1,3 +1,4 @@
+[% page.crumbs.push({ 'Products' => '' }) %]
 <h1>[% c.loc('Products') %]</h1>
 <ul>
 [% FOREACH product IN c.model('Schema::Product').search_ordered.all %]

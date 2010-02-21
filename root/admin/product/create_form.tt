@@ -1,5 +1,5 @@
-[% page.crumbs.push({ 'Product' => '' }) %]
-<h1>[% c.loc('Create Product') %]</h1>
+[% page.crumbs.push({ 'Add Product' => '' }) %]
+<h1>[% c.loc('Add Product') %]</h1>
 <form id="product" method="post" action="[% c.uri_for_action('/admin/product/root') %]">
  <fieldset>
   <table>

@@ -1,3 +1,4 @@
+[% page.crumbs.push({ 'Add Group' => '' }) %]
 <h1>[% c.loc('Add Group') %]</h1>
 <form id="auth" method="post" action="[% c.uri_for_action('/admin/group/root') %]">
  <fieldset class="narrow">

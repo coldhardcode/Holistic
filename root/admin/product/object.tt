@@ -1,5 +1,9 @@
 [%~
-page.crumbs.push({ 'Product' => '' });
+name = product.name | html;
+page.crumbs.push(
+    { 'Products' => c.uri_for_action('/admin/product/root').as_string  },
+    { $name => '' }
+);
 ~%]
 <h1>[% c.loc('Product: [_1]', [ product.name ]) %]</h1>
 <form id="product" method="post" action="[% c.uri_for_action('/admin/product/object', [ product.id ]) %]">

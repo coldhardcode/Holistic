@@ -1,5 +1,10 @@
 [%~
-
+name = product.name | html;
+page.crumbs.push(
+    { 'Products' => c.uri_for_action('/admin/product/root').as_string  },
+    { $name => c.uri_for_action('/admin/product/object', [ product.id ]).as_string }
+    { 'Queues' => '' }
+);
 queues = queue_rs.all;
 
 ~%]
