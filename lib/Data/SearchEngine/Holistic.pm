@@ -20,7 +20,7 @@ sub search {
     my $start = time;
 
     my @items = ();
-    my $rs = $self->schema->resultset('Ticket')->search(
+    my @tickets = $self->schema->resultset('Ticket')->search(
         {
             '-or' => [
                 name => { -like => '%'.$oquery->query.'%' },
@@ -28,10 +28,18 @@ sub search {
             ]
         }, {
         }
+    )->all;
+
+    my $pager = Data::SearchEngine::Paginator->new(
+        current_page => $oquery->page,
+        entries_per_page => $oquery->count,
+        total_entries => scalar(@tickets)
     );
 
     my %facets = ();
-    while(my $tick = $rs->next) {
+    for(0..scalar(@tickets) - 1) {
+    # foreach my $tick (@tickets) {
+        my $tick = $tickets[$_];
 
         my $products = $tick->products;
         while(my $prod = $products->next) {
@@ -43,19 +51,17 @@ sub search {
         $facets{priority}->{$tick->priority->name}++;
         $facets{type}->{$tick->type->name}++;
 
+        print STDERR "#### $_ : ".$pager->first." : ".$pager->last."\n";
         push(@items, Data::SearchEngine::Holistic::Item->new(
             id => $tick->id,
             ticket => $tick,
             score => 1
-        ));
+        )) if($_ >= $pager->first && $_ <= $pager->last);
     }
 
     my $results = Data::SearchEngine::Holistic::Results->new(
         query => $oquery,
-        pager => Data::SearchEngine::Paginator->new(
-            entries_per_page => $oquery->count,
-            total_entries => scalar(@items)
-        ),
+        pager => $pager,
         items => \@items,
         elapsed => time - $start,
         facets => \%facets

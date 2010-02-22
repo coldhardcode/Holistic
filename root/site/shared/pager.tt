@@ -1,5 +1,5 @@
 <nav class="pager">
- <p>[% c.loc('Page [_1] of [_2]', pager.current_page, pager.last_page) %]</p>
+ <p>[% c.loc('Results [_1] to [_2] of [_3], Page [_4] of [_5]', pager.first, pager.last, pager.total_entries, pager.current_page, pager.last_page) %]</p>
  <ol>
   <li class="first"><a href="[% c.req.uri_with({ page => pager.first_page }) %]"><img src="/static/images/actions/resultset_first.png"></a></li>
   [% IF pager.current_page > pager.first_page %]

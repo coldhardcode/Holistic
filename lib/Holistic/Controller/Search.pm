@@ -28,9 +28,6 @@ sub default : Chained('base') PathPart('') Args(0) {
     );
 
     $c->stash->{results} = $search->search($query);
-    use Data::Dumper;
-    $c->log->error(Dumper($c->stash->{results}->facets));
-    $c->log->error(Dumper($c->stash->{results}->get_sorted_facet('status')));
     $c->stash->{template} = 'search/default.tt';
 }
 

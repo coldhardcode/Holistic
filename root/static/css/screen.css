@@ -483,6 +483,7 @@ nav.pager {
     border-radius: 5px;
     color: #353535;
     display: block;
+    font-size: 14px;
     margin: 0 0 1em 0; padding: 9px;
     text-align: right;
     width: 100%;
@@ -493,7 +494,6 @@ nav.pager img {
 nav.pager p {
     display: inline;
     float: left;
-    font-size: 1.23em;
     font-weight: bold;
     margin: 0; padding: 0;
 }
