@@ -19,7 +19,7 @@ page.body.scripts.push('timemarkers.js');
             </optgroup>
         </select>
         <input type="text" name="dt_marker" value="" placeholder="Date Marker">
-        <img class="calendar" src="[% static('images/icons/calendar_add.png') %]" alt="Calendar">
+        <img class="calendar" src="[% static('images/icons/date.png') %]" alt="Calendar">
         <input type="submit" value="Add">
      </li>
     </ul>
