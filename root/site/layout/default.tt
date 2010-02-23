@@ -14,6 +14,7 @@
 [% END %]
 <article id="content">
  <div id="main" class="clearfix">
+ [% PROCESS site/messages.tt %]
 [%~ 
 # Nothing fancy here.  Just dump the content.
 content

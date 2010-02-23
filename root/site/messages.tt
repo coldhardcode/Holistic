@@ -1,0 +1,8 @@
+<section class="message">
+ [% SET gpos = messages.for_scope('global').for_level('success').first_message.id %]
+ <aside class="gmessage" [% UNLESS gpos %]style="display: none"[% END %]><p>[% c.loc(gpos) %]</p></aside>
+ [% SET gerr = messages.for_scope('global').for_level('error').first_message.id %]
+ <aside class="rmessage" [% UNLESS gerr %]style="display: none"[% END %]><p>[% c.loc(gerr) %]</p></aside>
+ [% SET gwarn = messages.for_scope('global').for_level('warn').first_message.id %]
+ <aside class="omessage" [% UNLESS gwarn %]style="display: none"[% END %]><p>[% c.loc(gwarn) %]</p></aside>
+</section>
