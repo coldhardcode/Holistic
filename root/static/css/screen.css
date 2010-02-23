@@ -415,7 +415,7 @@ p.subdued {
     -moz-border-radius: 7px;
     border-radius: 7px;
     color: #fff;
-    display: block;
+    font-size: 14px;
     margin: 0 0 1em 0; padding: 0 0 0 0;
     overflow: hidden;
 }
@@ -606,6 +606,7 @@ fieldset table thead th {
     text-align: right;
 }
 fieldset table tr td {
+    border: none;
     text-align: left;
     vertical-align: top;
 }
@@ -639,8 +640,9 @@ fieldset input[type="number"],
 fieldset input[type="range"],
 fieldset select,
 fieldset textarea {
-    margin: 0; padding: 0;
-    width: 12.25em;
+    resize: none;
+    margin: 0; padding: 2px;
+    width: 200px;
 }
 fieldset input[type="url"].double,
 fieldset input[type="email"].double,
@@ -652,7 +654,7 @@ fieldset textarea.double {
     width: 32em;
 }
 fieldset textarea {
-    width: 25em;
+    width: 350px;
 }
 fieldset.cwrap {
     background-color: #fff;
@@ -688,8 +690,13 @@ td.message aside {
     border-top-left-radius: 0;
     clear: both;
     font-size: 12px;
-    text-align: center;
     margin: 0; padding: 0;
+    text-align: center;
+    width: 208px;
+}
+td.message textarea + aside {
+    margin-top: -4px; 
+    width: 358px
 }
 table tbody tr.imp,
 table tbody tr.imp td label {
