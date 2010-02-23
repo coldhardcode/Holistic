@@ -23,8 +23,6 @@ use Catalyst qw/
     Session Session::Store::FastMmap Session::State::Cookie
 
     Cache
-
-    +Holistic::Plugin::Message 
 /;
 
 extends 'Catalyst';
