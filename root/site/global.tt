@@ -11,6 +11,9 @@
 END %]
 
 [% MACRO label_field(info) BLOCK %]
+ [% IF !info.error && messages && messages.count %]
+  [% info.error = c.loc(messages.for_subject(info.name).for_level('error').first_message.id) %]
+ [% END %]
  <td [% IF info.error %]class="error"[% END %]>
   [% IF info.important %]<strong>[% END %]
   <label id="form_[% info.name %]_label" for="form_[% info.name %]">[% c.loc(info.label) ~%]
@@ -29,9 +32,9 @@ END %]
  [% info.value %]
  [%~ IF info.link ~%]</a>[%~ END ~%]
  [% IF info.error %]
- <div><aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside></div>
+ <aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside>
  [% ELSIF info.extra %]
- <div><aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+ <aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside>
  [% END %]
 </td>
 [% END; %]
@@ -75,9 +78,9 @@ END %]
    [% END %]
   </select>
   [% IF info.error %]
-  <div><aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside></div>
+  <aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside>
   [% ELSIF info.extra %]
-  <div><aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+  <aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside>
   [% END %]
  </td>
 [% END; %]
@@ -91,9 +94,9 @@ END %]
    [%~ IF info.tabindex %] tabindex="[% info.tabindex %]"[% END ~%]
    [%~ IF info.maxlength %] maxlength="[% info.maxlength %]"[% END ~%]>
    [% IF info.error %]
-   <div><aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside></div>
+   <aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside>
    [% ELSIF info.extra %]
-   <div><aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+   <aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside>
    [% END %]
  </td>
 [% END; %]
@@ -113,9 +116,9 @@ END %]
   [%~ info.value | html ~%]
  </textarea>
  [% IF info.error %]
-  <div><aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside></div>
+  <aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside>
  [% ELSIF info.extra %]
-  <div><aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+  <aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside>
  [% END %]
 </td>
 [% END; %]
@@ -156,9 +159,9 @@ END %]
    [% END %]
   </fieldset>
   [% IF info.error %]
-  <div><aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside></div>
+  <aside class="rmessage"><p>[% c.loc(info.error) %]</p></aside>
   [% ELSIF info.extra %]
-  <div><aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside></div>
+  <aside class="gmessage"><p>[% c.loc(info.extra) %]</p></aside>
   [% END %]
  </td>
 [% END; %]
