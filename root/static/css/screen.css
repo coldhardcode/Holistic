@@ -136,6 +136,7 @@ footer a {
 }
 footer nav {
     clear: both;
+    font-size: 14px;
     padding: 0 4% 27px 4%; margin: 10px auto;
 }
 footer nav dl {
@@ -157,6 +158,7 @@ footer nav dd {
 footer nav dt {
     color: #101010;
     padding: 0 0 .5em 0;
+    text-transform: uppercase;
 }
 footer nav dd {
     padding: 0 0 .25em 0;
@@ -305,29 +307,6 @@ legend {
 br {
     clear: both;
 }
-#sidebar {
-    background-color: #fff;
-    -webkit-border-top-right-radius: 7px;
-    -webkit-border-bottom-right-radius: 7px;
-    -moz-border-radius-topright: 7px;
-    -moz-border-radius-bottomright: 7px;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-    border: 1px solid #353535;
-    border-width: 1px 1px 1px 0;
-    color: #353535;
-    font-size: 12px;
-    left: 0;
-    margin: 0; padding: 1em 0 1em 1em;
-    position: absolute;
-    text-align: left;
-    top: 102px;
-    width: 120px;
-}
-#sidebar a {
-    color: #353535;
-    text-shadow: none;
-}
 body > header {
     font-size: 14px;
 }
@@ -382,6 +361,56 @@ body > header form fieldset {
 body > header form fieldset input {
     vertical-align: bottom;
 }
+#sidebar {
+    background-color: #fff;
+    -webkit-border-top-right-radius: 7px;
+    -webkit-border-bottom-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    -moz-border-radius-bottomright: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    color: #353535;
+    font-size: 12px;
+    left: 0;
+    margin: 0; padding: 1em 0 1em 0;
+    position: absolute;
+    text-align: left;
+    top: 102px;
+    width: 180px;
+}
+#sidebar a {
+    display: block;
+    margin: 0; padding: .25em .25em 0 1em;
+    text-decoration: none;
+    text-shadow: none;
+}
+#sidebar a:hover {
+    background-color: #eee;
+}
+#sidebar h4 {
+    border-bottom: 1px solid #656565;
+    margin: 0 0 .75em 0; padding: 0 0 0 .5em;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+#sidebar > ul {
+    margin: 0 0 1em 0; padding: 0 0 .5em 0;
+}
+#sidebar > ul li {
+    display: block;
+    list-style-type: none;
+    margin: 0 0 .25em 0; padding: 0;
+}
+#sidebar a:hover {
+    text-decoration: underline;
+}
+#sidebar ul.tix li {
+    text-indent: -15px;
+    margin: 0 0 0 10px;
+}
+#sidebar ul.tix li a {
+    font-size: 12px;
+}
 p.caption {
     color: #919191;
     font-size: 0.769em;
@@ -404,7 +433,7 @@ p.subdued {
     font-weight: bold;
 }
 #content {
-    padding: 12px 120px 0 180px;
+    padding: 12px 120px 0 200px;
 }
 #main > header {
     margin: 0 0 1.5em 0; padding: 0;
@@ -462,34 +491,6 @@ p.subdued {
     color: #fff;
     display: block;
     text-decoration: none;
-}
-nav.bar h3 {
-    margin: 0; padding: 0 0 7px 0;
-}
-nav.bar > ul {
-    margin: 0; padding: 0 0 18px 0;
-}
-nav.bar > ul li {
-    list-style-type: none;
-}
-nav.bar > ul li {
-    display: block;
-    margin: 0 0 .25em 0; padding: 0;
-}
-nav.bar a {
-    color: #eee;
-    padding: 7px;
-    text-decoration: none;
-}
-nav.bar a:hover {
-    text-decoration: underline;
-}
-nav.bar ul.tix li {
-    text-indent: -15px;
-    margin: 0 0 0 10px;
-}
-nav.bar ul.tix li a {
-    font-size: 12px;
 }
 nav.pager {
     background: none;
