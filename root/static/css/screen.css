@@ -156,8 +156,9 @@ footer nav dd {
     margin: 0; padding: 0;
 }
 footer nav dt {
+    border-bottom: 1px solid #353535;
     color: #101010;
-    padding: 0 0 .5em 0;
+    margin: 0 6em .5em 0; padding: 0 0 .1em 0;
     text-transform: uppercase;
 }
 footer nav dd {
@@ -380,7 +381,7 @@ body > header form fieldset input {
 }
 #sidebar a {
     display: block;
-    margin: 0; padding: .25em .25em 0 1em;
+    margin: 0; padding: 0 .25em 0 1em;
     text-decoration: none;
     text-shadow: none;
 }
@@ -443,7 +444,7 @@ p.subdued {
 }
 #main > header details {
     color: #87766f;
-    font-size: 12px;
+    font-size: 14px;
     margin: 0; padding: 0;
 }
 #main > header details dl dt {
