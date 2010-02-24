@@ -232,6 +232,15 @@ table tbody td {
     padding: 7px;
     vertical-align: top;
 }
+table tbody th.link,
+table tbody td.link {
+    margin: 0; padding: 0;
+}
+table tbody th > a,
+table tbody td > a {
+    display: block;
+    padding: 7px;
+}
 table tbody td:last-child {
     border-right-width: 1px;
 }
@@ -277,6 +286,14 @@ table tfoot td meter {
 }
 table tfoot td img {
     vertical-align: bottom;
+}
+table tfoot details dt,
+table tfoot details dd {
+    display: inline;
+    margin: 0; padding: 0;
+}
+table tfoot details dd {
+    padding: 0 1em 0 0;
 }
 legend {
     font-size: 1.615em;
