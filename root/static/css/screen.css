@@ -236,8 +236,8 @@ table tbody th.link,
 table tbody td.link {
     margin: 0; padding: 0;
 }
-table tbody th > a,
-table tbody td > a {
+table tbody th > a:only-child,
+table tbody td > a:only-child {
     display: block;
     padding: 7px;
 }
