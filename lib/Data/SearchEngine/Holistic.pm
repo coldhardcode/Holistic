@@ -56,7 +56,7 @@ sub search {
             id => $tick->id,
             ticket => $tick,
             score => 1
-        )) if($_ >= $pager->first && $_ <= $pager->last);
+        )) if($_ + 1 >= $pager->first && $_ <= $pager->last);
     }
 
     my $results = Data::SearchEngine::Holistic::Results->new(
