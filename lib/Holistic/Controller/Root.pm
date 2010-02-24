@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 use Message::Stack;
 use Message::Stack::DataVerifier;
+use DBIx::Class::QueryLog;
+use DBIx::Class::QueryLog::Analyzer;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -36,6 +38,17 @@ sub index :Path :Args(0) {
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ($self, $c) = @_;
     $c->stash->{now} = DateTime->now;
+
+    if($c->debug) {
+        my $ql = DBIx::Class::QueryLog->new;
+        my $schema = $c->model('Schema')->schema;
+        $schema->storage->debugobj($ql);
+        $schema->storage->debug(1);
+
+        $c->stash->{'querylog'} = $ql;
+        my $ana = DBIx::Class::QueryLog::Analyzer->new({ querylog => $ql });
+        $c->stash->{'qlanalyzer'} = $ana;
+    }
 
     if ( $c->user_exists ) {
         my $name  = $c->user->id;

@@ -19,5 +19,10 @@
 # Nothing fancy here.  Just dump the content.
 content
 ~%]
+ [% IF c.debug %]
+ <section id="debug">
+  [% PROCESS site/instrumentation/querylog.tt %]
+ </section>
+ [% END %]
  </div>
 </article>
