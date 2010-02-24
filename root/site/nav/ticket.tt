@@ -1,0 +1,6 @@
+<h4>[% c.loc('Ticket') %]</a></h4>
+<ul>
+ <li><a href="#comment">[% c.loc('Comment') %]</a></li>
+ <li><a href="[% c.uri_for('/ticket/create', { parent => ticket.id }) %]">[% c.loc('Create Dependent') %]</a></li>
+ <li><a href="#">[% c.loc('Add to Stack') %]</a></li>
+</ul>
