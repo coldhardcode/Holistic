@@ -99,7 +99,7 @@ sub shut_up_permissions : Plan(17) {
     $queue->product_links->create({ product_pk1 => $product->id });
 
     # Anybody can create (even not logged in), this is by default:
-    $product->permissions->allow('create', scope => [ 'Ticket' ]);
+    $product->permissions->allow('create ticket', scope => $queue);
 
     # But lets remove write  permissions
     $product->permissions->prohibit('update');
