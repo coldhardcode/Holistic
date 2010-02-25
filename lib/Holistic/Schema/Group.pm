@@ -7,6 +7,8 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
+with 'Holistic::Role::Permissions';
+
 my $CLASS = __PACKAGE__;
 
 $CLASS->table('groups');
@@ -46,6 +48,9 @@ __PACKAGE__->has_many('person_links', 'Holistic::Schema::Person::Group', 'group_
 
 __PACKAGE__->many_to_many('persons' => 'person_links' => 'person' );
 
+__PACKAGE__->has_many('queue_links', 'Holistic::Schema::Queue::Group', 'group_pk1');
+__PACKAGE__->many_to_many('queues', => 'queue_links' => 'queue' );
+
 sub is_member {
     my ( $self, $person, $role ) = @_;
     my $rs = $self->membership( $person, $role );
@@ -73,6 +78,10 @@ sub membership {
         $rs = $rs->search({ 'role.pk1' => $role_obj->id });
     }
     $rs;
+}
+
+sub permission_hierarchy {
+    return { 'queue_links' => { 'queue' => { 'product_links' => 'product' } } };
 }
 
 use Digest::MD5;

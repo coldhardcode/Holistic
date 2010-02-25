@@ -45,18 +45,21 @@ sub run_test {
 
     next unless $m->can('attributes');
     my $attrs = $m->attributes;
+    my $ret   = undef;
     if ( $attrs and ref $attrs eq 'ARRAY' ) {
         foreach my $attr ( @$attrs ) {
             if ( $attr =~ /^Plan\s*\(\s*(\d+)\s*\)\s*$/ ) {
                 $self->planned_tests( $self->planned_tests + $1 );
                 try {
-                    $self->$method($call_args);
+                    $ret = $self->$method($call_args);
                 } catch {
                     confess $_;
                 };
             }
         }
     }
+
+    return $ret;
 }
 
 no Moose::Role;

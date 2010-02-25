@@ -12,15 +12,15 @@ has 'queue' => (
 );
 
 sub queue_create : Plan(1) {
-    my ( $self ) = @_;
+    my ( $self, $data ) = @_;
 
     my $type_ms = $self->resultset('Queue::Type')->find_or_create({
         name => 'Milestone'
     });
 
     my $queue = $self->schema->resultset('Queue')->find_or_create({
-        name  => 'A Q',
-        token => 'a-queue',
+        name  => $data->{name} || 'A Q',
+        token => $data->{token} || 'a-queue',
         type  => $type_ms
     });
 

@@ -4,7 +4,7 @@ my $suite = Holistic::Test::Suite->new;
 
 $suite->run(
     #with => [ 'Person', 'Group', 'Ticket' ],
-    with => [ 'Person', 'Ticket', 'Verify' ],
+    with => [ 'Person', 'Queue', 'Ticket', 'Verify', 'Permissions' ],
     config => {
         connect_info => [
             'dbi:SQLite:t/var/test.db',
@@ -24,7 +24,8 @@ $suite->run(
         { 'group_join' => { ident => 'gphat', role => 'Pickshur Makur' } },
         'ticket_create',
         'ticket_dependencies',
-        'ticket_profile'
+        'ticket_profile',
+        'shut_up_permissions',
     ]
 );
 

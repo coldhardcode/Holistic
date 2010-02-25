@@ -50,6 +50,8 @@ sub group_create : Plan(1) {
     });
     ok( $group, 'created group' );
     $self->group( $group );
+
+    $group;
 }
 
 sub group_join : Plan(5) {
