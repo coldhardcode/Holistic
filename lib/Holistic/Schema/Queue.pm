@@ -7,6 +7,8 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
+with 'Holistic::Role::Permissions';
+
 __PACKAGE__->load_components(qw/Tree::AdjacencyList DynamicDefault/);
 
 __PACKAGE__->table('queues');
@@ -135,6 +137,13 @@ sub all_tickets {
             group_by => [ 'me.pk1' ]
         }
     );
+}
+
+sub permission_hierarchy {
+    return {
+        ascends     => [ 'product', 'parent' ],
+        condescends => [ 'groups', 'children' ]
+    }
 }
 
 no Moose;

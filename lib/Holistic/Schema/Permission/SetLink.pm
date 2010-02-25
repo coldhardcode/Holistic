@@ -24,6 +24,13 @@ $CLASS->add_columns(
     
 $CLASS->set_primary_key(qw/permission_set_pk1 permission_pk1/);
 
+$CLASS->belongs_to('permission', 'Holistic::Schema::Permission',
+    { 'foreign.pk1' => 'self.permission_pk1' }
+);
+
+$CLASS->belongs_to('permission_set', 'Holistic::Schema::Permission::Set',
+    { 'foreign.pk1' => 'self.permission_set_pk1' }
+);
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

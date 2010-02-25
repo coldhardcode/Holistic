@@ -26,6 +26,16 @@ $CLASS->add_columns(
         set_on_create => 1 
     }
 );  
-    
+
 $CLASS->set_primary_key('pk1');
 
+$CLASS->has_many(
+    'permission_links' => 'Holistic::Schema::Permission::SetLink',
+    { 'foreign.permission_set_pk1' => 'self.pk1' }
+);
+
+$CLASS->many_to_many('permissions' => 'permission_links' => 'permission');
+
+
+no Moose;
+__PACKAGE__->meta->make_immutable(inline_constructor => 0);

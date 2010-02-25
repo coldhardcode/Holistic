@@ -81,7 +81,11 @@ sub membership {
 }
 
 sub permission_hierarchy {
-    return { 'queue_links' => { 'queue' => { 'product_links' => 'product' } } };
+    return {
+        'ascends' => {
+            'queue_links' => { 'queue' => { 'product_links' => 'product' } } 
+        }
+    };
 }
 
 use Digest::MD5;

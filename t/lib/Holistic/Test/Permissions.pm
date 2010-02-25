@@ -33,7 +33,7 @@ Each permission can be negated.
 
 =cut
 
-sub shut_up_permissions : Plan(5) {
+sub shut_up_permissions : Plan(17) {
     my ( $self, $data ) = @_;
 
     # We create people and groups
@@ -176,7 +176,7 @@ sub shut_up_permissions : Plan(5) {
     # admin_group can, because they're awesome.
     $admin_group->permissions->allow( permission => 'create ticket', queue => $queue );
 
-    $all_group->permissions->make_read_only; # macro sets
+    $all_group->permissions->prohibit_all; # macro sets
     $all_group->permissions->prohibit('update ticket');
     $all_group->permissions->prohibit('create ticket', { queue => [ 'Triage' ]});
     $all_group->permissions->allow('assign ticket', { queue => [ 'Triage' ]});

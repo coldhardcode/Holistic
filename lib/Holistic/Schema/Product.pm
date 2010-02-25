@@ -6,6 +6,8 @@ use Carp;
 
 extends 'Holistic::Base::DBIx::Class';
 
+with 'Holistic::Role::Permissions';
+
 __PACKAGE__->table('products');
 
 __PACKAGE__->add_columns(
@@ -26,5 +28,13 @@ __PACKAGE__->set_primary_key('pk1');
 __PACKAGE__->has_many('queue_links', 'Holistic::Schema::Product::Queue', 'product_pk1');
 __PACKAGE__->many_to_many('queues' => 'queue_links' => 'queue');
 
-    no Moose;
+sub permission_hierarchy {
+    return {
+        'condescends' => {
+            'queue_links' => { 'queue' => { 'group_links' => 'group' } } 
+        }
+    };
+}
+
+no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
