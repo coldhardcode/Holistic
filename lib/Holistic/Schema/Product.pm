@@ -30,9 +30,17 @@ __PACKAGE__->many_to_many('queues' => 'queue_links' => 'queue');
 
 sub permission_hierarchy {
     return {
-        'condescends' => {
-            'queue_links' => { 'queue' => { 'group_links' => 'group' } } 
-        }
+        'condescends' => [
+            'permission_set',
+            {
+                'queue_links' => { 
+                    'queue' => [
+                        'permission_set',
+                        { 'group_links' => { 'group' => 'permission_set' } } 
+                    ]
+                } 
+            }
+        ]
     };
 }
 

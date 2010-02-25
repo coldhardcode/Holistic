@@ -42,12 +42,14 @@ sub shut_up_permissions : Plan(17) {
     die "Need queue tests to run"
         unless $self->meta->does_role('Holistic::Test::Queue');
 
-    my $person = $self->run_test('person_create', {
+    my $role = $self->schema->get_role( $data->{role} || 'Test Role' );
+    my $ident = $self->run_test('person_create', {
         name  => 'User 1',
         token => 'user_1',
         email => 'user_1@coldhardcode.com',
         ident => 'user_1'
     });
+    my $person = $ident->person;
     my $all_group = $self->run_test('group_create',
         {
             name  => 'Registered Users',
@@ -55,6 +57,8 @@ sub shut_up_permissions : Plan(17) {
             email => 'all@holistic.coldhardcode.com' 
         });
     ok($all_group, 'created global group');
+    $all_group->add_to_persons($person, { role => $role });
+
     my $admin_group = $self->run_test('group_create',
         {
             name  => 'Admin Users',
@@ -62,6 +66,7 @@ sub shut_up_permissions : Plan(17) {
             email => 'admin@holistic.coldhardcode.com' 
         });
     ok($admin_group, 'created admin group');
+    $admin_group->add_to_persons($person, { role => $role });
     my $mgr_group = $self->run_test('group_create',
         {
             name  => 'Managers',
@@ -99,16 +104,16 @@ sub shut_up_permissions : Plan(17) {
     $queue->product_links->create({ product_pk1 => $product->id });
 
     # Anybody can create (even not logged in), this is by default:
-    $product->permissions->allow('create ticket', scope => $queue);
+    $product->permissions->allow('create ticket', $queue);
 
     # But lets remove write  permissions
     $product->permissions->prohibit('update');
     $product->permissions->prohibit('comment');
 
-    $product->permissions->allow('update ticket', group => $all_group);
+    $product->permissions->allow('update ticket', $all_group);
 
     ok( $product->check_permission( undef, 'create ticket' ), 'anon can create' );
-    ok( $product->check_permission( undef, 'update ticket' ), 'anon cannot update' );
+    ok( !$product->check_permission( undef, 'update ticket' ), 'anon cannot update' );
 
     # Check permissions, ->for returns a hash of permission names in that scope:
     # If there are descendent blocks at a lower level
@@ -118,6 +123,9 @@ sub shut_up_permissions : Plan(17) {
     #    'create ticket' => $permission_id,
     #    'update ticket' => $permission_id,
     # },
+    use Data::Dumper;
+    diag( Dumper($product->fetch_permissions( $person ) ) );
+
     is_deeply(
         $product->permissions->for( group => $admin_group ),
         $triage->permissions->for( group => $admin_group ),
@@ -167,19 +175,19 @@ sub shut_up_permissions : Plan(17) {
 
 
     # Admin group can create tickets
-    $admin_group->permissions->allow('create ticket', product => $product2 );
+    $admin_group->permissions->allow('create ticket', $product2 );
     # Only managers can update tickets in triage (assign)
-    $mgr_group->permissions->allow('update ticket', queue => $triage );
+    $mgr_group->permissions->allow('update ticket', $triage );
 
     # Nobody can create tickets in this queue, they must be assigned
     $queue->permissions->prohibit('create ticket');
     # admin_group can, because they're awesome.
-    $admin_group->permissions->allow( permission => 'create ticket', queue => $queue );
+    $admin_group->permissions->allow('create ticket', $queue );
 
     $all_group->permissions->prohibit_all; # macro sets
     $all_group->permissions->prohibit('update ticket');
-    $all_group->permissions->prohibit('create ticket', { queue => [ 'Triage' ]});
-    $all_group->permissions->allow('assign ticket', { queue => [ 'Triage' ]});
+    $all_group->permissions->prohibit('create ticket', $triage);
+    $all_group->permissions->allow('assign ticket', $triage );
 
 }
 

@@ -52,45 +52,65 @@ sub check_permission {
     my ( $self, $user, $permission ) = @_;
 }
 
-sub for {
-    my ( $scope, $object ) = @_;
+sub _fetch_permissions_by_rel {
+    my ( $self, $person, $rel ) = @_;
+
 }
 
-
-sub is_member {
+sub fetch_permissions {
     my ( $self, $person ) = @_;
-
-    my $ret;
-    
-    if ( $self->can('groups') ) {
-        $ret = $self->groups(
-            { 'person.pk1' => $person->id },
-            { prefetch => [ 'person' ] }
-        )->first;
-        return $ret if defined $ret;
-    }
+    # This object's permissions do not condescend, simply skip.
     my $desc = $self->permission_hierarchy->{condescends};
+
     return undef unless defined $desc;
 
-    my @rels = ();
+    my $find_myself = {
+        map { my $n = $_; "me.$n" => $self->$n; } $self->result_source->primary_columns 
+    };
 
-    if ( $desc eq 'ARRAY' ) {
-        @rels = @$desc
-    } else {
-        @rels = keys %$desc;
+    my $rs = $self->result_source->resultset->search(
+        $find_myself,
+        { prefetch => $desc }
+    );
+    $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+
+    use Data::Dumper;
+    use Data::Visitor::Callback;
+
+    my @sets = ();
+    my $v = Data::Visitor::Callback->new(
+        hash => sub {
+            my $val = $_;
+            if ( exists $val->{permission_set} ) {
+                push @sets, $val->{permission_set}->{pk1};
+            }
+            $val;
+        },
+    );
+    
+    $v->visit([ $rs->all ]);
+
+    my $set_rs = $self->schema->resultset('Permission::Set')->search(
+        { 'me.pk1' => [ @sets ] },
+        { prefetch => { 'permission_links' => 'permission' } }
+    );
+
+    # Needs to be in order of the values above
+    my %matches = ();
+    while ( my $set = $set_rs->next ) {
+        my @perms = $set->permissions->get_column('name')->all;
+        $matches{$set->id} = \@perms if @perms > 0;
     }
 
-    my $next_rel = pop @rels;
-    # Needs to traverse has_many
-    my $info = $self->result_source->relationship_info( $next_rel );
-    confess "No information specified on next relationship to follow ($next_rel, check permission_hierarchy"
-        unless defined $info;
-use Data::Dumper;
-die Dumper($info);
-
-    if ( $self->$desc->meta->does_role('Holistic::Role::Permissions') ) {
-        return $self->$desc->is_member( $person );
+    my @final = ();
+    foreach my $set ( @sets ) {
+        next unless defined $matches{$set};
+        push @final, @{ $matches{$set} };
+        delete $matches{$set}; # delete after we're done, cheap uniq
     }
+
+    print Dumper([ @final ]);
+    return { map { $_ => $_ } @final };
 }
 
 no Moose::Role;
