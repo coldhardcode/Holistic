@@ -42,6 +42,12 @@ sub permissions {
     $self->permission_set->permissions;
 }
 
+sub add_permission {
+    my ( $self, $permission ) = @_;
+
+    $self->permission_set->permission_links->create({ permission => $permission });
+}
+
 sub check_permission {
     my ( $self, $user, $permission ) = @_;
 }
