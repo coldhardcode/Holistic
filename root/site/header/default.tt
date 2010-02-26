@@ -11,7 +11,13 @@ END;
   </fieldset>
  </form>
 </header>
-<nav id="sidebar">
+<aside id="sidebar">
+ <section class="message">
+  <aside class="omessage">
+   <p><a href="#">Ticket X requires your attention.</a></p>
+  </aside>
+ </section>
+ <nav>
 [% IF results %]
  [% PROCESS site/nav/search_refine.tt %]
 [% END %]
@@ -19,4 +25,5 @@ END;
  [% PROCESS site/nav/ticket.tt %]
 [% END %]
 [% PROCESS site/nav/ticket_stack.tt %]
-</nav>
+ </nav>
+</aside>

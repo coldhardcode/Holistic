@@ -1,7 +1,7 @@
 @charset "utf-8";
 * { margin: 0; padding: 0 ;}
 html, body {
-    background-color: #e9e9d7;
+    background: #e9e9d7 url('/static/images/back.png') repeat-y;
     color: #353535;
     font-family: 'HelveticaNueue-Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-size: 16px;
@@ -15,7 +15,7 @@ header, aside, nav, section, article {
 section { clear: left; }
 html body > header {
     background: #e5e5d4 url('/static/images/header_back.png');
-    height: 90px;
+    height: 72px;
 }
 html, body, #content, #tickcontent {
     height: 100%;
@@ -363,54 +363,48 @@ body > header form fieldset input {
     vertical-align: bottom;
 }
 #sidebar {
-    background-color: #fff;
-    -webkit-border-top-right-radius: 7px;
-    -webkit-border-bottom-right-radius: 7px;
-    -moz-border-radius-topright: 7px;
-    -moz-border-radius-bottomright: 7px;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
     color: #353535;
-    font-size: 12px;
+    font-size: 14px;
     left: 0;
-    margin: 0; padding: 1em 0 1em 0;
+    margin: 1em; padding: 0;
     position: absolute;
     text-align: left;
-    top: 102px;
-    width: 180px;
+    top: 72px;
+    width: 250px;
 }
-#sidebar a {
+#sidebar p {
+    font-size: 14px;
+    margin: .3em .5em .3em .75em; padding: 0;
+}
+#sidebar p a {
+    text-decoration: underline;
+}
+#sidebar nav a {
     display: block;
     margin: 0; padding: 0 .25em 0 1em;
     text-decoration: none;
     text-shadow: none;
 }
-#sidebar a:hover {
+#sidebar nav a:hover {
     background-color: #eee;
+    text-decoration: underline;
 }
-#sidebar h4 {
-    border-bottom: 1px solid #656565;
+#sidebar nav h4 {
     margin: 0 0 .75em 0; padding: 0 0 0 .5em;
-    font-size: 12px;
+    font-size: 14px;
     text-transform: uppercase;
 }
-#sidebar > ul {
+#sidebar nav > ul {
     margin: 0 0 1em 0; padding: 0 0 .5em 0;
 }
-#sidebar > ul li {
+#sidebar nav > ul li {
     display: block;
     list-style-type: none;
     margin: 0 0 .25em 0; padding: 0;
 }
-#sidebar a:hover {
-    text-decoration: underline;
-}
 #sidebar ul.tix li {
     text-indent: -15px;
     margin: 0 0 0 10px;
-}
-#sidebar ul.tix li a {
-    font-size: 12px;
 }
 p.caption {
     color: #919191;
@@ -434,7 +428,7 @@ p.subdued {
     font-weight: bold;
 }
 #content {
-    padding: 12px 120px 0 200px;
+    padding: 12px 1.5em 0 300px;
 }
 #main > header {
     margin: 0 0 1.5em 0; padding: 0;
@@ -456,7 +450,6 @@ p.subdued {
     display: inline;
     margin: 0; padding: 0 2em 0 0;
 }
-
 .message aside {
     -webkit-border-radius: 7px;
     -moz-border-radius: 7px;
@@ -467,8 +460,8 @@ p.subdued {
     overflow: hidden;
 }
 .message aside p {
+    font-size: 16px;
     margin: 0; padding: .25em .5em;
-    font-size: 1.23em;
 }
 .message aside.gmessage {
     background-color: #55aa2a;
