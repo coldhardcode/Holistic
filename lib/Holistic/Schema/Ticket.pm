@@ -107,8 +107,7 @@ use String::Random;
 
 extends 'Holistic::Schema::Queue';
 
-with 'Holistic::Role::ACL',
-     'Holistic::Role::Discussable';
+with 'Holistic::Role::Discussable';
 
 __PACKAGE__->table('tickets');
 __PACKAGE__->resultset_class('Holistic::ResultSet::Ticket');

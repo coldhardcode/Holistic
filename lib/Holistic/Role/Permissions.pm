@@ -4,43 +4,68 @@ use Moose::Role;
 
 requires 'table', 'permission_hierarchy';
 
-sub permission_set_result_source { 'Permission::Set' }
+use Holistic::Permissions;
+
+has 'permission_set_result_source' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'Permission::Set::Object'
+);
+
+has '_permissions' => (
+    isa => 'Holistic::Permissions',
+    lazy_build => 1
+);
+
+sub permissions {
+    my ( $self ) = @_;
+    my $attr = shift->meta->get_attribute('_permissions');
+
+    $attr->get_value( $self );
+}
 
 after 'table' => sub {
     my ( $class ) = @_;
 
+    my $source = $class->result_source_instance;
+
     $class->add_columns(
-        permission_set_pk1 => {
-            data_type      => 'INTEGER',
-            is_nullable    => 1,
-            size           => undef,
-            is_foreign_key => 1
+        result_class => {
+            data_type      => 'VARCHAR',
+            is_nullable    => 0,
+            size           => 255,
+            default_value  => $source->name
         },
     );
-
-    $class->belongs_to(
-        'permission_set'   => $class->permission_set_result_source,
-        { 'foreign.pk1' => 'self.permission_set_pk1' },
+    $class->has_many(
+        'permission_set_objects' => 'Holistic::Schema::Permission::Set::Object',
+        {
+            'foreign.foreign_pk1'  => 'self.pk1',
+            'foreign.result_class' => 'self.result_class'
+        },
     );
-};
+    $class->many_to_many('permission_sets' => 'permission_set_objects' => 'permission_set' );
 
-before 'insert' => sub {
-    my ( $self ) = @_;
-    unless ( defined $self->permission_set_pk1 ) {
-        my $set = $self->result_source->schema
-            ->resultset( "Permission::Set" )
-            ->find_or_create({ result_class => $self->result_class });
-
-        $self->permission_set_pk1( $set->id );
+    # This would be awesome:
+    if ( 0 ) {
+        $class->schema->resultset($class->permission_set_result_source)
+            ->result_source->belongs_to(
+                $class->name => $class,
+                {
+                    'foreign.pk1'           => 'self.foreign_pk1',
+                    'foreign.result_class'  => 'self.result_class'
+                }
+            );
     }
 };
 
-# Returns a result source of all permissions applicable to this object.
-sub permissions {
+sub _build__permissions {
     my ( $self ) = @_;
-
-    $self->permission_set->permissions;
+    Holistic::Permissions->new(
+        scope => $self,
+    );
 }
+
 
 sub add_permission {
     my ( $self, $permission ) = @_;
@@ -49,15 +74,29 @@ sub add_permission {
 }
 
 sub check_permission {
-    my ( $self, $user, $permission ) = @_;
-}
+    my ( $self, $person, $permission ) = @_;
 
-sub _fetch_permissions_by_rel {
-    my ( $self, $person, $rel ) = @_;
+    my $perm = $self->fetch_permissions_by_person($person);
 
+    return exists $perm->{$permission};
 }
 
 sub fetch_permissions {
+    my ( $self, $by, $object ) = @_;
+
+    if ( $by eq 'person' ) {
+        $self->fetch_permissions_by_person( $object );
+    }
+    elsif ( $by eq 'group' ) {
+        $self->fetch_permissions_by_person( $object );
+    }
+}
+
+sub fetch_permissions_by_group {
+
+}
+
+sub fetch_permissions_by_person {
     my ( $self, $person ) = @_;
     # This object's permissions do not condescend, simply skip.
     my $desc = $self->permission_hierarchy->{condescends};
@@ -68,11 +107,21 @@ sub fetch_permissions {
         map { my $n = $_; "me.$n" => $self->$n; } $self->result_source->primary_columns 
     };
 
+    if ( defined $person ) {
+        $find_myself->{'group.pk1'} = { '-in' => [ $person->group_links->get_column('group_pk1')->all ] };
+    }
+
     my $rs = $self->result_source->resultset->search(
         $find_myself,
         { prefetch => $desc }
     );
     $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+
+    return $self->_permissions_from_rs( $rs );
+}
+
+sub _permissions_from_rs {
+    my ( $self, $rs ) = @_;
 
     use Data::Dumper;
     use Data::Visitor::Callback;
@@ -98,19 +147,27 @@ sub fetch_permissions {
     # Needs to be in order of the values above
     my %matches = ();
     while ( my $set = $set_rs->next ) {
-        my @perms = $set->permissions->get_column('name')->all;
-        $matches{$set->id} = \@perms if @perms > 0;
+        my $perms = $set->permissions;
+        while ( my $perm = $perms->next ) {
+            $matches{$set->id} ||= [];
+            push @{$matches{$set->id}}, { $perm->get_columns };
+        }
     }
 
-    my @final = ();
+    my %final = ();
+    # Guarantee order
     foreach my $set ( @sets ) {
         next unless defined $matches{$set};
-        push @final, @{ $matches{$set} };
-        delete $matches{$set}; # delete after we're done, cheap uniq
+        foreach my $perm ( @{ $matches{$set} } ) {
+            if ( $perm->{prohibit} ) {
+                delete $final{$perm->{name}};
+            } else {
+                $final{$perm->{name}} = $perm;
+            }
+        }
     }
 
-    print Dumper([ @final ]);
-    return { map { $_ => $_ } @final };
+    return \%final;
 }
 
 no Moose::Role;

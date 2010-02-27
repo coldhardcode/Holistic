@@ -7,7 +7,7 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
-with 'Holistic::Role::Permissions';
+#with 'Holistic::Role::Permissions';
 
 my $CLASS = __PACKAGE__;
 

@@ -33,7 +33,7 @@ sub permission_hierarchy {
         'condescends' => [
             'permission_set',
             {
-                'queue_links' => { 
+                'queue_links' => {
                     'queue' => [
                         'permission_set',
                         { 'group_links' => { 'group' => 'permission_set' } } 

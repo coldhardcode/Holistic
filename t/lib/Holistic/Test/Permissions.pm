@@ -124,7 +124,7 @@ sub shut_up_permissions : Plan(17) {
     #    'update ticket' => $permission_id,
     # },
     use Data::Dumper;
-    diag( Dumper($product->fetch_permissions( $person ) ) );
+    diag( Dumper($product->fetch_permissions( person => $person ) ) );
 
     is_deeply(
         $product->permissions->for( group => $admin_group ),

@@ -14,11 +14,6 @@ $CLASS->add_columns(
         size        => 16,
         is_auto_increment => 1,
     },
-    result_class => {
-        data_type   => 'VARCHAR',
-        size        => 255,
-        is_nullable => 0,
-    },
     dt_created => {
         data_type   => 'DATETIME',
         is_nullable => 0,
@@ -30,7 +25,12 @@ $CLASS->add_columns(
 $CLASS->set_primary_key('pk1');
 
 $CLASS->has_many(
-    'permission_links' => 'Holistic::Schema::Permission::SetLink',
+    'objects' => 'Holistic::Schema::Permission::Set::Object',
+    { 'foreign.permission_set_pk1' => 'self.pk1' }
+);
+
+$CLASS->has_many(
+    'permission_links' => 'Holistic::Schema::Permission::Set::Permission',
     { 'foreign.permission_set_pk1' => 'self.pk1' }
 );
 
