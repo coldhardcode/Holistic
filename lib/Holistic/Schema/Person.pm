@@ -78,6 +78,22 @@ sub connected_to_user {
     return 0 unless $user;
 }
 
+sub needs_attention {
+    my ( $self ) = @_;
+
+    my $status = $self->result_source->schema->get_status('@ATTENTION');
+
+    $self->schema->resultset('Ticket')->search(
+        { 
+            status_pk1   => $status->id,
+            identity_pk2 => [ $self->identities->get_column('pk1')->all ]
+        },
+        {
+            prefetch => [ 'final_state' ]
+        }
+    );
+}
+
 sub temporary_password {
     my ( $self ) = @_;
 

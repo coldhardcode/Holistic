@@ -156,7 +156,7 @@ sub activity { shift->comments(@_); }
 sub needs_attention {
     my ( $self, $identity ) = @_;
 
-    my $status = $self->result_source->schema->get_status('Attention Required');
+    my $status = $self->result_source->schema->get_status('@ATTENTION');
     if ( defined $identity ) {
         my $state = $self->state;
         my $source_id;
@@ -189,7 +189,7 @@ sub clear_attention {
         { order_by => [ { '-desc' => 'me.pk1' } ], rows => 2 }
     );
 
-    my $status = $self->result_source->schema->get_status('Attention Required');
+    my $status = $self->result_source->schema->get_status('@ATTENTION');
     my ( $attn_state, $prev_state ) = $rs->all;
     if ( $attn_state->status_pk1 == $status->pk1 ) {
         my %cols = $prev_state->get_columns;
@@ -292,6 +292,7 @@ sub state {
     } elsif ( defined $final_state ) {
         $final_state->discard_changes;
     }
+
     if ( not defined $final_state ) {
         my %merge;
         my @columns = $rs->result_source->columns;

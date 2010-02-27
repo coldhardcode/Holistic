@@ -16,7 +16,7 @@ has 'ticket' => (
     isa => 'Holistic::Schema::Ticket'
 );
 
-sub ticket_create : Plan(23) {
+sub ticket_create : Plan(28) {
     my ( $self, $data ) = @_;
 
     my $type_ms = $self->resultset('Queue::Type')->find_or_create({
@@ -136,25 +136,29 @@ sub ticket_create : Plan(23) {
 
     ok( ! $ticket->needs_attention, 'ticket doesnt need attention');
     
-    my $schmuck = $self->resultset('Person')->create({
+    my $person = $self->resultset('Person')->create({
         name  => 'Joe',
         token => 'joe',
         email => 'joe@joe.com',
     });
-    my $ident = $schmuck->add_to_identities({ realm => 'local', id => 'joe' });
+    my $ident = $person->add_to_identities({ realm => 'local', id => 'joe' });
+    cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );
     $ticket->needs_attention( $ident );
     cmp_ok( $ticket->needs_attention->pk1, '==', $ident->pk1, 'ticket needs attention');
+    cmp_ok( $person->needs_attention->count, '==', 1, 'person->needs_attention' );
     ok( $ticket->clear_attention(0), 'clear attention' );
+    cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );
     ok( !$ticket->clear_attention, 'clear attention twice is dumb' );
 
     cmp_ok( $ticket->state->success, '==', 0, 'ticket is in failure state');
 
     $ticket->needs_attention( $ident );
     
-    cmp_ok( $queue->all_tickets->search({ 'status.name' => 'Attention Required' })->count, '==', 1, 'ticket count on queue by status' );
+    cmp_ok( $queue->all_tickets->search({ 'status.name' => '@ATTENTION' })->count, '==', 1, 'ticket count on queue by status' );
 
     $ticket->tag(qw/foo bar baz/);
 
+    cmp_ok( $person->needs_attention->count, '==', 1, 'person->needs_attention' );
     $ticket;
 }
 
