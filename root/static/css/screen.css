@@ -4,7 +4,7 @@ html, body {
     background: #e9e9d7 url('/static/images/back.png') repeat-y;
     color: #353535;
     font-family: 'HelveticaNueue-Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 18px;
     margin: 0; padding: 0;
 }
@@ -90,8 +90,9 @@ a[name] {
     color: #353535;
 }
 p {
-    line-height: 1.307em;
-    padding: 0 0 1em 0;
+    font-size: 14px;
+    line-height: 18px;
+    margin: 0; padding: 0 0 1em 0;
 }
 ul {
     padding: 0 0 13px 0;
@@ -390,7 +391,7 @@ body > header form fieldset input {
     text-decoration: underline;
 }
 #sidebar nav h4 {
-    margin: 0 0 .75em 0; padding: 0 0 0 .5em;
+    margin: 0 0 .5em 0; padding: 0 0 0 .5em;
     font-size: 14px;
     text-transform: uppercase;
 }
@@ -405,6 +406,19 @@ body > header form fieldset input {
 #sidebar ul.tix li {
     text-indent: -15px;
     margin: 0 0 0 10px;
+}
+#sidebar table td {
+    border: none;
+    padding: 4px;
+}
+#sidebar table a {
+    margin: 0; padding: 0;
+}
+#sidebar table a:hover {
+    background: none;
+}
+#sidebar table label {
+    font-weight: bold;
 }
 p.caption {
     color: #919191;
@@ -433,7 +447,7 @@ p.subdued {
 #main > header {
     margin: 0 0 1.5em 0; padding: 0;
 }
-#main > header h2 {
+#main > header h1 {
     margin: 0; padding: 0;
 }
 #main > header details {
