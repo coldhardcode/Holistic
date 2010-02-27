@@ -51,6 +51,8 @@ requires 'Data::Manager';
 
 # Search
 requires 'Data::SearchEngine';
+requires 'Hash::Merge';
+requires 'Search::QueryParser';
 
 # DateTime
 requires 'DateTime';

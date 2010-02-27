@@ -8,11 +8,43 @@ with 'Data::SearchEngine';
 use Data::SearchEngine::Holistic::Item;
 use Data::SearchEngine::Paginator;
 use Data::SearchEngine::Holistic::Results;
+use Hash::Merge qw(merge);
+use Search::QueryParser;
+
+has fields => (
+    is => 'ro',
+    isa => 'HashRef',
+    default => sub {
+        {
+            name => {
+                alias => 'me',
+                text => 1
+            },
+            description => {
+                alias => 'me',
+                text => 1
+            }
+        }
+    },
+    lazy => 1
+);
+
+has query_parser => (
+    is => 'ro',
+    lazy_build => 1
+);
 
 has schema => (
     is => 'ro',
     required => 1
 );
+
+sub _build_query_parser {
+    my ($self) = @_;
+
+    return Search::QueryParser->new;
+}
+
 
 sub search {
     my ($self, $oquery) = @_;
@@ -20,15 +52,7 @@ sub search {
     my $start = time;
 
     my @items = ();
-    my @tickets = $self->schema->resultset('Ticket')->search(
-        {
-            '-or' => [
-                name => { -like => '%'.$oquery->query.'%' },
-                description => { -like => '%'.$oquery->query.'%' }
-            ]
-        }, {
-        }
-    )->all;
+    my @tickets = $self->create_resultset($oquery)->all;
 
     my $pager = Data::SearchEngine::Paginator->new(
         current_page => $oquery->page,
@@ -38,7 +62,6 @@ sub search {
 
     my %facets = ();
     for(0..scalar(@tickets) - 1) {
-    # foreach my $tick (@tickets) {
         my $tick = $tickets[$_];
 
         my $products = $tick->products;
@@ -51,7 +74,6 @@ sub search {
         $facets{priority}->{$tick->priority->name}++;
         $facets{type}->{$tick->type->name}++;
 
-        print STDERR "#### $_ : ".$pager->first." : ".$pager->last."\n";
         push(@items, Data::SearchEngine::Holistic::Item->new(
             id => $tick->id,
             ticket => $tick,
@@ -67,5 +89,97 @@ sub search {
         facets => \%facets
     );
 }
+
+sub create_resultset {
+    my ($self, $oquery) = @_;
+
+    my $q = $self->query_parser->parse($oquery->query);
+
+    my %conds = ();
+
+    my %attrs;
+
+    # Create a list of ANDs that we can fiddle with later
+    my @ands = ();
+
+    if(exists($q->{''}) && scalar(@{ $q->{''} })) {
+        my $ors = [];
+        $self->add_conditions($q->{''}, $ors);
+        $conds{'-or'} = $ors;
+    }
+    if(exists($q->{'+'}) && scalar(@{ $q->{'+'} })) {
+        $self->add_conditions($q->{'+'}, \@ands);
+    }
+    if(exists($q->{'-'}) && scalar(@{ $q->{'-'} })) {
+        $self->add_conditions($q->{'-'}, \@ands, 1);
+    }
+
+    # Merge all the hashes in the AND section so we can query
+    foreach my $a (@ands) {
+        %conds = %{ merge(\%conds, $a) };
+    }
+
+    use Data::Dumper;
+    print STDERR Dumper($q);
+    print STDERR Dumper(\%conds);
+
+    return $self->schema->resultset('Ticket')->search(\%conds, \%attrs);
+}
+
+# This method expects to get the sub-set of query to iterate over and an
+# array-ref in which to push conditions.  It is up to the caller to manage
+# which sub-set and array-ref is passed.
+sub add_conditions {
+    my ($self, $query, $conditions, $negate) = @_;
+
+    my $fields = $self->fields;
+
+    foreach my $i (@{ $query }) {
+        my $field   = $i->{field};
+
+        # If the field isn't defined in our list, bail
+        next unless defined($fields->{$field}) || $field eq '';
+
+        my $op      = $i->{op};
+        my $val     = $i->{value};
+
+        # An empty field defaults to using a LIKE on the name & description,
+        # op is irrelevant cuz you can't put an op on nothing
+        if($field eq '') {
+            push(@{ $conditions }, {
+                'me.name' => { -like => "\%$val\%" },
+            });
+            push(@{ $conditions }, {
+                'me.description' => { -like => "\%$val\%" },
+            });
+        } else {
+            my $fdef = $fields->{$field};
+            if($op eq ':' && !$fdef->{text}) {
+                # :s are basically LIKEs.  If we are not dealing with a text
+                # field then convert the op to a =
+                $op = '=';
+            }
+
+            # If we got here, there must be a field
+            if($op eq ':') {
+                if($negate) {
+                    push(@{ $conditions }, {
+                        $fdef->{alias}.".$field" => { '-not like' => "\%$val\%" }
+                    });
+                } else {
+                    push(@{ $conditions }, {
+                        $fdef->{alias}.".$field" => { -like => "\%$val\%" }
+                    });
+                }
+            } elsif($op eq '=') {
+                push(@{ $conditions }, {
+                    $fdef->{alias}.".$field" => $val
+                });
+            }
+        }
+    }
+}
+
+__PACKAGE__->meta->make_immutable;
 
 1;
