@@ -3,7 +3,8 @@ package Holistic::Plugin::Message;
 use warnings;
 use strict;
 
-use Class::C3;
+use Message::Stack;
+use MRO::Compat;
 
 our $VERSION = '0.01';
 
@@ -44,7 +45,7 @@ the C<default_type> configuration key.
      'Plugin::Message' => {
          stash_key => 'messages',
          flash_key => '_message',
-         default_type => 'info',
+         default_type => 'warning',
      }
  });
 
@@ -68,24 +69,24 @@ Called without any arguments, it simply returns the current message stack
 sub message {
     my ( $c, $message ) = @_;
 
-    my $default   = $c->config->{'Plugin::Message'}->{default_type} || 'info';
+    my $default   = $c->config->{'Plugin::Message'}->{default_type} || 'warning';
     my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'messages';
-    $c->stash->{$stash_key} ||= [];
+    $c->stash->{$stash_key} ||= Message::Stack->new;
     my $stash = $c->stash->{$stash_key};
 
     return $stash unless $message;
 
-    my $s = {};
+    my $s = { scope => 'global' };
     if ( ref $message ) {
-        $s->{type}    = $message->{type} || $default;
-        $s->{message} = $message->{message};
+        $s->{level}   = $message->{type} || $default;
+        $s->{id}      = $message->{message};
+        $s->{scope}   = 'global';
     } else {
-        $s->{type}    = $default;
-        $s->{message} = $message;
+        $s->{level}   = $default;
+        $s->{id}      = $message;
     }
-    if ( $s->{type} and $s->{message} ) {
-        push @{ $stash }, $s;
-    }
+    $stash->add($s);
+
     return $stash;
 }
 
@@ -103,8 +104,8 @@ sub dispatch {
 
     # Redirect?
     my $messages = $c->stash->{$stash_key};
-    if ( $messages and @$messages and $c->response->location ) {
-        push @{$c->flash->{$flash_key}}, @$messages;
+    if ( $messages and $messages->has_messages and $c->response->location ) {
+        $c->flash->{$flash_key} = $messages;
     }
     return $ret;
 }

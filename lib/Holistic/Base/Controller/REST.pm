@@ -296,7 +296,7 @@ sub update : Private {
         $c->log->_dump(\%filtered);
     }
     $object->update( \%filtered );
-    $c->message( $c->loc( $self->update_string ) );
+    $c->message({ type => 'success', message => $self->update_string });
 }
 
 # Just designed to override this.
@@ -337,7 +337,7 @@ sub create : Private {
         my $object = $c->stash->{$self->rs_key}->create( \%filter );
         $c->stash->{$self->object_key} = $object;
         $c->forward('post_create', [ $data, $object ]);
-        $c->message( $self->create_string );
+        $c->message({ type => 'success', message => $self->create_string });
         return $object;
     } );
 }
