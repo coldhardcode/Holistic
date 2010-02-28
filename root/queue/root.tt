@@ -7,7 +7,7 @@ top_rs = queue_rs.search_rs({'me.parent_pk1' => 0 });
 
  [% WHILE ( queue = rs.next ) %]
  <li>
-  <h3><a href="#">[% queue.name %]</a> <small>Owned by <a href="#">XX gphat</a>, due in <time date="2010-01-30">XX 8 days</time>.</small></h3>
+  <h3><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% queue.name %]</a> <small>Owned by <a href="#">XX gphat</a>, due in <time date="2010-01-30">XX 8 days</time>.</small></h3>
   [% PROCESS site/shared/ticket_table.tt tickets = queue.all_tickets.all %]
   [% queue_children(queue.children_rs) %]
  </li>
@@ -17,7 +17,6 @@ top_rs = queue_rs.search_rs({'me.parent_pk1' => 0 });
 <h1>[% c.loc('Roadmap') %]</h1>
 <p>XX Couple things to do here...</p>
 <ul>
- <li>Owner is broken</li>
  <li>Due dates (and other dates)</li>
  <li>looks like a parent queue shows all it's child queue's tickets</li>
 </ul>
