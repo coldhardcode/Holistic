@@ -1,4 +1,9 @@
 [% SET pager = results.pager %]
+<h3>XX Some stuff that's broken</h3>
+<ul>
+ <li>param <tt>requestor</tt> is set, but not used.</li>
+ <li>No other params are added to the Query object yet.</li>
+</ul>
 [% IF pager.total_entries %]
   [% INCLUDE site/shared/pager.tt pager = results.pager %]
   [% INCLUDE site/shared/ticket_table.tt tickets = results.items %]

@@ -41,8 +41,9 @@ requires 'Catalyst::View::Graphics::Primitive';
 # Moose
 requires 'Moose';
 requires 'namespace::autoclean';
-requires 'MooseX::Role::Parameterized';
 requires 'MooseX::Method::Signatures';
+requires 'MooseX::Role::Parameterized';
+requires 'MooseX::UndefTolerant';
 
 # D:V Stuff
 requires 'Data::Verifier';
