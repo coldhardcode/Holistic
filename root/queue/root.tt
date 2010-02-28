@@ -4,14 +4,23 @@ top_rs = queue_rs.search_rs({'me.parent_pk1' => 0 });
 
 ~%]
 [% MACRO queue_children(rs) BLOCK %]
+
+ [% WHILE ( queue = rs.next ) %]
+ <li>
+  <h3><a href="#">[% queue.name %]</a> <small>Owned by <a href="#">XX gphat</a>, due in <time date="2010-01-30">XX 8 days</time>.</small></h3>
+  [% PROCESS site/shared/ticket_table.tt tickets = queue.all_tickets.all %]
+  [% queue_children(queue.children_rs) %]
+ </li>
+ [% END %]
+[% END %]
+
+<h1>[% c.loc('Roadmap') %]</h1>
+<p>XX Couple things to do here...</p>
 <ul>
-[% WHILE ( queue = rs.next ) %]
-    <li>
-      [% SET product = queue.products_rs.first.name %]
-      [%~ c.loc(queue.type.name) =%] <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.name | html %]</a> [% IF product %] : ([% product %])[% END %]
-      [% queue_children(queue.children_rs) ~%]
-    </li>
-[% END %]
+ <li>Owner is broken</li>
+ <li>Due dates (and other dates)</li>
+ <li>looks like a parent queue shows all it's child queue's tickets</li>
 </ul>
-[% END %]
+<ul class="roadmap">
 [% queue_children(top_rs) %]
+</ul>
