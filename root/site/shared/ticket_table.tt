@@ -4,6 +4,7 @@ USE Number.Format;
 
 tickets_open   = 0;
 tickets_closed = 0;
+tickets_total  = 0;
 
 ~%]
 <table class="summary">
