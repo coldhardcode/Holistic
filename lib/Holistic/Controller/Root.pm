@@ -138,12 +138,6 @@ sub milestone : Local {
     $c->stash->{template} = 'milestone.tt';
 }
 
-sub roadmap : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'roadmap.tt';
-}
-
 sub ticketguide : Local {
     my ($self, $c) = @_;
 
