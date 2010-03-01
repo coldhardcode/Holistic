@@ -45,7 +45,6 @@ sub _build_query_parser {
     return Search::QueryParser->new;
 }
 
-
 sub search {
     my ($self, $oquery) = @_;
 
@@ -97,7 +96,7 @@ sub create_resultset {
 
     my %conds = ();
 
-    my %attrs;
+    my %attrs = ();
 
     # Create a list of ANDs that we can fiddle with later
     my @ands = ();
@@ -122,6 +121,7 @@ sub create_resultset {
     use Data::Dumper;
     print STDERR Dumper($q);
     print STDERR Dumper(\%conds);
+    print STDERR Dumper(\%attrs);
 
     return $self->schema->resultset('Ticket')->search(\%conds, \%attrs);
 }

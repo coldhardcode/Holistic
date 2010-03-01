@@ -25,7 +25,6 @@ sub default : Chained('base') PathPart('') Args(0) {
         query => $q,
         page => $c->req->params->{page} || 1,
         count => $c->req->params->{count} || 10,
-        requestor => $c->req->params->{requester},
     );
 
     $c->stash->{results} = $search->search($query);
