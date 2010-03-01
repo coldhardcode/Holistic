@@ -43,7 +43,7 @@ sub run_test {
         confess "Unknown method name: $method, check test plan.";
     }
 
-    next unless $m->can('attributes');
+    warn "$method does not define a test plan" unless $m->can('attributes');
     my $attrs = $m->attributes;
     my $ret   = undef;
     if ( $attrs and ref $attrs eq 'ARRAY' ) {

@@ -4,7 +4,9 @@ my $suite = Holistic::Test::Suite->new;
 
 $suite->run(
     #with => [ 'Person', 'Group', 'Ticket' ],
-    with => [ 'Person', 'Queue', 'Ticket', 'Verify', 'Permissions' ],
+    with => [ qw/
+        Person Queue Ticket Verify Permissions Search
+    /],
     config => {
         connect_info => [
             'dbi:SQLite:t/var/test.db',
@@ -25,6 +27,7 @@ $suite->run(
         'ticket_create',
         'ticket_dependencies',
         'ticket_profile',
+        'do_search',
         #'shut_up_permissions',
     ]
 );
