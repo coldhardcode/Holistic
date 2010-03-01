@@ -121,8 +121,11 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key('pk1');
 __PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1');
 
-__PACKAGE__->might_have(
-    'final_state', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1',
+__PACKAGE__->add_relationship(
+    'final_state',
+    'Holistic::Schema::Ticket::FinalState',
+    { 'foreign.ticket_pk1' => 'self.pk1' },
+    { join_type => 'left', accessor => 'single' }
 );
 
 __PACKAGE__->belongs_to(

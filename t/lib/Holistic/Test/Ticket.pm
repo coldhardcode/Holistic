@@ -123,6 +123,7 @@ sub ticket_create : Plan(28) {
         '==', 1, 'one comment scoped by realm'
     );
 
+
     cmp_ok( $queue->all_tickets->count, '==', 1, 'ticket count on queue' );
     cmp_ok( $milestone->all_tickets->count, '==', 1, 'ticket count on milestone' );
 
@@ -153,7 +154,7 @@ sub ticket_create : Plan(28) {
     cmp_ok( $ticket->state->success, '==', 0, 'ticket is in failure state');
 
     $ticket->needs_attention( $ident );
-    
+
     cmp_ok( $queue->all_tickets->search({ 'status.name' => '@ATTENTION' })->count, '==', 1, 'ticket count on queue by status' );
 
     $ticket->tag(qw/foo bar baz/);

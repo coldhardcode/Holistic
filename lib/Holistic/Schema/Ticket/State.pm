@@ -32,15 +32,24 @@ __PACKAGE__->set_primary_key('pk1');
 __PACKAGE__->belongs_to('ticket', 'Holistic::Schema::Ticket', 'ticket_pk1');
 __PACKAGE__->belongs_to('status', 'Holistic::Schema::Ticket::Status', 'status_pk1');
 
-__PACKAGE__->has_one(
-    'identity', 'Holistic::Schema::Person::Identity', 
-    { 'foreign.pk1' => 'self.identity_pk1' }
+__PACKAGE__->add_relationship(
+    'identity',
+    'Holistic::Schema::Person::Identity',
+    { 'foreign.pk1' => 'self.identity_pk1' },
+    {
+        join_type => 'left',
+        accessor  => 'single'
+    }
 );
 
-__PACKAGE__->belongs_to(
-    'destination_identity', 'Holistic::Schema::Person::Identity',
+__PACKAGE__->add_relationship(
+    'destination_identity',
+    'Holistic::Schema::Person::Identity',
     { 'foreign.pk1' => 'self.identity_pk2' },
-    { join_type => 'left' }
+    {
+        join_type => 'left',
+        accessor  => 'single'
+    }
 );
 
 sub actor_object {

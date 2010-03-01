@@ -85,11 +85,12 @@ sub needs_attention {
 
     $self->schema->resultset('Ticket')->search(
         { 
-            status_pk1   => $status->id,
-            identity_pk2 => [ $self->identities->get_column('pk1')->all ]
+            'final_state.status_pk1'   => $status->id,
+            'final_state.identity_pk2' => [ $self->identities->get_column('pk1')->all ]
         },
         {
-            prefetch => [ 'final_state' ]
+            prefetch => [ 'final_state' ],
+            #join => [ 'final_state' ],
         }
     );
 }
