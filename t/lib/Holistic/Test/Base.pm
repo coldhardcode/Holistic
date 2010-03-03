@@ -32,7 +32,8 @@ sub run {
         $self->run_test( $method, $call_args );
      }
 
-    done_testing( $self->planned_tests );
+     #done_testing( $self->planned_tests );
+     done_testing;
 }
 
 sub run_test {
@@ -48,8 +49,15 @@ sub run_test {
     my $ret   = undef;
     if ( $attrs and ref $attrs eq 'ARRAY' ) {
         foreach my $attr ( @$attrs ) {
-            if ( $attr =~ /^Plan\s*\(\s*(\d+)\s*\)\s*$/ ) {
+            if ( $attr =~ /^Plan\s*\(\s*(\d+)\s*\)\s*$/i ) {
                 $self->planned_tests( $self->planned_tests + $1 );
+                try {
+                    $ret = $self->$method($call_args);
+                } catch {
+                    confess $_;
+                };
+            }
+            elsif ( lc($attr) eq 'test' ) {
                 try {
                     $ret = $self->$method($call_args);
                 } catch {

@@ -23,7 +23,7 @@ sub _build_searcher {
     Data::SearchEngine::Holistic->new( schema => shift->schema );
 }
 
-sub do_search : Plan(1) {
+sub do_search : Test {
     my ( $self, $data ) = @_;
 
     my $q     = $data->{query} || 'test';
