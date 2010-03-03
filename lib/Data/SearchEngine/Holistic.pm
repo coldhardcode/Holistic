@@ -18,11 +18,13 @@ has fields => (
         {
             name => {
                 alias => 'me',
-                text => 1
+                text => 1,
+                field => 'name'
             },
             description => {
                 alias => 'me',
-                text => 1
+                text => 1,
+                field => 'description'
             }
         }
     },
@@ -164,16 +166,16 @@ sub add_conditions {
             if($op eq ':') {
                 if($negate) {
                     push(@{ $conditions }, {
-                        $fdef->{alias}.".$field" => { '-not like' => "\%$val\%" }
+                        $fdef->{alias}.'.'.$fdef->{field} => { '-not like' => "\%$val\%" }
                     });
                 } else {
                     push(@{ $conditions }, {
-                        $fdef->{alias}.".$field" => { -like => "\%$val\%" }
+                        $fdef->{alias}.'.'.$fdef->{field} => { -like => "\%$val\%" }
                     });
                 }
             } elsif($op eq '=') {
                 push(@{ $conditions }, {
-                    $fdef->{alias}.".$field" => $val
+                    $fdef->{alias}.'.'.$fdef->{field} => $val
                 });
             }
         }
