@@ -14,6 +14,12 @@ has 'planned_tests' => (
     default => 0
 );
 
+has 'use_plan' => (
+    is => 'rw',
+    isa => 'Int',
+    default => 1
+);
+
 sub run {
     my ( $self, $methods ) = @_;
 
@@ -30,10 +36,13 @@ sub run {
             ( $method, $call_args ) = each %$method;
         }
         $self->run_test( $method, $call_args );
-     }
+    }
 
-     #done_testing( $self->planned_tests );
-     done_testing;
+    if ( $self->use_plan ) {
+        done_testing( $self->planned_tests );
+    } else {
+        done_testing;
+    }
 }
 
 sub run_test {
@@ -58,6 +67,7 @@ sub run_test {
                 };
             }
             elsif ( lc($attr) eq 'test' ) {
+                $self->use_plan(0);
                 try {
                     $ret = $self->$method($call_args);
                 } catch {
