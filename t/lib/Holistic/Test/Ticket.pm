@@ -57,14 +57,8 @@ sub ticket_create : Plan(28) {
         name => $data->{priority} || 'Urgent'
     });
 
-    my $type_def = $self->resultset('Ticket::Type')->find_or_create({
-        name => 'Defect'
-    });
-    my $type_en = $self->resultset('Ticket::Type')->find_or_create({
-        name => 'Enhancement'
-    });
-    my $type_task = $self->resultset('Ticket::Type')->find_or_create({
-        name => 'Task'
+    my $ticket_type = $self->resultset('Ticket::Type')->find_or_create({
+        name => $data->{ticket_type} || 'Task'
     });
 
     my $milestone = $self->resultset('Queue')->create({
@@ -81,7 +75,7 @@ sub ticket_create : Plan(28) {
         identity    => $identity,
         parent_pk1  => $milestone->id,
         priority    => $priority,
-        type        => $type_task,
+        type        => $ticket_type,
     });
 
     $self->ticket( $ticket );
