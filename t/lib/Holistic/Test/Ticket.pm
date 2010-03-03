@@ -69,7 +69,7 @@ sub ticket_create : Plan(28) {
     });
 
     my $ticket = $self->resultset('Ticket')->create({
-        name        => 'Test Suite Generated Ticket',
+        name        => $data->{name} || 'Test Suite Generated Ticket',
         token       => 'test-suite-generated-ticket',
         description => $lorem->paragraphs(2),
         identity    => $identity,
