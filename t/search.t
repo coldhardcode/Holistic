@@ -20,10 +20,13 @@ $suite->run(
         { 'person_create' => { name => 'Cory Watson', ident => 'gphat', email => 'gphat@coldhardcode.com' } },
         { 'person_create' => { name => 'Bob', ident => 'bob', email => 'bob@coldhardcode.com' } },
         { 'group_create' => { name => 'Managers' } },
-        'ticket_create',
-        'ticket_dependencies',
-        'ticket_profile',
+        { ticket_create => { priority => 'Normal', name => 'Awesome Test Ticket' } },
         'do_search',
+        { 'do_search' => { query => 'name:Awesome', count => 1 } },
+        { 'do_search' => { query => 'name="Awesome Test Ticket"', count => 1 } },
+        { 'do_search' => { query => 'name="Test Ticket"', count => 0 } },
+        { 'do_search' => { query => 'priority=Normal', count => 1 } },
+        { 'do_search' => { query => 'priority=Urgent', count => 0 } },
     ]
 );
 
