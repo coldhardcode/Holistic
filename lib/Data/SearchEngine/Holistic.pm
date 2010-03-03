@@ -24,13 +24,13 @@ has fields => (
             description => {
                 alias => 'me',
                 text => 1,
-                field => 'description'
+                field => 'description',
                 text => 1
             },
             'priority' => {
                 alias => 'priority',
                 text => 1,
-                field => 'priority.name'
+                field => 'name'
             }
         }
     },
@@ -128,10 +128,10 @@ sub create_resultset {
         %conds = %{ merge(\%conds, $a) };
     }
 
-    use Data::Dumper;
+    # use Data::Dumper;
     # print STDERR Dumper($q);
-    print STDERR Dumper(\%conds);
-    print STDERR Dumper(\%attrs);
+    # print STDERR Dumper(\%conds);
+    # print STDERR Dumper(\%attrs);
 
     return $self->schema->resultset('Ticket')->search(\%conds, \%attrs);
 }
