@@ -23,7 +23,7 @@ sub _build_searcher {
     Data::SearchEngine::Holistic->new( schema => shift->schema );
 }
 
-sub do_search : Plan(1) { 
+sub do_search : Plan(1) {
     my ( $self, $data ) = @_;
 
     my $q     = $data->{query} || 'test';
@@ -39,6 +39,10 @@ sub do_search : Plan(1) {
 
     my $results = $self->search( $query );
     ok($results, 'got results');
+
+    if(exists($data->{count})) {
+        cmp_ok($results->pager->total_entries, '==', $data->{count}, 'total entries = '.$data->{count});
+    }
 }
 
 1;
