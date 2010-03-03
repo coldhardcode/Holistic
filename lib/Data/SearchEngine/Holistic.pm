@@ -25,6 +25,12 @@ has fields => (
                 alias => 'me',
                 text => 1,
                 field => 'description'
+                text => 1
+            },
+            'priority' => {
+                alias => 'priority',
+                text => 1,
+                field => 'priority.name'
             }
         }
     },
@@ -98,7 +104,9 @@ sub create_resultset {
 
     my %conds = ();
 
-    my %attrs = ();
+    my %attrs = (
+        prefetch => [ 'type', 'priority', 'final_state' ]
+    );
 
     # Create a list of ANDs that we can fiddle with later
     my @ands = ();
@@ -120,10 +128,10 @@ sub create_resultset {
         %conds = %{ merge(\%conds, $a) };
     }
 
-    # use Data::Dumper;
+    use Data::Dumper;
     # print STDERR Dumper($q);
-    # print STDERR Dumper(\%conds);
-    # print STDERR Dumper(\%attrs);
+    print STDERR Dumper(\%conds);
+    print STDERR Dumper(\%attrs);
 
     return $self->schema->resultset('Ticket')->search(\%conds, \%attrs);
 }
