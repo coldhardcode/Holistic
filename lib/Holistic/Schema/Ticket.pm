@@ -125,6 +125,11 @@ __PACKAGE__->add_relationship(
 );
 
 __PACKAGE__->belongs_to(
+    'requestor', 'Holistic::Schema::Person::Identity',
+    { 'foreign.pk1' => 'self.identity_pk1' }
+);
+
+__PACKAGE__->belongs_to(
     'type', 'Holistic::Schema::Ticket::Type',
     { 'foreign.pk1' => 'self.type_pk1' }
 );
@@ -216,15 +221,6 @@ sub initial_state {
 
 sub priority { shift->state->priority }
 
-sub requestor {
-    my ( $self ) = @_;
-
-    my $state = $self->initial_state;
-    return undef unless defined $state;
-
-    $state->identity;
-}
-
 sub owner {
     my ( $self ) = @_;
     my $state =
@@ -240,9 +236,14 @@ sub status {
     my $state = $self->state;
 
     if ( not defined $state ) {
+        my $priority = $self->schema->resultset('Ticket::Priority')->find_or_create(
+            { name => '@default priority' }
+        );
+
         $state = $self->add_state({
-            identity => $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' }),
-            status => $self->result_source->schema->get_status('NEW TICKET')
+            identity_pk1 => $self->identity_pk1,
+            priority     => $priority,
+            status       => $self->result_source->schema->get_status('@new ticket')
         });
     }
 
@@ -423,8 +424,8 @@ around 'create' => sub {
 
     my $schema = $self->result_source->schema;
     my $ident;
-    if ( exists $data->{identity} ) {
-        $ident = delete $data->{identity};
+    if ( exists $data->{assign_identity} ) {
+        $ident = delete $data->{assign_identity};
     }
     my $priority;
     if ( exists $data->{priority} ) {
@@ -437,16 +438,25 @@ around 'create' => sub {
     }
     # in a txn?
     my $ticket = $self->$orig($data, @args);
-    $ticket->discard_changes;
     if ( defined $ident ) {
+        $ticket->discard_changes;
         my $status = $schema->get_status('@new ticket');
         my $state = $ticket->add_state({
-            identity_pk1 => $ident->pk1,
+            identity_pk1 => $ticket->identity_pk1,
+            identity_pk2 => $ident->pk1,
+            status_pk1   => $status->id,
+            priority_pk1 => $priority->id,
+        });
+    } elsif ( defined $priority ) {
+        $ticket->discard_changes;
+        my $status = $schema->get_status('@new ticket');
+        my $state = $ticket->add_state({
+            identity_pk1 => $ticket->identity_pk1,
             status_pk1   => $status->id,
             priority_pk1 => $priority->id,
         });
     }
-    $ticket;
+    return $ticket;
 };
 
 no Moose;
