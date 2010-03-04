@@ -105,7 +105,14 @@ sub create_resultset {
     my %conds = ();
 
     my %attrs = (
-        prefetch => [ 'type', 'priority', 'final_state' ]
+        prefetch => [
+            'type',
+            {
+                'final_state' => [
+                    'identity', 'destination_identity', 'priority', 'status'
+                ]
+            }
+        ]
     );
 
     # Create a list of ANDs that we can fiddle with later

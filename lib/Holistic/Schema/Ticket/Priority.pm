@@ -18,7 +18,10 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key('pk1');
 
-__PACKAGE__->has_many('tickets', 'Holistic::Schema::Ticket', 'priority_pk1');
+__PACKAGE__->has_many('ticket_transient_states', 'Holistic::Schema::Ticket::State', 'priority_pk1');
+__PACKAGE__->has_many('ticket_states', 'Holistic::Schema::Ticket::FinalState', 'priority_pk1');
+
+__PACKAGE__->many_to_many('tickets', 'ticket_states', 'ticket');
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

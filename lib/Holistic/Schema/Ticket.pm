@@ -113,10 +113,6 @@ __PACKAGE__->table('tickets');
 __PACKAGE__->resultset_class('Holistic::ResultSet::Ticket');
 
 # See Holistic::Schema::Queue for all columns
-__PACKAGE__->add_columns(
-    'priority_pk1',
-    { data_type => 'integer', size => '16', is_foreign_key => 1 },
-);
 
 __PACKAGE__->set_primary_key('pk1');
 __PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1');
@@ -136,10 +132,6 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->belongs_to(
     'queue', 'Holistic::Schema::Queue',
     { 'foreign.pk1' => 'self.parent_pk1' }
-);
-
-__PACKAGE__->belongs_to(
-    'priority', 'Holistic::Schema::Ticket::Priority', 'priority_pk1'
 );
 
 __PACKAGE__->has_many(
@@ -210,7 +202,7 @@ sub initial_state {
 
     my $state = $self->states(
         {
-            'me.status_pk1' => $self->result_source->schema->get_status('NEW TICKET')->id
+            'me.status_pk1' => $self->result_source->schema->get_status('@new ticket')->id
         },
         {
             order_by => [ { '-asc' => 'me.dt_created' } ],
@@ -221,6 +213,8 @@ sub initial_state {
 
     return $state;
 }
+
+sub priority { shift->state->priority }
 
 sub requestor {
     my ( $self ) = @_;
@@ -268,8 +262,13 @@ sub add_state {
     my ( $self, $info ) = @_;
 
     $self->result_source->schema->txn_do(sub {
-        my $final = $self->final_state;
-        $final->delete if defined $final and $final->in_storage;
+        my $final = $self->state;
+        if ( defined $final ) {
+            foreach my $key ( qw/priority_pk1 identity_pk1 identity_pk2/ ) {
+                $info->{$key} ||= $final->$key;
+            }
+            $final->delete if $final->in_storage;
+        }
         $self->add_to_states($info);
     });
 }
@@ -427,14 +426,24 @@ around 'create' => sub {
     if ( exists $data->{identity} ) {
         $ident = delete $data->{identity};
     }
+    my $priority;
+    if ( exists $data->{priority} ) {
+        $priority = delete $data->{priority};
+    } else {
+        # Default priority?
+        $priority = $schema->resultset('Ticket::Priority')->find_or_create(
+            { name => '@default priority' }
+        );
+    }
     # in a txn?
     my $ticket = $self->$orig($data, @args);
     $ticket->discard_changes;
     if ( defined $ident ) {
-        my $status = $schema->get_status('NEW TICKET');
+        my $status = $schema->get_status('@new ticket');
         my $state = $ticket->add_state({
             identity_pk1 => $ident->pk1,
             status_pk1   => $status->id,
+            priority_pk1 => $priority->id,
         });
     }
     $ticket;

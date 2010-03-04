@@ -23,6 +23,8 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
     'success',
     { data_type => 'integer', size => '1', default_value => 1 },
+    'priority_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1 },
     'dt_created',
     { data_type => 'datetime', is_nullable => 0, set_on_create => 1 }
 );
@@ -31,6 +33,7 @@ __PACKAGE__->set_primary_key('pk1');
 
 __PACKAGE__->belongs_to('ticket', 'Holistic::Schema::Ticket', 'ticket_pk1');
 __PACKAGE__->belongs_to('status', 'Holistic::Schema::Ticket::Status', 'status_pk1');
+__PACKAGE__->belongs_to( 'priority', 'Holistic::Schema::Ticket::Priority', 'priority_pk1');
 
 __PACKAGE__->add_relationship(
     'identity',

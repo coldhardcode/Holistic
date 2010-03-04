@@ -80,7 +80,7 @@ sub ticket_create : Plan(28) {
 
     $self->ticket( $ticket );
 
-    is( $ticket->status->name, 'NEW TICKET', 'new ticket status' );
+    is( $ticket->status->name, '@new ticket', 'new ticket status' );
 
     my $state = $ticket->state;
 
@@ -89,6 +89,7 @@ sub ticket_create : Plan(28) {
 
     cmp_ok( $state->state_count, '==', 1, 'final state cached' );
     cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
+    is( $ticket->final_state->priority->name, $priority->name, 'final state priority' );
     cmp_ok( $ticket->final_state->identity_pk1, '==', $identity->pk1, 'final state identity' );
     cmp_ok( $ticket->requestor->pk1, '==', $identity->pk1, 'requestor identity' );
     cmp_ok( $identity->tickets->count, '==', 1, 'ticket count on identity' );

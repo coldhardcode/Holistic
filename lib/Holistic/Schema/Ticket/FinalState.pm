@@ -17,6 +17,7 @@ __PACKAGE__->add_columns(
 # FIXME: I don't know why these aren't inheriting properly.
 __PACKAGE__->belongs_to('ticket', 'Holistic::Schema::Ticket', 'ticket_pk1');
 __PACKAGE__->belongs_to('status', 'Holistic::Schema::Ticket::Status', 'status_pk1');
+__PACKAGE__->belongs_to( 'priority', 'Holistic::Schema::Ticket::Priority', 'priority_pk1');
 
 __PACKAGE__->has_one(
     'identity', 'Holistic::Schema::Person::Identity', 
