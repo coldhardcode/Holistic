@@ -26,6 +26,9 @@ __PACKAGE__->add_columns(
     'token',
     { data_type => 'varchar', size => '255', is_nullable => 0,
         dynamic_default_on_create => sub { my ( $self ) = @_; $self->schema->tokenize( $self->name ) } },
+    'identity_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1,
+        dynamic_default_on_create => \&_default_system_user },
     'type_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1,
         dynamic_default_on_create => \&_default_type },
@@ -53,6 +56,11 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->belongs_to(
     'type', 'Holistic::Schema::Queue::Type',
     { 'foreign.pk1' => 'self.type_pk1' }
+);
+
+__PACKAGE__->belongs_to(
+    'identity', 'Holistic::Schema::Person::Identity',
+    { 'foreign.pk1' => 'self.identity_pk1' }
 );
 
 __PACKAGE__->has_many(
@@ -105,6 +113,12 @@ sub _default_type {
     my ( $self ) = @_;
 
     return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->id;
+}
+
+sub _default_system_user {
+    my ( $self ) = @_;
+
+    return $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' })->id;
 }
 
 sub all_tickets {
