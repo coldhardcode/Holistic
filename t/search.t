@@ -49,6 +49,12 @@ $suite->run(
         { 'do_search' => { query => 'queue_name:Version', count => 1 } },
         { 'do_search' => { query => 'queue_name="Version 4.5"', count => 1 } },
         { 'do_search' => { query => 'queue=2', count => 1 } },
+        # Reporter
+        { 'do_search' => { query => 'reporter=bob', count => 1 } }, # How to get the fucking id?
+        { 'do_search' => { query => 'reporter_name:Bo', count => 1 } },
+        { 'do_search' => { query => 'reporter_email:bob@', count => 1 } },
+        { 'do_search' => { query => 'reporter_email:bob@coldhardcode.com', count => 1 } },
+        { 'do_search' => { query => 'reporter_email:fred@coldhardcode.com', count => 0 } },
     ]
 );
 

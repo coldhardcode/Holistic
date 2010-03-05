@@ -46,6 +46,21 @@ has fields => (
                 text => 1,
                 field => 'name'
             },
+            reporter => {
+                alias => 'me',
+                text => 1,
+                field => 'identity_pk1'
+            },
+            reporter_email => {
+                alias => 'person',
+                text => 1,
+                field => 'email'
+            },
+            reporter_name => {
+                alias => 'person',
+                text => 1,
+                field => 'name'
+            },
             type => {
                 alias => 'type',
                 text => 1,
@@ -129,7 +144,7 @@ sub create_resultset {
             'queue',
             {
                 'final_state' => [
-                    'identity', 'destination_identity', 'priority', 'status'
+                    { 'identity' => 'person' }, 'destination_identity', 'priority', 'status'
                 ]
             }
         ]
