@@ -35,6 +35,11 @@ has fields => (
                 alias => 'priority',
                 text => 1,
                 field => 'name'
+            },
+            type => {
+                alias => 'type',
+                text => 1,
+                field => 'name'
             }
         }
     },
