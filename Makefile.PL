@@ -68,6 +68,7 @@ requires 'MooseX::Types::DateTime';
 requires 'DBIx::Class' => '0.08119';
 requires 'DBIx::Class::TimeStamp';
 requires 'DBIx::Class::DynamicDefault';
+requires 'DBIx::Class::Ordered';
 
 # Pretty baubels
 requires 'Chart::Clicker';
