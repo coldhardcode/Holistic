@@ -21,13 +21,17 @@ has fields => (
                 text => 1,
                 field => 'name'
             },
+            date_created => {
+                alias => 'me',
+                field => 'dt_created',
+                text => 0
+            },
             description => {
                 alias => 'me',
                 text => 1,
                 field => 'description',
-                text => 1
             },
-            'priority' => {
+            priority => {
                 alias => 'priority',
                 text => 1,
                 field => 'name'
@@ -135,10 +139,10 @@ sub create_resultset {
         %conds = %{ merge(\%conds, $a) };
     }
 
-    # use Data::Dumper;
-    # print STDERR Dumper($q);
-    # print STDERR Dumper(\%conds);
-    # print STDERR Dumper(\%attrs);
+    use Data::Dumper;
+    print STDERR Dumper($q);
+    print STDERR Dumper(\%conds);
+    print STDERR Dumper(\%attrs);
 
     return $self->schema->resultset('Ticket')->search(\%conds, \%attrs);
 }
@@ -178,7 +182,9 @@ sub add_conditions {
             }
 
             # If we got here, there must be a field
-            if($op eq ':') {
+
+            # We can only do likes if it's text
+            if($op eq ':' && $fdef->{text}) {
                 if($negate) {
                     push(@{ $conditions }, {
                         $fdef->{alias}.'.'.$fdef->{field} => { '-not like' => "\%$val\%" }
@@ -191,6 +197,15 @@ sub add_conditions {
             } elsif($op eq '=') {
                 push(@{ $conditions }, {
                     $fdef->{alias}.'.'.$fdef->{field} => $val
+                });
+            # Can't be text for > and <
+            } elsif(($op eq '>') && !$fdef->{text}) {
+                push(@{ $conditions }, {
+                    $fdef->{alias}.'.'.$fdef->{field} => { '>' =>  $val }
+                });
+            } elsif(($op eq '<') && !$fdef->{text}) {
+                push(@{ $conditions }, {
+                    $fdef->{alias}.'.'.$fdef->{field} => { '<' =>  $val }
                 });
             }
         }

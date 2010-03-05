@@ -76,6 +76,7 @@ sub ticket_create : Plan(28) {
         parent_pk1  => $milestone->id,
         priority    => $priority,
         type        => $ticket_type,
+        dt_created  => $data->{dt_created}
     });
 
     $self->ticket( $ticket );
