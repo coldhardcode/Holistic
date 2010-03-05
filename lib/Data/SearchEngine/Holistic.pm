@@ -112,11 +112,13 @@ sub create_resultset {
         prefetch => [
             'type',
             {
+                'ticket_tags' => 'tag',
                 'final_state' => [
                     'identity', 'destination_identity', 'priority', 'status'
                 ]
             }
-        ]
+        ],
+        group_by => [ 'ticket_tags.ticket_pk1' ]
     );
 
     # Create a list of ANDs that we can fiddle with later

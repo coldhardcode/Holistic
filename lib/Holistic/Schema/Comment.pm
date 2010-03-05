@@ -1,7 +1,8 @@
 package Holistic::Schema::Comment;
     
 use Moose;
-    
+use Try::Tiny;
+
 extends 'Holistic::Base::DBIx::Class';
 
 my $CLASS = __PACKAGE__; 
@@ -11,40 +12,45 @@ $CLASS->table('comments');
 
 $CLASS->add_columns(
     pk1  => {
-        data_type   => 'INTEGER',
+        data_type   => 'integer',
         is_nullable => 0,
         size        => 16,
         is_auto_increment => 1,
     },  
     parent_pk1 => {
-        data_type       => 'INTEGER',
+        data_type       => 'integer',
         is_nullable     => 0,
         default_value   => 0,
         size            => 16,
     },  
     identity_pk1 => {
-        data_type       => 'INTEGER',
+        data_type       => 'integer',
         is_nullable     => 0,
         default_value   => 0,
         size            => 16,
     },
     taggable_pk1 => {
-        data_type   => 'INTEGER',
+        data_type   => 'integer',
         is_nullable => 1,
         size        => undef,
         is_foreign_key => 1
     },
     name => {
-        data_type   => 'VARCHAR',
+        data_type   => 'varchar',
         is_nullable => 0,
-        size        => 128
+        size        => 255,
+    },
+    class => {
+        data_type   => 'varchar',
+        is_nullable => 1,
+        size        => 128,
     },
     body => {
-        data_type   => 'TEXT',
+        data_type   => 'text',
         is_nullable => 1
     },
     dt_created => {
-        data_type   => 'DATETIME',
+        data_type   => 'datetime',
         is_nullable => 0,
         size        => undef,
         set_on_create => 1
@@ -101,13 +107,13 @@ sub add_comment {
     $comments_rs->validate( $data );
 
     $data->{parent_pk1} = $self->id;
-    my $comment = eval {
-        $self->add_to_children($data);
-    };
-    if ( $@ ) {
+    my $comment;
+    try {
+        $comment = $self->add_to_children($data);
+    } catch {
         # Should we do anything here?
-        die $@;
-    }
+        die $_;
+    };
     return $comment;
 }
 
