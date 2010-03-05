@@ -36,6 +36,16 @@ has fields => (
                 text => 1,
                 field => 'name'
             },
+            queue => {
+                alias => 'me',
+                text => 0,
+                field => 'parent_pk1'
+            },
+            queue_name => {
+                alias => 'queue',
+                text => 1,
+                field => 'name'
+            },
             type => {
                 alias => 'type',
                 text => 1,
@@ -116,6 +126,7 @@ sub create_resultset {
     my %attrs = (
         prefetch => [
             'type',
+            'queue',
             {
                 'final_state' => [
                     'identity', 'destination_identity', 'priority', 'status'

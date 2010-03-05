@@ -45,6 +45,10 @@ $suite->run(
         # Type
         { 'do_search' => { query => 'type=Foo', count => 0 } },
         { 'do_search' => { query => 'type=TestType', count => 1 } },
+        # Queue
+        { 'do_search' => { query => 'queue_name:Version', count => 1 } },
+        { 'do_search' => { query => 'queue_name="Version 4.5"', count => 1 } },
+        { 'do_search' => { query => 'queue=2', count => 1 } },
     ]
 );
 
