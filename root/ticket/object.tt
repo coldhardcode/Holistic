@@ -16,12 +16,7 @@ attention = ticket.needs_attention;
 dependencies = ticket.dependencies_rs;
 activity_log = ticket.comments;
 
-tag_list = [];
-FOREACH tag IN ticket.tags;
-    tag_list.push("<a href=\"#\">" _ tag.name _ "</a>");
-END;
-
-is_editable = 0;
+is_editable = 1;
 
 IF c.user_exists && c.user.person_pk1 == owner.person_pk1;
     is_owned = 1;

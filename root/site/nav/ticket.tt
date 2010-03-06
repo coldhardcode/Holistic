@@ -1,4 +1,3 @@
-[% is_editable = 1 %]
 <h4>[% c.loc('Ticket #[_1]', ticket.id) %]</a></h4>
 [% IF is_editable %]<form>[% END %]
  <table class="ticket">
@@ -58,7 +57,9 @@
      END %]
    </tr>
    <tr>
-   [% readonly_field({ label => 'Tags', double => 1, name => 'ticket.tags', value => tag_list.join(' ') }); %]
+    [% label_field({ label => 'Tags' }) %]
+    <td>[% PROCESS 'ticket/editable-tags.tt' %]
+    </td>
    </tr>
    [% IF is_editable %]
    <tr class="submit">

@@ -32,6 +32,45 @@ sub object_alias_setup : Chained('setup') PathPart('-') Args(2) {
     $c->detach('object');
 }
 
+sub tag : Chained('object_setup') PathPargs(0) Args(1) ActionClass('REST') { 
+    my ( $self, $c, $tag_id ) = @_;
+    $c->stash->{tag} = $tag_id;
+}
+sub tag_GET {
+    my ( $self, $c ) = @_;
+
+    $c->stash->{page}->{layout} = 'partial';
+    $c->stash->{template} = 'ticket/editable-tags.tt';
+}
+
+sub tag_POST {
+    my ( $self, $c ) = @_;
+    my $data = $c->req->data || $c->req->params;
+
+    unless ( $data->{tag} ) {
+        $c->log->error('No tag specified');
+        return;
+    }
+
+    my $ticket = $c->stash->{ $self->object_key };
+    my $tag = $c->model('Schema::Tag')->find_or_create({
+        name => $data->{tag}
+    });
+    $ticket->ticket_tags->find_or_create({ tag_pk1 => $tag->id });
+    $self->status_ok( $c, 
+        entity => [ map { $_->get_columns } $ticket->tags->all ]
+    );
+}
+
+sub tag_DELETE {
+    my ( $self, $c ) = @_;
+    my $ticket = $c->stash->{ $self->object_key };
+    $ticket->ticket_tags({ tag_pk1 => $c->stash->{tag} })->delete;
+    $self->status_ok( $c, 
+        entity => [ map { $_->get_columns } $ticket->tags->all ]
+    );
+}
+
 sub assign : Chained('object_setup') PathPargs(0) Args(0) ActionClass('REST') { }
 sub assign_POST {
     my ( $self, $c ) = @_;
