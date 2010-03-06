@@ -1,0 +1,8 @@
+[% page.body.scripts.push('tags.js') %]
+<ul id="taglist" class="editable" rest="[% c.uri_for_action('/ticket/tag', [ ticket.id ], 'view' ) %]">
+    [% FOREACH tag IN ticket.tags %]
+        <li class="tag">[% tag.name | html %]<a class="remove" href="[% c.uri_for_action('/ticket/tag', [ ticket.id ], tag.id, { 'action' => 'delete' } ) %]">[x]</a></li>
+    [% END %]
+    <li><input type="text" name="tag" rest="[% c.uri_for_action('/ticket/tag', [ ticket.id ], 'new' ) %]"></li>
+</ul>
+

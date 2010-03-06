@@ -353,7 +353,7 @@ sub tag {
 
     foreach my $tag ( @tags ) {
         my $tag = $self->result_source->schema->resultset('Tag')->find_or_create({
-            name => lc($tag)
+            name => $tag
         });
         $self->add_to_tags($tag);
     }

@@ -7,6 +7,8 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
+__PACKAGE__->load_components(qw/ Ordered Core /);
+
 __PACKAGE__->table('ticket_priorities');
 
 __PACKAGE__->add_columns(
@@ -14,9 +16,12 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
+    'position',
+    { data_type => 'integer', size => '16' },
 );
 
 __PACKAGE__->set_primary_key('pk1');
+__PACKAGE__->position_column('position');
 
 __PACKAGE__->has_many('ticket_transient_states', 'Holistic::Schema::Ticket::State', 'priority_pk1');
 __PACKAGE__->has_many('ticket_states', 'Holistic::Schema::Ticket::FinalState', 'priority_pk1');

@@ -96,13 +96,13 @@ __PACKAGE__->many_to_many('products' => 'product_links' => 'product');
 
 sub due_date {
     my ( $self, $date ) = @_;
-    my $marker = $self->time_markers({ name => 'DUE' })->first;
+    my $marker = $self->time_markers({ name => '@due' })->first;
     if ( defined $date ) {
         if ( $marker ) {
             $marker->update({ dt_marker => $date });
         } else {
             $marker = $self
-                ->add_to_time_markers({ dt_marker => $date, name => 'DUE' });
+                ->add_to_time_markers({ dt_marker => $date, name => '@due' });
         }
     }
 
