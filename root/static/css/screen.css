@@ -1,7 +1,7 @@
 @charset "utf-8";
 * { margin: 0; padding: 0 ;}
 html, body {
-    background: #e9e9d7 url('/static/images/back.png') repeat-y;
+    background: #fefcf1 url('/static/images/back.png') repeat-y;
     color: #353535;
     font-family: 'HelveticaNueue-Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -367,7 +367,8 @@ body > header form fieldset input {
     color: #353535;
     font-size: 14px;
     left: 0;
-    margin: 1em; padding: 0;
+    margin: 12px 1em 1em 1em; padding: 0;
+/*    overflow: hidden;*/
     position: absolute;
     text-align: left;
     top: 72px;
@@ -411,7 +412,7 @@ body > header form fieldset input {
     border: none;
     padding: 4px;
 }
-#sidebar table a {
+#sidebar table td > a {
     margin: 0; padding: 0;
 }
 #sidebar table a:hover {
@@ -1056,4 +1057,39 @@ section.product ul:nth-of-type(2) {
 }
 #future > li:first-child > ul li {
     background-color: #fff;
+}
+ul.taglist {
+    margin: 0; padding: 0;
+}
+ul.taglist li {
+    list-style: none;
+    margin: 3px; padding: 0 3px;
+}
+ul.taglist li.tag {
+    background: #e9eff9;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #85aed7;
+    float: left;
+}
+ul.taglist li.tag:hover {
+    background-color: #cddcf3;
+    border: 1px solid #8597bb;
+}
+ul.taglist li a {
+    display: inline;
+}
+ul.taglist li.tag a.remove {
+    color: #999;
+    font-weight: bold;
+    margin: 0 0 0 7px;
+    text-decoration: none;
+}
+ul.taglist li.tag a.remove:hover {
+    color: #333;
+}
+ul.taglist li > input {
+    margin: 1em 0 0 0;
+    width: 9em;
 }
