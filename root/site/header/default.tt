@@ -17,13 +17,13 @@ END;
    <p><a href="#">Ticket X requires your attention.</a></p>
   </aside>
  </section>
- <nav>
 [% IF results %]
  [% PROCESS site/nav/search_refine.tt %]
 [% END %]
 [% IF context.ticket %]
  [% PROCESS site/nav/ticket.tt %]
 [% END %]
+ <nav>
 [% PROCESS site/nav/ticket_stack.tt %]
  </nav>
 </aside>
