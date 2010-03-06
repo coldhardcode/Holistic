@@ -166,7 +166,8 @@ footer nav dd a {
     text-decoration: none;
 }
 footer nav dd a:hover {
-    color: #e9e9d7;
+    color: #000;
+    font-weight: bold;
 }
 footer p {
     clear: both;
