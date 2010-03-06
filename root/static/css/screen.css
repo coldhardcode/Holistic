@@ -40,12 +40,8 @@ body > #tickcontent {
 .clearfix {display: block;}
 /* End hide from IE-mac */
 footer {
-    background-color: #9c9c81;
-    background: url('/static/images/chc-water.png') no-repeat top right,
-        -webkit-gradient(linear, left top, left bottom, from(#b0b09a), to(#9c9c81));
-    background: url('/static/images/chc-water.png') no-repeat top right,
-        -moz-linear-gradient(top, #b0b09a, #9c9c81);
-    border-top: 1px solid #353535;
+    background-color: #f0eee4;
+    background: #f0eee4 url('/static/images/chc-water.png') no-repeat top right;
     display: block;
     clear: both;
     height: 150px;
