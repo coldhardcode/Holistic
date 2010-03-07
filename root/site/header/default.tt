@@ -12,17 +12,16 @@ END;
  </form>
 </header>
 <aside id="sidebar">
- <section class="message">
-  <aside class="omessage">
-   <p><a href="#">Ticket X requires your attention.</a></p>
-  </aside>
- </section>
-[% IF results %]
- [% PROCESS site/nav/search_refine.tt %]
-[% END %]
-[% IF context.ticket %]
- [% PROCESS site/nav/ticket.tt %]
-[% END %]
+[%
+IF messages.for_scope('sidebar').has_messages;
+    PROCESS "site/messages.tt", message_scope => 'sidebar';
+END;
+IF results;
+    PROCESS site/nav/search_refine.tt;
+END;
+IF context.ticket;
+    PROCESS site/nav/ticket.tt;
+END %]
  <nav>
 [% PROCESS site/nav/ticket_stack.tt %]
  </nav>

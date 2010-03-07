@@ -57,6 +57,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                 { id => $name, realm => 'local' },
                 { prefetch => [ 'person' ] }
             )->first;
+
         # Vivify the user from external auth (most likely HTTP Auth)
         if ( not defined $ident ) {
             my $person = $c->model('Schema::Person')->create({
@@ -73,6 +74,16 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
             # Clobbering time.
             $c->user( $ident );
             $c->stash->{now}->set_time_zone( $ident->person->timezone );
+            my $attn_count = $ident->needs_attention->count;
+            $attn_count = 1;
+            if ( $attn_count > 0 ) {
+                $c->messages({
+                    scope   => 'sidebar',
+                    message => $c->loc('NEEDS ATTENTION', [ $attn_count ]),
+                    level   => 'warn'
+                });
+            }
+
         } else {
             $c->log->fatal("Unable to establish identity of the user");
             $c->logout;

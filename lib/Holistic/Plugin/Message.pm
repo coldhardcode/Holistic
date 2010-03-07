@@ -80,7 +80,7 @@ sub message {
     if ( ref $message ) {
         $s->{level}   = $message->{type} || $default;
         $s->{id}      = $message->{message};
-        $s->{scope}   = 'global';
+        $s->{scope}   = $message->{scope} || 'global';
     } else {
         $s->{level}   = $default;
         $s->{id}      = $message;

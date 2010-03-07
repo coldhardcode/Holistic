@@ -68,5 +68,21 @@ sub sqlt_deploy_hook {
     $sqlt_table->add_index( name => 'person_pk1_idx', fields => [ 'person_pk1' ]);
 }
 
+sub needs_attention {
+    my ( $self ) = @_;
+
+    my $status = $self->result_source->schema->get_status('@ATTENTION');
+
+    $self->schema->resultset('Ticket')->search(
+        { 
+            'final_state.status_pk1'   => $status->id,
+            'final_state.identity_pk2' => $self->id
+        },
+        {
+            prefetch => [ 'final_state' ],
+        }
+    );
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
