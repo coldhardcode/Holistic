@@ -13,8 +13,8 @@ __PACKAGE__->config(
         # retarded.
         'text/xml'   => [ 'View', 'TT' ],
     },
-    update_string => 'Your object has been updated',
-    create_string => 'Your object has been created',
+    update_string => 'Your object has been updated.',
+    create_string => 'Your object has been created.',
 );
 
 has 'access_check' => (
@@ -38,13 +38,13 @@ has 'prefetch' => (
 has 'create_string' => (
     is  => 'rw',
     isa => 'Str',
-    default => 'Your object has been created'
+    default => 'Your object has been created.'
 );
 
 has 'update_string' => (
     is  => 'rw',
     isa => 'Str',
-    default => 'Your object has been updated'
+    default => 'Your object has been updated.'
 );
 
 has 'rs_key' => (
@@ -86,7 +86,7 @@ sub _fetch_rs {
 
     unless ( $rs and $rs->isa('DBIx::Class::ResultSet') ) {
         die "Invalid configuration, asked for " . 
-            $self->class . " but didn't get a resultset back\n";
+            $self->class . " but didn't get a resultset back.\n";
     }
 
     return $rs;
