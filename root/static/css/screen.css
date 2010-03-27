@@ -859,6 +859,10 @@ article.group_man section.users ul li.selected label {
     background: transparent url('/static/images/actions/bullet_go.png') no-repeat center left;
     padding: 0 0 0 15px;
 }
+article.group_man section.groups {
+    clear: none;
+    float: left;
+}
 table.cal {
     border: 1px solid #fff;
     width: 100%;
@@ -1089,4 +1093,13 @@ ul.taglist li.tag a.remove:hover {
 ul.taglist li > input {
     margin: 1em 0 0 0;
     width: 9em;
+}
+span.type {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 2px 3px;
+    font-size: 12px;
 }

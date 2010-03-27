@@ -58,7 +58,8 @@ sub ticket_create : Plan(28) {
     });
 
     my $ticket_type = $self->resultset('Ticket::Type')->find_or_create({
-        name => $data->{ticket_type} || 'Task'
+        name => $data->{ticket_type} || 'Task',
+        color => $data->{ticket_color} || 'ddd'
     });
 
     my $milestone = $self->resultset('Queue')->create({
