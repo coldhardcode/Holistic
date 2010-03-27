@@ -3,6 +3,7 @@ package Holistic::Schema::Queue::Type;
 use Moose;
 
 use Carp;
+use Graphics::Color::RGB;
 use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
@@ -22,6 +23,14 @@ __PACKAGE__->set_primary_key('pk1');
 
 __PACKAGE__->has_many('queues',  'Holistic::Schema::Queue', 'type_pk1');
 __PACKAGE__->has_many('tickets', 'Holistic::Schema::Ticket', 'type_pk1');
+
+sub foreground_color {
+    my ($self) = @_;
+
+    my $c = Graphics::Color::RGB->from_hex_string($self->color);
+
+    return (($c->r + $c->g + $c->b) > 1.5) ? '#000' : '#fff';
+}
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
