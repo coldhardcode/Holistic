@@ -14,6 +14,8 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
+    'color',
+    { data_type => 'char', size => '6', is_nullable => 0, default_value => '000000' },
 );
 
 __PACKAGE__->set_primary_key('pk1');

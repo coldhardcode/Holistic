@@ -20,6 +20,8 @@ __PACKAGE__->add_columns(
     { data_type => 'varchar', size => '255', is_nullable => 0, },
     'description',
     { data_type => 'text', is_nullable => 1},
+    'color',
+    { data_type => 'char', size => '6', is_nullable => 0, default_value => '000000' },
     'rel_source',
     { data_type => 'varchar', size => '255', is_nullable => 0,
         dynamic_default_on_create => sub { shift->result_source->name } },
