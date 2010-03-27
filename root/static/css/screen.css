@@ -242,9 +242,6 @@ table tbody td > a:only-child {
     display: block;
     padding: 7px;
 }
-table tbody td:last-child {
-    border-right-width: 1px;
-}
 table tbody tr.odd {
     background-color: #eee;
 }
@@ -942,12 +939,15 @@ ul.status h3 {
     width: 1.5em;
     writing-mode: tb-rl;
 }
+ul.status li {
+    width: 90%;
+}
 ul.status li table {
     padding: 0; margin: 7px 0;
 }
 ul.status li.now {
-    background: -webkit-gradient(linear, left center, right center, from(#f8f8f2), to(#e9e9d7));
-    background: -moz-linear-gradient(right, #e9e9d7, #f8f8f2);
+    background: -webkit-gradient(linear, left center, right center, from(#ffffff), to(#fefcf1));
+    background: -moz-linear-gradient(right, #ffffff, #fefcf1);
     border: 1px solid #353535;
     border-width: 1px 0 1px 1px;
 }
