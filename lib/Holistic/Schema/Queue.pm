@@ -35,7 +35,7 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_foreign_key => 1,
         dynamic_default_on_create => \&_default_type },
     'parent_pk1',
-    { data_type => 'integer', size => '16', default_value => 0 },
+    { data_type => 'integer', size => '16', is_nullable => 1, default_value => undef },
     'dt_created',
     { data_type => 'datetime', set_on_create => 1 },
     'dt_updated',
@@ -114,13 +114,13 @@ sub due_date {
 sub _default_type {
     my ( $self ) = @_;
 
-    return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->id;
+    return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->pk1;
 }
 
 sub _default_system_user {
     my ( $self ) = @_;
 
-    return $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' })->id;
+    return $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' })->pk1;
 }
 
 sub all_tickets {
