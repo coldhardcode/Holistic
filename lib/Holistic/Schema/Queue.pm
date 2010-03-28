@@ -114,7 +114,7 @@ sub due_date {
 sub _default_type {
     my ( $self ) = @_;
 
-    return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->pk1;
+    return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->id;
 }
 
 sub _default_system_user {
