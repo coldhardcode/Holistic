@@ -20,6 +20,7 @@ requires 'Catalyst::Plugin::Params::Nested';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Plugin::Cache';
 requires 'Cache::FastMmap';
+requires 'Net::API::RPX';
 
 requires 'Template::Plugin::Lingua::EN::Inflect';
 requires 'Template::Plugin::Number::Format';
@@ -69,6 +70,8 @@ requires 'DBIx::Class' => '0.08119';
 requires 'DBIx::Class::TimeStamp';
 requires 'DBIx::Class::DynamicDefault';
 requires 'DBIx::Class::Ordered';
+requires 'DBIx::Class::EncodedColumn';
+requires 'DBIx::Class::Tree';
 
 # Pretty baubels
 requires 'Chart::Clicker';
@@ -85,6 +88,7 @@ requires 'YAML::XS';
 requires 'parent';
 
 test_requires 'Test::More' => '0.88';
+test_requires 'String::Ranom';
 test_requires 'Text::Lorem' => '0.3';
 catalyst;
 
