@@ -85,7 +85,7 @@ requires 'YAML::XS';
 requires 'parent';
 
 test_requires 'Test::More' => '0.88';
-test_requires 'Text::Lorem' => '0.88';
+test_requires 'Text::Lorem' => '0.3';
 catalyst;
 
 install_script glob('script/*.pl');
