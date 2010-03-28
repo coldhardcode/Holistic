@@ -31,6 +31,16 @@ sub create_form : Chained('setup') PathPart('create') Args(0) {
     }
     $type ||= $c->model('Schema::Queue::Type')->first;
     $c->stash->{type} = $type;
+
+    $c->stash->{queue_rs} = $c->model('Schema::Queue')->search_rs(
+        { 
+            'product_links.product_pk1' => $c->stash->{product}->id,
+            #'me.active'                 => 1,
+        },
+        {
+            prefetch => [ 'product_links' ]
+        }
+    );
 }
 
 sub post_create : Private {

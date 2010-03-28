@@ -17,6 +17,17 @@
     </tr>
    </tfoot>
    <tbody>
+[%~ IF queue_rs.count > 0 %]
+    <tr>
+     [% select_field({
+        label => 'Parent', name => 'parent_pk1', required => 1, double => 1,
+        error => stack.for_subject('parent_pk1').first_message.id,
+        value => results.get_original_value('parent_pk1'),
+        array => queue_rs.all, label_method => 'name', value_method => 'id',
+        default_option => [ 0, c.loc('No Parent') ]
+    }) %]
+    </tr>
+[% END %]
     <tr>
      [% text_field({ label => 'Name', name => 'name', hint => 'Name', required => 1 }); %]
     </tr>
