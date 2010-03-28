@@ -12,7 +12,7 @@ __PACKAGE__->add_columns(
     'permission_set_pk1',
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'foreign_pk1',
-    { data_type => 'integer', size => '16', is_auto_increment => 1 },
+    { data_type => 'integer', size => '16' },
     'result_class',
     {
         data_type      => 'VARCHAR',

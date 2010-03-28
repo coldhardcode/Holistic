@@ -27,7 +27,7 @@ $CLASS->add_columns(
     'email',
     { data_type => 'varchar', size => '255', is_nullable => 1 },
     'postal',
-    { data_type => 'vachar', size => '9', is_nullable => 1,
+    { data_type => 'varchar', size => '9', is_nullable => 1,
         default_value => '' },
     'country',
     { data_type => 'char', size => '2', is_nullable => 0,
