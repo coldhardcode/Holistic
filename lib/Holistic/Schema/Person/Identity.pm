@@ -20,7 +20,7 @@ $CLASS->add_columns(
     { data_type => 'integer', size => 16, is_nullable => 0 },
     'realm',
     { data_type => 'varchar', size => 64, is_nullable => 0 },
-    'id',
+    'ident',
     { data_type => 'varchar', size => 64, is_nullable => 0 },
     'secret',
     {
@@ -49,11 +49,11 @@ $CLASS->has_many(
 );
 
 $CLASS->add_unique_constraint(
-    realm_id_constraint => [ qw/realm id/ ]
+    realm_ident_constraint => [ qw/realm ident/ ]
 );
 
 $CLASS->add_unique_constraint(
-    person_realm_id_constraint => [ qw/person_pk1 realm id/ ]
+    person_realm_id_constraint => [ qw/person_pk1 realm ident/ ]
 );
 
 $CLASS->has_many(

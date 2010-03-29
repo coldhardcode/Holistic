@@ -120,7 +120,7 @@ sub _default_type {
 sub _default_system_user {
     my ( $self ) = @_;
 
-    return $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' })->pk1;
+    return $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', ident => 'system' })->pk1;
 }
 
 sub all_tickets {

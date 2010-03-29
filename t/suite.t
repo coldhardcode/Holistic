@@ -9,8 +9,7 @@ $suite->run(
     /],
     config => {
         connect_info => [
-            'dbi:SQLite:t/var/test.db',
-            '', '',
+            "dbi:mysql:holistic", 'holistic', '',
             { quote_char => '`', name_sep => '.' }
         ]
     },

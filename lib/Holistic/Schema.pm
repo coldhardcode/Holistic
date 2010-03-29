@@ -24,6 +24,8 @@ sub deploy {
     my $key_check_on;
 
     if ( $self->storage->connect_info->[0] =~ /^DBI:mysql/i ) {
+        $properties->{add_drop_table} = 1
+            unless exists $properties->{add_drop_table};
         $key_check_off = "SET FOREIGN_KEY_CHECKS = 0;";
         $key_check_on  = "SET FOREIGN_KEY_CHECKS = 1;";
     }
@@ -31,8 +33,31 @@ sub deploy {
     my $populate_txn = sub {
         $self->SUPER::deploy($properties, @_);
 
-        return unless $data_import and ref $data_import eq 'HASH';
         $self->storage->dbh->do($key_check_off) if $key_check_off;
+
+        my $system_person = $self->resultset('Person')->create({
+            name  => 'Holistic System User',
+            token => 'holistic',
+            email => 'no-reply@coldhardcode.com',
+        });
+        my $system_ident = $system_person->add_to_identities({
+            realm  => 'system',
+            ident  => 'system',
+            active => 0
+        });
+
+        $self->resultset('Comment')->create({
+            pk1          => 0,
+            parent_pk1   => 0,
+            identity_pk1 => $system_ident->id,
+            body         => '',
+        });
+
+        
+        unless ( $data_import and ref $data_import eq 'HASH' ) {
+            $self->storage->dbh->do($key_check_on) if $key_check_on;
+            return;
+        }
 
         foreach my $data ( keys %$data_import ) {
             my $rs = $self->resultset($data);
@@ -61,6 +86,25 @@ sub deploy {
     if ( $@ ) {
         die "Unable to deploy and populate data: $@";
     }
+}
+
+sub default_comment {
+    my ( $self ) = @_;
+
+    $self->resultset('Comment')->search(
+        { parent_pk1 => 0, identity_pk1 => $self->system_identity->id }
+    )->first;
+}
+
+sub system_identity {
+    my ( $self ) = @_;
+
+    $self->resultset('Person::Identity')->search(
+        { realm => 'system', ident => 'system' },
+        {
+            prefetch => [ 'person' ]
+        }
+    )->first;
 }
 
 sub get_status {

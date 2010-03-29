@@ -7,7 +7,9 @@ extends 'Holistic::Base::DBIx::Class';
 
 my $CLASS = __PACKAGE__; 
 
-$CLASS->load_components( qw|Tree::AdjacencyList Serialize::Storable TimeStamp Core| );
+$CLASS->load_components( qw/
+    Tree::AdjacencyList Serialize::Storable TimeStamp DynamicDefault Core
+/ );
 $CLASS->table('comments');
 
 $CLASS->add_columns(
@@ -22,6 +24,9 @@ $CLASS->add_columns(
         is_nullable     => 0,
         default_value   => 0,
         size            => 16,
+        dynamic_default_on_create => sub {
+            shift->result_source->schema->default_comment->id;
+        }
     },  
     identity_pk1 => {
         data_type       => 'integer',

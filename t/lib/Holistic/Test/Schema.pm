@@ -30,17 +30,6 @@ sub deploy : Plan(2) {
     catch { $err = $_; carp $_; };
     ok(!$err, 'deploy');
     ok($self->schema->storage->connected, 'connected schema');
-
-    my $system_person = $self->resultset('Person')->create({
-        name  => 'Holistic System User',
-        token => 'holistic',
-        email => 'foo@bar.com',
-    });
-    $system_person->add_to_identities({
-        realm  => 'system',
-        id     => 'system',
-        active => 0
-    });
 }
 
 no Moose::Role;

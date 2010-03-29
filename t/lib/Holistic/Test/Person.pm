@@ -28,14 +28,14 @@ sub person_create : Plan(1) {
     $self->person( $person );
 
     $person->add_to_identities(
-        { realm => 'local', id => $person->token, secret => $data->{password} || 'test-script-generated' }
+        { realm => 'local', ident => $person->token, secret => $data->{password} || 'test-script-generated' }
     );
 
-    $person->add_to_identities( { realm => 'twitter', id => $person->token } );
-    $person->add_to_identities( { realm => 'irc', id => $person->token } );
+    $person->add_to_identities( { realm => 'twitter', ident => $person->token } );
+    $person->add_to_identities( { realm => 'irc', ident => $person->token } );
 
     $person->add_to_identities(
-        { realm => 'git', id => $person->token . '@foo', secret => 'public key?' }
+        { realm => 'git', ident => $person->token . '@foo', secret => 'public key?' }
     );
 }
 
@@ -70,7 +70,7 @@ sub group_join : Plan(5) {
     }
 
     if ( $data->{ident} ) {
-        $person = $self->resultset('Person::Identity')->search({ id => $data->{ident}, realm => 'local' })->first;
+        $person = $self->resultset('Person::Identity')->search({ ident => $data->{ident}, realm => 'local' })->first;
         confess "Specified identity can't be found, $data->{ident} doesn't exist with local realm!" unless defined $person;
         $person = $person->person;
     } else {
