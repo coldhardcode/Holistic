@@ -75,7 +75,7 @@ __PACKAGE__->config(
                 store => {
                     class       => 'DBIx::Class',
                     user_class  => 'Schema::Person::Identity',
-                    id_field    => 'id',
+                    id_field    => 'ident',
                 }
             }, 
             local => {
@@ -88,7 +88,7 @@ __PACKAGE__->config(
                 store => {
                     class       => 'DBIx::Class',
                     user_class  => 'Schema::Person::Identity',
-                    id_field    => 'id',
+                    id_field    => 'ident',
                 }
             },
             temp => {
@@ -101,7 +101,7 @@ __PACKAGE__->config(
                 store => {
                     class    => 'DBIx::Class',
                     user_class => 'Schema::Person::Identity',
-                    id_field   => 'id',
+                    id_field   => 'ident',
                 }
             },
         }
