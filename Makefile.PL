@@ -75,6 +75,7 @@ requires 'DBIx::Class::Tree';
 
 # Pretty baubels
 requires 'Chart::Clicker';
+requires 'Graphics::Color';
 
 # Random Stuff
 requires 'Lingua::EN::Words2Nums';
