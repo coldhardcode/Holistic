@@ -32,6 +32,18 @@ has port => (
     default => 3367
 );
 
+has product => (
+    is => 'rw',
+    isa => 'Str',
+    default => 'component'
+);
+
+has queue => (
+    is => 'rw',
+    isa => 'Str',
+    default => 'milestone'
+);
+
 has username => (
     is => 'rw',
     isa => 'Str',
