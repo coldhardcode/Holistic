@@ -58,6 +58,7 @@ sub make_ticket {
     my ($rep_person, $rep_ident) = find_person_and_identity($row->{reporter});
 
     my $tick = $ticket_rs->create({
+        pk1         => $row->{id},
         type_pk1    => $type->id,
         identity_pk1=> $rep_ident->id,
         name        => $row->{summary},
@@ -86,7 +87,7 @@ sub find_person_and_identity {
     my $identity = $person->identities->first if($person->identities->count);
     unless(defined($identity)) {
         $identity = $person->add_to_identities({
-            realm   => 'wtf?', # XX
+            realm   => $email, # XX wrong as shit
             ident   => 'wtf?', # XX
             secret  => 'wtf?', # XX
             active  => 1
