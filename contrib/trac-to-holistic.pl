@@ -73,9 +73,10 @@ sub find_person_and_identity {
 
     # Find a person
     my $person = $person_cache{$email};
+
     unless(defined($person)) {
         $person = $person_rs->create({
-            token   => 'wtf?',
+            token   => $email,
             name    => $email,
             public  => 1,
             email   => $email,
@@ -84,12 +85,13 @@ sub find_person_and_identity {
     }
 
     # Find an identity
-    my $identity = $person->identities->first if($person->identities->count);
+    my $identity = $person->local_identity;
+
     unless(defined($identity)) {
         $identity = $person->add_to_identities({
-            realm   => $email, # XX wrong as shit
-            ident   => 'wtf?', # XX
-            secret  => 'wtf?', # XX
+            realm   => 'local',
+            ident   => $email,
+            secret  => '', # XX, need a password?
             active  => 1
         });
     }
