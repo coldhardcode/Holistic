@@ -171,11 +171,6 @@ sub create_resultset {
         %conds = %{ merge(\%conds, $a) };
     }
 
-    use Data::Dumper;
-    print STDERR Dumper($q);
-    print STDERR Dumper(\%conds);
-    print STDERR Dumper(\%attrs);
-
     return $self->schema->resultset('Ticket')->search(\%conds, \%attrs);
 }
 
