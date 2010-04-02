@@ -41,6 +41,7 @@ my $product_rs = $schema->resultset('Product');
 my $tick_sth = $dbh->prepare('SELECT id, type, time, changetime, component, severity, priority, owner, reporter, cc, version, milestone, status, resolution, summary, description, keywords FROM ticket');
 my $mile_sth = $dbh->prepare('SELECT name, due, completed, description FROM milestone WHERE name=?');
 my $prod_sth = $dbh->prepare('SELECT name, owner, description FROM component WHERE name=?');
+my $comm_sth = $dbh->prepare("SELECT author, time, newvalue FROM ticket_change WHERE ticket=? AND field='comment' ORDER BY TIME ASC");
 
 $tick_sth->execute;
 
@@ -77,6 +78,25 @@ sub make_ticket {
         dt_updated=> DateTime->from_epoch(epoch => $row->{changetime})
     });
     $tick->update({ parent_pk1 => $queue->id }) if defined($queue);
+
+    ############## TICKET COMMENTS
+    $comm_sth->execute($row->{id});
+    my %comm_row;
+    $comm_sth->bind_columns( \( @comm_row{ @{$comm_sth->{NAME_lc} } } ));
+    while ($comm_sth->fetch) {
+        # No reason to have empty ones
+        next unless defined($comm_row{newvalue}) && $comm_row{newvalue} ne '';
+        # Use the system user if there's no author
+        # XX this only works if you use emails!
+        $comm_row{author} = 'no-reply@coldhardcode.com' unless(defined($comm_row{author}) && $comm_row{author} ne '');
+
+        my ($comm_person, $comm_ident) = find_person_and_identity($comm_row{author});
+        $tick->add_comment({
+            identity => $comm_ident,
+            body => $comm_row{newvalue},
+            dt_created => DateTime->from_epoch(epoch => $comm_row{time})
+        });
+    }
 }
 
 sub find_person_and_identity {
