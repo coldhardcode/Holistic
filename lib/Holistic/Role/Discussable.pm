@@ -52,7 +52,6 @@ To override the default of 'Discussable', overrride this sub:
 
 =cut
 
-
 sub discussable_result_source { 'Discussable' }
 
 after 'table' => sub {
@@ -79,7 +78,7 @@ before 'insert' => sub {
     unless ( defined $self->discussable_pk1 ) {
         my $discussable = $self->result_source->schema
             ->resultset('Discussable')
-            ->find_or_create({ result_class => $self->result_class });
+            ->create({ result_class => $self->result_class });
 
         $self->discussable_pk1( $discussable->id );
     }
