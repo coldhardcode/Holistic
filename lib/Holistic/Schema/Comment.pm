@@ -42,7 +42,7 @@ $CLASS->add_columns(
     },
     name => {
         data_type   => 'varchar',
-        is_nullable => 0,
+        is_nullable => 1,
         size        => 255,
     },
     class => {

@@ -102,7 +102,7 @@ sub add_comment {
     if ( $data->{subject} and not $data->{name} ) {
         $data->{name} = delete $data->{subject};
     }
-    for ( qw/name body identity/ ) { 
+    for ( qw/body identity/ ) { 
         Carp::croak( "Need $_ to create comment" ) unless $data->{$_}
     }
 
