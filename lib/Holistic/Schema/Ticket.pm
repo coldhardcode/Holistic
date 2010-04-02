@@ -223,8 +223,9 @@ sub priority { shift->state->priority }
 
 sub owner {
     my ( $self ) = @_;
-    my $state =
-        $self->states({}, { order_by => [ { '-desc' => 'me.pk1' } ] })->first;
+    my $state = $self->state;
+    #my $state =
+    #    $self->states({}, { order_by => [ { '-desc' => 'me.pk1' } ] })->first;
     my $id = $state->identity_pk2 || $state->identity_pk1;
     $self->result_source->schema->resultset('Person::Identity')
         ->search({ 'me.pk1' => $id }, { prefetch => [ 'person' ] })
@@ -278,6 +279,8 @@ sub state {
     my ( $self ) = @_;
 
     my $final_state = $self->final_state;
+
+    return $final_state if defined $final_state;
 
     my $rs = $self->states(
         {},

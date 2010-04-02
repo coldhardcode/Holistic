@@ -141,11 +141,13 @@ sub create_resultset {
     my %attrs = (
         prefetch => [
             'type',
-            'queue',
             {
+                #'queue' => { 'product_links' => 'product' },
                 'ticket_tags' => 'tag',
                 'final_state' => [
-                    { 'identity' => 'person' }, 'destination_identity', 'priority', 'status'
+                    { 'identity' => 'person' },
+                    { 'destination_identity' => 'person' } ,
+                    'priority', 'status'
                 ]
             }
         ],
