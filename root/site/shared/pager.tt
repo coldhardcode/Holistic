@@ -7,11 +7,24 @@
   [% ELSE %]
   <li class="first">[% c.loc('Previous') %]</li>
   [% END %]
-  [% FOREACH [ pager.first_page .. pager.last_page ] %]
-    [% IF loop.count == pager.current_page %]
-    <li>[% loop.count %]</li>
+  [%
+    # I'm almost certainly doing this COMPLETELY batshit crazily...
+    SET window = 3; # How many pages to show on each side
+    SET start_page = pager.current_page - window;
+    IF start_page < 1; start_page = 1; END;
+    SET used = pager.current_page - start_page;
+    SET end_page = pager.current_page + window + (window - used);
+    IF end_page > pager.last_page; end_page = pager.last_page; END;
+    SET used = used + (end_page - pager.current_page);
+    IF used != (window * 2) && start_page != 1; start_page = start_page - 3; END;
+    IF start_page < 1; start_page = 1; END;
+  %]
+  [% FOREACH page IN [ start_page .. end_page ] %]
+    [% IF page > pager.last_page; LAST; END %]
+    [% IF page == pager.current_page %]
+    <li>[% page %]</li>
     [% ELSE %]
-    <li><a href="[% c.req.uri_with({ page => loop.count }) %]">[% loop.count %]</a></li>
+    <li><a href="[% c.req.uri_with({ page => page }) %]">[% page %]</a></li>
     [% END %]
   [% END %]
   [% IF pager.current_page < pager.last_page %]
