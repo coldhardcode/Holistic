@@ -4,6 +4,7 @@ use strict;
 use Data::Dumper;
 use DateTime;
 use Holistic::Schema;
+use List::MoreUtils qw(uniq);
 use YAML qw(LoadFile);
 
 use Holistic::Conversion::Trac;
@@ -40,6 +41,9 @@ my $product_rs = $schema->resultset('Product');
 
 my %status_cache;
 my $status_rs = $schema->resultset('Ticket::Status');
+
+my %tag_cache;
+my $tag_rs = $schema->resultset('Tag');
 
 my $tick_sth = $dbh->prepare('SELECT id, type, time, changetime, component, severity, priority, owner, reporter, cc, version, milestone, status, resolution, summary, description, keywords FROM ticket');
 my $mile_sth = $dbh->prepare('SELECT name, due, completed, description FROM milestone WHERE name=?');
@@ -111,6 +115,36 @@ sub make_ticket {
             });
         }
     }
+
+    ################ TICKET TAGS
+    if($conv->tags) {
+        if(defined($row->{keywords}) && ($row->{keywords} ne '')) {
+            my @keywords = split(/ /, $row->{keywords});
+            @keywords = uniq(@keywords);
+            foreach my $keyword (@keywords) {
+                $keyword =~ s/,//;
+                $keyword = lc($keyword);
+                my $tag = find_tag($keyword);
+                $tick->add_to_ticket_tags({
+                    tag_pk1 => $tag->id
+                });
+            }
+        }
+    }
+}
+
+sub find_tag {
+    my ($name) = @_;
+
+    my $tag = $tag_cache{$name};
+
+    unless(defined($tag)) {
+        $tag = $tag_rs->create({
+            name => $name
+        });
+        $tag_cache{$name} = $tag;
+    }
+    return $tag;
 }
 
 sub find_person_and_identity {
@@ -146,6 +180,26 @@ sub find_person_and_identity {
     return ( $person, $identity );
 }
 
+sub find_product {
+    my ($name) = @_;
+
+    my $product = $product_cache{$name};
+    unless(defined($product)) {
+
+        $prod_sth->execute($name);
+        my %row;
+        $prod_sth->bind_columns( \( @row{ @{$prod_sth->{NAME_lc} } } ));
+
+        # XX Need due date and completed!
+        $product = $product_rs->create({
+            name        => $name,
+            description => $row{description}
+        });
+        $product_cache{$name} = $product;
+    }
+    return $product;
+}
+
 sub find_queue {
     my ($name, $product) = @_;
 
@@ -167,26 +221,6 @@ sub find_queue {
         $queue_cache{$name} = $queue;
     }
     return $queue;
-}
-
-sub find_product {
-    my ($name) = @_;
-
-    my $product = $product_cache{$name};
-    unless(defined($product)) {
-
-        $prod_sth->execute($name);
-        my %row;
-        $prod_sth->bind_columns( \( @row{ @{$prod_sth->{NAME_lc} } } ));
-
-        # XX Need due date and completed!
-        $product = $product_rs->create({
-            name        => $name,
-            description => $row{description}
-        });
-        $product_cache{$name} = $product;
-    }
-    return $product;
 }
 
 sub find_status {

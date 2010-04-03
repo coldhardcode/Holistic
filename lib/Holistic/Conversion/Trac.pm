@@ -44,6 +44,12 @@ has queue => (
     default => 'milestone'
 );
 
+has tags => (
+    is => 'rw',
+    isa => 'Bool',
+    default => 1
+);
+
 has username => (
     is => 'rw',
     isa => 'Str',
