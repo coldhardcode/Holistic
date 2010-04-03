@@ -38,10 +38,13 @@ my $queue_rs = $schema->resultset('Queue');
 my %product_cache;
 my $product_rs = $schema->resultset('Product');
 
+my %status_cache;
+my $status_rs = $schema->resultset('Ticket::Status');
+
 my $tick_sth = $dbh->prepare('SELECT id, type, time, changetime, component, severity, priority, owner, reporter, cc, version, milestone, status, resolution, summary, description, keywords FROM ticket');
 my $mile_sth = $dbh->prepare('SELECT name, due, completed, description FROM milestone WHERE name=?');
 my $prod_sth = $dbh->prepare('SELECT name, owner, description FROM component WHERE name=?');
-my $comm_sth = $dbh->prepare("SELECT author, time, newvalue FROM ticket_change WHERE ticket=? AND field='comment' ORDER BY TIME ASC");
+my $change_sth = $dbh->prepare("SELECT author, field, time, newvalue FROM ticket_change WHERE ticket=? ORDER BY TIME ASC");
 
 $tick_sth->execute;
 
@@ -79,23 +82,34 @@ sub make_ticket {
     });
     $tick->update({ parent_pk1 => $queue->id }) if defined($queue);
 
-    ############## TICKET COMMENTS
-    $comm_sth->execute($row->{id});
-    my %comm_row;
-    $comm_sth->bind_columns( \( @comm_row{ @{$comm_sth->{NAME_lc} } } ));
-    while ($comm_sth->fetch) {
-        # No reason to have empty ones
-        next unless defined($comm_row{newvalue}) && $comm_row{newvalue} ne '';
+    ############## TICKET CHANGES
+    $change_sth->execute($row->{id});
+    my %change_row;
+    $change_sth->bind_columns( \( @change_row{ @{$change_sth->{NAME_lc} } } ));
+    while ($change_sth->fetch) {
         # Use the system user if there's no author
-        # XX this only works if you use emails!
-        $comm_row{author} = 'no-reply@coldhardcode.com' unless(defined($comm_row{author}) && $comm_row{author} ne '');
+        # XX this only works if you use emails, should probably use token or whatever
+        $change_row{author} = 'no-reply@coldhardcode.com' unless(defined($change_row{author}) && $change_row{author} ne '');
+        my ($change_person, $change_ident) = find_person_and_identity($change_row{author});
 
-        my ($comm_person, $comm_ident) = find_person_and_identity($comm_row{author});
-        $tick->add_comment({
-            identity => $comm_ident,
-            body => $comm_row{newvalue},
-            dt_created => DateTime->from_epoch(epoch => $comm_row{time})
-        });
+        # Comments
+        if($change_row{field} eq 'comment') {
+            # No reason to have empty ones
+            next unless defined($change_row{newvalue}) && $change_row{newvalue} ne '';
+
+            $tick->add_comment({
+                identity => $change_ident,
+                body => $change_row{newvalue},
+                dt_created => DateTime->from_epoch(epoch => $change_row{time})
+            });
+        # State (resolution in Trac) changes
+        } elsif($change_row{field} eq 'resolution') {
+            my $status = find_status($change_row{newvalue});
+            $tick->add_state({
+                identity_pk1 => $change_ident->id,
+                status_pk1 => $status->id
+            });
+        }
     }
 }
 
@@ -173,4 +187,18 @@ sub find_product {
         $product_cache{$name} = $product;
     }
     return $product;
+}
+
+sub find_status {
+    my ($name) = @_;
+
+    my $status = $status_cache{$name};
+    unless(defined($status)) {
+
+        $status = $status_rs->create({
+            name => $name
+        });
+        $status_cache{$name} = $status;
+    }
+    return $status;
 }
