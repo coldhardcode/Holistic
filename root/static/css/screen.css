@@ -56,8 +56,8 @@ h1, h2, h3, h4, h5, h6, legend {
     text-shadow: #fff 0 -1px;
 }
 h1 {
-    font-size: 34px;
-    line-height: 54px;
+    font-size: 28px;
+    line-height: 36px;
 }
 h2 {
     font-size: 26px;
@@ -447,17 +447,17 @@ p.subdued {
 }
 #main > header details {
     color: #87766f;
-    font-size: 14px;
+    font-size: 12px;
     margin: 0; padding: 0;
 }
 #main > header details dl dt {
     display: inline;
     color: #7d766f;
-    margin: 0; padding: 0 .5em 0 0;
+    margin: 0; padding: 0 .25em 0 0;
 }
 #main > header details dl dd {
     display: inline;
-    margin: 0; padding: 0 2em 0 0;
+    margin: 0; padding: 0 1em 0 0;
 }
 .message aside {
     -webkit-border-radius: 7px;
@@ -599,6 +599,14 @@ div.tabs nav ul li a:hover {
 section.tab {
     border: 1px solid #353535;
     margin: 0; padding: 1em;
+}
+section.description {
+    background-color: #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    padding: 5px;
 }
 fieldset {
     background-color: #eee;
@@ -757,7 +765,7 @@ ul.comments li cite {
     width: 40px;
     margin: .5em .5em 0 0;
 }
-ul.comments li p {
+ul.comments li blockquote {
     background: #fff;
     border: 1px solid #ddd;
     -webkit-border-radius: 3px;

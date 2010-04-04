@@ -1,5 +1,4 @@
 [%~
-
 USE Number.Format;
 
 page.body.scripts.push('tabview.js');
@@ -57,7 +56,9 @@ END;
 </header>
 
 <h3>[% c.loc('Description') %]</h3>
-<p>[% ticket.description | html %]</p>
+<section class="description">
+[% ticket.description %]
+</section>
 
 <h2 id="tabview-heading"></h2>
 <div class="tabs" id="tabview-1">
@@ -83,7 +84,9 @@ END;
      ~%]
      </time>
      <cite><img src="[% message.identity.person.gravatar_url %]"></cite>
-     <p>[% message.body %]</p>
+     <blockquote>
+      [% message.body %]
+     </blockquote>
     </li>
   [% END %]
    </ul>

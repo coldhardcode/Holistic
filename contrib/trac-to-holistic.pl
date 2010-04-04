@@ -5,6 +5,7 @@ use Data::Dumper;
 use DateTime;
 use Holistic::Schema;
 use List::MoreUtils qw(uniq);
+use Text::Trac;
 use YAML qw(LoadFile);
 
 use Holistic::Conversion::Trac;
@@ -19,6 +20,10 @@ my $schema = Holistic::Schema->connect(@{ $conf->{'Model::Schema'}->{connect_inf
 my $dbh = DBI->connect(
     'DBI:mysql:database='.$conv->database.';host='.$conv->host.';port='.$conv->port,
     $conv->username, $conv->password
+);
+
+my $trac_parser = Text::Trac->new(
+    trac_ticket_url => '/ticket/id/'
 );
 
 my $ticket_rs = $schema->resultset('Ticket');
@@ -75,12 +80,13 @@ sub make_ticket {
     my $product = find_product($row->{$conv->product});
     my $queue = find_queue($row->{$conv->queue}, $product);
 
+    my $desc = $trac_parser->parse($row->{description});
     my $tick = $ticket_rs->create({
         pk1         => $row->{id},
         type_pk1    => $type->id,
         identity_pk1=> $rep_ident->id,
         name        => $row->{summary},
-        description => $row->{description},
+        description => $desc,
         dt_created=> DateTime->from_epoch(epoch => $row->{time}),
         dt_updated=> DateTime->from_epoch(epoch => $row->{changetime})
     });
@@ -101,9 +107,11 @@ sub make_ticket {
             # No reason to have empty ones
             next unless defined($change_row{newvalue}) && $change_row{newvalue} ne '';
 
+            my $html = $trac_parser->parse($change_row{newvalue});
+            next if !defined($html) || ($html eq '');
             $tick->add_comment({
                 identity => $change_ident,
-                body => $change_row{newvalue},
+                body => $html,
                 dt_created => DateTime->from_epoch(epoch => $change_row{time})
             });
         # State (resolution in Trac) changes
