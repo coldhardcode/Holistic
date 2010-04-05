@@ -58,6 +58,7 @@ sub run_test {
     my $ret   = undef;
     if ( $attrs and ref $attrs eq 'ARRAY' ) {
         foreach my $attr ( @$attrs ) {
+            diag(" --> Running " . $m->original_package_name . "->$method");
             if ( $attr =~ /^Plan\s*\(\s*(\d+)\s*\)\s*$/i ) {
                 $self->planned_tests( $self->planned_tests + $1 );
                 try {
