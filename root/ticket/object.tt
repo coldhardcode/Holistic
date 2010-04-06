@@ -76,10 +76,10 @@ END;
     <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
      <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
      [%=
-       IF message.identity.realm == 'local';
-         "the web";
-       ELSIF message.identity.realm == 'git';
+       IF message.identity.realm == 'git';
          "<a href=\"#\">git</a>";
+       ELSE;
+         "the web";
        END;
      ~%]
      </time>
@@ -91,7 +91,7 @@ END;
   [% END %]
    </ul>
    <h3><a name="comment">[% c.loc('Add A Comment') %]</a></h3>
-   <form>
+   <form method="post" action="[% c.uri_for_action('/ticket/comment/root', [ ticket.id ] ) %]">
     <fieldset>
      <table>
       <tfoot>
@@ -101,7 +101,7 @@ END;
       </tfoot>
       <tbody>
        <tr>
-         [% textarea_field({ label => 'Comment', name => 'ticket.comment', hint => 'Your Comment', required => 1, rows => 8 }); %]
+         [% textarea_field({ label => 'Comment', name => 'body', hint => 'Your Comment', required => 1, rows => 8 }); %]
        </tr>
       </tbody>
      </table>

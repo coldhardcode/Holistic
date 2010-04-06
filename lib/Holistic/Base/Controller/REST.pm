@@ -410,4 +410,5 @@ sub not_found : Private {
 
 sub end : ActionClass('Serialize') { }
 
-1;
+no Moose;
+__PACKAGE__->meta->make_immutable;

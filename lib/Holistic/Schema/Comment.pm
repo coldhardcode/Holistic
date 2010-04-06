@@ -122,5 +122,30 @@ sub add_comment {
     return $comment;
 }
 
+# Verification Code
+sub _build__verify_profile {
+    my ( $self ) = @_;
+    my $rs = $self->schema->resultset('Person::Identity');
+    return {
+        'profile' => {
+            'body' => {
+                'required'   => 1,
+                'type'       => 'Str',
+                'min_length' => 1
+            },
+            'identity' => {
+                'required'   => 1,
+                'type'       => 'Holistic::Schema::Person::Identity',
+                'coercion'   => Data::Verifier::coercion(
+                    from => 'Int',
+                    via  => sub { $rs->find( $_ ); }
+                )
+            },
+        },
+        'filters' => [ 'trim' ]
+    };
+}
+
+
 1;
 

@@ -71,7 +71,9 @@ sub tag_DELETE {
     );
 }
 
-sub assign : Chained('object_setup') PathPargs(0) Args(0) ActionClass('REST') { }
+sub comment : Chained('object_setup') PathPart('') CaptureArgs(0) { }
+
+sub assign : Chained('object_setup') Args(0) ActionClass('REST') { }
 sub assign_POST {
     my ( $self, $c ) = @_;
 

@@ -372,7 +372,22 @@ sub action_list {
 
 sub is_member {
     my ( $self, $person, $role ) = @_;
-    return 1;
+
+    my $search = { };
+    if ( $person->isa('Holistic::Schema::Person') ) {
+        $search->{'person.pk1'} = $person->id;
+    }
+    elsif ( $person->isa('Holistic::Schema::Person::Identity') ) {
+        $search->{'identities.pk1'} = $person->id;
+        $search->{'identities.active'} = 1;
+    }
+    else {
+        confess "Invalid call to is_member, require person or identity (not $person)";
+    }
+    $self->groups(
+        $search,
+        { join => { 'person_links' => { 'person' => 'identities' } } }
+    )->count > 0;
 }
 
 # Verification Code
