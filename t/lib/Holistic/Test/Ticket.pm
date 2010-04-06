@@ -142,7 +142,9 @@ sub ticket_create : Plan(28) {
     my $ident = $person->add_to_identities({ realm => 'local', ident => 'joe' });
     cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );
     $ticket->needs_attention( $ident );
+
     cmp_ok( $ticket->needs_attention->pk1, '==', $ident->pk1, 'ticket needs attention');
+
     cmp_ok( $person->needs_attention->count, '==', 1, 'person->needs_attention' );
     ok( $ticket->clear_attention(0), 'clear attention' );
     cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );

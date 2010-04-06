@@ -270,6 +270,7 @@ sub add_state {
                 $info->{$key} ||= $final->$key;
             }
             $final->delete if $final->in_storage;
+            $self->discard_changes;
         }
         $self->add_to_states($info);
     });
