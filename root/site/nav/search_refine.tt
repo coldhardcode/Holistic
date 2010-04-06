@@ -1,11 +1,10 @@
 <h3>[% c.loc('Refine') %]</h3>
 <ul>
-[% SET products = results.facets.products %]
+[% SET products = results.facets.product %]
 [% IF products.size > 1 %]
- [% SET s_things = results.get_sorted_facet('product') %]
  <li>[% c.loc('Product') %]
    <ul>
-   [% FOREACH prod = s_things %]
+   [% FOREACH prod = products.keys %]
     <li><a href="[% c.req.uri_with({ product => prod }) %]">[% c.loc('[_1] ([_2])', prod, products.${prod}) %]</a></li>
    [% END %]
    </ul>

@@ -93,33 +93,51 @@ sub search {
     my $start = time;
 
     my @items = ();
-    my @tickets = $self->create_resultset($oquery)->all;
+    my $full_rs = $self->create_resultset($oquery);
+
+    my $tickets = $full_rs->search(undef, {
+        page => $oquery->page, rows => $oquery->count
+    });
 
     my $pager = Data::SearchEngine::Paginator->new(
         current_page => $oquery->page,
         entries_per_page => $oquery->count,
-        total_entries => scalar(@tickets)
+        total_entries => $full_rs->count
     );
 
     my %facets = ();
-    for(0..scalar(@tickets) - 1) {
-        my $tick = $tickets[$_];
 
-        my $products = $tick->products;
-        while(my $prod = $products->next) {
-            $facets{product}->{$prod->name}++;
-        }
+    my $prod_facets = $tickets->search(undef, {
+        group_by => 'product.pk1',
+        join => { 'parent' => { 'product_links' => 'product' } },
+        '+select' => [ \'product.name AS product_name', { count => 'product.pk1' } ],
+        '+as' => [ 'product_name', 'product_count' ],
+        order_by => \'product_count DESC',
+        page => 1,
+        rows => 5
+    });
+    while(my $prod_facet = $prod_facets->next) {
+        $facets{product}->{$prod_facet->get_column('product_name')} = $prod_facet->get_column('product_count');
+    }
+    # for(0..scalar(@tickets) - 1) {
+        # my $tick = $tickets[$_];
 
-        $facets{status}->{$tick->status->name}++;
-        $facets{owner}->{$tick->owner->person->token}++;
-        $facets{priority}->{$tick->priority->name}++;
-        $facets{type}->{$tick->type->name}++;
+        # my $products = $tick->products;
+        # while(my $prod = $products->next) {
+        #     $facets{product}->{$prod->name}++;
+        # }
+        # 
+        # $facets{status}->{$tick->status->name}++;
+        # $facets{owner}->{$tick->owner->person->token}++;
+        # $facets{priority}->{$tick->priority->name}++;
+        # $facets{type}->{$tick->type->name}++;
 
+    while(my $tick = $tickets->next) {
         push(@items, Data::SearchEngine::Holistic::Item->new(
             id => $tick->id,
             ticket => $tick,
             score => 1
-        )) if($_ + 1 >= $pager->first && $_ <= $pager->last);
+        ));
     }
 
     my $results = Data::SearchEngine::Holistic::Results->new(
