@@ -40,7 +40,6 @@ FOREACH stylesheet IN page.head.stylesheets;
 [%
 END;
 %]
-    <link rel="stylesheet" href="[% static( 'css/screen.css', 1 ) %]" type="text/css" media="screen">
     <style type="text/css" id="styleoverrides"></style>
  </head>
     [% # Drop in the header if appropriate

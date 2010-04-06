@@ -2,6 +2,7 @@ package Holistic::Controller::Root;
 use Moose;
 use namespace::autoclean;
 
+use HTTP::BrowserDetect;
 use Message::Stack;
 use Message::Stack::DataVerifier;
 use DBIx::Class::QueryLog;
@@ -38,6 +39,8 @@ sub index :Path :Args(0) {
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ($self, $c) = @_;
     $c->stash->{now} = DateTime->now;
+
+    $c->stash->{browser_detect} = HTTP::BrowserDetect->new($c->req->user_agent);
 
     if($c->debug) {
         my $ql = DBIx::Class::QueryLog->new;

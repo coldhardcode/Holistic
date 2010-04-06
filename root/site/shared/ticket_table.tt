@@ -17,7 +17,6 @@ tickets_total  = 0;
    <th>[% c.loc('Owner') %]</th>
    <th>[% c.loc('Date Due') %]</th>
    <th>[% c.loc('Priority') %]</th>
-   <th>[% c.loc('Component') %]</th>
   </tr>
 [% FOREACH ticket IN tickets;
     classes = [];
@@ -47,7 +46,6 @@ tickets_total  = 0;
    <td>[% ticket.final_state.destination_identity.person.token | html %]</td>
    <td>[% due_date = ticket.due_date; IF due_date; %]<time datetime="[% due_date.dt_marker %]">[% pretty_date(due_date.dt_marker); %]</time>[% ELSE; "&mdash;"; END %]</td>
    <td>[% c.loc(ticket.priority.name) %]</td>
-   <td>X</td>
   </tr>
 [% END %]
  </tbody>
@@ -55,11 +53,11 @@ tickets_total  = 0;
  <tfoot>
    <tr>
     [%= SET complete_percent = ( tickets_closed / tickets_total ) * 100 ~%]
-    <td colspan="8">
+    <td colspan="7">
      <meter>
       [% IF complete_percent == 100 %]
       <img src="/static/images/actions/tick.png">
-      [% ELSE %]
+      [% ELSIF complete_percent > 0 %]
       <img src="[% c.uri_for('/chart/completion_pie', complete_percent) %]">
       [% END %]
       [% complete_percent | format_number %]% Complete

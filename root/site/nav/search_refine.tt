@@ -2,10 +2,10 @@
 <ul>
 [% SET products = results.facets.product %]
 [% IF products.size > 1 %]
- <li>[% c.loc('Product') %]
+ <li><strong>[% c.loc('Product') %]</strong>
    <ul>
    [% FOREACH prod = products.keys %]
-    <li><a href="[% c.req.uri_with({ product => prod }) %]">[% c.loc('[_1] ([_2])', prod, products.${prod}) %]</a></li>
+    <li><a href="[% c.req.uri_with({ product => prod }) %]">[% prod %] <meter>[% products.${prod} %]</meter></a></li>
    [% END %]
    </ul>
  </li>

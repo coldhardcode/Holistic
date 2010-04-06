@@ -53,7 +53,7 @@ footer {
 h1, h2, h3, h4, h5, h6, legend {
     font-weight: bold;
     margin: 0 0 18px 0; padding: 0;
-    text-shadow: #fff 0 -1px;
+    text-shadow: #fff 1px 1px;
 }
 h1 {
     font-size: 28px;
@@ -156,7 +156,6 @@ footer nav dt {
     border-bottom: 1px solid #353535;
     color: #101010;
     margin: 0 6em .5em 0; padding: 0 0 .1em 0;
-    text-transform: uppercase;
 }
 footer nav dd {
     padding: 0 0 .25em 0;
@@ -382,13 +381,11 @@ body > header form fieldset input {
     text-shadow: none;
 }
 #sidebar nav a:hover {
-    background-color: #eee;
     text-decoration: underline;
 }
 #sidebar nav h4 {
     margin: 0 0 .5em 0; padding: 0 0 0 .5em;
     font-size: 14px;
-    text-transform: uppercase;
 }
 #sidebar nav > ul {
     margin: 0 0 1em 0; padding: 0 0 .5em 0;
