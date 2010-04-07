@@ -16,7 +16,7 @@ A ticket is a subclass of a queue, with additional features.  A queue is
 essentially some defined workflow that tickets go through, this can be the
 top level group queue, or a subordinate milestone object.
 
-In any case, a ticket has one of these, linked by the C<parent_pk1> column.
+In any case, a ticket has one of these, linked by the C<queue_pk1> column.
 
 =head2 INFORMATIONAL CATEGORIES
 
@@ -112,10 +112,25 @@ with 'Holistic::Role::Discussable';
 __PACKAGE__->table('tickets');
 __PACKAGE__->resultset_class('Holistic::ResultSet::Ticket');
 
-# See Holistic::Schema::Queue for all columns
-
+# See Holistic::Schema::Queue for base columns
+__PACKAGE__->add_columns(
+    'queue_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1 },
+);
 __PACKAGE__->set_primary_key('pk1');
-__PACKAGE__->has_many('states', 'Holistic::Schema::Ticket::State', 'ticket_pk1');
+
+__PACKAGE__->belongs_to(
+    'queue', 'Holistic::Schema::Queue', 
+    { 'foreign.pk1' => 'self.queue_pk1' }
+);
+
+__PACKAGE__->has_many(
+    'states', 'Holistic::Schema::Ticket::State', 'ticket_pk1'
+);
+
+__PACKAGE__->has_many(
+    'final_states', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1'
+);
 
 __PACKAGE__->add_relationship(
     'final_state',
@@ -132,11 +147,6 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->belongs_to(
     'type', 'Holistic::Schema::Ticket::Type',
     { 'foreign.pk1' => 'self.type_pk1' }
-);
-
-__PACKAGE__->belongs_to(
-    'queue', 'Holistic::Schema::Queue',
-    { 'foreign.pk1' => 'self.parent_pk1' }
 );
 
 __PACKAGE__->has_many(
@@ -157,6 +167,7 @@ sub needs_attention {
     my ( $self, $identity ) = @_;
 
     my $status = $self->result_source->schema->get_status('@ATTENTION');
+
     if ( defined $identity ) {
         my $state = $self->state;
         my $source_id;
@@ -171,9 +182,10 @@ sub needs_attention {
             status_pk1   => $status->id,
         });
     }
+warn "Fetching state...\n";
     my $state = $self->state;
-
-    if ( $state and $state->status_pk1 == $status->id ) {
+warn "Got state? $state (" . $state->status_pk1 . " == " . $status->id . ")\n";
+    if ( $state->status_pk1 == $status->id ) {
         return $state->destination_identity;
     }
     return undef;
@@ -264,7 +276,8 @@ sub add_state {
     my ( $self, $info ) = @_;
 
     $self->result_source->schema->txn_do(sub {
-        my $final = $self->state;
+        my $final = $self->final_state;
+        # Preserve some other things
         if ( defined $final ) {
             foreach my $key ( qw/priority_pk1 identity_pk1 identity_pk2/ ) {
                 $info->{$key} ||= $final->$key;
@@ -273,6 +286,7 @@ sub add_state {
             $self->discard_changes;
         }
         $self->add_to_states($info);
+        $self->state;
     });
 }
 
@@ -287,18 +301,19 @@ sub state {
         {},
         {
             prefetch => [ 'identity', 'destination_identity' ],
-            order_by => [ { '-asc' => 'me.dt_created' } ] 
+            order_by => [ { '-desc' => 'me.pk1' } ] 
         }
     );
 
     my $state_count = $rs->count;
     return undef if $state_count == 0;
-    if ( defined $final_state && $final_state->state_count != $state_count ) {
-        $final_state->delete if $final_state->in_storage;
-        $final_state = undef;
-    } elsif ( defined $final_state ) {
-        $final_state->discard_changes;
-    }
+
+    #if ( defined $final_state && $final_state->state_count != $state_count ) {
+    #$final_state->delete if $final_state->in_storage;
+    #    $final_state = undef;
+    #} elsif ( defined $final_state ) {
+    #    $final_state->discard_changes;
+    #}
 
     if ( not defined $final_state ) {
         my %merge;
@@ -344,7 +359,7 @@ sub state {
             }
         }
         $merge{state_count} = $state_count;
-        $self->final_state( $self->create_related('final_state', \%merge) );
+        $self->create_related('final_state', \%merge);
         $final_state = $self->final_state;
     }
     return $final_state;
@@ -373,6 +388,10 @@ sub action_list {
 sub is_member {
     my ( $self, $person, $role ) = @_;
 
+    my $ret = $self->queue->is_member( $person, $role );
+  
+    # Part of the queue, they're a member here, too. 
+    return $ret if $ret; 
     my $search = { };
     if ( $person->isa('Holistic::Schema::Person') ) {
         $search->{'person.pk1'} = $person->id;

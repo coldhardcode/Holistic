@@ -1,5 +1,6 @@
 [%~
 
+groups = c.model('Schema::Group').search_ordered.all;
 parent = queue.parent;
 pname = product.name | html;
 name = queue.name | html;
@@ -14,9 +15,8 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
 
 ~%]
 <h1>[% c.loc('[_2] [_1]', [ queue.type.name, queue.name ] ) %]</h1>
-
 <ul>
-    <li><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% c.loc('Status') %]</a></li>
+    <li><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% c.loc('View Tickets') %]</a></li>
     <li><a href="[% c.uri_for_action('/ticket/create_form', { queue_pk1 => queue.id }) %]">[% c.loc('Create Ticket') %]</a></li>
 [%~ IF parent.defined %]
     <li>XX <a href="[% c.uri_for_action('/admin/product/queue/object', [ product.id, parent.id ]) %]">[% c.loc('Parent: [_1]', [ parent.name ]) %]</a></li>
@@ -45,6 +45,9 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
     </tr>
     <tr>
      [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8, value => queue.description }); %]
+    </tr>
+    <tr>
+        [% checkboxes_field({ label => 'Ownership Groups', name => 'groups', array => groups, value_method => 'id', label_method => 'name', selected => selected_groups }); %]
     </tr>
    </tbody>
   </table>

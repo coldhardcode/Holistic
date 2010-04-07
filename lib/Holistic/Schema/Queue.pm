@@ -9,13 +9,18 @@ extends 'Holistic::Base::DBIx::Class';
 
 #with 'Holistic::Role::Permissions';
 
-__PACKAGE__->load_components(qw/Tree::AdjacencyList DynamicDefault/);
+__PACKAGE__->load_components(qw/
+    +Holistic::Base::DBIx::Class::MatPath
+    DynamicDefault
+/);
 
 __PACKAGE__->table('queues');
 
 __PACKAGE__->add_columns(
     'pk1',
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
+    #'position',
+    #{ data_type => 'integer', size => '16', is_nullable => 0 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
     'description',
@@ -27,15 +32,19 @@ __PACKAGE__->add_columns(
         dynamic_default_on_create => sub { shift->result_source->name } },
     'token',
     { data_type => 'varchar', size => '255', is_nullable => 0,
-        dynamic_default_on_create => sub { my ( $self ) = @_; $self->schema->tokenize( $self->name ) } },
+        dynamic_default_on_create => sub {
+            my ( $self ) = @_;
+            $self->schema->tokenize( $self->name );
+        }
+    },
     'identity_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1,
         dynamic_default_on_create => \&_default_system_user },
     'type_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1,
         dynamic_default_on_create => \&_default_type },
-    'parent_pk1',
-    { data_type => 'integer', size => '16', is_nullable => 1, default_value => undef },
+    'path',
+    { data_type => 'varchar', size => '255', is_nullable => 0, default_value => '' },
     'dt_created',
     { data_type => 'datetime', set_on_create => 1 },
     'dt_updated',
@@ -43,16 +52,13 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->set_primary_key('pk1');
-__PACKAGE__->parent_column('parent_pk1');
+
+__PACKAGE__->path_column('path');
+__PACKAGE__->parent_column('path');
 
 __PACKAGE__->has_many(
     'tickets', 'Holistic::Schema::Ticket', 
-    { 'foreign.parent_pk1' => 'self.pk1' }
-);
-
-__PACKAGE__->belongs_to(
-    'parent', 'Holistic::Schema::Queue',
-    { 'foreign.pk1' => 'self.parent_pk1' }
+    { 'foreign.queue_pk1' => 'self.pk1' }
 );
 
 __PACKAGE__->belongs_to(
@@ -77,6 +83,26 @@ __PACKAGE__->has_many('group_links', __PACKAGE__ . '::Group',
     { 'foreign.foreign_pk1' => 'self.pk1' }
 );
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
+
+sub is_member {
+    my ( $self, $person, $role ) = @_;
+
+    my $search = { };
+    if ( $person->isa('Holistic::Schema::Person') ) {
+        $search->{'person.pk1'} = $person->id;
+    }
+    elsif ( $person->isa('Holistic::Schema::Person::Identity') ) {
+        $search->{'identities.pk1'} = $person->id;
+        $search->{'identities.active'} = 1;
+    }
+    else {
+        confess "Invalid call to is_member, require person or identity (not $person)";
+    }
+    $self->groups(
+        $search,
+        { join => { 'person_links' => { 'person' => 'identities' } } }
+    )->count > 0;
+}
 
 sub assignable_priorities {
     shift->schema->resultset('Ticket::Priority')->search_rs( @_ );
@@ -126,24 +152,10 @@ sub _default_system_user {
 sub all_tickets {
     my ( $self ) = @_;
 
-    my $rs = $self->search_related(
-        'children',
-        { },
-        {
-            select   => [ 'me.pk1', 'children.pk1', map { "children_$_.pk1" } 2 .. 5 ],
-            as       => [ map { "pk$_" } 1 .. 6 ],
-            prefetch => [ 
-                { 'children' => { 'children' => { 'children' => { 'children' => 'children' } } } }
-            ]
-        }
-    );
-    my @pk1s = $self->pk1;
-    while ( my $row = $rs->next ) {
-        push @pk1s, grep { defined } map { $row->get_column("pk$_") } 1 .. 5;
-    }
+    my @pk1s = ( $self->pk1, $self->all_children->get_column('me.pk1')->all );
 
     $self->result_source->schema->resultset('Ticket')->search_rs(
-        { 'me.parent_pk1' => \@pk1s },
+        { 'me.queue_pk1' => \@pk1s },
         {
             prefetch => {
                 'final_state' => [

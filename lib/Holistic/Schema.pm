@@ -120,7 +120,7 @@ sub get_role {
 }
 
 sub tokenize {
-    my ( $field ) = @_;
+    my ( $self, $field ) = @_;
     $field = lc($field);
     $field =~ s/&/-/g;
     $field =~ s/\s+/_/g;

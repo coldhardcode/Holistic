@@ -21,8 +21,9 @@ sub queue_create : Plan(1) {
     my $queue = $self->schema->resultset('Queue')->find_or_create({
         name  => $data->{name} || 'A Q',
         token => $data->{token} || 'a-queue',
-        type  => $type_ms
+        type  => $type_ms,
     });
+    $queue->discard_changes;
 
     ok($queue, 'created queue');
     $self->queue( $queue );

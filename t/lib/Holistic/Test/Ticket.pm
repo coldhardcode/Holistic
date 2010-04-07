@@ -9,7 +9,9 @@ use Text::Lorem;
 
 our $lorem = Text::Lorem->new;
 
-with 'Holistic::Test::Schema'; # We require schema
+with 'Holistic::Test::Schema', # We require schema
+     'Holistic::Test::Queue',  # And queue
+;
 
 has 'ticket' => (
     is  => 'rw',
@@ -23,16 +25,14 @@ sub ticket_create : Plan(28) {
         name => 'Milestone'
     });
 
-    my $queue;
-    if ( $self->meta->does_role('Holistic::Test::Queue') ) {
-        $queue = $self->queue;
+    my $queue = $self->queue;
+    if ( not defined $queue ) {
+        $queue = $self->run_test('queue_create', {
+            name  => 'Test Queue',
+            token => 'test-suite-queue',
+            type  => $type_ms
+        });
     }
-
-    $queue ||= $self->resultset('Queue')->find_or_create({
-        name  => 'Test Queue',
-        token => 'test-suite-queue',
-        type  => $type_ms
-    });
 
     if ( $self->meta->does_role('Holistic::Test::Person') ) {
         my $group = $self->group;
@@ -66,7 +66,8 @@ sub ticket_create : Plan(28) {
         name        => 'Version 4.5',
         token       => 'version-4.5',
         type        => $type_ms,
-        parent_pk1  => $queue->id,
+        # XX this needs to be automatic (maybe a 'parent'?)
+        path        => join('.', $queue->path, 'version-4.5'),
     });
 
     my $ticket = $self->resultset('Ticket')->create({
@@ -74,7 +75,7 @@ sub ticket_create : Plan(28) {
         token       => 'test-suite-generated-ticket',
         description => $lorem->paragraphs(2),
         identity    => $identity,
-        parent_pk1  => $milestone->id,
+        queue_pk1   => $milestone->id,
         priority    => $priority,
         type        => $ticket_type,
         dt_created  => $data->{dt_created}
@@ -141,6 +142,7 @@ sub ticket_create : Plan(28) {
     });
     my $ident = $person->add_to_identities({ realm => 'local', ident => 'joe' });
     cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );
+$self->schema->storage->debug(1);
     $ticket->needs_attention( $ident );
 
     cmp_ok( $ticket->needs_attention->pk1, '==', $ident->pk1, 'ticket needs attention');
@@ -179,7 +181,6 @@ sub ticket_dependencies : Plan(2) {
             queue       => $ticket->queue,
             priority    => $ticket->priority,
             type        => $ticket->type,
-            parent_pk1  => $ticket->parent_pk1
         });
         $ticket->add_to_dependent_links({
             linked_ticket => $new,

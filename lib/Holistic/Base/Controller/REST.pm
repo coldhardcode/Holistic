@@ -295,8 +295,11 @@ sub update : Private {
         $c->log->debug("Updating $object with:");
         $c->log->_dump(\%filtered);
     }
-    $object->update( \%filtered );
-    $c->message({ type => 'success', message => $self->update_string });
+    $object->result_source->schema->txn_do( sub {
+        $object->update( \%filtered );
+        $c->forward('post_update', [ $data, $object ]);
+        $c->message({ type => 'success', message => $self->update_string });
+    });
 }
 
 # Just designed to override this.

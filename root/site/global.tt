@@ -141,7 +141,7 @@ END %]
         ELSE;
           SET this_name = item;
         END;
-      %]<label><input type="checkbox" name="[% info.name %].[% this.value %]"> [% this_name %]</label>
+        %]<label><input type="checkbox" name="[% info.name %]" value="[% this_value %]"[% IF info.selected.${this_value}.defined %] checked="checked"[% END %]>[% this_name %]</label>
       [% END %]
       [% ELSE;
         IF info.value_method;
@@ -154,7 +154,7 @@ END %]
         ELSE;
           SET this_name = item;
         END;
-      %]<label><input type="checkbox" name="[% info.name %].[% this_value %]"> [% this_name %]</label>
+      %]<label><input type="checkbox" name="[% info.name %]" value="[% this_value %]"[% IF info.selected.${this_value}.defined %] checked="checked"[% END %]> [% this_name %]</label>
      [% END %]
    [% END %]
   </fieldset>
