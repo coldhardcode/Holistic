@@ -103,7 +103,7 @@ exception.
 use Moose;
 
 use Carp;
-use String::Random;
+use Scalar::Util 'blessed';
 
 extends 'Holistic::Schema::Queue';
 
@@ -387,6 +387,8 @@ sub action_list {
 
 sub is_member {
     my ( $self, $person, $role ) = @_;
+    
+    return 0 unless defined $person and blessed( $person );
 
     my $ret = $self->queue->is_member( $person, $role );
   
@@ -415,6 +417,10 @@ sub _build__verify_profile {
     my $rs = $self->schema->resultset('Person::Identity');
     return {
         'profile' => {
+            'queue_pk1' => {
+                'required' => 1,
+                'type' => 'Int'
+            },
             'priority_pk1' => {
                 'required' => 1,
                 'type' => 'Int'
@@ -465,15 +471,23 @@ around 'create' => sub {
     if ( exists $data->{assign_identity} ) {
         $ident = delete $data->{assign_identity};
     }
+
     my $priority;
     if ( exists $data->{priority} ) {
         $priority = delete $data->{priority};
-    } else {
+    }
+    elsif ( exists $data->{priority_pk1} ) {
+        # Default priority?
+        $priority = $schema->resultset('Ticket::Priority')
+            ->find( delete $data->{priority_pk1} );
+    }
+    if ( not defined $priority ) {
         # Default priority?
         $priority = $schema->resultset('Ticket::Priority')->find_or_create(
             { name => '@default priority' }
         );
     }
+
     # in a txn?
     my $ticket = $self->$orig($data, @args);
     if ( defined $ident ) {

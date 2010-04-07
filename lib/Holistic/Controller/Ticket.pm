@@ -112,15 +112,15 @@ sub post_create : Private {
 sub prepare_data {
     my ( $self, $c, $data ) = @_;
 
-    # XX - we need to get a queue filter to create a ticket under a product and
-    #      queue.
-    $data->{ticket}->{parent_pk1} = 0;
     if ( defined ( my $reporter = $data->{ticket}->{reporter} ) ) {
-        my $identity = $c->model('Schema::Person::Identity')->search({ realm => 'local', id => lc($reporter) })->first;
+        my $identity = $c->model('Schema::Person::Identity')->search({ realm => 'local', ident => lc($reporter) })->first;
         if ( defined $identity ) {
             $data->{ticket}->{identity} = $identity->pk1;
             $c->log->debug("We have an identity ($identity) to set...");
         }
+    }
+    if ( not defined $data->{ticket}->{identity} ) {
+        $data->{ticket}->{identity} = $c->model('Schema')->schema->system_identity;
     }
     $data->{ticket};
 }

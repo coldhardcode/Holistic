@@ -73,7 +73,7 @@ END %]
         ELSE;
           SET this_name = item;
         END;
-      %]<option value="[% this_value %]" [% IF this_value == info.value %]selected="selected"[% END %]>[% this_name %]</option>
+      %]<option value="[% this_value %]" [% IF this_value == info.value %]selected="selected"[% END %]>[% c.loc(this_name) %]</option>
      [% END %]
    [% END %]
   </select>

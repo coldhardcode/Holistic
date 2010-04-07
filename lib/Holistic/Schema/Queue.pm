@@ -3,7 +3,7 @@ package Holistic::Schema::Queue;
 use Moose;
 
 use Carp;
-use String::Random;
+use Scalar::Util 'blessed';
 
 extends 'Holistic::Base::DBIx::Class';
 
@@ -87,7 +87,9 @@ __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
 sub is_member {
     my ( $self, $person, $role ) = @_;
 
-    my $search = { };
+    return 0 unless defined $person and blessed( $person );
+
+    my $search = {};
     if ( $person->isa('Holistic::Schema::Person') ) {
         $search->{'person.pk1'} = $person->id;
     }

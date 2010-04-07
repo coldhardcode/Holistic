@@ -15,3 +15,6 @@ msgstr ":"
 
 msgid "@due"
 msgstr "Due Date"
+
+msgid "@default priority"
+msgstr "Normal"

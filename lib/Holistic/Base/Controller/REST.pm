@@ -263,10 +263,10 @@ sub object_POST {
 
     my $obj = $c->stash->{$self->object_key};
 
-    if ( $c->debug ) {
-        $c->log->debug("Updating object: $obj with:");
-        $c->log->_dump( $data );
-    }
+    #if ( $c->debug ) {
+        #$c->log->debug("Updating object: $obj with:");
+        #$c->log->_dump( $data );
+    #}
     if ( $obj ) {
         $c->forward('update', [ $obj, $data ]);
     } else {
@@ -293,7 +293,7 @@ sub update : Private {
 
     if ( $c->debug ) {
         $c->log->debug("Updating $object with:");
-        $c->log->_dump(\%filtered);
+        $c->log->_dump({ keys => [ keys %filtered ] });
     }
     $object->result_source->schema->txn_do( sub {
         $object->update( \%filtered );
