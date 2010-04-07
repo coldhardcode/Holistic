@@ -53,7 +53,6 @@ sub deploy {
             body         => '',
         });
 
-        
         unless ( $data_import and ref $data_import eq 'HASH' ) {
             $self->storage->dbh->do($key_check_on) if $key_check_on;
             return;

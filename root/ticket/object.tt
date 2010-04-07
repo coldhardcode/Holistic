@@ -74,7 +74,7 @@ END;
    <ul class="comments">
     [% FOREACH message IN activity_log.reverse %]
     <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
-     [% message.identity.id %]<time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
+     <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
      [%=
        IF message.identity.realm == 'git';
          "<a href=\"#\">git</a>";

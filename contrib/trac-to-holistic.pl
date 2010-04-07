@@ -40,6 +40,8 @@ my $identity_rs = $schema->resultset('Person::Identity');
 
 my %queue_cache;
 my $queue_rs = $schema->resultset('Queue');
+# System queue?
+my $default_queue = 1; # XX Arbitrary, but everything has to have a queue
 
 my %product_cache;
 my $product_rs = $schema->resultset('Product');
@@ -87,10 +89,10 @@ sub make_ticket {
         identity_pk1=> $rep_ident->id,
         name        => $row->{summary},
         description => $desc,
-        dt_created=> DateTime->from_epoch(epoch => $row->{time}),
-        dt_updated=> DateTime->from_epoch(epoch => $row->{changetime})
+        queue_pk1   => ( defined $queue ? $queue->id : $default_queue ),
+        dt_created  => DateTime->from_epoch(epoch => $row->{time}),
+        dt_updated  => DateTime->from_epoch(epoch => $row->{changetime})
     });
-    $tick->update({ parent_pk1 => $queue->id }) if defined($queue);
 
     ############## TICKET CHANGES
     $change_sth->execute($row->{id});
