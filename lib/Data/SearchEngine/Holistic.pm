@@ -39,7 +39,7 @@ has fields => (
             queue => {
                 alias => 'me',
                 text => 0,
-                field => 'parent_pk1'
+                field => 'queue_pk1'
             },
             queue_name => {
                 alias => 'queue',
@@ -109,7 +109,7 @@ sub search {
 
     my $prod_facets = $tickets->search(undef, {
         group_by => 'product.pk1',
-        join => { 'parent' => { 'product_links' => 'product' } },
+        join => { 'queue' => { 'product_links' => 'product' } },
         '+select' => [ \'product.name AS product_name', { count => 'product.pk1' } ],
         '+as' => [ 'product_name', 'product_count' ],
         order_by => \'product_count DESC',
