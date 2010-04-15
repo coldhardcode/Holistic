@@ -67,8 +67,8 @@ END;
  <nav class="tabs">
   <ul>
    <li class="yui-tab yui-tab-selected first"><a href="#comments">[% c.loc('Comments ([_1])', activity_log.size) %]</a></li>
-   <li class="yui-tab"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
-   <li class="yui-tab last"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
+   <li class="yui-tab"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
+   <li class="yui-tab last"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
   </ul>
  </nav>
  <div class="panels">
