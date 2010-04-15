@@ -13,7 +13,7 @@ requestor = ticket.requestor;
 owner     = ticket.owner;
 attention = ticket.needs_attention;
 dependencies = ticket.dependencies_rs;
-activity_log = ticket.comments;
+activity_log = ticket.comments({ }, { prefetch => [ 'type' ] });
 
 persons = {};
 
@@ -76,6 +76,7 @@ END;
    <ul class="comments">
     [% FOREACH message IN activity_log.reverse %]
     <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
+     <a name="[% message.id %]"></a>
      <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
      [%=
        IF message.identity.realm == 'git';
@@ -89,6 +90,7 @@ END;
      <blockquote>
       [% message.body %]
      </blockquote>
+     <a href="#[% message.id %]">#</a> - [% message.type.name %]
     </li>
   [% END %]
    </ul>

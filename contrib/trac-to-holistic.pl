@@ -57,6 +57,8 @@ my $mile_sth = $dbh->prepare('SELECT name, due, completed, description FROM mile
 my $prod_sth = $dbh->prepare('SELECT name, owner, description FROM component WHERE name=?');
 my $change_sth = $dbh->prepare("SELECT author, field, time, newvalue FROM ticket_change WHERE ticket=? ORDER BY TIME ASC");
 
+my $worklog_type = $schema->resultset('Comment::Type')->find_or_create({ name => '@worklog' });
+
 $tick_sth->execute;
 
 my %row;
@@ -111,10 +113,15 @@ sub make_ticket {
 
             my $html = $trac_parser->parse($change_row{newvalue});
             next if !defined($html) || ($html eq '');
+            my $is_worklog = 0;
+            if ( $html =~ /changeset/ ) {
+                $is_worklog = 1;
+            }
             $tick->add_comment({
                 identity => $change_ident,
                 body => $html,
-                dt_created => DateTime->from_epoch(epoch => $change_row{time})
+                dt_created => DateTime->from_epoch(epoch => $change_row{time}),
+                ( $is_worklog ? ( type_pk1 => $worklog_type->id ) : () )
             });
         # State (resolution in Trac) changes
         } elsif($change_row{field} eq 'resolution') {

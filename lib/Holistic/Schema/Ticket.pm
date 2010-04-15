@@ -161,7 +161,20 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many('dependencies', 'dependent_links', 'linked_ticket' );
 
-sub activity { shift->comments(@_); }
+sub worklog {
+    my ( $self ) = @_;
+    $self
+        ->comments({ 'type.name' => '@worklog' }, { prefetch => [ 'type' ] })
+        ->search_rs;
+}
+
+sub activity {
+    my ( $self ) = @_;
+    $self
+        ->comments(
+            { 'type.name' => { '!=', '@worklog' } }, { prefetch => [ 'type' ] }
+        )->search_rs;
+}
 
 sub needs_attention {
     my ( $self, $identity ) = @_;
@@ -182,9 +195,7 @@ sub needs_attention {
             status_pk1   => $status->id,
         });
     }
-warn "Fetching state...\n";
     my $state = $self->state;
-warn "Got state? $state (" . $state->status_pk1 . " == " . $status->id . ")\n";
     if ( $state->status_pk1 == $status->id ) {
         return $state->destination_identity;
     }

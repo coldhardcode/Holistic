@@ -111,6 +111,7 @@ sub ticket_create : Plan(28) {
         identity => $self->person->identities({ realm => 'git' })->first,
         subject  => 'changeset:a2f13fh89',
         body     => $lorem->sentences(2),
+        type_pk1 => $self->resultset('Comment::Type')->find_or_create({ name => '@worklog' })->id
     });
 
     cmp_ok(
@@ -120,8 +121,10 @@ sub ticket_create : Plan(28) {
         )->count,
         '==', 1, 'one comment scoped by realm'
     );
-
-
+    cmp_ok( $ticket->worklog->count, '==', 1, 'one worklog entry' );
+    cmp_ok( $ticket->activity->count, '==', 1, 'one activity entry' );
+    cmp_ok( $ticket->comments->count, '==', 2, 'two comments entry' );
+ 
     cmp_ok( $queue->all_tickets->count, '==', 1, 'ticket count on queue' );
     cmp_ok( $milestone->all_tickets->count, '==', 1, 'ticket count on milestone' );
 
