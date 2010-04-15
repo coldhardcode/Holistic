@@ -42,7 +42,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
 
     $c->stash->{browser_detect} = HTTP::BrowserDetect->new($c->req->user_agent);
 
-    if($c->debug) {
+    if ($c->debug) {
         my $ql = DBIx::Class::QueryLog->new;
         my $schema = $c->model('Schema')->schema;
         $schema->storage->debugobj($ql);
@@ -54,18 +54,17 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     }
 
     if ( $c->user_exists ) {
-        my $name  = $c->user->id;
         my $ident = $c->model('Schema::Person::Identity')
             ->search(
-                { ident => $name, realm => 'local' },
+                { 'me.pk1' => $c->user->id },
                 { prefetch => [ 'person' ] }
             )->single;
 
         # Vivify the user from external auth (most likely HTTP Auth)
         if ( not defined $ident ) {
             my $person = $c->model('Schema::Person')->create({
-                name  => $name,
-                token => $name,
+                name  => $c->user->ident,
+                token => $c->user->ident,
             });
             # We don't need a secret, since it is external.
             $ident = $person->add_to_identities({
@@ -97,13 +96,14 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     }
 
     if ( defined ( my $errors = $c->flash->{errors} ) ) {
-        my $stack = Message::Stack->new;
+        my $stack = $c->stash->{messages} || Message::Stack->new;
 
         foreach my $scope ( keys %{ $errors } ) {
             $c->stash->{errors}->{$scope} = $errors->{$scope};
             Message::Stack::DataVerifier->parse( $stack, $scope, $errors->{$scope} );
         }
-        $c->stash->{stack} = $stack;
+        $c->stash->{stack}      = $stack;
+        $c->stash->{messages} ||= $stack;
     }
 }
 

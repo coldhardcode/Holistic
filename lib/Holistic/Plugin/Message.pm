@@ -100,6 +100,7 @@ sub dispatch {
     if ( $c->can('flash') and $c->flash->{$flash_key} ) {
         $c->stash->{$stash_key} = delete $c->flash->{$flash_key};
     }
+
     my $ret = $c->next::method(@_);
 
     # Redirect?

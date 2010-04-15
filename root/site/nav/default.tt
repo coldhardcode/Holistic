@@ -4,6 +4,7 @@
   <li><a href="[% c.uri_for_action('/queue/root') %]">[% c.loc('Roadmap') %]</a></li>
   <li><a href="[% c.uri_for_action('/ticket/create_form') %]">[% c.loc('Create Ticket') %]</a></li>
 [% IF c.user_exists %]
+  <li><a href="[% c.uri_for_action('/my/profile/root') %]">[% c.loc('Profile') %]</a></li>
   <li><a href="[% c.uri_for_action('/auth/logout') %]">[% c.loc('Logout') %]</a></li>
 [% ELSE %]
   <li><a href="[% c.uri_for_action('/auth/login') %]">[% c.loc('Login') %]</a></li>

@@ -112,6 +112,27 @@ sub temporary_password {
     });
 }
 
+# Verification Code
+sub _build__verify_profile {
+    my ( $self ) = @_;
+    return {
+        'profile' => {
+            'name' => {
+                'required' => 1,
+                'type' => 'Str',
+                'max_length' => '255',
+                'min_length' => 1
+            },
+            'email' => {
+                'required'   => 1,
+                'type'       => 'Str',
+                'min_length' => 1
+            },
+        },
+        'filters' => [ 'trim' ]
+    };
+}
+
 use Digest::MD5;
 use URI::Escape qw(uri_escape);
 

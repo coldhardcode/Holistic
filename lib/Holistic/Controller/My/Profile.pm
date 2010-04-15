@@ -14,6 +14,8 @@ __PACKAGE__->config(
 after 'setup' => sub {
     my ( $self, $c ) = @_;
     if ( $c->config->{'Plugin::Authentication'}->{'realms'}->{'local'}->{'credential'}->{'class'} eq 'HTTP' ) {
+        $c->log->debug("User logged in via HTTP, so can't change password")
+            if $c->debug;
         $c->stash->{disable_password_change} = 1;
     }
 };
@@ -24,7 +26,7 @@ sub _fetch_rs {
         $c->res->redirect( $c->uri_for_action('/auth/login') );
         $c->detach;
     }
-    $c->model('Schema::Person')->search({ 'me.pk1' => $c->user->person_pk1 });
+    $c->model('Schema::Person')->search_rs({ 'me.pk1' => $c->user->person_pk1 });
 }
 
 no Moose;
