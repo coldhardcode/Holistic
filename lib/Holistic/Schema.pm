@@ -95,6 +95,14 @@ sub default_comment {
     )->first;
 }
 
+sub default_comment_type {
+    my ( $self ) = @_;
+
+    $self->resultset('Comment::Type')->find_or_create(
+        { name => '@comment' }
+    );
+}
+
 sub system_identity {
     my ( $self ) = @_;
 

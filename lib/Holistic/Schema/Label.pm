@@ -3,7 +3,6 @@ package Holistic::Schema::Label;
 use Moose;
 
 use Carp;
-use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 

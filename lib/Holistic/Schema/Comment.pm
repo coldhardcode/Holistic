@@ -18,7 +18,7 @@ $CLASS->add_columns(
         is_nullable => 0,
         size        => 16,
         is_auto_increment => 1,
-    },  
+    },
     parent_pk1 => {
         data_type       => 'integer',
         is_nullable     => 0,
@@ -26,6 +26,15 @@ $CLASS->add_columns(
         size            => 16,
         dynamic_default_on_create => sub {
             shift->result_source->schema->default_comment->id;
+        }
+    },
+    type_pk1 => {
+        data_type       => 'integer',
+        is_nullable     => 0,
+        default_value   => 0,
+        size            => 16,
+        dynamic_default_on_create => sub {
+            shift->result_source->schema->default_comment_type->id;
         }
     },  
     identity_pk1 => {
@@ -82,6 +91,11 @@ $CLASS->many_to_many('comment_objects', 'discussable_comments', 'discussable');
 $CLASS->belongs_to(
     'identity', 'Holistic::Schema::Person::Identity', 
     { 'foreign.pk1' => 'self.identity_pk1' }
+);
+
+$CLASS->belongs_to(
+    'type', 'Holistic::Schema::Comment::Type', 
+    { 'foreign.pk1' => 'self.type_pk1' }
 );
 
 $CLASS->might_have(

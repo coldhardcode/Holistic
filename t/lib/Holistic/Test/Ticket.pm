@@ -142,9 +142,7 @@ sub ticket_create : Plan(28) {
     });
     my $ident = $person->add_to_identities({ realm => 'local', ident => 'joe' });
     cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );
-$self->schema->storage->debug(1);
     $ticket->needs_attention( $ident );
-
     cmp_ok( $ticket->needs_attention->pk1, '==', $ident->pk1, 'ticket needs attention');
 
     cmp_ok( $person->needs_attention->count, '==', 1, 'person->needs_attention' );

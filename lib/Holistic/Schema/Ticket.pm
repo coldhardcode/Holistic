@@ -301,7 +301,7 @@ sub state {
         {},
         {
             prefetch => [ 'identity', 'destination_identity' ],
-            order_by => [ { '-desc' => 'me.pk1' } ] 
+            order_by => [ { '-asc' => 'me.pk1' } ] 
         }
     );
 
