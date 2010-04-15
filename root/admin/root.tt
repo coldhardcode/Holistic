@@ -5,7 +5,16 @@
    <li><a href="[% c.uri_for('/admin/settings') %]">[% c.loc('Settings') %]</a></li>
   </ul>
  </li>
- <li>[% c.loc('Users &amp; Groups') %]
+ <li>[% c.loc('Users') %]
+   <ul>
+    <li>Actions:
+     <ul>
+      <li><a href="[% c.uri_for_action('/admin/person/create_form') %]">[% c.loc('Add User') %]</a></li>
+     </ul>
+    </li>
+   </ul>
+ </li>
+ <li>[% c.loc('Groups') %]
   <ul>
   [% FOREACH group IN c.model('Schema::Group').search_ordered.all %]
    <li><a href="[% c.uri_for_action('/admin/group/object', [ group.id ]) %]">[% group.name | html %]</a></li>

@@ -1,0 +1,20 @@
+[% page.crumbs.push({ 'Add User' => '' }) %]
+<h1>[% c.loc('Add Person') %]</h1>
+<form id="auth" method="post" action="[% c.uri_for_action('/admin/person/root') %]">
+ <fieldset class="narrow">
+  <table>
+   <tfoot>
+    <tr>
+     <td colspan="2'">
+      <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
+     </td>
+    </tr>
+   </tfoot>
+   <tbody>
+    <tr>
+     [% text_field({ label => 'Person Name', name => 'name', hint => 'Just the person name', required => 1 }); %]
+    </tr>
+   </tbody>
+  </table>
+ </fieldset>
+</form>
