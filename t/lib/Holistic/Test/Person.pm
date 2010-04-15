@@ -27,9 +27,11 @@ sub person_create : Plan(1) {
     ok( $person, 'created person' );
     $self->person( $person );
 
-    $person->add_to_identities(
-        { realm => 'local', ident => $person->token, secret => $data->{password} || 'test-script-generated' }
-    );
+    $person->add_to_identities({
+        realm  => 'local',
+        ident  => $person->token,
+        secret => ( $data->{password} || 'test-script-generated' )
+    });
 
     $person->add_to_identities( { realm => 'twitter', ident => $person->token } );
     $person->add_to_identities( { realm => 'irc', ident => $person->token } );

@@ -57,9 +57,9 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
         my $name  = $c->user->id;
         my $ident = $c->model('Schema::Person::Identity')
             ->search(
-                { id => $name, realm => 'local' },
+                { ident => $name, realm => 'local' },
                 { prefetch => [ 'person' ] }
-            )->first;
+            )->single;
 
         # Vivify the user from external auth (most likely HTTP Auth)
         if ( not defined $ident ) {
@@ -67,8 +67,9 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                 name  => $name,
                 token => $name,
             });
+            # We don't need a secret, since it is external.
             $ident = $person->add_to_identities({
-                id => $c->user->id,
+                ident => $c->user->id,
                 realm => 'local'
             });
             # XX Throw up a notice to complete their profile?
@@ -78,9 +79,11 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
             $c->user( $ident );
             $c->stash->{now}->set_time_zone( $ident->person->timezone );
             my $attn_count = $ident->needs_attention->count;
-            $attn_count = 1;
+            $c->log->debug("Tickets need attention: $attn_count")
+                if $c->debug;
+            $attn_count = 1; # XX Testing
             if ( $attn_count > 0 ) {
-                $c->messages({
+                $c->message({
                     scope   => 'sidebar',
                     message => $c->loc('NEEDS ATTENTION', [ $attn_count ]),
                     level   => 'warn'

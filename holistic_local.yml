@@ -5,14 +5,6 @@ Plugin::Authentication:
             credential:
                 class: HTTP
                 type: basic
-                password_field: password
-                password_type:  clear
-            store:
-                class: Minimal
-                users:
-                    jshirley:
-                        password: yayme
-                    gphat:
-                        password: hater
-                    parrot:
-                        password: blah
+                password_type: self_check
+                username_field: ident
+                password_field: secret

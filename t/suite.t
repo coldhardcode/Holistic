@@ -15,9 +15,9 @@ $suite->run(
     },
     tests => [
         'deploy',
-        { 'person_create' => { name => 'J. Shirley', ident => 'jshirley', email => 'jshirley@coldhardcode.com' } },
-        { 'person_create' => { name => 'Cory Watson', ident => 'gphat', email => 'gphat@coldhardcode.com' } },
-        { 'person_create' => { name => 'Bob', ident => 'bob', email => 'bob@coldhardcode.com' } },
+        { 'person_create' => { name => 'J. Shirley', ident => 'jshirley', email => 'jshirley@coldhardcode.com', secret => 'test' } },
+        { 'person_create' => { name => 'Cory Watson', ident => 'gphat', email => 'gphat@coldhardcode.com', secret => 'test' } },
+        { 'person_create' => { name => 'Bob', ident => 'bob', email => 'bob@coldhardcode.com', secret => 'test' } },
         { 'group_create' => { name => 'Managers' } },
         { 'group_join' => { ident => 'bob', role => 'The Boss' } },
         { 'group_create' => { name => 'Developers' } },

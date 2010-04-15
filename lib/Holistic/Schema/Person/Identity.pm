@@ -6,6 +6,8 @@ extends 'Holistic::Base::DBIx::Class';
 
 my $CLASS = __PACKAGE__;
 
+$CLASS->load_components(qw/EncodedColumn/);
+
 $CLASS->table('person_identities');
 
 $CLASS->add_columns(

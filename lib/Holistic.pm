@@ -80,10 +80,9 @@ __PACKAGE__->config(
             }, 
             local => {
                 credential => {
-                    class           => 'Password',
-                    password_field  => 'secret',
-                    password_type   => 'hashed',
-                    password_hash_type => 'SHA-1',
+                    class               => 'Password',
+                    password_field      => 'secret',
+                    self_check          => 1,
                 },
                 store => {
                     class       => 'DBIx::Class',
@@ -95,8 +94,7 @@ __PACKAGE__->config(
                 credential => {
                     class => 'Password',
                     password_field => 'secret',
-                    password_type  => 'hashed',
-                    password_hash_type => 'SHA-1',
+                    self_check          => 1,
                 },
                 store => {
                     class    => 'DBIx::Class',

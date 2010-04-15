@@ -43,8 +43,10 @@ sub disabled : Chained('setup') Args(0) { }
 sub login : Chained('setup') Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->log->debug("Already logged in? " . $c->user_exists);
-
+    if ( $c->user_exists ) {
+        $c->res->redirect($c->uri_for_action('/my/root'), 302);
+        $c->detach;
+    }
 
     if ( $c->config->{'Plugin::Authentication'}->{'realms'}->{'local'}->{'credential'}->{'class'} eq 'HTTP' ) {
         if ( $c->user_exists ) {
@@ -62,6 +64,7 @@ sub login : Chained('setup') Args(0) {
 
 sub http_post_auth : Chained('setup') Args(0) {
     my ( $self, $c ) = @_;
+
     $c->authenticate({ realm => 'local' });
     if ( $c->user_exists ) {
         $c->res->redirect( $c->uri_for_action('/my/root') );

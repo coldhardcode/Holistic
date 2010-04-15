@@ -1,5 +1,4 @@
 <h1>[% c.loc('My Tickets') %]</h1>
-<p class="todo">XX My means "First identity created", which is dumb.  We need auth.  Currently: [% person.name %] XX</p>
 [% PROCESS "site/shared/ticket_table.tt", tickets = person.tickets.all %]
 
 
