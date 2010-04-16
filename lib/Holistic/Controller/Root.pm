@@ -188,7 +188,25 @@ Attempt to render a view, if needed.
 
 =cut
 
-sub end : ActionClass('RenderView') {}
+sub end : ActionClass('RenderView') {
+    my ( $self, $c ) = @_;
+
+    {
+        my $stash_key = 'message_stack';
+        my $messagestack = $c->stash->{$stash_key};
+
+        my $data_messages = $c->model('DataManager')->messages;
+        if ( $data_messages->has_messages ) {
+            if ( $messagestack ) {
+                $messagestack->add( $_ ) for @{ $data_messages->messages };
+            } else {
+                $messagestack = $data_messages;
+                $c->stash->{$stash_key} = $messagestack;
+            }
+        }
+    }
+
+}
 
 =head1 AUTHOR
 

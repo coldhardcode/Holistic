@@ -7,7 +7,8 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
-with 'Holistic::Role::Actor';
+with 'Holistic::Role::Actor',
+     'Holistic::Role::Verify';
 
 my $CLASS = __PACKAGE__;
 
@@ -112,7 +113,8 @@ sub temporary_password {
     });
 }
 
-# Verification Code
+# Data::Verify Code (from ::Verify role)
+sub _build_verify_scope { 'profile' }
 sub _build__verify_profile {
     my ( $self ) = @_;
     return {

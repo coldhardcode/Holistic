@@ -5,6 +5,7 @@ use strict;
 
 use Message::Stack;
 use MRO::Compat;
+use Scalar::Util 'blessed';
 
 our $VERSION = '0.01';
 
@@ -70,24 +71,42 @@ sub message {
     my ( $c, $message ) = @_;
 
     my $default   = $c->config->{'Plugin::Message'}->{default_type} || 'warning';
-    my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'messages';
+    my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'message_stack';
     $c->stash->{$stash_key} ||= Message::Stack->new;
     my $stash = $c->stash->{$stash_key};
 
     return $stash unless $message;
 
-    my $s = { scope => 'global' };
-    if ( ref $message ) {
-        $s->{level}   = $message->{type} || $default;
-        $s->{id}      = $message->{message};
-        $s->{scope}   = $message->{scope} || 'global';
+    if ( blessed $message ) {
+        $stash->add($message);
     } else {
-        $s->{level}   = $default;
-        $s->{id}      = $message;
+        my $s = { scope => 'global' };
+        if ( ref $message ) {
+            $s->{level}   = $message->{type} || $default;
+            $s->{id}      = $message->{message};
+            $s->{scope}   = $message->{scope} || 'global';
+        } else {
+            $s->{level}   = $default;
+            $s->{id}      = $message;
+        }
+        $stash->add($s);
     }
-    $stash->add($s);
 
     return $stash;
+}
+
+
+sub has_messages {
+    my ( $c, $scope ) = @_;
+
+    my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'message_stack';
+    my $stack = $c->stash->{$stash_key};
+    return 0 unless defined $stack;
+
+    if ( $scope ) {
+        return $stack->for_scope($scope)->has_messages;
+    }
+    return $stack->has_messages;
 }
 
 sub dispatch {
