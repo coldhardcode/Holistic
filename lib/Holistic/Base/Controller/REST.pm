@@ -241,10 +241,6 @@ sub root_POST {
     $data ||= $c->req->data || $c->req->params;
     delete $data->{x};
     delete $data->{y};
-    if ( $c->debug ) {
-        $c->log->debug("Handling POST to " . $c->req->uri);
-        $c->log->_dump($data);
-    }
 
     $c->forward('create', [ $data ]);
 
@@ -278,10 +274,6 @@ sub object_POST {
 
     my $obj = $c->stash->{$self->object_key};
 
-    #if ( $c->debug ) {
-        #$c->log->debug("Updating object: $obj with:");
-        #$c->log->_dump( $data );
-    #}
     if ( $obj ) {
         $c->forward('update', [ $obj, $data ]);
     } else {
@@ -300,8 +292,9 @@ sub update : Private {
 
     $scopes = ref $scopes ? $scopes : [ $scopes ];
 
-    my $no_fails = 0;
+    $data = $self->prepare_data( $c, $data );
 
+    my $no_fails = 0;
     my $schema = $c->model('Schema')->schema;
     try {
         $schema->txn_do( sub {
@@ -372,6 +365,8 @@ sub create : Private {
     my @objects  = ();
     my $schema   = $c->model('Schema')->schema;
 
+    $data = $self->prepare_data( $c, $data );
+
     try {
         @objects = $schema->txn_do( sub {
             my @objects;
@@ -379,6 +374,7 @@ sub create : Private {
                 my $chunk   = delete $data->{$scope};
                 $c->log->debug("Verifying $scope (we have chunk: $chunk)")
                     if $c->debug;
+                $c->log->_dump({ $scope => $chunk }) if $c->debug;
 
                 my $results = $c->model('DataManager')->verify( $scope, $chunk );
                 $c->log->debug("$scope results: " . $results->success);

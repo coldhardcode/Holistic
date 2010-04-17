@@ -10,8 +10,8 @@ __PACKAGE__->config(
     rs_key     => 'ticket_rs',
     object_key => 'ticket',
     scope      => 'ticket',
-    create_string => 'The ticket has been created',
-    update_string => 'The ticket has been updated',
+    create_string => 'The ticket has been created.',
+    update_string => 'The ticket has been updated.',
     error_string  => 'There was an error processing your ticket, please try again.',
 );
 
@@ -124,9 +124,9 @@ sub prepare_data {
         }
     }
     if ( not defined $data->{ticket}->{identity} ) {
-        $data->{ticket}->{identity} = $c->model('Schema')->schema->system_identity;
+        $data->{ticket}->{identity} = $c->model('Schema')->schema->system_identity->id;
     }
-    $data->{ticket};
+    $data;
 }
 
 no Moose;
