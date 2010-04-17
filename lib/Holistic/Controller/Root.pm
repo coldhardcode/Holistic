@@ -143,12 +143,6 @@ sub guide : Local {
     $c->stash->{template} = 'guide.tt';
 }
 
-sub log : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'log.tt';
-}
-
 sub milestone : Local {
     my ($self, $c) = @_;
 

@@ -1,5 +1,8 @@
 [% page.title = c.loc('Activity Log') %]
 <h1>[% date_str = req_day | date_short; c.loc('Activity for [_1]', date_str) %]</h1>
+[% IF !states.size %]
+<p>[% c.loc('No work for this day.') %]</p>
+[% END %]
 <dl class="log">
  [% FOREACH state = states %]
  <dt>

@@ -18,7 +18,7 @@
   <dl>
    <dt>[% c.loc('Tactical') %]</dt>
    <dd><a href="[% c.uri_for('/my') %]">[% c.loc('My Tickets') %]</a></dd>
-   <dd><a href="[% c.uri_for('/log') %]">[% c.loc('Activity Log') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/calendar/today') %]">[% c.loc('Activity Log') %]</a></dd>
    <dd><a href="[% c.uri_for_action('/what/root') %]">[% c.loc("What's being done?") %]</a></dd>
   </dl>
   <dl>

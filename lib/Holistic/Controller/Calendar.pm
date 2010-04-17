@@ -73,6 +73,16 @@ sub root : Chained('setup') PathPart('') Args() {
     $c->stash->{days} = \@days;
 }
 
+sub today : Chained('setup') PathPart('today') Args(0) {
+    my ($self, $c) = @_;
+
+    my $now = $c->stash->{now};
+
+    $c->stash->{template} = 'calendar/day.tt';
+
+    $c->detach('day', [ $now->year, $now->month, $now->day ]);
+}
+
 sub day : Chained('setup') PathPart('') Args(3) {
     my ($self, $c, $year, $month, $day) = @_;
 
