@@ -71,7 +71,7 @@ sub message {
     my ( $c, $message ) = @_;
 
     my $default   = $c->config->{'Plugin::Message'}->{default_type} || 'warning';
-    my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'message_stack';
+    my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'messages';
     $c->stash->{$stash_key} ||= Message::Stack->new;
     my $stash = $c->stash->{$stash_key};
 
@@ -92,6 +92,8 @@ sub message {
         $stash->add($s);
     }
 
+    $c->stash->{$stash_key} = $stash;
+
     return $stash;
 }
 
@@ -99,7 +101,7 @@ sub message {
 sub has_messages {
     my ( $c, $scope ) = @_;
 
-    my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'message_stack';
+    my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'messages';
     my $stack = $c->stash->{$stash_key};
     return 0 unless defined $stack;
 
@@ -122,9 +124,13 @@ sub dispatch {
 
     my $ret = $c->next::method(@_);
 
+    return $ret unless defined $c->res->location;
+
     # Redirect?
     my $messages = $c->stash->{$stash_key};
-    if ( $messages and $messages->has_messages and $c->response->location ) {
+    return $ret unless defined $messages;
+
+    if ( $messages->has_messages and $c->response->location) {
         $c->flash->{$flash_key} = $messages;
     }
     return $ret;

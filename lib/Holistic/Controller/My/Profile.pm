@@ -9,6 +9,9 @@ __PACKAGE__->config(
     class      => 'Schema::Person',
     rs_key     => 'person_rs',
     object_key => 'person',
+    scope      => 'person',
+    update_string => 'Your profile details have been saved.',
+    error_string  => 'Error updating your profile, please try again.',
 );
 
 after 'setup' => sub {
@@ -17,6 +20,8 @@ after 'setup' => sub {
         $c->log->debug("User logged in via HTTP, so can't change password")
             if $c->debug;
         $c->stash->{disable_password_change} = 1;
+    } else {
+        $c->stash->{context}->{identity} = $c->user->obj;
     }
 };
 

@@ -6,7 +6,7 @@
     [% readonly_field({ label => 'Type', value => ticket.type.name }) %]
    </tr>
    <tr>
-    [% readonly_field({ label => 'Queue', value => ticket.queue.name, link => c.uri_for_action('/queue/object', [ ticket.parent_pk1 ]) }) %]
+    [% readonly_field({ label => 'Queue', value => ticket.queue.name, link => c.uri_for_action('/queue/object', [ ticket.queue_pk1 ]) }) %]
    </tr>
    <tr>
 [% IF is_editable;

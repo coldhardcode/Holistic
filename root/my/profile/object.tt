@@ -4,10 +4,10 @@
   <table>
    <tbody>
     <tr>
-     [% text_field({ label => 'Your name', name => 'name', hint => 'How you are seen to others.', required => 1, double => 1, value => person.name }); %]
+     [% text_field({ label => 'Your name', name => 'person.name', hint => 'How you are seen to others.', required => 1, double => 1, value => person.name }); %]
     </tr>
     <tr>
-     [% text_field({ label => 'Email', name => 'email', hint => 'Holistic will email you here.', required => 1, double => 1, value => person.email }); %]
+     [% text_field({ label => 'Email', name => 'person.email', hint => 'Holistic will email you here.', required => 1, double => 1, value => person.email }); %]
     </tr>
 [% IF !disable_password_change %]
     <tr>

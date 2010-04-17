@@ -9,6 +9,10 @@ __PACKAGE__->config(
     class      => 'Schema::Ticket',
     rs_key     => 'ticket_rs',
     object_key => 'ticket',
+    scope      => 'ticket',
+    create_string => 'The ticket has been created.',
+    update_string => 'The ticket has been updated.',
+    error_string  => 'There was an error processing your ticket, please try again.',
 );
 
 =head1 NAME
@@ -112,17 +116,21 @@ sub post_create : Private {
 sub prepare_data {
     my ( $self, $c, $data ) = @_;
 
+    if ( $c->user_exists ) {
+        $data->{ticket}->{identity} = $c->user->id;
+        return $data;
+    }
+
     if ( defined ( my $reporter = $data->{ticket}->{reporter} ) ) {
         my $identity = $c->model('Schema::Person::Identity')->search({ realm => 'local', ident => lc($reporter) })->first;
         if ( defined $identity ) {
             $data->{ticket}->{identity} = $identity->pk1;
-            $c->log->debug("We have an identity ($identity) to set...");
         }
     }
     if ( not defined $data->{ticket}->{identity} ) {
-        $data->{ticket}->{identity} = $c->model('Schema')->schema->system_identity;
+        $data->{ticket}->{identity} = $c->model('Schema')->schema->system_identity->id;
     }
-    $data->{ticket};
+    $data;
 }
 
 no Moose;

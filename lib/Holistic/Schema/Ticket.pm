@@ -107,7 +107,8 @@ use Scalar::Util 'blessed';
 
 extends 'Holistic::Schema::Queue';
 
-with 'Holistic::Role::Discussable';
+with 'Holistic::Role::Discussable',
+     'Holistic::Role::Verify';
 
 __PACKAGE__->table('tickets');
 __PACKAGE__->resultset_class('Holistic::ResultSet::Ticket');
@@ -423,6 +424,7 @@ sub is_member {
 }
 
 # Verification Code
+sub _build_verify_scope { 'ticket' }
 sub _build__verify_profile {
     my ( $self ) = @_;
     my $rs = $self->schema->resultset('Person::Identity');
