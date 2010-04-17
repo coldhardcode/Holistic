@@ -116,11 +116,15 @@ sub post_create : Private {
 sub prepare_data {
     my ( $self, $c, $data ) = @_;
 
+    if ( $c->user_exists ) {
+        $data->{ticket}->{identity} = $c->user->id;
+        return $data;
+    }
+
     if ( defined ( my $reporter = $data->{ticket}->{reporter} ) ) {
         my $identity = $c->model('Schema::Person::Identity')->search({ realm => 'local', ident => lc($reporter) })->first;
         if ( defined $identity ) {
             $data->{ticket}->{identity} = $identity->pk1;
-            $c->log->debug("We have an identity ($identity) to set...");
         }
     }
     if ( not defined $data->{ticket}->{identity} ) {

@@ -105,7 +105,7 @@ END;
       </tfoot>
       <tbody>
        <tr>
-         [% textarea_field({ label => 'Comment', name => 'body', hint => 'Your Comment', required => 1, rows => 8 }); %]
+         [% textarea_field({ label => 'Comment', name => 'comment.body', hint => 'Your Comment', required => 1, rows => 8 }); %]
        </tr>
       </tbody>
      </table>

@@ -384,9 +384,10 @@ sub create : Private {
                         if exists $clean_data->{verify_password};
                     $c->log->debug("Creating $scope...")
                         if $c->debug;
-                    push @objects,
-                        $c->stash->{$self->rs_key}->create($clean_data);
+                    push @objects, $c->forward('_create', [ $clean_data ]);
+                    
                     $c->stash->{context}->{$scope} = $objects[-1];
+
                     if ( $scope eq $self->object_key ) {
                         $c->stash->{$self->object_key} = $objects[-1];
                     }
@@ -434,6 +435,12 @@ sub create : Private {
     };
 }
 
+sub _create : Private {
+    my ( $self, $c, $clean_data ) = @_;
+
+    $c->stash->{$self->rs_key}->create($clean_data);
+}
+
 sub post_create : Private { }
 sub post_update : Private { }
 
@@ -441,14 +448,16 @@ sub post_action : Private {
     my ( $self, $c, $object ) = @_;
 
     if ( $c->req->looks_like_browser ) {
-        my $uri = $c->req->uri;
-        if ( defined $object and defined $c->controller->action_for('object') ) {
-            $uri = $c->uri_for_action(
-                $self->action_for('object'),
-                [ @{ $c->req->captures || [] }, $object->id ]
-            );
+        if ( not $c->res->location ) {
+            my $uri = $c->req->uri;
+            if ( defined $object and defined $c->controller->action_for('object') ) {
+                $uri = $c->uri_for_action(
+                    $self->action_for('object'),
+                    [ @{ $c->req->captures || [] }, $object->id ]
+                );
+            }
+            $c->res->redirect( $uri, 303 );
         }
-        $c->res->redirect( $uri, 303 );
     } else {
         my $object = $c->stash->{$self->object_key};
         if ( defined $object ) {

@@ -9,6 +9,10 @@ __PACKAGE__->config(
     class      => 'Schema::Comment',
     rs_key     => 'comment_rs',
     object_key => 'comment',
+    scope      => 'comment',
+    update_string => 'The comment has been updated.',
+    create_string => 'Your comment has been posted.',
+    error_string  => 'There was an error processing your comment, please try again.'
 );
 
 sub _fetch_rs {
@@ -21,51 +25,17 @@ sub prepare_data {
 
     $data->{subject} = '';
     # XX Require login for comments, or anon identity?
-    $data->{identity} = $c->user_exists ?
+    $data->{comment}->{identity} = $c->user_exists ?
         $c->user->id : $c->model('Schema')->schema->system_identity->id;
 
     return $data;
 }
 
-sub create : Private {
-    my ( $self, $c, $data ) = @_;
-    my $ticket = $c->stash->{ticket};
+sub _create : Private {
+    my ( $self, $c, $clean_data ) = @_;
 
-    # Always redirect back to the ticket
-    $c->res->redirect( $c->uri_for_action('/ticket/object', [ $ticket->id ]) );
-
-    $data = $self->prepare_data( $c, $data );
-
-    my $result = $c->stash->{$self->rs_key}->verify( $data );
-    unless ( $result->success ) {
-        if ( $c->debug ) {
-            $c->log->debug("Validation error:");
-            $c->log->_dump({ invalids => [ $result->invalids ], missings => [ $result->missings ]});
-        }
-
-        $c->flash->{errors}->{'create'} = $result;
-        my @args = ();
-        push @args, $c->req->captures if $c->req->captures;
-        #push @args, @{ $c->req->args } if $c->req->args;
-        $c->log->debug( $c->action );
-        $c->log->_dump( \@args );
-        $c->detach;
-    }
-
-    my %filter =
-        map { $_ => $result->get_value($_) }
-        grep { defined $result->get_value($_) }
-        $result->valids;
-    if ( $c->debug ) {
-        $c->log->debug("Creating new " . $self->rs_key . " object:");
-        $c->log->_dump({ %filter });
-    }
-
-    my $object = $c->model('Schema')->schema->txn_do( sub {
-        my $comment = $ticket->add_comment(\%filter);
-        $c->message({ type => 'success', message => $self->create_string });
-        return $comment;
-    } );
+    $c->res->redirect( $c->uri_for_action('/ticket/object', [ $c->stash->{ticket}->id ] ) );
+    $c->stash->{ticket}->add_comment($clean_data);
 }
 
 no Moose;
