@@ -77,10 +77,10 @@ sub day : Chained('setup') PathPart('') Args(3) {
     my ($self, $c, $year, $month, $day) = @_;
 
     # Use ->{now} because it is timezone'd already.
-    my $req_day = $c->stash->{now};
-        $req_day->year( $year );
-        $req_day->month( $month );
-        $req_day->day( $day );
+    my $req_day = $c->stash->{now}->clone;
+        $req_day->set_year($year);
+        $req_day->set_month($month);
+        $req_day->set_day($day);
 
     $c->stash->{req_day} = $req_day;
 }
