@@ -1,6 +1,6 @@
 [%~
-
-top_rs = queue_rs.search_rs({'me.parent_pk1' => 0 });
+# XX this will get fixed
+top_rs = queue_rs.search_rs({'me.path' => '1' });
 
 ~%]
 [% MACRO queue_children(rs) BLOCK %]
