@@ -9,7 +9,10 @@ __PACKAGE__->config(
     class      => 'Schema::Ticket',
     rs_key     => 'ticket_rs',
     object_key => 'ticket',
-    scope      => 'ticket'
+    scope      => 'ticket',
+    create_string => 'The ticket has been created',
+    update_string => 'The ticket has been updated',
+    error_string  => 'There was an error processing your ticket, please try again.',
 );
 
 =head1 NAME
