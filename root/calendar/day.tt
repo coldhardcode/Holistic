@@ -1,6 +1,19 @@
 [% page.title = c.loc('Activity Log') %]
-<h1>XX Formatting [% req_day %]</h1>
+<h1>[% date_str = req_day | date_short; c.loc('Activity for [_1]', date_str) %]</h1>
 <dl class="log">
+ [% FOREACH state = states %]
+ <dt>
+  <a href="[% c.uri_for_action('/ticket/object', [ state.ticket_pk1 ]) %]"> 
+   <time datetime="[% state.dt_created %]">[% state.dt_created | date_hour %]</time>
+   XX <img src="/static/images/actions/add.png">
+   Ticket: #[% state.ticket_pk1 %]: <strong>[% state.ticket.name %]</strong> was <strong>XX modified</strong> by XX gphat.
+  </a>
+ </dt>
+ <dd>
+  XX Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
+ </dd>
+ [% END %]
+ <h3>All below this is fake.  Just here for demonstrative purposes.</h3>
  <dt>
   <a href="[% c.uri_for('/ticket') %]"> 
   <time datetime="2010-01-19T07:15Z">8:15 a.m.</time>
@@ -11,8 +24,6 @@
  <dd>
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
  </dd>
-</ul>
-<dl class="log">
  <dt>
   <a href="[% c.uri_for('/ticket') %]"> 
   <time datetime="2010-01-19T07:15Z">8:15 a.m.</time>
@@ -23,8 +34,6 @@
  <dd>
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
  </dd>
-</ul>
-<dl class="log">
  <dt>
   <a href="[% c.uri_for('/ticket') %]"> 
   <time datetime="2010-01-19T07:15Z">8:15 a.m.</time>

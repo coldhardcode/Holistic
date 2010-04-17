@@ -83,6 +83,17 @@ sub day : Chained('setup') PathPart('') Args(3) {
         $req_day->set_day($day);
 
     $c->stash->{req_day} = $req_day;
+
+    my $states = $c->model('Schema::Ticket::State')->search(
+        {
+            'me.dt_created' => { -between => [
+                $req_day->strftime('%F').' 00:00:00',
+                $req_day->strftime('%F').' 23:59:59',
+            ] }
+        }, {
+            prefetch => 'ticket'
+        });
+    $c->stash->{states} = [ $states->all ];
 }
 
 #no Moose;

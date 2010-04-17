@@ -21,6 +21,7 @@ __PACKAGE__->config({
             date    => '%x',
             short   => '%b %e, %G',
             long    => '%X %x',
+            hour    => '%I:%M %p'
         }
     }
 });
