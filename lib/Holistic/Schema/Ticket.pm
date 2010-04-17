@@ -511,6 +511,7 @@ around 'create' => sub {
             identity_pk2 => $ident->pk1,
             status_pk1   => $status->id,
             priority_pk1 => $priority->id,
+            dt_created   => $data->{dt_created} || $ticket->dt_created
         });
     } elsif ( defined $priority ) {
         $ticket->discard_changes;
@@ -519,6 +520,7 @@ around 'create' => sub {
             identity_pk1 => $ticket->identity_pk1,
             status_pk1   => $status->id,
             priority_pk1 => $priority->id,
+            dt_created   => $data->{dt_created} || $ticket->dt_created
         });
     }
     return $ticket;
