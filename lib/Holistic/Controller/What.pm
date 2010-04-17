@@ -14,8 +14,11 @@ sub root : Chained('setup') PathPart('') Args(0) {
 }
 
 sub person : Chained('setup') PathPart('person') Args(1) {
-    my ($self, $c, $person) = @_;
+    my ($self, $c, $id) = @_;
 
+    my $person = $c->model('Schema::Person')->find($id);
+
+    $c->stash->{person} = $person;
     $c->stash->{object} = 'person';
     $c->stash->{template} = 'what/object.tt';
 }
@@ -32,8 +35,11 @@ sub product : Chained('setup') PathPart('product') Args(1) {
 }
 
 sub queue : Chained('setup') PathPart('queue') Args(1) {
-    my ($self, $c, $person) = @_;
+    my ($self, $c, $id) = @_;
 
+    my $queue = $c->model('Schema::Queue')->find($id);
+
+    $c->stash->{queue} = $queue;
     $c->stash->{object} = 'queue';
     $c->stash->{template} = 'what/object.tt';
 }
