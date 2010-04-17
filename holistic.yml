@@ -15,13 +15,6 @@ Model::Schema:
 # Shortcut to the connect_info, for easier parsing into CLI apps
 connect_info: *1
 
-formats:
-    date:
-        date: '%D'
-        short: '%b %e, %G'
-        long: '%b %d, %Y at %l:%M %p'
-        comment: '%c'
-
 # Creating verification profiles works here.
 Model::Verifier:
     profiles:
