@@ -114,7 +114,7 @@ sub temporary_password {
 }
 
 # Data::Verify Code (from ::Verify role)
-sub _build_verify_scope { 'profile' }
+sub _build_verify_scope { 'person' }
 sub _build__verify_profile {
     my ( $self ) = @_;
     return {

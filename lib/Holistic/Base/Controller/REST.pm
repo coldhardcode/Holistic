@@ -260,6 +260,7 @@ sub object_setup : Chained('setup') PathPart('id') CaptureArgs(1) {
         return $self->status_not_found( $c, message => $c->loc("Sorry, unable to find that object") );
     }
     $c->stash->{$self->object_key} = $obj;
+    $c->stash->{context}->{$self->object_key} = $obj;
 }
 
 sub object : Chained('object_setup') PathPart('') Args(0) ActionClass('REST') { }
