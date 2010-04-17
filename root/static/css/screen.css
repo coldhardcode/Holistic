@@ -383,9 +383,36 @@ body > header form fieldset input {
 #sidebar nav a:hover {
     text-decoration: underline;
 }
+#sidebar h3 {
+    line-height: 26px;
+    margin: 0 0 9px 0;
+}
 #sidebar nav h4 {
     margin: 0 0 .5em 0; padding: 0 0 0 .5em;
     font-size: 14px;
+}
+#sidebar ul {
+    margin: 0;
+}
+#sidebar ul li a {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+}
+#sidebar ul li a:hover {
+    background-color: #fff;
+}
+#sidebar ul li {
+    list-style: none;
+}
+#sidebar ul li meter {
+    color: #757575;
+}
+#sidebar ul li meter:after {
+    content: ')';
+}
+#sidebar ul li meter:before {
+    content: '(';
 }
 #sidebar nav > ul {
     margin: 0 0 1em 0; padding: 0 0 .5em 0;
@@ -585,7 +612,7 @@ div.tabs nav ul li a {
     text-decoration: none;
 }
 div.tabs nav ul li a:hover {
-    background-color: #fff;
+    background-color: #eee;
 }
 #crumbs ul {
     margin: 1em 0 0 290px; padding: 0;
@@ -603,7 +630,7 @@ section.description {
     -moz-border-radius: 3px;
     border-radius: 3px;
     border: 1px solid #ddd;
-    padding: 5px;
+    padding: 1em 7px 0 7px;
 }
 fieldset {
     background-color: #eee;

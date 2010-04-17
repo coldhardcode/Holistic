@@ -45,7 +45,7 @@ DEFAULT page.body.scripts     = [
 DEFAULT page.crumbs           = [];
 DEFAULT page.content_class    = 'content';
 
-IF 1;#browser_detect.ipad;
+IF browser_detect.ipad;
   # Optional (ipad detection) and last (so it can override things)
   page.head.stylesheets.push('ipad.css');
 END;
