@@ -128,7 +128,8 @@ sub make_ticket {
             my $status = find_status($change_row{newvalue});
             $tick->add_state({
                 identity_pk1 => $change_ident->id,
-                status_pk1 => $status->id
+                status_pk1 => $status->id,
+                dt_created => DateTime->from_epoch(epoch => $change_row{time})
             });
         }
     }
