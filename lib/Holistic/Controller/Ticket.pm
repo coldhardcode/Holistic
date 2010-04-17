@@ -9,6 +9,7 @@ __PACKAGE__->config(
     class      => 'Schema::Ticket',
     rs_key     => 'ticket_rs',
     object_key => 'ticket',
+    scope      => 'ticket'
 );
 
 =head1 NAME

@@ -38,14 +38,14 @@ sub _build_verifiers {
     my $ret     = {};
 
     foreach my $name ( $schema->sources ) {
-        my $source = $schema->class($name)->new;
-
+        my $source = $schema->resultset($name)->new_result({});
         next unless $source->can('meta');
         next unless $source->meta->does_role('Holistic::Role::Verify');
         $ret->{$source->verify_scope} = $source->verifier;
-        $self->scope_to_resultsource->{ $source->verify_scope } = "Schema::$name
-";
+        $self->scope_to_resultsource->{ $source->verify_scope } = 
+            "Schema::$name";
     }
+
     $ret;
 };
 

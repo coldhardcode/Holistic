@@ -5,11 +5,14 @@ use Try::Tiny;
 
 extends 'Holistic::Base::DBIx::Class';
 
+with 'Holistic::Role::Verify';
+
 my $CLASS = __PACKAGE__; 
 
 $CLASS->load_components( qw/
     Tree::AdjacencyList Serialize::Storable TimeStamp DynamicDefault Core
 / );
+
 $CLASS->table('comments');
 
 $CLASS->add_columns(
@@ -137,6 +140,7 @@ sub add_comment {
 }
 
 # Verification Code
+sub _build_verify_scope { 'comment' }
 sub _build__verify_profile {
     my ( $self ) = @_;
     my $rs = $self->schema->resultset('Person::Identity');

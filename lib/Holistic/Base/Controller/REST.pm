@@ -1,6 +1,7 @@
 package Holistic::Base::Controller::REST;
 
 use Moose;
+use Try::Tiny;
 
 BEGIN { extends 'Catalyst::Controller::REST'; }
 
@@ -15,6 +16,14 @@ __PACKAGE__->config(
     },
     update_string => 'Your object has been updated.',
     create_string => 'Your object has been created.',
+    error_string => 'There was an error creating your object.',
+);
+
+has 'scope' => (
+    is => 'ro',
+    isa => 'Str',
+    predicate => 'has_default_scope'
+
 );
 
 has 'access_check' => (
@@ -45,6 +54,12 @@ has 'update_string' => (
     is  => 'rw',
     isa => 'Str',
     default => 'Your object has been updated.'
+);
+
+has 'error_string' => (
+    is  => 'rw',
+    isa => 'Str',
+    default => 'There was a problem processing your request.'
 );
 
 has 'rs_key' => (
@@ -278,28 +293,66 @@ sub object_POST {
 sub update : Private {
     my ( $self, $c, $object, $data ) = @_;
 
-    my $result = $object->verify( $data );
+    my $page   = delete $data->{_page};
+    my $scopes = delete $data->{scopes};
+    $scopes = [ $self->scope ]
+        if not defined $scopes and $self->has_default_scope;
 
-    unless ( $result->success ) {
-        $c->log->debug("Failed verification") if $c->debug;
-        $c->flash->{errors}->{'update'} = $result;
-        $c->res->redirect( $c->req->uri );
+    $scopes = ref $scopes ? $scopes : [ $scopes ];
+
+    my $no_fails = 0;
+
+    my $schema = $c->model('Schema')->schema;
+    try {
+        $schema->txn_do( sub {
+            foreach my $scope ( @$scopes ) {
+                my $chunk     = delete $data->{$scope};
+                my $scope_obj = $c->stash->{context}->{$scope};
+                unless ( defined $scope_obj ) {
+                    $c->log->error("Scope $scope not defined in stash.context, skipping update");
+                    next;
+                }
+                $c->log->debug("Verifying scope: $scope (". $scope_obj->id .")")
+                    if $c->debug;
+                my $results = $c->model('DataManager')->verify( $scope, $chunk );
+                if ( $results->success ) {
+                    my $clean_data = $c->model('DataManager')->data_for_scope( $scope );
+                    delete $clean_data->{verify_password}
+                        if exists $clean_data->{verify_password};
+                    $c->log->debug("Updating $scope (" . $scope_obj->id . ")")
+                        if $c->debug;
+                    $scope_obj->update($clean_data);
+                } else {
+                    $c->log->debug("No success verifying scope $scope") if $c->debug;
+
+                    $no_fails = 1;
+                    $c->stash->{form}->{valids} = $c->model('DataManager')->data_for_scope( $scope );
+                }
+            }
+            if ( $no_fails ) {
+                die "validation error\n";
+            }
+            $c->message( $self->update_string );
+        } );
+    } catch {
+        $c->log->error("Caught error: $_");
+        $c->message({
+            type    => 'error',
+            message => $self->error_string
+        });
+        foreach my $message ( @{ $c->model('DataManager')->messages->messages } ) {
+            $c->message($message);
+        }
+        my $uri = $page->{referrer};
+        if ( $uri ) {
+            $uri = URI->new( $uri );
+            unless ( $uri->host eq $c->req->uri->host ) {
+                $uri = undef;
+            }
+        }
+        $c->res->redirect( $uri || $c->req->uri );
         $c->detach;
-    }
-    my %filtered =
-        map { $_ => $result->get_value($_) }
-        grep { defined $result->get_value($_) }
-        $result->valids;
-
-    if ( $c->debug ) {
-        $c->log->debug("Updating $object with:");
-        $c->log->_dump({ keys => [ keys %filtered ] });
-    }
-    $object->result_source->schema->txn_do( sub {
-        $object->update( \%filtered );
-        $c->forward('post_update', [ $data, $object ]);
-        $c->message({ type => 'success', message => $self->update_string });
-    });
+    };
 }
 
 # Just designed to override this.
@@ -308,41 +361,81 @@ sub prepare_data { shift; shift; $_[0]; }
 sub create : Private {
     my ( $self, $c, $data ) = @_;
 
-    $data = $self->prepare_data( $c, $data );
+    my $page   = delete $data->{_page};
+    my $scopes = delete $data->{scopes};
 
-    my $result = $c->stash->{$self->rs_key}->verify( $data );
-    unless ( $result->success ) {
-        if ( $c->debug ) {
-            $c->log->debug("Validation error:");
-            $c->log->_dump({ invalids => [ $result->invalids ], missings => [ $result->missings ]});
+    $scopes = [ $self->scope ]
+        if not defined $scopes and $self->has_default_scope;
+    $scopes = ref $scopes ? $scopes : [ $scopes ];
+
+    my $no_fails = 0;
+    my @objects  = ();
+    my $schema   = $c->model('Schema')->schema;
+
+    try {
+        @objects = $schema->txn_do( sub {
+            my @objects;
+            foreach my $scope ( @$scopes ) {
+                my $chunk   = delete $data->{$scope};
+                $c->log->debug("Verifying $scope (we have chunk: $chunk)")
+                    if $c->debug;
+
+                my $results = $c->model('DataManager')->verify( $scope, $chunk );
+                $c->log->debug("$scope results: " . $results->success);
+                if ( $results->success ) {
+                    my $clean_data = $c->model('DataManager')->data_for_scope( $scope );
+                    delete $clean_data->{verify_password}
+                        if exists $clean_data->{verify_password};
+                    $c->log->debug("Creating $scope...")
+                        if $c->debug;
+                    push @objects,
+                        $c->stash->{$self->rs_key}->create($clean_data);
+                    $c->stash->{context}->{$scope} = $objects[-1];
+                    if ( $scope eq $self->object_key ) {
+                        $c->stash->{$self->object_key} = $objects[-1];
+                    }
+                } else {
+                    if ( $c->debug ) {
+                        $c->log->debug("No success verifying scope $scope");
+                        $c->log->_dump({
+                            missing => [ $results->missings ],
+                            invalids => [ $results->missings ],
+                        });
+                    }
+
+                    $no_fails = 1;
+                    $c->stash->{form}->{valids} = $c->model('DataManager')->data_for_scope( $scope );
+                }
+            }
+            if ( $no_fails ) {
+                die "validation error\n";
+            }
+            $c->message( $self->create_string );
+            return @objects;
+        } );
+    } catch {
+        $c->log->error("Caught error: $_");
+        $c->message({
+            type    => 'error',
+            message => $self->error_string
+        });
+        foreach my $message ( @{ $c->model('DataManager')->messages->messages } ) {
+            $c->message($message);
         }
-
-        $c->flash->{errors}->{'create'} = $result;
-        my @args = ();
-        push @args, $c->req->captures if $c->req->captures;
-        #push @args, @{ $c->req->args } if $c->req->args;
-        $c->log->debug( $c->action );
-        $c->log->_dump( \@args );
-        $c->res->redirect( $c->uri_for( $c->controller->action_for('create_form'), @args ) );
+        my $uri = $page->{referrer};
+        if ( $uri ) {
+            $uri = URI->new( $uri );
+            unless ( $uri->host eq $c->req->uri->host ) {
+                $uri = undef;
+            }
+        } else {
+            $uri = $c->uri_for( $c->controller->action_for('create_form'), $c->req->captures );
+        }
+        $c->log->debug("Redirecting... $uri");
+        $c->log->_dump( $c->error );
+        $c->res->redirect( $uri || $c->req->uri );
         $c->detach;
-    }
-
-    my %filter =
-        map { $_ => $result->get_value($_) }
-        grep { defined $result->get_value($_) }
-        $result->valids;
-    if ( $c->debug ) {
-        $c->log->debug("Creating new " . $self->rs_key . " object:");
-        $c->log->_dump({ %filter });
-    }
-
-    my $object = $c->model('Schema')->schema->txn_do( sub {
-        my $object = $c->stash->{$self->rs_key}->create( \%filter );
-        $c->stash->{$self->object_key} = $object;
-        $c->forward('post_create', [ $data, $object ]);
-        $c->message({ type => 'success', message => $self->create_string });
-        return $object;
-    } );
+    };
 }
 
 sub post_create : Private { }
