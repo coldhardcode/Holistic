@@ -5,6 +5,8 @@ use Bread::Board;
 extends 'Bread::Board::Container';
 
 use MongoDB::Connection;
+use Log::Dispatch;
+use Log::Dispatch::Screen;
 
 has 'database_host' => (
     is => 'ro',
@@ -18,8 +20,37 @@ has 'database_port' => (
     default => 27017
 );
 
+has 'logging_outputs' => (
+    is      => 'ro',
+    isa     => 'HashRef[Log::Dispatch::Output]',
+    default => sub { {
+        'Screen' => Log::Dispatch::Screen->new(
+            name => 'screen', min_level => 'debug'
+        )
+    } }
+);
+
 sub BUILD {
     my ($self) = @_;
+
+    # Parameterized container for logging
+    my $logging = container 'Logging' => [ 'Outputs' ] => as {
+        service 'Logger' => (
+            block => sub {
+                my $s       = shift;
+                my $c       = $s->parent;
+                my $outputs = $c->get_sub_container('Outputs');
+                my $log     = Log::Dispatch->new;
+                foreach my $name ( $outputs->get_service_list ) {
+                    $log->add(
+                        # XX WTF?  Why is ->get now doing the right thing?
+                        $outputs->get_service( $name )->get->{block}->()
+                    );
+                }
+                $log;
+            }
+        );
+    };
 
     container $self => as {
 
@@ -32,14 +63,30 @@ sub BUILD {
                 lifecycle => 'Singleton',
                 block => sub {
                     my $s = shift;
+                    #$s->param('/Logging/Logger')->info(Dumper($s));
                     MongoDB::Connection->new(
                         host => $s->param('host'),
                         port => $s->param('port')
                     );
                 },
-                dependencies => [qw(host port)]
+                dependencies => wire_names(qw(host port /Logging/Logger))
             );
-        }
+        };
+
+        my $configured_outputs = $self->logging_outputs;
+        my $outputs = container 'Outputs' => as {
+            foreach my $output ( keys %$configured_outputs ) {
+                my $dispatcher = $configured_outputs->{$output};
+                service $output => {
+                    block => sub { $dispatcher; }
+                };
+            }
+        };
+
+        my $logger_container = $logging->create( Outputs => $outputs);
+        $logger_container->name('Logging');
+
+        $self->add_sub_container( $logger_container );
     };
 }
 
