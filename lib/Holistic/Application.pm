@@ -1,7 +1,6 @@
 package Holistic::Application;
 use Moose;
 use Bread::Board;
-use Data::Dumper;
 
 extends 'Bread::Board::Container';
 
@@ -33,7 +32,6 @@ sub BUILD {
                 lifecycle => 'Singleton',
                 block => sub {
                     my $s = shift;
-                    print Dumper($s);
                     MongoDB::Connection->new(
                         host => $s->param('host'),
                         port => $s->param('port')
