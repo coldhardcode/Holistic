@@ -14,9 +14,8 @@ my $inf = $app->fetch('Inflator')->get;
 my $tick = Holistic::Ticket->new(summary => 'A Ticket', description => 'With a description');
 
 my $id = $inf->save($tick);
-diag($id);
 
 my $tick2 = $inf->find('Holistic::Ticket', $id);
-diag(Dumper($tick2));
+cmp_ok($tick2->summary, 'eq', 'A Ticket', 'inflated ticket summary');
 
 done_testing;
