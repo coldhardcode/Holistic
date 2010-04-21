@@ -43,8 +43,7 @@ sub BUILD {
                 my $log     = Log::Dispatch->new;
                 foreach my $name ( $outputs->get_service_list ) {
                     $log->add(
-                        # XX WTF?  Why is ->get now doing the right thing?
-                        $outputs->get_service( $name )->get->{block}->()
+                        $outputs->get_service( $name )->get
                     );
                 }
                 $log;
@@ -63,6 +62,7 @@ sub BUILD {
                 lifecycle => 'Singleton',
                 block => sub {
                     my $s = shift;
+                    #use Data::Dumper;
                     #$s->param('/Logging/Logger')->info(Dumper($s));
                     MongoDB::Connection->new(
                         host => $s->param('host'),
@@ -77,9 +77,9 @@ sub BUILD {
         my $outputs = container 'Outputs' => as {
             foreach my $output ( keys %$configured_outputs ) {
                 my $dispatcher = $configured_outputs->{$output};
-                service $output => {
+                service $output => (
                     block => sub { $dispatcher; }
-                };
+                );
             }
         };
 
