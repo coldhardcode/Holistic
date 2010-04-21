@@ -87,6 +87,13 @@ sub BUILD {
         $logger_container->name('Logging');
 
         $self->add_sub_container( $logger_container );
+
+        service 'Inflator' => (
+            class => 'Holistic::Util::Inflator',
+            dependencies => {
+                connection => depends_on('Database/connection'),
+            }
+        );
     };
 }
 
