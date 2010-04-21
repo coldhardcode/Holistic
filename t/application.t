@@ -18,4 +18,15 @@ my $id = $inf->save($tick);
 my $tick2 = $inf->find('Holistic::Ticket', $id);
 cmp_ok($tick2->summary, 'eq', 'A Ticket', 'inflated ticket summary');
 
+my $searcher = $app->fetch('Searcher')->get;
+
+$searcher->query({ summary => 'A Ticket' });
+
+my $cursor = $searcher->get_results;
+
+while(my $obj = $cursor->next) {
+    my $inflated = $inf->inflate('Holistic::Ticket', $obj);
+    print $inflated->_id."\n";
+}
+
 done_testing;

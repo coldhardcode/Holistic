@@ -89,11 +89,21 @@ sub BUILD {
         $self->add_sub_container( $logger_container );
 
         service 'Inflator' => (
+            lifecycle => 'Singleton',
             class => 'Holistic::Util::Inflator',
             dependencies => {
                 connection => depends_on('Database/connection'),
             }
         );
+
+        service 'Searcher' => (
+            class => 'Holistic::Util::Searcher',
+            dependencies => {
+                inflator    => depends_on('Inflator'),
+                connection  => depends_on('Database/connection'),
+            }
+        );
+
     };
 }
 
