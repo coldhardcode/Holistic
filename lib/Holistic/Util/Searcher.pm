@@ -12,6 +12,7 @@ has 'attributes' => (
 has 'collection' => (
     is => 'rw',
     isa => 'Str',
+    required => 1
 );
 
 has 'connection' => (
