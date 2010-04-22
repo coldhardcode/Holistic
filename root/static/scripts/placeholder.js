@@ -1,4 +1,9 @@
-YUI().use("node", function(Y) {
+YUI().use("event-delegate", "node", function(Y) {
+    Y.delegate('click',
+        function(e) { e.target.ancestor('form').submit(); },
+        document.body, 'form img'
+    );
+
     // webkit has native placeholder support
     if ( Y.UA.webkit ) return;
 
@@ -32,5 +37,4 @@ YUI().use("node", function(Y) {
             } );
         });
     });
-
 });
