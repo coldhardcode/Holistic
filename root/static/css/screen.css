@@ -351,6 +351,9 @@ body > header form {
 body > header form fieldset {
     border: none;
     background: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     padding: 0; margin: 30px 1em 0 0;
 }
 body > header form fieldset input {
@@ -429,12 +432,6 @@ body > header form fieldset input {
 #sidebar table td {
     border: none;
     padding: 4px;
-}
-#sidebar table td > a {
-    margin: 0; padding: 0;
-}
-#sidebar table a:hover {
-    background: none;
 }
 #sidebar table label {
     font-weight: bold;
@@ -638,6 +635,9 @@ fieldset {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
+    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 3px 5px rgba(0,0,0,.2);
+    box-shadow: 0 5px 5px rgba(0,0,0,.2);
     margin: 0 0 1em 0;
     padding: 1em;
     position: relative;
@@ -771,6 +771,9 @@ table.ticket label {
 table.ticket tr.submit td {
     border: none;
     text-align: right;
+}
+table.ticket tr.submit td a {
+    display: inline-block;
 }
 ul.comments {
     margin: 0; padding: 0 5px 0 5px;
@@ -1134,4 +1137,52 @@ span.type {
     border: 1px solid #ddd;
     font-size: 12px;
     margin: 0 7px 0 0; padding: 2px 3px;
+}
+.submit_button {
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 3px 5px rgba(0,0,0,.3);
+    box-shadow: 0 3px 5px rgba(0,0,0,.3);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    outline: none;
+    padding: .5em 2em .55em;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+}
+.small {
+    padding: .2em .5em;
+    font-size: 12px;
+}
+.submit_button:hover {
+    text-decoration: none;
+}
+.submit_button:active {
+    position: relative;
+    top: 1px;
+}
+.orange {
+    color: #fef4e9;
+    border: solid 1px #da7c0c;
+    background-color: #de691f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+    background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+    text-shadow: #95582d 0 -1px;
+}
+.orange:hover {
+    background: #f47c20;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
+    background: -moz-linear-gradient(top,  #f88e11,  #f06015);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+}
+.orange:active {
+    color: #fcd3a5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+    background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }

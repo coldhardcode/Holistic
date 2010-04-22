@@ -32,7 +32,7 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
    <tfoot>
     <tr>
      <td colspan="2'">
-      <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
+      <a href="#" class="submit_button orange">Submit</a>
      </td>
     </tr>
    </tfoot>

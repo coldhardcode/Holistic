@@ -63,7 +63,7 @@
    </tr>
    [% IF is_editable %]
    <tr class="submit">
-    <td colspan="4"><input type="image" src="[% static('/static/images/buttons/save-medium.png') %]" alt="c.loc('Submit Form') %]"></td>
+    <td colspan="4"><a href="#" class="submit_button orange">Save</a></td>
    </tr>
    [% END %]
   </tbody>

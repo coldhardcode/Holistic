@@ -204,7 +204,7 @@
    <tfoot>
     <tr>
      <td colspan="2">
-      <input type="image" src="/static/images/buttons/submit.png" value="Submit Form">
+      <a href="#" class="submit_button orange">Submit</a>
      </td>
     </tr>
    </tfoot>

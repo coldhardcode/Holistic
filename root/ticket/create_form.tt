@@ -21,7 +21,7 @@ stack      = stack;
   <table>
    <tfoot>
     <td colspan="4">
-     <input type="image" src="[% static('/static/images/buttons/submit.png') %]" alt="[% c.loc('Submit Form') %]">
+      <a href="#" class="submit_button orange">Submit</a>
     </td>
    </tfoot>
    <tbody>
