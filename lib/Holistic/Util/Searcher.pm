@@ -50,4 +50,16 @@ sub get_results {
     return $self->connection->get_collection($self->collection)->query($self->query, $self->attributes);
 }
 
+sub inflate_results {
+    my ($self, $cursor) = @_;
+
+    my @results;
+    my $inflator = $self->inflator;
+    while(my $obj = $cursor->next) {
+        push(@results, $inflator->inflate($obj));
+    }
+
+    return \@results;
+}
+
 1;

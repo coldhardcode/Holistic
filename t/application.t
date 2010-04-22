@@ -25,9 +25,7 @@ $searcher->search({ description => 'With a description' });
 
 my $cursor = $searcher->get_results;
 
-while(my $obj = $cursor->next) {
-    my $inflated = $inf->inflate($obj);
-    print $inflated->_id."\n";
-}
+my $tickets = $searcher->inflate_results($cursor);
+ok(scalar(@{ $tickets}), 'got some tickets');
 
 done_testing;
