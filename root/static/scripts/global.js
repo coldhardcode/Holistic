@@ -1,7 +1,7 @@
 YUI().use("event-delegate", "node", function(Y) {
     Y.delegate('click',
         function(e) { e.target.ancestor('form').submit(); },
-        document.body, 'form img'
+        document.body, 'form .submit_button'
     );
 
     // webkit has native placeholder support
