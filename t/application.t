@@ -18,8 +18,7 @@ my $id = $inf->save($tick);
 my $tick2 = $inf->find('Holistic::Ticket', $id);
 cmp_ok($tick2->summary, 'eq', 'A Ticket', 'inflated ticket summary');
 
-my $searcher = $app->fetch('Searcher')->get;
-$searcher->collection('tickets');
+my $searcher = $app->fetch('Searcher/tickets')->get;
 
 $searcher->search({ summary => 'A Ticket' });
 $searcher->search({ description => 'With a description' });
