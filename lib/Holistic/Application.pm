@@ -115,9 +115,6 @@ sub BUILD {
                     );
                 },
                 dependencies => wire_names(qw(/Inflator /Database/connection))
-                #     inflator    => depends_on('Inflator'),
-                #     connection  => depends_on('Database/connection'),
-                # }
             );
         };
     };

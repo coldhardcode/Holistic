@@ -21,14 +21,16 @@ sub find {
     die "Can't find collection for $class" unless defined($coll_name);
     my $doc = $db->get_collection($coll_name)->find_one({ _id => $id });
 
-    return $self->inflate($class, $doc);
+    return $self->inflate($doc);
 }
 
 sub inflate {
-    my ($self, $class, $doc) = @_;
+    my ($self, $doc) = @_;
 
     my $oid = $doc->{_id};
     $doc->{_id} = $oid->value;
+    my $class = $doc->{__CLASS__};
+
     return $class->thaw(encode_json($doc), { format => 'JSON' });
 }
 
