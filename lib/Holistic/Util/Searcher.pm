@@ -9,9 +9,14 @@ has 'attributes' => (
     default => sub { {} }
 );
 
+has 'collection' => (
+    is => 'rw',
+    isa => 'Str',
+);
+
 has 'connection' => (
     is => 'ro',
-    isa => 'MongoDB::Connection',
+    isa => 'MongoDB::Database',
     required => 1
 );
 
@@ -41,7 +46,7 @@ sub search {
 sub get_results {
     my ($self) = @_;
 
-    return $self->connection->get_database('holistic')->get_collection('tickets')->query($self->query, $self->attributes);
+    return $self->connection->get_collection($self->collection)->query($self->query, $self->attributes);
 }
 
 1;

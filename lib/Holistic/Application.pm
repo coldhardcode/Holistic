@@ -14,6 +14,12 @@ has 'database_host' => (
     default => 'localhost'
 );
 
+has 'database_name' => (
+    is => 'ro',
+    isa => 'Str',
+    default => 'holistic'
+);
+
 has 'database_port' => (
     is => 'ro',
     isa => 'Int',
@@ -57,6 +63,7 @@ sub BUILD {
 
             service 'host' => $self->database_host;
             service 'port' => $self->database_port;
+            service 'name' => $self->database_name;
 
             service 'connection' => (
                 lifecycle => 'Singleton',
@@ -67,9 +74,9 @@ sub BUILD {
                     MongoDB::Connection->new(
                         host => $s->param('host'),
                         port => $s->param('port')
-                    );
+                    )->get_database($s->param('name'));
                 },
-                dependencies => wire_names(qw(host port /Logging/Logger))
+                dependencies => wire_names(qw(host name port /Logging/Logger))
             );
         };
 
