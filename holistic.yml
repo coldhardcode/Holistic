@@ -7,7 +7,7 @@ timezone: America/Los_Angeles
 Model::Schema:
     connect_info: &1
         - "dbi:mysql:holistic"
-        - "holistic"
+        - "root"
         - ""
         -
             quote_char: '`'

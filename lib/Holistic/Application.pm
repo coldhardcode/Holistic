@@ -7,6 +7,8 @@ extends 'Bread::Board::Container';
 use MongoDB::Connection;
 use Log::Dispatch;
 use Log::Dispatch::Screen;
+use KiokuDB;
+use KiokuDB::Backend::MongoDB;
 
 has 'database_host' => (
     is => 'ro',
@@ -95,28 +97,44 @@ sub BUILD {
 
         $self->add_sub_container( $logger_container );
 
-        service 'Inflator' => (
-            lifecycle => 'Singleton',
-            class => 'Holistic::Util::Inflator',
-            dependencies => {
-                connection => depends_on('Database/connection'),
-            }
-        );
+        container 'Kioku' => as {
 
-        container 'Searcher' => as {
             service 'tickets' => (
-                class => 'Holistic::Util::Searcher',
+                class => 'KiokuDB::Backend::MongoDB',
                 block => sub {
                     my $s = shift;
-                    Holistic::Util::Searcher->new(
-                        connection => $s->param('/Database/connection'),
-                        collection => 'tickets',
-                        inflator => $s->param('/Inflator'),
+                    my $conn = $s->param('/Database/connection');
+                    my $mongo = KiokuDB::Backend::MongoDB->new(
+                        collection => $conn->get_collection('tickets')
                     );
+                    return KiokuDB->new(backend => $mongo);
                 },
-                dependencies => wire_names(qw(/Inflator /Database/connection))
+                dependencies => wire_names(qw(/Database/connection))
             );
         };
+
+        # service 'Inflator' => (
+        #     lifecycle => 'Singleton',
+        #     class => 'Holistic::Util::Inflator',
+        #     dependencies => {
+        #         connection => depends_on('Database/connection'),
+        #     }
+        # );
+        # 
+        # container 'Searcher' => as {
+        #     service 'tickets' => (
+        #         class => 'Holistic::Util::Searcher',
+        #         block => sub {
+        #             my $s = shift;
+        #             Holistic::Util::Searcher->new(
+        #                 connection => $s->param('/Database/connection'),
+        #                 collection => 'tickets',
+        #                 inflator => $s->param('/Inflator'),
+        #             );
+        #         },
+        #         dependencies => wire_names(qw(/Inflator /Database/connection))
+        #     );
+        # };
     };
 }
 

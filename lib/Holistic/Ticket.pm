@@ -1,12 +1,22 @@
 package Holistic::Ticket;
 use Moose;
-use MooseX::Storage;
 
-with 'MooseX::Storage::Deferred';
+use Holistic::Types qw(TicketPriority TicketType);
 
-has '_id' => (
+has 'date_due' => (
+    is => 'rw',
+    isa => 'DateTime'
+);
+
+has 'description' => (
     is => 'rw',
     isa => 'Str'
+);
+
+has 'priority' => (
+    is => 'rw',
+    isa => TicketPriority,
+    default => 'Normal'
 );
 
 has 'summary' => (
@@ -14,9 +24,16 @@ has 'summary' => (
     isa => 'Str'
 );
 
-has 'description' => (
+has 'tags' => (
     is => 'rw',
-    isa => 'Str'
+    isa => 'ArrayRef[Str]',
+    default => sub { [] }
+);
+
+has 'type' => (
+    is => 'rw',
+    isa => TicketType,
+    default => 'Defect'
 );
 
 1;
