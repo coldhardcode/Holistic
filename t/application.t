@@ -3,15 +3,20 @@ use Data::Dumper;
 
 use Holistic::Application;
 use Holistic::Ticket;
+use Holistic::Person;
 
 my $app = Holistic::Application->new(name => 'Holistic', database_host => '10.0.1.13');
-
+ok($app, 'created application');
 my $conn = $app->fetch('Database/connection')->get;
 isa_ok($conn, 'MongoDB::Database');
 
 # my $inf = $app->fetch('Inflator')->get;
 
 my $tick = Holistic::Ticket->new(summary => 'A Ticket', description => 'With a description');
+
+my $person = Holistic::Person->new( name => 'Bob Hope' );
+
+$tick->add_requestor( $person );
 
 # my $id = $inf->save($tick);
 
