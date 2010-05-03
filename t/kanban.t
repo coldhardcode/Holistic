@@ -1,7 +1,6 @@
 use Test::More;
 
 use Holistic::Stack;
-use Holistic::Stack::Step;
 
 use Holistic::Ticket;
 
