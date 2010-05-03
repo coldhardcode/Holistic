@@ -38,6 +38,28 @@ has 'type' => (
     default => 'Defect'
 );
 
+has 'step' => (
+    is        => 'rw',
+    isa       => 'Holistic::Node',
+    predicate => 'has_step',
+    handles   => {
+        next_step => 'next_step'
+    }
+);
+
+sub advance {
+    my ( $self ) = @_;
+    die "Ticket is not part of a process"
+        unless $self->has_step;
+
+    my $next = $self->next_step;
+    if ( not defined $next ) {
+        return undef;
+    }
+    warn "Next step: $next\n";
+    $next->add_ticket( $self );
+}
+
 has 'people' => (
     is      => 'rw',
     isa     => 'Holistic::Ticket::Assignments',
