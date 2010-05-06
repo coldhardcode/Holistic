@@ -251,13 +251,8 @@ sub requestor {
 sub owner {
     my ( $self ) = @_;
 
-    my $state = $self->state;
-    #my $state =
-    #    $self->states({}, { order_by => [ { '-desc' => 'me.pk1' } ] })->first;
-    my $id = $state->identity_pk2 || $state->identity_pk1;
-    $self->result_source->schema->resultset('Person::Identity')
-        ->search({ 'me.pk1' => $id }, { prefetch => [ 'person' ] })
-        ->first;
+    my $link = $self->_get_person_rs_with_role('@owner')->first;
+    return defined $link ? $link->person : undef;
 }
 
 
