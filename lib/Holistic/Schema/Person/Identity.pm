@@ -59,10 +59,10 @@ $CLASS->add_unique_constraint(
 );
 
 $CLASS->has_many(
-    'ticket_states', 'Holistic::Schema::Ticket::FinalState',
-    { 'foreign.identity_pk1' => 'self.pk1' }
+    'ticket_persons', 'Holistic::Schema::Ticket::Person',
+    { 'foreign.person_pk1' => 'self.person_pk1' }
 );
-$CLASS->many_to_many('tickets' => 'ticket_states' => 'ticket');
+$CLASS->many_to_many('tickets' => 'ticket_persons' => 'ticket');
 
 # TODO: Decide on indexes
 sub sqlt_deploy_hook {
@@ -73,17 +73,8 @@ sub sqlt_deploy_hook {
 sub needs_attention {
     my ( $self ) = @_;
 
-    my $status = $self->result_source->schema->get_status('@ATTENTION');
+    $self->ticket_persons({ 'role.name' => '@attention' }, { prefetch => [ 'role', 'ticket' ] })->search_related('ticket');
 
-    $self->schema->resultset('Ticket')->search(
-        { 
-            'final_state.status_pk1'   => $status->id,
-            'final_state.identity_pk2' => $self->id
-        },
-        {
-            prefetch => [ 'final_state' ],
-        }
-    );
 }
 
 no Moose;

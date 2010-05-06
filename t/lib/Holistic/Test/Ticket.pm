@@ -67,8 +67,8 @@ sub ticket_create : Plan(28) {
     $self->ticket( $ticket );
 
     is( $ticket->status->name, 'Backlog', 'new ticket status' );
-
-    cmp_ok( $ticket->requestor->pk1, '==', $identity->pk1, 'requestor identity' );
+    
+    cmp_ok( $ticket->requestor->pk1, '==', $identity->person_pk1, 'requestor identity' );
     cmp_ok( $identity->tickets->count, '==', 1, 'ticket count on identity' );
     cmp_ok( $identity->person->tickets->count, '==', 1, 'ticket count on person' );
 
@@ -110,7 +110,7 @@ sub ticket_create : Plan(28) {
     cmp_ok( $ticket->time_markers->count, '==', 1, 'time marker ok');
     cmp_ok( $ticket->due_date->dt_marker, '==', $dt_due, 'due date ok');
 
-    ok( ! $ticket->needs_attention, 'ticket doesnt need attention');
+    ok( !$ticket->needs_attention->count, 'ticket doesnt need attention');
     
     my $person = $self->resultset('Person')->create({
         name  => 'Joe',
@@ -120,18 +120,14 @@ sub ticket_create : Plan(28) {
     my $ident = $person->add_to_identities({ realm => 'local', ident => 'joe' });
     cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );
     $ticket->needs_attention( $ident );
-    cmp_ok( $ticket->needs_attention->pk1, '==', $ident->pk1, 'ticket needs attention');
+    cmp_ok( $ticket->needs_attention->first->pk1, '==', $ident->person_pk1, 'ticket needs attention');
 
     cmp_ok( $person->needs_attention->count, '==', 1, 'person->needs_attention' );
     ok( $ticket->clear_attention(0), 'clear attention' );
     cmp_ok( $person->needs_attention->count, '==', 0, 'person has no attn tickets' );
-    ok( !$ticket->clear_attention, 'clear attention twice is dumb' );
-
-    cmp_ok( $ticket->state->success, '==', 0, 'ticket is in failure state');
-
     $ticket->needs_attention( $ident );
 
-    cmp_ok( $queue->all_tickets->search({ 'status.name' => '@ATTENTION' })->count, '==', 1, 'ticket count on queue by status' );
+    cmp_ok( $queue->all_tickets->search({ 'ticket_persons.active' => 1, 'role.name' => '@attention' })->count, '==', 1, 'ticket count on queue by status' );
 
     $ticket->tag(qw/foo bar baz/);
 
@@ -155,15 +151,12 @@ sub ticket_dependencies : Plan(2) {
             priority    => $ticket->priority,
             type        => $ticket->type,
         });
-        $new->requestor( $ticket->identity );
+        $new->requestor( $ticket->requestor );
         $ticket->add_to_dependent_links({
             linked_ticket => $new,
             identity_pk1  => $identities[$_]->id,
             type          => $self->resultset('Label')->find_or_create({ name => 'Blocking' }),
         });
-        if ( $_ == 0 ) {
-            $new->close( $identities[$_] );
-        }
     }
 
     cmp_ok( $ticket->queue->all_tickets, '==', 6, 'ticket count on queue');

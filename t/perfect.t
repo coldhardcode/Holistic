@@ -15,8 +15,8 @@ my $goal = Holistic::Goal->new(
 );
 
 my $ticket = Holistic::Ticket->new(
-    subject => "Place drop it",
-    body    => "Become I don't want it",
+    subject   => "Place drop it",
+    body      => "Become I don't want it",
     requestor => 'anon@dumbasses.com'
 );
 

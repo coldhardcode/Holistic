@@ -74,8 +74,8 @@ sub BUILD {
                     #use Data::Dumper;
                     #$s->param('/Logging/Logger')->info(Dumper($s));
                     MongoDB::Connection->new(
-                        host => $s->param('host'),
-                        port => $s->param('port')
+                        #host => $s->param('host'),
+                        #port => $s->param('port')
                     )->get_database($s->param('name'));
                 },
                 dependencies => wire_names(qw(host name port /Logging/Logger))

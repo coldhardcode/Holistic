@@ -185,11 +185,10 @@ sub all_tickets {
     $self->result_source->schema->resultset('Ticket')->search_rs(
         { 'me.queue_pk1' => \@pk1s },
         {
-            prefetch => {
-                'final_state' => [
-                    'identity', 'destination_identity', 'status' 
-                ],
-            },
+            prefetch => [
+                { 'ticket_persons' => [ 'role', 'person' ] },
+                'priority', 'queue'
+            ],
             group_by => [ 'me.pk1' ]
         }
     );

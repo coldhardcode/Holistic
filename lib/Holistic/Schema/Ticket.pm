@@ -224,7 +224,7 @@ sub needs_attention {
     if ( defined $identity ) {
         $self->_create_person_with_role( $identity, '@attention' );
     }
-    return $rs;
+    return $rs->search_related('person');
 }
 
 sub clear_attention {
@@ -244,7 +244,8 @@ sub requestor {
         $self->_create_person_with_role( $person, '@requestor' );
     }
 
-    return $self->_get_person_rs_with_role('@requestor')->first;
+    my $link = $self->_get_person_rs_with_role('@requestor')->first;
+    return defined $link ? $link->person : undef;
 }
 
 sub owner {

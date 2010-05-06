@@ -79,21 +79,19 @@ sub connected_to_user {
     return 0 unless $user;
 }
 
+
 sub needs_attention {
     my ( $self ) = @_;
 
-    my $status = $self->result_source->schema->get_status('@ATTENTION');
-
-    $self->schema->resultset('Ticket')->search(
-        { 
-            'final_state.status_pk1'   => $status->id,
-            'final_state.identity_pk2' => [ $self->identities->get_column('pk1')->all ]
+    $self->ticket_persons(
+        {
+            'role.name' => '@attention',
+            'me.active' => 1,
         },
         {
-            prefetch => [ 'final_state' ],
-            #join => [ 'final_state' ],
+            prefetch => [ 'role', 'ticket' ]
         }
-    );
+    )->search_related('ticket');
 }
 
 sub temporary_password {
@@ -152,10 +150,11 @@ sub gravatar_url {
         "&size=$size";
 }
 
-sub tickets {
-    my ( $self ) = @_;
-    $self->identities->search_related('ticket_states')->search_related('ticket');
-}
+__PACKAGE__->has_many(
+    'ticket_persons', 'Holistic::Schema::Ticket::Person', 'person_pk1'
+);
+__PACKAGE__->many_to_many('tickets', 'ticket_persons', 'ticket');
+
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
