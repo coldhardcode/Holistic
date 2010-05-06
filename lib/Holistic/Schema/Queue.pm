@@ -19,8 +19,6 @@ __PACKAGE__->table('queues');
 __PACKAGE__->add_columns(
     'pk1',
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
-    #'position',
-    #{ data_type => 'integer', size => '16', is_nullable => 0 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
     'description',
@@ -44,7 +42,8 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_foreign_key => 1,
         dynamic_default_on_create => \&_default_type },
     'path',
-    { data_type => 'varchar', size => '255', is_nullable => 0, default_value => '' },
+    { data_type => 'varchar', size => '255', is_nullable => 0,
+        dynamic_default_on_create => sub { shift->token } },
     'dt_created',
     { data_type => 'datetime', set_on_create => 1 },
     'dt_updated',
@@ -83,6 +82,33 @@ __PACKAGE__->has_many('group_links', __PACKAGE__ . '::Group',
     { 'foreign.foreign_pk1' => 'self.pk1' }
 );
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
+
+sub initial_state {
+    my ( $self, $depth ) = @_;
+    $depth = 0 if not defined $depth;
+    
+    my $parent = $self->parent;
+    if ( $depth == 0 and defined $parent and $parent->id != $self->id ) {
+        return $parent->initial_state;
+    }
+    my $child = $self->direct_children->first;
+    if ( defined $child ) {
+        return $child->initial_state( $depth + 1 );
+    }
+    return $self;
+}
+
+sub add_step {
+    my ( $self, $data ) = @_;
+
+    die "Step must have at least the name\n"
+        unless $data->{name};
+
+    $data->{token} ||= $self->schema->tokenize( $data->{name} );
+    $data->{path}    = join($self->path_separator, $self->path, $data->{token});
+    
+    $self->resultset('Queue')->create($data);
+}
 
 sub is_member {
     my ( $self, $person, $role ) = @_;

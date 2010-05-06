@@ -11,23 +11,36 @@ has 'queue' => (
     isa => 'Holistic::Schema::Queue'
 );
 
-sub queue_create : Plan(1) {
+sub queue_create : Plan(3) {
     my ( $self, $data ) = @_;
 
     my $type_ms = $self->resultset('Queue::Type')->find_or_create({
-        name => 'Milestone'
+        name => 'Release'
     });
 
     my $queue = $self->schema->resultset('Queue')->find_or_create({
-        name  => $data->{name} || 'A Q',
-        token => $data->{token} || 'a-queue',
+        name  => $data->{name} || 'Version 1.0',
+        token => $data->{token} || 'version_1.0',
         type  => $type_ms,
     });
-    $queue->discard_changes;
+    my $backlog = $queue->add_step({ name => 'Backlog' });
+    $queue->add_step({ name => 'Analysis' });
+    my $wip = $queue->add_step({ name => 'Work In Progress' });
+        my $dev = $wip->add_step({ name => 'Development' });
+            $dev->add_step({ name => 'Code' });
+            $dev->add_step({ name => 'Review' });
+        $wip->add_step({ name => 'Test' });
+        $wip->add_step({ name => 'Merge' });
+
+    $queue->add_step({ name => 'Release' });
+
+    $queue->add_step({ name => 'Stalled' });
 
     ok($queue, 'created queue');
     $self->queue( $queue );
 
+    is($queue->initial_state->id, $backlog->id, 'right initial state');
+    is($queue->size, 10, 'queue is the right height');
     return $queue;
 }
 

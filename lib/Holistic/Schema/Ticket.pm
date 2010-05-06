@@ -12,11 +12,24 @@ values and other attributes.
 
 =head2 QUEUES AND MILESTONES
 
-A ticket is a subclass of a queue, with additional features.  A queue is
-essentially some defined workflow that tickets go through, this can be the
-top level group queue, or a subordinate milestone object.
+A ticket belongs to a L<Holistic::Schema::Queue> instance, which is a
+materialized tree.
 
-In any case, a ticket has one of these, linked by the C<queue_pk1> column.
+The visual is similar to a Kanban board:
+
+ +----------------------------------------------------------------------------+
+ |                                 $Project                                   |
+ +-----------+-----------+----------------------------------------------------+
+ |  Backlog  | Analyasis |   Work In Progress                |     Release    |
+ +-----------+-----------+-------------+---------------------+----------------+
+ |           |           | Development |   Test   |   Merge  |     Ticket     |
+ |           |  Ticket   +-------------+----------+----------+                |
+ |  Ticket   |  Ticket   |   Ticket    |  Ticket  |          |                |
+ |           |           |             |          |          |                |
+ +-----------+-----------+-------------+----------+----------+----------------+
+
+The ticket state is simply the closest queue_pk1 node, which is the active
+functional state of the ticket.
 
 =head2 INFORMATIONAL CATEGORIES
 
@@ -111,39 +124,36 @@ with 'Holistic::Role::Discussable',
      'Holistic::Role::Verify';
 
 __PACKAGE__->table('tickets');
-__PACKAGE__->resultset_class('Holistic::ResultSet::Ticket');
 
 # See Holistic::Schema::Queue for base columns
 __PACKAGE__->add_columns(
     'queue_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
+    'priority_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1 },
 );
 __PACKAGE__->set_primary_key('pk1');
+
+__PACKAGE__->belongs_to(
+    'priority', 'Holistic::Schema::Ticket::Priority', 
+    { 'foreign.pk1' => 'self.priority_pk1' }
+);
 
 __PACKAGE__->belongs_to(
     'queue', 'Holistic::Schema::Queue', 
     { 'foreign.pk1' => 'self.queue_pk1' }
 );
+# Convenience
+sub status { shift->queue(@_) }
 
 __PACKAGE__->has_many(
-    'states', 'Holistic::Schema::Ticket::State', 'ticket_pk1'
+    'ticket_meta', 'Holistic::Schema::Ticket::Meta', 'ticket_pk1'
 );
 
-__PACKAGE__->has_many(
-    'final_states', 'Holistic::Schema::Ticket::FinalState', 'ticket_pk1'
-);
-
-__PACKAGE__->add_relationship(
-    'final_state',
-    'Holistic::Schema::Ticket::FinalState',
-    { 'foreign.ticket_pk1' => 'self.pk1' },
-    { join_type => 'left', accessor => 'single' }
-);
-
-__PACKAGE__->belongs_to(
-    'requestor', 'Holistic::Schema::Person::Identity',
-    { 'foreign.pk1' => 'self.identity_pk1' }
-);
+sub get_metadata {
+    my ( $self ) = @_;
+    return { map { $_->name => $_->value } $self->ticket_meta->all };
+}
 
 __PACKAGE__->belongs_to(
     'type', 'Holistic::Schema::Ticket::Type',
@@ -162,6 +172,94 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many('dependencies', 'dependent_links', 'linked_ticket' );
 
+__PACKAGE__->has_many(
+    'ticket_persons', 'Holistic::Schema::Ticket::Person',
+    { 'foreign.ticket_pk1' => 'self.pk1' }
+);
+
+sub _get_person_rs_with_role {
+    my ( $self, $role ) = @_;
+    die "Unable to add_person without a role\n"
+        unless defined $role;
+
+    my $role_obj = blessed($role) ?
+        $role :
+        $self->resultset('Ticket::Role')->find_or_create({ name => $role });
+
+    $self->ticket_persons(
+        { 'role.pk1' => $role_obj->id },
+        { prefetch => [ 'person', 'role' ] }
+    )->search_rs;
+}
+
+sub _create_person_with_role {
+    my ( $self, $person, $role ) = @_;
+    die "Unable to add_person without a role\n"
+        unless defined $role;
+
+    my $role_obj = blessed($role) ?
+        $role :
+        $self->resultset('Ticket::Role')->find_or_create({ name => $role });
+
+    my $person_pk1 = $person->isa('Holistic::Schema::Person') ?
+        $person->id : $person->person_pk1;
+    $self->ticket_persons->create({
+        person_pk1 => $person_pk1,
+        role_pk1   => $role_obj->id,
+        active     => 1
+    });
+}
+
+sub add_person {
+    my ( $self, $person, $role ) = @_;
+
+    $self->_create_person_with_role( $person, $role );
+}
+
+sub needs_attention {
+    my ( $self, $identity ) = @_;
+
+    my $rs = $self->_get_person_rs_with_role('@attention');
+
+    if ( defined $identity ) {
+        $self->_create_person_with_role( $identity, '@attention' );
+    }
+    return $rs;
+}
+
+sub clear_attention {
+    my ( $self, $success ) = @_;
+
+    my $rs = $self->_get_person_rs_with_role('@attention');
+    $rs->update_all({ 'active' => 0 });
+
+    return 1;
+}
+
+# there can only be one requestor
+sub requestor {
+    my ( $self, $person ) = @_;
+
+    if ( defined $person ) {
+        $self->_create_person_with_role( $person, '@requestor' );
+    }
+
+    return $self->_get_person_rs_with_role('@requestor')->first;
+}
+
+sub owner {
+    my ( $self ) = @_;
+
+    my $state = $self->state;
+    #my $state =
+    #    $self->states({}, { order_by => [ { '-desc' => 'me.pk1' } ] })->first;
+    my $id = $state->identity_pk2 || $state->identity_pk1;
+    $self->result_source->schema->resultset('Person::Identity')
+        ->search({ 'me.pk1' => $id }, { prefetch => [ 'person' ] })
+        ->first;
+}
+
+
 sub worklog {
     my ( $self ) = @_;
     $self
@@ -177,205 +275,7 @@ sub activity {
         )->search_rs;
 }
 
-sub needs_attention {
-    my ( $self, $identity ) = @_;
 
-    my $status = $self->result_source->schema->get_status('@ATTENTION');
-
-    if ( defined $identity ) {
-        my $state = $self->state;
-        my $source_id;
-        if ( defined $state ) {
-            $source_id = $state->identity_pk1;
-        } else {
-            $source_id = $self->result_source->schema->resultset('Person::Identity')->single({ realm => 'system', id => 'system' })->id;
-        }
-        $self->add_state({
-            identity_pk1 => $source_id,
-            identity_pk2 => $identity->pk1,
-            status_pk1   => $status->id,
-        });
-    }
-    my $state = $self->state;
-    if ( $state->status_pk1 == $status->id ) {
-        return $state->destination_identity;
-    }
-    return undef;
-}
-
-sub clear_attention {
-    my ( $self, $success ) = @_;
-
-    $success = defined $success && $success ? 1 : 0;
-
-    my $rs = $self->states(
-        {},
-        { order_by => [ { '-desc' => 'me.pk1' } ], rows => 2 }
-    );
-
-    my $status = $self->result_source->schema->get_status('@ATTENTION');
-    my ( $attn_state, $prev_state ) = $rs->all;
-    if ( $attn_state->status_pk1 == $status->pk1 ) {
-        my %cols = $prev_state->get_columns;
-            delete $cols{$_} for qw/dt_created pk1 ticket_pk1/;
-        $cols{success} = $success;
-        $self->add_state({ %cols });
-        return 1;
-    }
-
-    return 0;
-}
-
-sub initial_state {
-    my ( $self ) = @_;
-
-    my $state = $self->states(
-        {
-            'me.status_pk1' => $self->result_source->schema->get_status('@new ticket')->id
-        },
-        {
-            order_by => [ { '-asc' => 'me.dt_created' } ],
-            prefetch => [ { 'identity' => 'person' } ] 
-        }
-    )->first;
-    return undef unless defined $state;
-
-    return $state;
-}
-
-sub priority { shift->state->priority }
-
-sub owner {
-    my ( $self ) = @_;
-    my $state = $self->state;
-    #my $state =
-    #    $self->states({}, { order_by => [ { '-desc' => 'me.pk1' } ] })->first;
-    my $id = $state->identity_pk2 || $state->identity_pk1;
-    $self->result_source->schema->resultset('Person::Identity')
-        ->search({ 'me.pk1' => $id }, { prefetch => [ 'person' ] })
-        ->first;
-}
-
-sub status {
-    my ( $self ) = @_;
-    my $state = $self->state;
-
-    if ( not defined $state ) {
-        my $priority = $self->schema->resultset('Ticket::Priority')->find_or_create(
-            { name => '@default priority' }
-        );
-
-        $state = $self->add_state({
-            identity_pk1 => $self->identity_pk1,
-            priority     => $priority,
-            status       => $self->result_source->schema->get_status('@new ticket')
-        });
-    }
-
-    $state->status;
-}
-
-sub close {
-    my ( $self, $identity ) = @_;
-
-    return $self->add_state({
-        identity => $identity,
-        status => $self->result_source->schema->get_status('CLOSED')
-    });
-}
-
-sub add_state {
-    my ( $self, $info ) = @_;
-
-    $self->result_source->schema->txn_do(sub {
-        my $final = $self->final_state;
-        # Preserve some other things
-        if ( defined $final ) {
-            foreach my $key ( qw/priority_pk1 identity_pk1 identity_pk2/ ) {
-                $info->{$key} ||= $final->$key;
-            }
-            $final->delete if $final->in_storage;
-            $self->discard_changes;
-        }
-        $self->add_to_states($info);
-        $self->state;
-    });
-}
-
-sub state {
-    my ( $self ) = @_;
-
-    my $final_state = $self->final_state;
-
-    return $final_state if defined $final_state;
-
-    my $rs = $self->states(
-        {},
-        {
-            prefetch => [ 'identity', 'destination_identity' ],
-            order_by => [ { '-asc' => 'me.pk1' } ] 
-        }
-    );
-
-    my $state_count = $rs->count;
-    return undef if $state_count == 0;
-
-    #if ( defined $final_state && $final_state->state_count != $state_count ) {
-    #$final_state->delete if $final_state->in_storage;
-    #    $final_state = undef;
-    #} elsif ( defined $final_state ) {
-    #    $final_state->discard_changes;
-    #}
-
-    if ( not defined $final_state ) {
-        my %merge;
-        my @columns = $rs->result_source->columns;
-
-        my %aggregate_columns;
-        my %persistent_columns;
-        my %normal_columns;
-
-        foreach my $col_name ( @columns ) {
-            my $info = $rs->result_source->column_info( $col_name );
-            next if $info->{is_auto_increment};
-
-            $col_name = $info->{accessor} if defined $info->{accessor};
-
-            if ( $info->{persist_state} ) {
-                $persistent_columns{ $col_name } = $info->{persistent_state};
-            }
-            elsif ( $info->{aggregate_state} ) {
-                $aggregate_columns{ $col_name } = $info->{aggregate_state};
-            }
-            else {
-                $normal_columns{ $col_name } = $col_name;
-            }
-        }
-
-        while ( my $row = $rs->next ) {
-            foreach my $column ( keys %aggregate_columns ) {
-                my $type = $aggregate_columns{$column};
-                    $type = 'sum' if int($type) == 1;
-
-                if ( $type eq 'sub' ) {
-                    $merge{$column} -= $row->$column;
-                } else {
-                    $merge{$column} += $row->$column;
-                }
-            }
-            foreach my $column ( keys %persistent_columns ) {
-                $merge{$column} ||= $row->$column;
-            }
-            foreach my $column ( keys %normal_columns ) {
-                $merge{$column} = $row->$column;
-            }
-        }
-        $merge{state_count} = $state_count;
-        $self->create_related('final_state', \%merge);
-        $final_state = $self->final_state;
-    }
-    return $final_state;
-}
 
 sub tag {
     my ( $self, @tags ) = @_;
@@ -469,62 +369,3 @@ sub _build__verify_profile {
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
-
-package Holistic::ResultSet::Ticket;
-
-use Moose;
-
-extends 'Holistic::Base::ResultSet';
-
-around 'create' => sub {
-    my ( $orig, $self, $data, @args ) = @_;
-
-    my $schema = $self->result_source->schema;
-    my $ident;
-    if ( exists $data->{assign_identity} ) {
-        $ident = delete $data->{assign_identity};
-    }
-
-    my $priority;
-    if ( exists $data->{priority} ) {
-        $priority = delete $data->{priority};
-    }
-    elsif ( exists $data->{priority_pk1} ) {
-        # Default priority?
-        $priority = $schema->resultset('Ticket::Priority')
-            ->find( delete $data->{priority_pk1} );
-    }
-    if ( not defined $priority ) {
-        # Default priority?
-        $priority = $schema->resultset('Ticket::Priority')->find_or_create(
-            { name => '@default priority' }
-        );
-    }
-
-    # in a txn?
-    my $ticket = $self->$orig($data, @args);
-    if ( defined $ident ) {
-        $ticket->discard_changes;
-        my $status = $schema->get_status('@new ticket');
-        my $state = $ticket->add_state({
-            identity_pk1 => $ticket->identity_pk1,
-            identity_pk2 => $ident->pk1,
-            status_pk1   => $status->id,
-            priority_pk1 => $priority->id,
-            dt_created   => $data->{dt_created} || $ticket->dt_created
-        });
-    } elsif ( defined $priority ) {
-        $ticket->discard_changes;
-        my $status = $schema->get_status('@new ticket');
-        my $state = $ticket->add_state({
-            identity_pk1 => $ticket->identity_pk1,
-            status_pk1   => $status->id,
-            priority_pk1 => $priority->id,
-            dt_created   => $data->{dt_created} || $ticket->dt_created
-        });
-    }
-    return $ticket;
-};
-
-no Moose;
-1;

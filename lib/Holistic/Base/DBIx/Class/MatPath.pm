@@ -156,4 +156,22 @@ sub direct_children {
     });
 }
 
+sub get_child_at {
+    my ( $self, $index ) = @_;
+
+    my $node = $self->direct_children->single({ 'position' => $index });
+    defined $node ? $node : undef;
+}
+
+sub get_child_index {
+    my ( $self ) = @_;
+    #$self->parent->direct_children->find( $self->id )->position;
+    $self->position;
+}
+
+sub size {
+    shift->all_children->count;
+}
+
+
 1;

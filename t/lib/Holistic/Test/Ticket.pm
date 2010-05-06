@@ -21,17 +21,9 @@ has 'ticket' => (
 sub ticket_create : Plan(28) {
     my ( $self, $data ) = @_;
 
-    my $type_ms = $self->resultset('Queue::Type')->find_or_create({
-        name => 'Milestone'
-    });
-
     my $queue = $self->queue;
     if ( not defined $queue ) {
-        $queue = $self->run_test('queue_create', {
-            name  => 'Test Queue',
-            token => 'test-suite-queue',
-            type  => $type_ms
-        });
+        $queue = $self->run_test('queue_create');
     }
 
     if ( $self->meta->does_role('Holistic::Test::Person') ) {
@@ -62,38 +54,20 @@ sub ticket_create : Plan(28) {
         color => $data->{ticket_color} || 'ddd'
     });
 
-    my $milestone = $self->resultset('Queue')->create({
-        name        => 'Version 4.5',
-        token       => 'version-4.5',
-        type        => $type_ms,
-        # XX this needs to be automatic (maybe a 'parent'?)
-        path        => join('.', $queue->path, 'version-4.5'),
-    });
-
     my $ticket = $self->resultset('Ticket')->create({
         name        => $data->{name} || 'Test Suite Generated Ticket',
-        token       => 'test-suite-generated-ticket',
         description => $lorem->paragraphs(2),
-        identity    => $identity,
-        queue_pk1   => $milestone->id,
+        queue_pk1   => $queue->initial_state->id,
         priority    => $priority,
         type        => $ticket_type,
         dt_created  => $data->{dt_created}
     });
+    $ticket->requestor( $identity->person );
 
     $self->ticket( $ticket );
 
-    is( $ticket->status->name, '@new ticket', 'new ticket status' );
+    is( $ticket->status->name, 'Backlog', 'new ticket status' );
 
-    my $state = $ticket->state;
-
-    cmp_ok( $state->identity_pk1, '==', $identity->pk1, 'proper identity state');
-    ok( $state, 'now we have a state' );
-
-    cmp_ok( $state->state_count, '==', 1, 'final state cached' );
-    cmp_ok( $ticket->final_state->state_count, '==', 1, 'final state cached' );
-    is( $ticket->final_state->priority->name, $priority->name, 'final state priority' );
-    cmp_ok( $ticket->final_state->identity_pk1, '==', $identity->pk1, 'final state identity' );
     cmp_ok( $ticket->requestor->pk1, '==', $identity->pk1, 'requestor identity' );
     cmp_ok( $identity->tickets->count, '==', 1, 'ticket count on identity' );
     cmp_ok( $identity->person->tickets->count, '==', 1, 'ticket count on person' );
@@ -126,7 +100,7 @@ sub ticket_create : Plan(28) {
     cmp_ok( $ticket->comments->count, '==', 2, 'two comments entry' );
  
     cmp_ok( $queue->all_tickets->count, '==', 1, 'ticket count on queue' );
-    cmp_ok( $milestone->all_tickets->count, '==', 1, 'ticket count on milestone' );
+    #cmp_ok( $milestone->all_tickets->count, '==', 1, 'ticket count on milestone' );
 
     my $dt_due = DateTime->now->add( weeks => 1 );
     $queue->due_date( DateTime->now->add( months => 1 ) );
@@ -175,14 +149,13 @@ sub ticket_dependencies : Plan(2) {
 
     for ( 0 .. 4 ) {
         my $new = $self->resultset('Ticket')->create({
-            name  => $lorem->words(4),
-            token => $lorem->words(4),
+            name        => $lorem->words(4),
             description => $lorem->paragraphs(2),
-            identity    => $identities[$_],
             queue       => $ticket->queue,
             priority    => $ticket->priority,
             type        => $ticket->type,
         });
+        $new->requestor( $ticket->identity );
         $ticket->add_to_dependent_links({
             linked_ticket => $new,
             identity_pk1  => $identities[$_]->id,
