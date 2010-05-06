@@ -35,7 +35,21 @@ sub all_parents {
         $path_col => { -in => \@path_parts },
     });
 }
+
+sub top_parent {
+    my $self = shift;
  
+    my $path_col = $self->path_column;
+    my $sep      = $self->path_separator;
+    my $esep     = $self->escaped_separator;
+ 
+    my @path_parts = split (/$esep/, $self->get_column($path_col));
+    return $self->result_source->resultset->search({
+        $path_col => $path_parts[0],
+    })->first;
+
+}
+
 sub all_children {
     my $self = shift;
 
@@ -159,14 +173,20 @@ sub direct_children {
 sub get_child_at {
     my ( $self, $index ) = @_;
 
-    my $node = $self->direct_children->single({ 'position' => $index });
-    defined $node ? $node : undef;
+    my $node = $self->direct_children->slice($index)->first;
+    return defined $node ? $node : undef;
 }
 
 sub get_child_index {
-    my ( $self ) = @_;
-    #$self->parent->direct_children->find( $self->id )->position;
-    $self->position;
+    my ( $self, $node ) = @_;
+    my @rows = $self->direct_children->all;
+    my $i = 0;
+    for ( my $i = 0; $i < @rows; $i++ ) {
+        if ( $rows[$i]->id == $node->id ) {
+            return $i;
+        }
+    }
+    return 0;
 }
 
 sub size {

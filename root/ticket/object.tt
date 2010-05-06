@@ -57,6 +57,8 @@ END;
  </details>
 </header>
 
+[% PROCESS "queue/overview.tt", queue = ticket.queue; %]
+
 <h3>[% c.loc('Description') %]</h3>
 <section class="description">
 [% ticket.description %]

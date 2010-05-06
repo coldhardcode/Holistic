@@ -83,6 +83,38 @@ __PACKAGE__->has_many('group_links', __PACKAGE__ . '::Group',
 );
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
 
+has '_next_step' => (
+    is   => 'ro',
+    isa  => 'CodeRef',
+    lazy_build => 1,
+);
+
+sub next_step {
+    my ( $self, @args ) = @_;
+    my $traversal = $self->_next_step;
+
+    $self->$traversal( @args );
+}
+
+sub _build__next_step {
+    return sub {
+        my ( $self, $depth ) = @_;
+        $depth = 0 if not defined $depth;
+        if ( $self->direct_children->count and not $depth ) {
+            return $self->direct_children->first;
+        }
+        my $parent = $self->parent;
+        return undef unless defined $parent;
+
+        my $next_index = $parent->get_child_index( $self ) + 1;
+        my $next       = $parent->get_child_at( $next_index );
+
+        return $next if defined $next;
+
+        # We're at the end, so find the next step on the parent
+        $parent->next_step( $depth + 1 );
+    };
+}
 sub initial_state {
     my ( $self, $depth ) = @_;
     $depth = 0 if not defined $depth;

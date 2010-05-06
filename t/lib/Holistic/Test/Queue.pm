@@ -27,9 +27,9 @@ sub queue_create : Plan(3) {
     $queue->add_step({ name => 'Analysis' });
     my $wip = $queue->add_step({ name => 'Work In Progress' });
         my $dev = $wip->add_step({ name => 'Development' });
-            $dev->add_step({ name => 'Code' });
-            $dev->add_step({ name => 'Review' });
-        $wip->add_step({ name => 'Test' });
+            my $code = $dev->add_step({ name => 'Code' });
+            my $review = $dev->add_step({ name => 'Review' });
+        my $test = $wip->add_step({ name => 'Test' });
         $wip->add_step({ name => 'Merge' });
 
     $queue->add_step({ name => 'Release' });
@@ -39,6 +39,8 @@ sub queue_create : Plan(3) {
     ok($queue, 'created queue');
     $self->queue( $queue );
 
+    is($code->next_step->id, $review->id, 'right next step');
+    is($review->next_step->id, $test->id, 'right next step escalate');
     is($queue->initial_state->id, $backlog->id, 'right initial state');
     is($queue->size, 10, 'queue is the right height');
     return $queue;
