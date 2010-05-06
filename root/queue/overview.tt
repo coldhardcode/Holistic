@@ -1,0 +1,17 @@
+[%~
+
+parent = queue.top_parent;
+
+~%]
+<section class="queue-overview">
+ <h3>[% parent.name %]</h3>
+ <details class="muted">
+  <dl>
+   <dt>[% c.loc('Currently:') %]</dt>
+   <dd>[% queue.name | html %]</dd>
+   <dt>[% c.loc('Next Step:') %]</dt>
+   <dd>[% queue.next_step.name | html %]</dd>
+  </dl>
+ </details>
+
+</section>
