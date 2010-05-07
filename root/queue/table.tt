@@ -14,9 +14,14 @@ SET children = q.direct_children.all;
                 </tr></tbody></table>[%
             END;
         END;
-    ELSE;
-        name | html;
-    END;
+    ELSE %]
+        <a href="[% c.uri_for_action('/queue/object', [ q.id ]) %]">[% name | html %]</a>
+        [% FOREACH ticket IN q.tickets %]
+            [% IF loop.first %]<ul>[% END %]
+            [% IF loop.last %]</ul>[% END %]
+            <li><a href="[% c.uri_for_action('/ticket/object', [ ticket.id ]) %]">#[% ticket.id %] - [% ticket.name %]</a></li>
+        [% END %]
+    [% END;
  %]</td>
 [% END %]
 
