@@ -15,7 +15,7 @@ sub queue_create : Plan(3) {
     my ( $self, $data ) = @_;
 
     my $type_ms = $self->resultset('Queue::Type')->find_or_create({
-        name => 'Release'
+        name => '@release'
     });
 
     my $queue = $self->schema->resultset('Queue')->find_or_create({

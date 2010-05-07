@@ -1,7 +1,14 @@
 [%~
 
 tickets = queue.all_tickets;
+type    = queue.type;
 
 ~%]
-<h1>[% c.loc(queue.type.name) %] [% queue.name | html %]</h1>
-[% PROCESS "site/shared/ticket_table.tt", tickets = tickets.all %]
+<h1>[% system_localize(type.name) %] [% queue.name | html %]</h1>
+[%~
+IF type.name == '@release';
+    PROCESS "queue/table.tt";
+ELSE;
+    PROCESS "site/shared/ticket_table.tt", tickets = tickets.all;
+END;
+~%]

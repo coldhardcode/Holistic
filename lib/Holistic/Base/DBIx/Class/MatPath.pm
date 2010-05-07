@@ -162,10 +162,9 @@ sub direct_children {
 	my $path_col = $self->path_column;
 	my $sep      = $self->path_separator;
 
-    my $match = join($sep, $self->get_column($path_col), '%', $sep,'%');
-    $match =~ s/($sep)+/$sep/g;
+    my $match = join($sep, $self->get_column($path_col), '%','%');
 
-	return $self->all_children->search({
+	return $self->all_children->search_rs({
 	    "me.$path_col" => { '-not_like' => $match }
     });
 }

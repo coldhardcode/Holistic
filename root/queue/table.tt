@@ -1,0 +1,35 @@
+[% MACRO queue_row(q) BLOCK; 
+SET name     = q.name;
+SET c_count  = q.direct_children.count;
+SET children = q.direct_children.all;
+%]
+<td>[%
+    IF c_count > 0;
+        FOREACH c IN children;
+            IF loop.first %]
+                <table><thead><tr><th colspan="[% c_count %]">[% q.name | html %]</th></tr></thead><tbody><tr>
+            [% END;
+                queue_row(c);
+            IF loop.last %]
+                </tr></tbody></table>[%
+            END;
+        END;
+    ELSE;
+        name | html;
+    END;
+ %]</td>
+[% END %]
+
+[% child_count = queue.direct_children.count %]
+<table>
+    <thead>
+        <tr><th colspan="[% child_count %]">[% queue.name %]</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+        [% FOREACH child IN queue.direct_children.all;
+            queue_row(child);
+        END; %]
+        </tr>
+    </tbody>
+</table>
