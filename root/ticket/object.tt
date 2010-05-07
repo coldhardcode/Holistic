@@ -45,6 +45,15 @@ END;
 </section>
 [% END %]
 
+<h2>XX Move this somewhere good.</h2>
+<nav>
+ <ul>
+  <li><a href="#comment">[% c.loc('Comment') %]</a></li>
+  <li><a href="[% c.uri_for('/ticket/create', { parent => ticket.id }) %]">[% c.loc('Create Dependent') %]</a></li>
+  <li><a href="#">[% c.loc('Add to Stack') %]</a></li>
+ </ul>
+</nav>
+
 <header>
  <h1>[% c.loc('Summary: [_1]', ticket.name) %]</h1>
  <details class="muted">
@@ -59,9 +68,9 @@ END;
 
 [% PROCESS "queue/overview.tt", queue = ticket.queue; %]
 
-<h3>[% c.loc('Description') %]</h3>
+<h3>[% c.loc('Description') %] (XX This is broken unless it has &lt;p&gt;s)</h3>
 <section class="description">
-[% ticket.description %]
+<p>[% ticket.description %]</p>
 </section>
 
 <h2 id="tabview-heading"></h2>

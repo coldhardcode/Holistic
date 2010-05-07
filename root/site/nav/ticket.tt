@@ -70,8 +70,3 @@
   </tbody>
  </table>
 </form>
-<ul>
- <li><a href="#comment">[% c.loc('Comment') %]</a></li>
- <li><a href="[% c.uri_for('/ticket/create', { parent => ticket.id }) %]">[% c.loc('Create Dependent') %]</a></li>
- <li><a href="#">[% c.loc('Add to Stack') %]</a></li>
-</ul>
