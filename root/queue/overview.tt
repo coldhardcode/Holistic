@@ -15,6 +15,6 @@ next_step = queue.next_step;
   </dl>
   </details>
   [% IF ticket.defined %]
-  <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]"><button class="orange">[% c.loc('Advance to [_1]', [ next_step.name ] ) %]</button></form>
+  <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]"><button class="orange submit_button">[% c.loc('Advance to [_1]', [ next_step.name ] ) %]</button></form>
   [% END %]
 </section>
