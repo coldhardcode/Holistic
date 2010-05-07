@@ -5,11 +5,11 @@ SET children = q.direct_children.all;
 %]
 <td>[%
     IF c_count > 0;
-        FOREACH c IN children;
+        FOREACH ch IN children;
             IF loop.first %]
                 <table><thead><tr><th colspan="[% c_count %]">[% q.name | html %]</th></tr></thead><tbody><tr>
             [% END;
-                queue_row(c);
+                queue_row(ch);
             IF loop.last %]
                 </tr></tbody></table>[%
             END;
