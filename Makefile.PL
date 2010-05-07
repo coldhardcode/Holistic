@@ -90,7 +90,7 @@ requires 'YAML::XS';
 requires 'parent';
 
 test_requires 'Test::More' => '0.88';
-test_requires 'String::Ranom';
+test_requires 'String::Random';
 test_requires 'Text::Lorem' => '0.3';
 catalyst;
 
