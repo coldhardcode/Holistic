@@ -23,24 +23,34 @@ sub queue_create : Plan(3) {
         token => $data->{token} || 'version_1.0',
         type  => $type_ms,
     });
+
     my $backlog = $queue->add_step({ name => 'Backlog' });
-    $queue->add_step({ name => 'Analysis' });
+    my $analysis = $queue->add_step({ name => 'Analysis' });
     my $wip = $queue->add_step({ name => 'Work In Progress' });
+warn(" --> " . $wip->id);
+        is($wip->parent->id, $queue->id, 'right parentage');
+warn(" --> " . $wip->id);
         my $dev = $wip->add_step({ name => 'Development' });
+            is($dev->parent->id, $wip->id, 'right parentage');
             my $code = $dev->add_step({ name => 'Code' });
             my $review = $dev->add_step({ name => 'Review' });
         my $test = $wip->add_step({ name => 'Test' });
-        $wip->add_step({ name => 'Merge' });
+        my $merge = $wip->add_step({ name => 'Merge' });
 
-    $queue->add_step({ name => 'Release' });
+    my $release = $queue->add_step({ name => 'Release' });
 
     $queue->add_step({ name => 'Stalled' });
 
     ok($queue, 'created queue');
     $self->queue( $queue );
 
-    is($code->next_step->id, $review->id, 'right next step');
+    is($backlog->next_step->id, $analysis->id, 'next step');
+    is($analysis->next_step->id, $code->id, 'next step');
+    is($code->next_step->id, $review->id, 'next step');
     is($review->next_step->id, $test->id, 'right next step escalate');
+    is($test->next_step->id, $merge->id, 'right next step escalate');
+    is($merge->next_step->id, $release->id, 'right next step escalate');
+
     is($queue->initial_state->id, $backlog->id, 'right initial state');
     is($queue->size, 10, 'queue is the right height');
     return $queue;

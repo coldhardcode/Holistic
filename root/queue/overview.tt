@@ -1,6 +1,7 @@
 [%~
 
 parent = queue.top_parent;
+next_step = queue.next_step;
 
 ~%]
 <section class="queue-overview">
@@ -10,8 +11,10 @@ parent = queue.top_parent;
    <dt>[% c.loc('Currently:') %]</dt>
    <dd>[% queue.name | html %]</dd>
    <dt>[% c.loc('Next Step:') %]</dt>
-   <dd>[% queue.next_step.name | html %]</dd>
+   <dd>[% IF next_step; next_step.name | html;  ELSE; c.loc("End of the road"); END; %]</dd>
   </dl>
- </details>
-
+  </details>
+  [% IF ticket.defined %]
+  <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]"><button class="orange">[% c.loc('Advance to [_1]', [ next_step.name ] ) %]</button></form>
+  [% END %]
 </section>

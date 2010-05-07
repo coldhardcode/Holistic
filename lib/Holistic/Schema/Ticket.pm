@@ -286,6 +286,14 @@ sub tag {
     }
 }
 
+sub advance {
+    my ( $self ) = @_;
+    my $step = $self->queue->next_step;
+    die "Can't advance ticket, no steps defined\n"
+        unless defined $step;
+    $self->update({ queue_pk1 => $step->id });
+}
+
 # ACL Methods
 sub action_list {
     return {

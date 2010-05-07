@@ -19,6 +19,8 @@ __PACKAGE__->table('queues');
 __PACKAGE__->add_columns(
     'pk1',
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
+    'queue_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
     'description',
@@ -53,7 +55,7 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key('pk1');
 
 __PACKAGE__->path_column('path');
-__PACKAGE__->parent_column('path');
+__PACKAGE__->parent_column('queue_pk1');
 
 __PACKAGE__->has_many(
     'tickets', 'Holistic::Schema::Ticket', 
@@ -100,21 +102,29 @@ sub _build__next_step {
     return sub {
         my ( $self, $depth ) = @_;
         $depth = 0 if not defined $depth;
-        if ( $self->direct_children->count and not $depth ) {
-            return $self->direct_children->first;
+
+        # If we have chidren, always go there.
+        if ( $self->direct_children->count ) {
+            return $self->direct_children->first->next_step( $depth + 1 );
+        } elsif ( $depth ) {
+            return $self;
         }
+
         my $parent = $self->parent;
         return undef unless defined $parent;
 
-        my $next_index = $parent->get_child_index( $self ) + 1;
-        my $next       = $parent->get_child_at( $next_index );
-
-        return $next if defined $next;
-
-        # We're at the end, so find the next step on the parent
-        $parent->next_step( $depth + 1 );
+        # Our sibling doesn't exist, so we have to start looking up and over
+        my $node = $self;
+        while ( defined $node ) {
+            my $next = $node->next_sibling;
+            return $next->next_step( $depth + 1 ) if defined $next;
+    
+            $node = $node->parent;
+        }
+        return undef;
     };
 }
+
 sub initial_state {
     my ( $self, $depth ) = @_;
     $depth = 0 if not defined $depth;
@@ -138,8 +148,11 @@ sub add_step {
 
     $data->{token} ||= $self->schema->tokenize( $data->{name} );
     $data->{path}    = join($self->path_separator, $self->path, $data->{token});
-    
-    $self->resultset('Queue')->create($data);
+    $data->{queue_pk1} = $self->id;
+ 
+    my $row = $self->resultset('Queue')->create($data);
+    $row->discard_changes;
+    return $row;
 }
 
 sub is_member {

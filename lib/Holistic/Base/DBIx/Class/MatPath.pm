@@ -153,6 +153,17 @@ sub _shift_siblings {
         }
     }
 }
+
+sub next_sibling {
+    my ( $self ) = @_;
+    my $parent = $self->parent;
+    return undef unless defined $parent;
+
+    my $next_index = $parent->get_child_index( $self ) + 1;
+    my $next       = $parent->get_child_at( $next_index );
+
+    return $next;
+}
  
 ## direct children:
 ## all_children->search (... -not_like => 'path $sep % $sep %

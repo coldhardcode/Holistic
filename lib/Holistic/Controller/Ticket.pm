@@ -1,6 +1,7 @@
 package Holistic::Controller::Ticket;
 
 use Moose;
+use Try::Tiny;
 
 BEGIN { extends 'Holistic::Base::Controller::REST'; }
 
@@ -36,7 +37,20 @@ sub object_alias_setup : Chained('setup') PathPart('-') Args(2) {
     $c->detach('object');
 }
 
-sub tag : Chained('object_setup') PathPargs(0) Args(1) ActionClass('REST') { 
+sub advance : Chained('object_setup') Args(0) ActionClass('REST') { }
+sub advance_POST {
+    my ( $self, $c ) = @_;
+
+    try {
+        $c->stash->{ticket}->advance;
+    } catch {
+        $c->message({ type => 'error', message => $c->loc($_) });
+    };
+
+    $c->res->redirect($c->uri_for_action('/ticket/object', $c->req->captures));
+}
+
+sub tag : Chained('object_setup')  Args(1) ActionClass('REST') { 
     my ( $self, $c, $tag_id ) = @_;
     $c->stash->{tag} = $tag_id;
 }
