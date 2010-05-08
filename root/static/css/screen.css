@@ -1202,7 +1202,7 @@ progress {
 }
 progress ol {
     list-style: none;
-    margin: 0; padding: .3em 0;
+    margin: 5px 0 4px 5px; padding: 0 0;
 }
 progress ol li {
     color: #87766f;
