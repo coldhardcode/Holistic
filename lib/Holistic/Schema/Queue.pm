@@ -46,6 +46,10 @@ __PACKAGE__->add_columns(
     'path',
     { data_type => 'varchar', size => '255', is_nullable => 0,
         dynamic_default_on_create => sub { shift->token } },
+    'closed_queue_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1, is_nullable => 1 },
+    'stalled_queue_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1, is_nullable => 1 },
     'dt_created',
     { data_type => 'datetime', set_on_create => 1 },
     'dt_updated',
@@ -60,6 +64,16 @@ __PACKAGE__->parent_column('queue_pk1');
 __PACKAGE__->has_many(
     'tickets', 'Holistic::Schema::Ticket', 
     { 'foreign.queue_pk1' => 'self.pk1' }
+);
+
+__PACKAGE__->belongs_to(
+    'stalled_queue', 'Holistic::Schema::Queue',
+    { 'foreign.pk1' => 'self.stalled_queue_pk1' }
+);
+
+__PACKAGE__->belongs_to(
+    'closed_queue', 'Holistic::Schema::Queue',
+    { 'foreign.pk1' => 'self.closed_queue_pk1' }
 );
 
 __PACKAGE__->belongs_to(

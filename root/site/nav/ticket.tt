@@ -1,9 +1,16 @@
+[%~
+requestor = ticket.requestor;
+
+~%]
 <h4>[% c.loc('Ticket #[_1]', ticket.id) %]</a></h4>
 [% IF is_editable %]<form>[% END %]
  <table class="ticket">
   <tbody>
    <tr>
-    [% readonly_field({ label => 'Type', value => ticket.type.name }) %]
+    [% readonly_field({ label => c.loc('Type'), value => ticket.type.name }) %]
+   </tr>
+   <tr>
+     [% readonly_field({ label => c.loc('Requestor'), value => requestor.name, link => c.uri_for_action('/person/object', [ requestor.id ] ) }) %]
    </tr>
    <tr>
    [% top = ticket.queue.top_parent;

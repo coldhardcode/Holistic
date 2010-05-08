@@ -129,6 +129,8 @@ __PACKAGE__->table('tickets');
 __PACKAGE__->add_columns(
     'queue_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
+    'last_queue_pk1',
+    { data_type => 'integer', size => '16', is_nullable => 1, is_foreign_key => 1 },
     'priority_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
 );
@@ -143,6 +145,12 @@ __PACKAGE__->belongs_to(
     'queue', 'Holistic::Schema::Queue', 
     { 'foreign.pk1' => 'self.queue_pk1' }
 );
+
+__PACKAGE__->belongs_to(
+    'last_queue', 'Holistic::Schema::Queue', 
+    { 'foreign.pk1' => 'self.last_queue_pk1' }
+);
+
 # Convenience
 sub status { shift->queue(@_) }
 
@@ -224,7 +232,7 @@ sub needs_attention {
     if ( defined $identity ) {
         $self->_create_person_with_role( $identity, '@attention' );
     }
-    return $rs->search_related('person');
+    return $rs->search_related_rs('person', {}, { group_by => 'person.pk1' } );
 }
 
 sub clear_attention {
@@ -291,7 +299,15 @@ sub advance {
     my $step = $self->queue->next_step;
     die "Can't advance ticket, no steps defined\n"
         unless defined $step;
-    $self->update({ queue_pk1 => $step->id });
+    $self->update({ queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1 });
+}
+
+sub is_open { return !shift->is_closed; }
+
+sub is_closed { 
+    my ( $self ) = @_;
+    my $closed = $self->queue->top_parent->closed_queue;
+    return ( defined $closed && $self->queue_pk1 == $closed->id );
 }
 
 # ACL Methods

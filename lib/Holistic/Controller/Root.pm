@@ -110,12 +110,13 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
 sub admin     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub calendar  : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub chart     : Chained('setup') PathPart('') CaptureArgs(0) { }
-sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub my        : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub person    : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub queue     : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub search    : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub ticket    : Chained('setup') PathPart('') CaptureArgs(0) { }
-sub what      : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub util      : Chained('setup') PathPart('') CaptureArgs(0) { }
+sub what      : Chained('setup') PathPart('') CaptureArgs(0) { }
 
 sub register : Chained('/') PathPart('') CaptureArgs(0) { }
 sub auth     : Chained('/') PathPart('') CaptureArgs(0) { }
