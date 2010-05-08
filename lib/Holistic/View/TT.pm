@@ -20,6 +20,7 @@ __PACKAGE__->config({
         date => {
             date    => '%x',
             short   => '%b %e, %G',
+            medium  => '%b %e, %G %I:%M %p',
             long    => '%X %x',
             hour    => '%I:%M %p'
         }
