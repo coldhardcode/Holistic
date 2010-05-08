@@ -6,9 +6,9 @@
  <li>Tag search?</li>
 </ul>
 [% IF pager.total_entries %]
-  [% INCLUDE site/shared/pager.tt pager = results.pager %]
+  [% IF pager.total_entries > pager.entries_per_page; INCLUDE site/shared/pager.tt pager = results.pager; END %]
   [% INCLUDE site/shared/ticket_table.tt tickets = results.items %]
-  [% INCLUDE site/shared/pager.tt pager = results.pager %]
+  [% IF pager.total_entries > pager.entries_per_page; INCLUDE site/shared/pager.tt pager = results.pager; END %]
 [% ELSE %]
 <section class="message">
  <aside class="omessage"><p>[% c.loc("Your search for '[_1]' returned no results.", results.query.original_query) %]</p></aside>
