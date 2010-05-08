@@ -35,22 +35,23 @@ my_parents = queue.parent_map;
 
 ~%]
 <progress>
-<ol>[%
+[%# White space is important here, keep the ~ %]
+<ol>[%~
     SET seen_progress = {};
     FOREACH child IN parent.direct_children.all;
         IF child.id != parent.id && my_parents.${child.id}.defined %]
-            [% FOREACH p IN queue.all_parents.all;
-                NEXT IF p.id == parent.id %]
+            [%~ FOREACH p IN queue.all_parents.all;
+                NEXT IF p.id == parent.id ~%]
                 <li class="curr">[% p.name %]</li>
-                [% IF loop.last;
+                [%~ IF loop.last;
                     seen_progress.${next_step.id} = 1;
                     seen_progress.${queue.id} = 1;
-                %]
-                    <li class="curr last">[% queue.name %]</li>
-                    <li class="future">[% next_step.name %]</li>
-                [% END %]
-            [% END %]
-        [% ELSIF !seen_progress.${child.id} %]
+                ~%]
+                    <li class="curr last">[% queue.name %]</li>[%~ ~%]
+                    <li class="future">[% next_step.name %]</li>[%~ ~%]
+                [%~ END ~%]
+            [%~ END ~%]
+        [%~ ELSIF !seen_progress.${child.id} ~%]
         <li class="[%~
                 'curr last' IF child.id == queue.id; 
                 'future' IF child.id == next_step.id; 
@@ -80,8 +81,6 @@ my_parents = queue.parent_map;
   </dl>
  </details>
 </header>
-
-[% PROCESS "queue/overview.tt", queue = ticket.queue; %]
 
 <h3>[% c.loc('Description') %] (XX This is broken unless it has &lt;p&gt;s)</h3>
 <section class="description">
