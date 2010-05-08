@@ -59,7 +59,7 @@ my_parents = queue.parent_map;
         [% END %]
     [% END %]
  </ol>
- [% IF ticket.defined %]
+ [% IF ticket.defined && next_step.defined %]
  <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]"><button class="orange submit_button small">[% c.loc('Advance to [_1] &#x2192;', [ next_step.name ] ) %] </button></form>
  [% END %]
 </progress>
