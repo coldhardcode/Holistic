@@ -31,9 +31,14 @@ sub all_parents {
     for my $i (1 .. $#path_parts) {
         $path_parts[$i] = join ($sep, @path_parts[$i-1, $i]);
     }
-    return $self->result_source->resultset->search({
+    return $self->result_source->resultset->search_rs({
         $path_col => { -in => \@path_parts },
     });
+}
+
+sub parent_map {
+    my ( $self ) = @_;
+    return { map { $_->id => $_ } $self->all_parents->all };
 }
 
 sub top_parent {

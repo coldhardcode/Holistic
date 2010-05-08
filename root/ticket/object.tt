@@ -27,18 +27,42 @@ IF c.user_exists && c.user.person_pk1 == attention.person_pk1;
     needs_my_attention = 1;
 END;
 
-parent = queue.top_parent;
-next_step = queue.next_step;
+parent     = queue.top_parent;
+next_step  = queue.next_step;
+my_parents = queue.parent_map;
 
-%]
+#  <li>Backlog</li><li>Analysis</li><li class="curr">Work In Progress</li><li class="curr last">Code</li><li class="future">Testing</li><li class="future">Merge</li>
+
+~%]
 <progress>
- <ol>
-  <li>Backlog</li><li>Analysis</li><li class="curr">Work In Progress</li><li class="curr last">Code</li><li class="future">Testing</li><li class="future">Merge</li>
+<ol>[%
+    SET seen_progress = {};
+    FOREACH child IN parent.direct_children.all;
+        IF child.id != parent.id && my_parents.${child.id}.defined %]
+            [% FOREACH p IN queue.all_parents.all;
+                NEXT IF p.id == parent.id %]
+                <li class="curr">[% p.name %]</li>
+                [% IF loop.last;
+                    seen_progress.${next_step.id} = 1;
+                    seen_progress.${queue.id} = 1;
+                %]
+                    <li class="curr last">[% queue.name %]</li>
+                    <li class="future">[% next_step.name %]</li>
+                [% END %]
+            [% END %]
+        [% ELSIF !seen_progress.${child.id} %]
+        <li class="[%~
+                'curr last' IF child.id == queue.id; 
+                'future' IF child.id == next_step.id; 
+            ~%]">[% child.name %]</li>
+        [% END %]
+    [% END %]
  </ol>
  [% IF ticket.defined %]
  <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]"><button class="orange submit_button small">[% c.loc('Advance to [_1] &#x2192;', [ next_step.name ] ) %] </button></form>
  [% END %]
 </progress>
+
 [% IF attention %]
 <section class="message">
  <aside class="omessage"><p><a href="#comment">[% c.loc('This ticket is awaiting attention from <strong>[_1]</strong>!', attention.person.name) %]</a></p></aside>

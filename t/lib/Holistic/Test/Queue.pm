@@ -27,9 +27,7 @@ sub queue_create : Plan(3) {
     my $backlog = $queue->add_step({ name => 'Backlog' });
     my $analysis = $queue->add_step({ name => 'Analysis' });
     my $wip = $queue->add_step({ name => 'Work In Progress' });
-warn(" --> " . $wip->id);
         is($wip->parent->id, $queue->id, 'right parentage');
-warn(" --> " . $wip->id);
         my $dev = $wip->add_step({ name => 'Development' });
             is($dev->parent->id, $wip->id, 'right parentage');
             my $code = $dev->add_step({ name => 'Code' });

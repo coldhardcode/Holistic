@@ -1219,8 +1219,6 @@ progress ol li.last {
     background: #eee url('/static/images/arrow-back-last.png') right center no-repeat;
 }
 progress form button {
-    display: inline;
-    float: right;
     position: absolute;
     right: 7px;
     top: 3px;

@@ -1,17 +1,36 @@
-[% MACRO queue_row(q) BLOCK; 
+[%~
+# CSS is put here because I have no intention of keeping it.
+~%]
+<style type="text/css">
+    table.queue table,
+    table.queue { border-collapse: collapse; }
+    table.queue table { margin: 0; }
+    table.queue td { padding: 0; }
+    table.queue table td { padding: 7px; }
+    table.queue td,
+    table.queue th
+    { border: 1px solid #000; } 
+</style>
+
+[%~
+
+MACRO queue_row(q) BLOCK; 
 SET name     = q.name;
 SET c_count  = q.direct_children.count;
 SET children = q.direct_children.all;
-%]
+
+~%]
 <td>[%
     IF c_count > 0;
         FOREACH ch IN children;
             IF loop.first %]
-                <table><thead><tr><th colspan="[% c_count %]">[% q.name | html %]</th></tr></thead><tbody><tr>
+                <table><tbody><tr>
             [% END;
                 queue_row(ch);
             IF loop.last %]
-                </tr></tbody></table>[%
+                </tr></tbody>
+                <thead><tr><th colspan="[% c_count %]">[% q.name | html %]</th></tr></thead>
+                </table>[%
             END;
         END;
     ELSE %]
@@ -23,10 +42,12 @@ SET children = q.direct_children.all;
         [% END %]
     [% END;
  %]</td>
-[% END %]
+[%~ END ~%]
 
-[% child_count = queue.direct_children.count %]
-<table>
+[%~
+child_count = queue.direct_children.count;
+~%]
+<table class="queue">
     <thead>
         <tr><th colspan="[% child_count %]">[% queue.name %]</th></tr>
     </thead>
@@ -38,3 +59,5 @@ SET children = q.direct_children.all;
         </tr>
     </tbody>
 </table>
+
+
