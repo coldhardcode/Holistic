@@ -43,7 +43,7 @@
       ELSE;
         due_date = c.loc('Unscheduled');
       END;
-      readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => due_date, link => link }); %]
+      readonly_field({ label => 'XX Date Due', name => 'ticket.date_due', type => 'date', value => due_date, link => link }); %]
    </tr>
    <tr>
     [% IF is_editable;

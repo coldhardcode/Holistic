@@ -27,32 +27,23 @@ IF c.user_exists && c.user.person_pk1 == attention.person_pk1;
     needs_my_attention = 1;
 END;
 
+parent = queue.top_parent;
+next_step = queue.next_step;
+
 %]
-[% IF 0 # commented out since this doesn't work %]
-<nav class="pager">
- <p>[% c.loc('Ticket [_1] of [_2] in', 2, siblings.count) %] <a href="[% c.uri_for_action('/queue/object', [ queue.id ] ) %]">[% queue.type.name %] [% queue.name %]</a></p>
+<progress>
  <ol>
-  <li class="first"><a href="#"><img src="/static/images/actions/resultset_first.png"></a></li>
-  <li><a href="#">[% c.loc('Previous') %]</a></li>
-  <li><a href="#">[% c.loc('Next') %]</a></li>
-  <li class="last"><a href="#"><img src="/static/images/actions/resultset_last.png"></a></li>
+  <li>Backlog</li><li>Analysis</li><li class="curr">Work In Progress</li><li class="curr last">Code</li><li class="future">Testing</li><li class="future">Merge</li>
  </ol>
-</nav>
-[% END %]
+ [% IF ticket.defined %]
+ <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]"><button class="orange submit_button small">[% c.loc('Advance to [_1] &#x2192;', [ next_step.name ] ) %] </button></form>
+ [% END %]
+</progress>
 [% IF attention %]
 <section class="message">
  <aside class="omessage"><p><a href="#comment">[% c.loc('This ticket is awaiting attention from <strong>[_1]</strong>!', attention.person.name) %]</a></p></aside>
 </section>
 [% END %]
-
-<h2>XX Move this somewhere good.</h2>
-<nav>
- <ul>
-  <li><a href="#comment">[% c.loc('Comment') %]</a></li>
-  <li><a href="[% c.uri_for('/ticket/create', { parent => ticket.id }) %]">[% c.loc('Create Dependent') %]</a></li>
-  <li><a href="#">[% c.loc('Add to Stack') %]</a></li>
- </ul>
-</nav>
 
 <header>
  <h1>[% c.loc('Summary: [_1]', ticket.name) %]</h1>

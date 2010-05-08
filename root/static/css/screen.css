@@ -1185,3 +1185,43 @@ span.type {
     background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }
+
+progress {
+    background: none;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #353535;
+    display: block;
+    font-size: 14px;
+    margin: 0 0 1em 0; padding: 0;
+    position: relative;
+    text-align: left;
+}
+progress ol {
+    list-style: none;
+    margin: 0; padding: .3em 0;
+}
+progress ol li {
+    color: #87766f;
+    display: inline;
+    list-style: none;
+    margin: 0; padding: .25em 1em;
+}
+progress ol li.curr {
+    background: #fff url('/static/images/arrow-back.png') right center no-repeat;
+    color: #000;
+    font-weight: bold;
+}
+progress ol li.last {
+    background: #eee url('/static/images/arrow-back-last.png') right center no-repeat;
+}
+progress form button {
+    display: inline;
+    float: right;
+    position: absolute;
+    right: 7px;
+    top: 2px;
+}
