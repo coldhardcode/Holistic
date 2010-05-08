@@ -23,7 +23,9 @@ IF context.ticket;
     PROCESS site/nav/ticket.tt;
 END %]
  <nav>
-   <a href="[% c.uri_for('/ticket/create', { parent => ticket.id }) %]">[% c.loc('XX Create Dependent') %]</a>
+[% IF context.ticket %]
+  <a href="[% c.uri_for('/ticket/create', { parent => ticket.id }) %]">[% c.loc('XX Create Dependent') %]</a>
+[% END %]
 [% PROCESS site/nav/ticket_stack.tt %]
  </nav>
 </aside>
