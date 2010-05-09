@@ -52,7 +52,7 @@ footer {
 }
 h1, h2, h3, h4, h5, h6, legend {
     font-weight: bold;
-    margin: 0 0 18px 0; padding: 0;
+    margin: 0 0 14px 0; padding: 0;
     text-shadow: #fff 1px 1px;
 }
 h1 {
@@ -74,7 +74,7 @@ h3 small {
 }
 h4 {
     font-size: 16px;
-    line-height: 28px;
+    line-height: 16px;
 }
 h5, h6 {
     line-height: 18px;
@@ -1202,24 +1202,51 @@ progress {
 }
 progress ol {
     list-style: none;
-    margin: 5px 0 4px 5px; padding: 0 0;
+    margin: 8px 0 7px 5px; padding: 0 0;
 }
 progress ol li {
-    color: #87766f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
+    background: -moz-linear-gradient(top, #72b94f, #55aa2a);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#72b94f', endColorstr='#55aa2a');
+    border: 1px solid #757575;
+    border-right: none;
+    color: #b8d7a2;
     display: inline;
     list-style: none;
     margin: 0; padding: .25em 1em;
 }
-progress ol li.curr {
-    background: #fff url('/static/images/arrow-back.png') right center no-repeat;
-    color: #000;
-    font-weight: bold;
+progress ol li:first-child {
+    -webkit-border-top-left-radius: 7px;
+    -webkit-border-bottom-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-bottomleft: 7px;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
 }
-progress ol li.last {
-    background: #eee url('/static/images/arrow-back-last.png') right center no-repeat;
+progress ol li:last-child {
+    border-right: 1px solid #000000;
+    -webkit-border-top-right-radius: 7px;
+    -webkit-border-bottom-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    -moz-border-radius-bottomright: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+progress ol li.curr {
+    color: #fff;
+    background-color: #55aa2a;
+    background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
+    background: -moz-linear-gradient(top, #72b94f, #55aa2a);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#72b94f', endColorstr='#55aa2a');
+    text-shadow: #558342 0 -1px;
+}
+progress ol li.future {
+    background: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#909090));
+    background: -moz-linear-gradient(top, #d4d4d4, #b0b0b0);
+    color: #777;
 }
 progress form button {
     position: absolute;
     right: 7px;
-    top: 3px;
+    top: 6px;
 }
