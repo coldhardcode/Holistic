@@ -53,6 +53,10 @@ sub _create : Private {
     my ( $self, $c, $clean_data ) = @_;
 
     $c->model('Schema')->schema->txn_do( sub {
+        my $token = $c->model('Schema')->schema->tokenize( $clean_data->{name} ); 
+        $clean_data->{path} = $token;
+        $clean_data->{token} = $token;
+
         my $queue = $c->stash->{$self->rs_key}->create($clean_data);
         $c->stash->{product}->add_to_queues( $queue );
 
