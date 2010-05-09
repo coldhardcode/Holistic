@@ -12,10 +12,10 @@
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Name', name => 'name', hint => 'Name', required => 1 }); %]
+     [% text_field({ label => 'Name', name => 'product.name', hint => 'Name', required => 1 }); %]
     </tr>
     <tr>
-     [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
+     [% textarea_field({ label => 'Description', name => 'product.description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
     </tr>
    </tbody>
   </table>

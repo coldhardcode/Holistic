@@ -8,6 +8,7 @@ use Scalar::Util 'blessed';
 extends 'Holistic::Base::DBIx::Class';
 
 #with 'Holistic::Role::Permissions';
+with 'Holistic::Role::Verify';
 
 __PACKAGE__->load_components(qw/
     +Holistic::Base::DBIx::Class::MatPath
@@ -60,6 +61,33 @@ __PACKAGE__->set_primary_key('pk1');
 
 __PACKAGE__->path_column('path');
 __PACKAGE__->parent_column('queue_pk1');
+
+# Verification Code
+sub _build_verify_scope { 'queue' }
+sub _build__verify_profile {
+    my ( $self ) = @_;
+    return {
+        'profile' => {
+            'type_pk1' => {
+                'required' => 1,
+                'type' => 'Int'
+            },
+            'name' => {
+                'required' => 1,
+                'type' => 'Str',
+                'max_length' => '255',
+                'min_length' => 1
+            },
+            'description' => {
+                'required'   => 1,
+                'type'       => 'Str',
+                'min_length' => 1
+            },
+        },
+        'filters' => [ 'trim' ]
+    };
+}
+
 
 __PACKAGE__->has_many(
     'tickets', 'Holistic::Schema::Ticket', 

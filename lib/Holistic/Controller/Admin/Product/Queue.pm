@@ -10,8 +10,10 @@ __PACKAGE__->config(
     rs_key     => 'queue_rs',
     object_key => 'queue',
     prefetch   => [ 'type' ],
+    scope      => 'queue',
     create_string => 'The queue has been created.',
     update_string => 'The queue has been updated.',
+    error_string  => 'There was an error processing your request, please try again.',
 );
 
 sub timemarker : Chained('object_setup') PathPart('') CaptureArgs(0) { }
@@ -45,22 +47,17 @@ sub create_form : Chained('setup') PathPart('create') Args(0) {
     }
     $type ||= $c->model('Schema::Queue::Type')->first;
     $c->stash->{type} = $type;
-
-    $c->stash->{queue_rs} = $c->model('Schema::Queue')->search_rs(
-        { 
-            'product_links.product_pk1' => $c->stash->{product}->id,
-            #'me.active'                 => 1,
-        },
-        {
-            prefetch => [ 'product_links' ]
-        }
-    );
 }
 
-sub post_create : Private {
-    my ( $self, $c, $data, $object ) = @_;
-    $c->log->debug("Adding $object to ". $c->stash->{product});
-    $c->stash->{product}->add_to_queues( $object );
+sub _create : Private {
+    my ( $self, $c, $clean_data ) = @_;
+
+    $c->model('Schema')->schema->txn_do( sub {
+        my $queue = $c->stash->{$self->rs_key}->create($clean_data);
+        $c->stash->{product}->add_to_queues( $queue );
+
+        return $queue;
+    });
 }
 
 sub post_update : Private {

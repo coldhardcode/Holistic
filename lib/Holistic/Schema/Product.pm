@@ -6,7 +6,8 @@ use Carp;
 
 extends 'Holistic::Base::DBIx::Class';
 
-with 'Holistic::Role::Permissions';
+with 'Holistic::Role::Permissions',
+     'Holistic::Role::Verify';
 
 __PACKAGE__->table('products');
 
@@ -27,6 +28,27 @@ __PACKAGE__->set_primary_key('pk1');
 
 __PACKAGE__->has_many('queue_links', 'Holistic::Schema::Product::Queue', 'product_pk1');
 __PACKAGE__->many_to_many('queues' => 'queue_links' => 'queue');
+
+sub _build_verify_scope { 'product' }
+sub _build__verify_profile {
+    my ( $self ) = @_;
+    return {
+        'profile' => {
+            'name' => {
+                'required' => 1,
+                'type' => 'Str',
+                'max_length' => '255',
+                'min_length' => 1
+            },
+            'description' => {
+                'required'   => 1,
+                'type'       => 'Str',
+                'min_length' => 1
+            },
+        },
+        'filters' => [ 'trim' ]
+    };
+}
 
 sub permission_hierarchy {
     return {

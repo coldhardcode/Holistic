@@ -2,12 +2,15 @@
 
 ~%]
 [% IF type %]
-<h1>[% c.loc("[_1] : Create ${type.name}", [ product.name ] ) %] </h1>
+<h1>[% c.loc("[_1] : Setup [_2]", [ product.name, system_localize(type.name) ] ) %] </h1>
 [% ELSE %]
-<h1>[% c.loc('[_1] : Create Ticket Queue', [ product.name ] ) %] </h1>
+<h1>[% c.loc('[_1] : Setup Queue', [ product.name ] ) %] </h1>
 [% END %]
 <form id="queue" method="post" action="[% c.uri_for_action('/admin/product/queue/root', [ product.id ]) %]">
  <fieldset>
+[% IF type %]
+    <input type="hidden" name="queue.type_pk1" value="[% type.id %]">
+[% END %]
   <table>
    <tfoot>
     <tr>
@@ -17,25 +20,16 @@
     </tr>
    </tfoot>
    <tbody>
-[%~ IF queue_rs.count > 0 %]
     <tr>
-     [% select_field({
-        label => 'Parent', name => 'parent_pk1', required => 1, double => 1,
-        error => stack.for_subject('parent_pk1').first_message.id,
-        value => results.get_original_value('parent_pk1'),
-        array => queue_rs.all, label_method => 'name', value_method => 'id',
-        default_option => [ 0, c.loc('No Parent') ]
-    }) %]
+     [% text_field({ label => 'Name', name => 'queue.name', hint => 'Name', required => 1 }); %]
+     </tr>
+[% IF !type %]
+    <tr>
+     [% select_field({ label => 'Type', name => 'queue.type_pk1', required => 1, array => types.all, label_method => 'name', value_method => 'id', value => type.id }); %]
     </tr>
 [% END %]
     <tr>
-     [% text_field({ label => 'Name', name => 'name', hint => 'Name', required => 1 }); %]
-    </tr>
-    <tr>
-     [% select_field({ label => 'Type', name => 'type_pk1', required => 1, array => types.all, label_method => 'name', value_method => 'id', value => type.id }); %]
-    </tr>
-    <tr>
-     [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
+     [% textarea_field({ label => 'Description', name => 'queue.description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
     </tr>
    </tbody>
   </table>

@@ -14,7 +14,7 @@ page.crumbs.push(
 time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
 
 ~%]
-<h1>[% c.loc('[_2] [_1]', [ queue.type.name, queue.name ] ) %]</h1>
+<h1>[% c.loc('[_2] [_1]', [ system_localize(queue.type.name), queue.name ] ) %]</h1>
 <ul>
     <li><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% c.loc('View Tickets') %]</a></li>
     <li><a href="[% c.uri_for_action('/ticket/create_form', { queue_pk1 => queue.id }) %]">[% c.loc('Create Ticket') %]</a></li>
