@@ -55,7 +55,7 @@ my_parents = queue.parent_map;
                 'curr last' IF child.id == queue.id; 
                 'future' IF child.id == next_step.id; 
             ~%]">[% child.name %]</li>
-        [% END %]
+        [%~ END ~%]
     [% END %]
  </ol>
  [% IF ticket.defined && ticket.is_open && next_step %]
