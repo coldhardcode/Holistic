@@ -49,6 +49,9 @@ my $product_rs = $schema->resultset('Product');
 my %status_cache;
 my $status_rs = $schema->resultset('Ticket::Status');
 
+my %priority_cache;
+my $priority_rs = $schema->resultset('Ticket::Priority');
+
 my %tag_cache;
 my $tag_rs = $schema->resultset('Tag');
 
@@ -82,18 +85,19 @@ sub make_ticket {
 
     my ($rep_person, $rep_ident) = find_person_and_identity($row->{reporter});
     my $product = find_product($row->{$conv->product});
-    my $queue = find_queue($row->{$conv->queue}, $product);
+    my $queue   = find_queue($row->{$conv->queue}, $product);
 
     my $desc = $trac_parser->parse($row->{description});
     my $tick = $ticket_rs->create({
-        pk1         => $row->{id},
-        type_pk1    => $type->id,
-        identity_pk1=> $rep_ident->id,
-        name        => $row->{summary},
-        description => $desc,
-        queue_pk1   => ( defined $queue ? $queue->id : $default_queue ),
-        dt_created  => DateTime->from_epoch(epoch => $row->{time}),
-        dt_updated  => DateTime->from_epoch(epoch => $row->{changetime})
+        pk1             => $row->{id},
+        type_pk1        => $type->id,
+        identity_pk1    => $rep_ident->id,
+        priority_pk1    => find_priority($row->{$conv->priority})->id,
+        name            => $row->{summary},
+        description     => $desc,
+        queue_pk1       => ( defined $queue ? $queue->id : $default_queue ),
+        dt_created      => DateTime->from_epoch(epoch => $row->{time}),
+        dt_updated      => DateTime->from_epoch(epoch => $row->{changetime})
     });
 
     ############## TICKET CHANGES
@@ -125,12 +129,14 @@ sub make_ticket {
             });
         # State (resolution in Trac) changes
         } elsif($change_row{field} eq 'resolution') {
-            my $status = find_status($change_row{newvalue});
-            $tick->add_state({
-                identity_pk1 => $change_ident->id,
-                status_pk1 => $status->id,
-                dt_created => DateTime->from_epoch(epoch => $change_row{time})
-            });
+            # XX newvalue isn't populated
+            my $status = find_status($tick->queue, $change_row{newvalue} || 'closed' );
+            $tick->update({ queue_pk1 => $status->id });
+
+            # XX Need to update the changelog:
+            #    identity_pk1 => $change_ident->id,
+            #    status_pk1 => $status->id,
+            #    dt_created => DateTime->from_epoch(epoch => $change_row{time})
         }
     }
 
@@ -228,9 +234,12 @@ sub find_queue {
         my %row;
         $mile_sth->bind_columns( \( @row{ @{$mile_sth->{NAME_lc} } } ));
 
+        my $token = $schema->tokenize($name);
         # XX Need due date and completed!
         $queue = $queue_rs->create({
             name        => $name,
+            token       => $token,
+            path        => $token,
             description => $row{description}
         });
         if(defined($product)) {
@@ -242,15 +251,29 @@ sub find_queue {
 }
 
 sub find_status {
-    my ($name) = @_;
+    my ($milestone, $name) = @_;
+    my $status_name = join(":", $milestone->id, $name);
+    my $status = $status_cache{$status_name};
 
-    my $status = $status_cache{$name};
     unless(defined($status)) {
-
-        $status = $status_rs->create({
-            name => $name
+        $status = $milestone->add_step({
+            name        => $name,
+            description => ''
         });
-        $status_cache{$name} = $status;
+        $status_cache{$status_name} = $status;
     }
     return $status;
+}
+
+sub find_priority {
+    my ($name) = @_;
+
+    my $pri = $priority_cache{$name};
+    unless(defined($pri)) {
+        $pri = $priority_rs->create({
+            name => $name,
+        });
+        $priority_cache{$name} = $pri;
+    }
+    return $pri;
 }

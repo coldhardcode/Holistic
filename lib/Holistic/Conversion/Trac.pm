@@ -38,6 +38,12 @@ has product => (
     default => 'component'
 );
 
+has priority => (
+    is => 'rw',
+    isa => 'Str',
+    default => 'priority'
+);
+
 has queue => (
     is => 'rw',
     isa => 'Str',

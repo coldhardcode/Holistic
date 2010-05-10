@@ -8,7 +8,7 @@ use parent 'DBIx::Class::Ordered';
 sub parent_column { shift->grouping_column(@_) }
 sub path_column   { shift->position_column(@_) }
  
-__PACKAGE__->mk_classdata( 'escaped_separator' );
+__PACKAGE__->mk_classdata( 'escaped_separator' => '.' );
 __PACKAGE__->mk_classdata( path_separator => '.' );
 
 sub set_inherited {
