@@ -1,19 +1,4 @@
 [%~
-# CSS is put here because I have no intention of keeping it.
-~%]
-<style type="text/css">
-    table.queue table,
-    table.queue { border-collapse: collapse; }
-    table.queue table { margin: 0; }
-    table.queue td { padding: 0; }
-    table.queue table td { padding: 7px; }
-    table.queue td,
-    table.queue th
-    { border: 1px solid #000; } 
-</style>
-
-[%~
-
 MACRO queue_row(q) BLOCK; 
 SET name     = q.name;
 SET c_count  = q.direct_children.count;
@@ -52,7 +37,7 @@ child_count = queue.direct_children.count;
         <tr><th colspan="[% child_count %]">[% queue.name %]</th></tr>
     </thead>
     <tbody>
-        <tr>
+        <tr class="root">
         [% FOREACH child IN queue.direct_children.all;
             queue_row(child);
         END; %]

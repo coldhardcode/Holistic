@@ -1250,3 +1250,15 @@ progress form button {
     right: 7px;
     top: 6px;
 }
+table.queue td {
+    border: none;
+    padding: 0;
+}
+table.queue tr.root > td {
+    border: 1px solid #ab0706;
+    border-left: none;
+}
+table.queue tr.root > td:first-child {
+    border: 1px solid #ab0706;
+    border-left-width: 1px;
+}
