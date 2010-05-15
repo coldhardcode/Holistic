@@ -187,10 +187,16 @@ sub _build__next_step {
             } elsif ( $depth ) {
                 return $self;
             }
-            my $sibling = $self->next_sibling;
-            return undef unless $sibling;
 
-            return $sibling->next_step( $depth + 1 );
+            my $sibling = $self->next_sibling;
+            if ( defined $sibling and $sibling->direct_children->count > 0 ) {
+                return $sibling->direct_children->all;
+            }
+
+            my $aunt = $self->parent->next_sibling;
+            return $aunt->next_step( $depth + 1 ) if defined $aunt;
+            #my $sibling = $self->parent->next_sibling;
+            return undef;
         };
     }
 }

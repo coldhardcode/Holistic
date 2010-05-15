@@ -165,7 +165,6 @@ sub next_sibling {
     return undef unless defined $parent;
 
     my $next_index = $parent->get_child_index( $self ) + 1;
-warn "\n\nMy index in tree: $next_index\n";
     my $next       = $parent->get_child_at( $next_index );
 
     return $next;

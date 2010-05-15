@@ -86,10 +86,10 @@ sub trac_queue_create : Test {
         my $assigned = $wip->add_step({ name => 'Assigned' });
         my $accepted = $wip->add_step({ name => 'Accepted' });
     my $closed = $queue->add_step({ name => 'Closed' });
-        my $fixed   = $wip->add_step({ name => 'Fixed' });
-        my $notabug = $wip->add_step({ name => 'Not a bug' });
-        my $invalid = $wip->add_step({ name => 'Invalid' });
-        my $wontfix = $wip->add_step({ name => 'Wontfix' });
+        my $fixed   = $closed->add_step({ name => 'Fixed' });
+        my $notabug = $closed->add_step({ name => 'Not a bug' });
+        my $invalid = $closed->add_step({ name => 'Invalid' });
+        my $wontfix = $closed->add_step({ name => 'Wontfix' });
 
     my @steps = $new->next_step;
     is( @steps, 2, "steps!");
@@ -99,7 +99,9 @@ sub trac_queue_create : Test {
         'next steps'
     );
     # From a WIP, the next step is a closed
+    diag("Step: " . $steps[0]->path);
     @steps = $steps[0]->next_step;
+    diag("Next step: " . $steps[0]->path);
     is( $steps[0]->queue_pk1, $closed->id, 'right next step');
 }
 
