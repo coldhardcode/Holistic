@@ -25,6 +25,7 @@ sub queue_create : Plan(3) {
     });
     ok($queue, 'created queue');
     $self->queue( $queue );
+    $queue->discard_changes;
 
     my $backlog = $queue->add_step({ name => 'Backlog' });
     my $analysis = $queue->add_step({ name => 'Analysis' });
@@ -61,6 +62,45 @@ sub queue_create : Plan(3) {
     is($queue->size, 11, 'queue is the right height');
 
     return $queue;
+}
+
+sub trac_queue_create : Test {
+    my ( $self, $data ) = @_;
+
+    my $type_ms = $self->resultset('Queue::Type')->find_or_create({
+        name => '@release'
+    });
+
+    my $queue = $self->schema->resultset('Queue')->find_or_create({
+        name  => $data->{name}  || 'Product Whatever',
+        type  => $type_ms,
+        path  => 'trac',
+        traversal_type => 2
+    });
+    ok($queue, 'created queue');
+    $self->queue( $queue );
+    $queue->discard_changes;
+
+    my $new    = $queue->add_step({ name => 'New' });
+    my $wip    = $queue->add_step({ name => 'WIP' });
+        my $assigned = $wip->add_step({ name => 'Assigned' });
+        my $accepted = $wip->add_step({ name => 'Accepted' });
+    my $closed = $queue->add_step({ name => 'Closed' });
+        my $fixed   = $wip->add_step({ name => 'Fixed' });
+        my $notabug = $wip->add_step({ name => 'Not a bug' });
+        my $invalid = $wip->add_step({ name => 'Invalid' });
+        my $wontfix = $wip->add_step({ name => 'Wontfix' });
+
+    my @steps = $new->next_step;
+    is( @steps, 2, "steps!");
+    diag(join(", ", map { $_->name } @steps));
+    ok(
+        $steps[0]->id == $assigned->id && $steps[1]->id == $accepted->id,
+        'next steps'
+    );
+    # From a WIP, the next step is a closed
+    @steps = $steps[0]->next_step;
+    is( $steps[0]->queue_pk1, $closed->id, 'right next step');
 }
 
 1;

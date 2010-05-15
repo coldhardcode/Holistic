@@ -22,6 +22,8 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'queue_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
+    'traversal_type',
+    { data_type => 'integer', size => '16', default_value => 1 },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0, },
     'description',
@@ -141,30 +143,56 @@ sub next_step {
 }
 
 sub _build__next_step {
-    return sub {
-        my ( $self, $depth ) = @_;
-        $depth = 0 if not defined $depth;
+    my ( $self ) = @_;
+    # Single, Kanban style (every step must be passed through)
+    if ( $self->traversal_type == 1 ) {
+        return sub {
+            my ( $self, $depth ) = @_;
+            $depth = 0 if not defined $depth;
+            # If we have chidren, always go there.
+            if ( $self->direct_children->count ) {
+                return $self->direct_children->first->next_step( $depth + 1 );
+            } elsif ( $depth ) {
+                return $self;
+            }
 
-        # If we have chidren, always go there.
-        if ( $self->direct_children->count ) {
-            return $self->direct_children->first->next_step( $depth + 1 );
-        } elsif ( $depth ) {
-            return $self;
-        }
+            my $parent = $self->parent;
+            return undef unless defined $parent;
 
-        my $parent = $self->parent;
-        return undef unless defined $parent;
+            # Our sibling doesn't exist, so we have to start looking up and over
+            my $node = $self;
+            while ( defined $node ) {
+                my $next = $node->next_sibling;
+                return $next->next_step( $depth + 1 ) if defined $next;
+        
+                $node = $node->parent;
+            }
+            return undef;
+        };
+    }
+    # Multiple options, meaning you can pick any one of the next steps.
+    # This has defined behavior: 
+    #  1. If I have children, return the list of children.
+    #  2. If I don't have children, look at my parents next sibling and 
+    #     a) return those children
+    #     b) return the next step as a single option.
+    # 
+    elsif ( $self->traversal_type == 2 ) {
+        return sub {
+            my ( $self, $depth ) = @_;
+            $depth = 0 if not defined $depth;
+            # Do we have children?
+            if ( $self->direct_children->count > 0 ) {
+                return $self->direct_children->all;
+            } elsif ( $depth ) {
+                return $self;
+            }
+            my $sibling = $self->next_sibling;
+            return undef unless $sibling;
 
-        # Our sibling doesn't exist, so we have to start looking up and over
-        my $node = $self;
-        while ( defined $node ) {
-            my $next = $node->next_sibling;
-            return $next->next_step( $depth + 1 ) if defined $next;
-    
-            $node = $node->parent;
-        }
-        return undef;
-    };
+            return $sibling->next_step( $depth + 1 );
+        };
+    }
 }
 
 sub initial_state {
@@ -191,6 +219,7 @@ sub add_step {
     $data->{token} ||= $self->schema->tokenize( $data->{name} );
     $data->{path}    = join($self->path_separator, $self->path, $data->{token});
     $data->{queue_pk1} = $self->id;
+    $data->{traversal_type} = $self->traversal_type;
  
     my $row = $self->resultset('Queue')->create($data);
     $row->discard_changes;

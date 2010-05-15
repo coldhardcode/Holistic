@@ -15,6 +15,7 @@ $suite->run(
     },
     tests => [
         'deploy',
-        'queue_create'
+        #'queue_create',
+        'trac_queue_create',
     ]
 );
