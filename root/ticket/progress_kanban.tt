@@ -4,13 +4,6 @@
 SET seen_progress = {};
 SET beyond_next   = 0;
 
-DEFAULT queue = ticket.queue;
-
-parent       = queue.top_parent;
-closed_queue = parent.closed_queue;
-next_step    = queue.next_step;
-my_parents   = queue.parent_map;
-
 ~%]
 <progress>
 <ol>[%~
@@ -40,15 +33,7 @@ my_parents   = queue.parent_map;
     [% END %]
  </ol>
  [% IF ticket.defined && ticket.is_open && next_step %]
-    <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]">
-        <button class="orange submit_button small">
-            [% c.loc('Advance to') %]
-            [% FOREACH step IN next_step %]
-                [% step.name %]
-            [% END %]    
-            &#x2192;'
-        </button>
-    </form>
+ <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]"><button class="orange submit_button small">[% c.loc('Advance to [_1] &#x2192;', [ next_step.name ] ) %] </button></form>
  [% END %]
 </progress>
 

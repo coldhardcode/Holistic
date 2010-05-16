@@ -27,14 +27,12 @@ IF c.user_exists && c.user.person_pk1 == attention.person_pk1;
     needs_my_attention = 1;
 END;
 
-parent     = queue.top_parent;
-closed_queue = parent.closed_queue;
-next_step  = queue.next_step;
-my_parents = queue.parent_map;
-
 ~%]
 
-[%~ PROCESS "ticket/progress.tt" ~%]
+[%~
+IF queue.traversal_type == 1; PROCESS "ticket/progress_kanban.tt";
+ELSE; PROCESS"ticket/progress.tt"; END;
+~%]
 
 [% IF attention %]
 <section class="message">

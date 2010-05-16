@@ -193,7 +193,10 @@ sub _build__next_step {
                 return $sibling->direct_children->all;
             }
 
-            my $aunt = $self->parent->next_sibling;
+            my $parent = $self->parent;
+            return undef if not defined $parent;
+
+            my $aunt = $parent->next_sibling;
             return $aunt->next_step( $depth + 1 ) if defined $aunt;
             #my $sibling = $self->parent->next_sibling;
             return undef;

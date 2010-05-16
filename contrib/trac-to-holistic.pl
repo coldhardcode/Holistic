@@ -60,9 +60,12 @@ my $mile_sth = $dbh->prepare('SELECT name, due, completed, description FROM mile
 my $prod_sth = $dbh->prepare('SELECT name, owner, description FROM component WHERE name=?');
 my $change_sth = $dbh->prepare("SELECT author, field, time, newvalue FROM ticket_change WHERE ticket=? ORDER BY TIME ASC");
 
+my $status_change_sth = $dbh->prepare("SELECT oldvalue,newvalue FROM ticket_change WHERE ticket=? AND field = 'status' ORDER BY TIME ASC");
+
 my $worklog_type = $schema->resultset('Comment::Type')->find_or_create({ name => '@worklog' });
 
-$tick_sth->execute;
+#$tick_sth->execute('5.0.0');
+$tick_sth->execute();
 
 my %row;
 $tick_sth->bind_columns( \( @row{ @{$tick_sth->{NAME_lc} } } ));
@@ -85,7 +88,8 @@ sub make_ticket {
 
     my ($rep_person, $rep_ident) = find_person_and_identity($row->{reporter});
     my $product = find_product($row->{$conv->product});
-    my $queue   = find_queue($row->{$conv->queue}, $product);
+    my $queue   = find_queue($row->{$conv->queue}, $product, $row->{id});
+    my $status  = find_status($queue, $row->{status} );
 
     my $desc = $trac_parser->parse($row->{description});
     my $tick = $ticket_rs->create({
@@ -95,7 +99,7 @@ sub make_ticket {
         priority_pk1    => find_priority($row->{$conv->priority})->id,
         name            => $row->{summary},
         description     => $desc,
-        queue_pk1       => ( defined $queue ? $queue->id : $default_queue ),
+        queue_pk1       => $status->id,
         dt_created      => DateTime->from_epoch(epoch => $row->{time}),
         dt_updated      => DateTime->from_epoch(epoch => $row->{changetime})
     });
@@ -129,8 +133,11 @@ sub make_ticket {
             });
         # State (resolution in Trac) changes
         } elsif($change_row{field} eq 'resolution') {
-            # XX newvalue isn't populated
-            my $status = find_status($tick->queue, $change_row{newvalue} || 'closed' );
+            # Here we find the appropriate closed state
+#warn "Finding closed state off " . $tick->queue . "\n";
+            my $closed_status = find_status($tick->queue->top_parent, 'closed');
+#warn "Finding closed state: " . $closed_status->path . "\n";
+            my $status = find_status($closed_status, $change_row{newvalue} || 'closed' );
             $tick->update({ queue_pk1 => $status->id });
 
             # XX Need to update the changelog:
@@ -225,7 +232,7 @@ sub find_product {
 }
 
 sub find_queue {
-    my ($name, $product) = @_;
+    my ($name, $product, $ticket_id) = @_;
 
     my $queue = $queue_cache{$name};
     unless(defined($queue)) {
@@ -240,12 +247,31 @@ sub find_queue {
             name        => $name,
             token       => $token,
             path        => $token,
-            description => $row{description}
+            description => $row{description},
+            traversal_type => 2
         });
         if(defined($product)) {
             $product->add_to_queue_links({ queue_pk1 => $queue->id });
         }
+
         $queue_cache{$name} = $queue;
+    }
+    if ( $ticket_id ) {
+        $status_change_sth->execute($ticket_id);
+        my %change_row;
+        $status_change_sth->bind_columns( \( @change_row{ @{$status_change_sth->{NAME_lc} } } ));
+        while ($status_change_sth->fetch) {
+            #warn " Status change: $change_row{oldvalue} => $change_row{newvalue}\n";
+            if ( not $status_cache{join(":", $queue->id, $change_row{oldvalue})} ) {
+                my $status = $queue->add_step({ name => $change_row{oldvalue} });
+                $status_cache{join(":", $queue->id, $status->name)} = $status;
+            }
+
+            if ( not $status_cache{join(":", $queue->id, $change_row{newvalue})} ) {
+                my $status = $queue->add_step({ name => $change_row{newvalue} });
+                $status_cache{join(":", $queue->id, $status->name)} = $status;
+            }
+        }
     }
     return $queue;
 }

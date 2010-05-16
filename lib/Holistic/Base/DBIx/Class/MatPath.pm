@@ -84,7 +84,7 @@ sub _position_from_value {
     my ($self, $val) = @_;
  
     my $esep = $self->escaped_separator;
-    return (split /$esep/, $val)[-1];
+    return (split /$esep/, ($val || ''))[-1];
 }
  
 sub _position_value {
