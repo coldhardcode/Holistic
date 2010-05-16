@@ -56,7 +56,7 @@ ELSE; PROCESS"ticket/progress.tt"; END;
 
 <h3>[% c.loc('Description') %] (XX This is broken unless it has &lt;p&gt;s)</h3>
 <section class="description">
-<p>[% ticket.description %]</p>
+[% ticket.description %]
 </section>
 
 <h2 id="tabview-heading"></h2>

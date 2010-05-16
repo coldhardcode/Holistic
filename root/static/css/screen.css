@@ -1265,3 +1265,11 @@ table.queue tr.root > td:first-child {
     border: 1px solid #ab0706;
     border-left-width: 1px;
 }
+table.queue ul {
+    margin: 0; padding: 0;
+}
+table.queue ul li {
+    border: 1px solid red;
+    list-style: none;
+    margin: 7px 5px; padding: 5px;
+}
