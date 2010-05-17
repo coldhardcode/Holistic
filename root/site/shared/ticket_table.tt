@@ -28,7 +28,7 @@ tickets_total  = 0;
     ELSE;
         tickets_open = tickets_open + 1;
     END;
-    IF ticket.needs_attention;
+    IF ticket.needs_attention.count;
         classes.push('imp');
     END;
     IF loop.index % 2 == 0;
