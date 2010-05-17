@@ -16,7 +16,10 @@ changes = ticket.changes;
        END;
      ~%]
      </time>
-     <cite><img src="[% change.identity.person.gravatar_url %]">[% person %]</cite>
+     <cite>
+         <img src="[% person.gravatar_url %]">
+         [% person.name %]
+     </cite>
      <blockquote>
       [% change.name %] set to [% change.value %]
      </blockquote>
