@@ -158,6 +158,10 @@ __PACKAGE__->has_many(
     'ticket_meta', 'Holistic::Schema::Ticket::Meta', 'ticket_pk1'
 );
 
+__PACKAGE__->has_many(
+    'changes', 'Holistic::Schema::Ticket::Change', 'ticket_pk1'
+);
+
 sub get_metadata {
     my ( $self ) = @_;
     return { map { $_->name => $_->value } $self->ticket_meta->all };

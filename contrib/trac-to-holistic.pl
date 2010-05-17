@@ -114,6 +114,13 @@ sub make_ticket {
         $change_row{author} = 'no-reply@coldhardcode.com' unless(defined($change_row{author}) && $change_row{author} ne '');
         my ($change_person, $change_ident) = find_person_and_identity($change_row{author});
 
+        $tick->add_to_changes({
+            identity_pk1 => $change_ident->id,
+            name         => $change_row{field},
+            value        => $change_row{newvalue} || '',
+            changeset    => join("", $tick->id, $change_row{time}, $change_row{field}),
+        }) unless $change_row{field} eq 'comment'; # Comments aren't changes
+
         # Comments
         if($change_row{field} eq 'comment') {
             # No reason to have empty ones

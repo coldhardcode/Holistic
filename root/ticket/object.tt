@@ -115,7 +115,7 @@ ELSE; PROCESS"ticket/progress.tt"; END;
    [% END %]
   </section>
   <section class="tab yui-tabpanel" id="worklog">
-   <p>Worklog Here</p>
+   [% PROCESS "ticket/worklog.tt" %]
   </section>
  </div>
 </div>
