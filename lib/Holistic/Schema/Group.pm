@@ -7,7 +7,7 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
-#with 'Holistic::Role::Permissions';
+with 'Holistic::Role::Verify';
 
 my $CLASS = __PACKAGE__;
 
@@ -104,6 +104,24 @@ sub gravatar_url {
         #"&default=$default" .
         "&size=$size";
 }
+
+sub _build_verify_scope { 'group' }
+sub _build__verify_profile {
+    my ( $self ) = @_;
+    my $rs = $self->schema->resultset('Person::Identity');
+    return {
+        'profile' => {
+            'name' => {
+                'required' => 1,
+                'type' => 'Str',
+                'max_length' => '255',
+                'min_length' => 1
+            },
+        },
+        'filters' => [ 'trim' ]
+    };
+}
+
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

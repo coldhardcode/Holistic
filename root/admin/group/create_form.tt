@@ -12,7 +12,7 @@
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Group Name', name => 'name', hint => 'Just the group name', required => 1 }); %]
+     [% text_field({ label => 'Group Name', name => 'group.name', hint => 'Just the group name', required => 1 }); %]
     </tr>
    </tbody>
   </table>

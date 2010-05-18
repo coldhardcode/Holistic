@@ -263,8 +263,13 @@ sub assignable_priorities {
 
 sub assignable_persons {
     my $self = shift;
-
-    $self->groups
+    my $top;
+    if ( $self->isa('Holistic::Schema::Ticket') ) {
+        $top = $self->queue->top_parent;
+    } else {
+        $top = $self->queue_pk1 ? $self->top_parent : $self;
+    }
+    $top->groups
         ->search_related('person_links')
         ->search_related('person',
             { 'identities.realm' => 'local' },

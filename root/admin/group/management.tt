@@ -12,7 +12,7 @@ page.body.scripts.push('group_manager.js');
   <h3>[% c.loc('Users') %]</h3>
   <ul class="people">
   [% FOREACH person IN c.model('Schema::Person').completed.all %]
-   <li><label><input style="display: none;" type="radio" name="person_pk1" value="[% person.id %]"><!--<a href="[% c.uri_for_action('/admin/person/object', [ person.id ]) %]">-->[% person.name | html %] ([% person.local_identity.id | html %])<!--</a>--></label></li>
+   <li><label><input style="display: none;" type="checkbox" name="person_pk1" value="[% person.id %]"><!--<a href="[% c.uri_for_action('/admin/person/object', [ person.id ]) %]">-->[% person.name | html %] ([% person.local_identity.id | html %])<!--</a>--></label></li>
   [% END %]
   </ul>
  </section>

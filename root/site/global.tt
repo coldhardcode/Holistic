@@ -4,7 +4,7 @@
     IF str.match('^\@'); c.loc(str); ELSE; str | html; END;
 END %]
 [% MACRO pretty_date(dt) BLOCK;
-    SET now_secs = now.epoch;
+    SET now_secs  = now.epoch;
     SET then_secs = dt.epoch;
     IF(now_secs > then_secs);
       time_dir.ago(now_secs - then_secs);

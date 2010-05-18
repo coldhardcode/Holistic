@@ -25,9 +25,11 @@ stack      = stack;
     </td>
    </tfoot>
    <tbody>
+[% IF !c.user_exists %]
     <tr>
-     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Should this be a dropbox?', required => 1, double => 1, error => stack.for_subject('reporter').first_message.id, value => results.get_original_value('reporter') }); %]
+     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Holistic username, (eg., gphat)', required => 1, double => 1, error => stack.for_subject('reporter').first_message.id, value => results.get_original_value('reporter') }); %]
     </tr>
+[% END %]
     <tr>
      [% select_field({ label => 'Queue', name => 'ticket.queue_pk1', required => 1, double => 1, error => stack.for_subject('queue_pk1').first_message.id, value => results.get_original_value('queue_pk1'), array => queue_rs.all, label_method => 'name', value_method => 'id' }) %]
     </tr>

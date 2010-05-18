@@ -261,9 +261,14 @@ sub requestor {
 }
 
 sub owner {
-    my ( $self ) = @_;
+    my ( $self, $person ) = @_;
 
     my $link = $self->_get_person_rs_with_role('@owner')->first;
+    if ( $person and ( not $link or ( $link and $link->person_pk1 != $person->id ) ) ) {
+        my $old = $link->person;
+        $link->delete if defined $link;
+        $link = $self->_create_person_with_role( $person, '@owner' );
+    }
     return defined $link ? $link->person : undef;
 }
 

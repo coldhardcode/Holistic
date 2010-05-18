@@ -9,7 +9,12 @@ __PACKAGE__->config(
     class      => 'Schema::Group',
     rs_key     => 'group_rs',
     object_key => 'group',
-    prefetch   => [ 'person_links' ]
+    prefetch   => [ 'person_links' ],
+    scope      => 'group',
+    create_string => 'The group has been created.',
+    update_string => 'The group has been updated.',
+    error_string  => 'There was an error processing your request, please try again.',
+
 );
 
 sub management : Chained('setup') Args(0) ActionClass('REST') { }

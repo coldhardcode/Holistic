@@ -316,6 +316,7 @@ sub update : Private {
                     $c->log->debug("Updating $scope (" . $scope_obj->id . ")")
                         if $c->debug;
                     $scope_obj->update($clean_data);
+                    $c->forward('post_update', [ $data, $object ]);
                 } else {
                     $c->log->debug("No success verifying scope $scope") if $c->debug;
 

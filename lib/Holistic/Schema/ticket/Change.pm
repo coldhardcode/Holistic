@@ -34,7 +34,7 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->set_primary_key(qw/pk1/);
-__PACKAGE__->add_unique_constraint( 'ticket_changes_changeset_idx' => [ 'changeset' ] );
+__PACKAGE__->add_unique_constraint( 'ticket_changes_changeset_idx' => [ 'changeset', 'name' ] );
 __PACKAGE__->position_column('position');
 __PACKAGE__->grouping_column('changeset');
 

@@ -1,9 +1,10 @@
 [%~
+
 requestor = ticket.requestor;
 
 ~%]
 <h4>[% c.loc('Ticket #[_1]', ticket.id) %]</a></h4>
-[% IF is_editable %]<form>[% END %]
+[% IF is_editable %]<form method="post" action="[% c.uri_for_action('/ticket/attributes', [ ticket.id ] ) %]">[% END %]
  <table class="ticket">
   <tbody>
    <tr>
@@ -20,30 +21,31 @@ requestor = ticket.requestor;
 [% IF is_editable;
      select_field({
          default_option => [ 0, 'Choose...' ],
-         label => 'Owner', name => 'ticket.owner',
-         value => owner.person_pk1,
+         label => 'Owner', name => 'owner',
+         value => owner.id,
          array => ticket.assignable_persons.all,
          value_method => 'pk1', label_method => 'name'
      });
  ELSE;
-     readonly_field({ label => 'Owner', name => 'ticket.owner', value => owner.person.name });
+     readonly_field({ label => 'Owner', name => 'owner', value => owner.person.name });
  END %]
    </tr>
    <tr>
    [% IF is_editable;
       select_field({
          default_option => [ 0, '' ],
-         label => 'Attention', name => 'ticket.attention',
-         value => attention.person_pk1,
+         label => 'Attention', name => 'attention',
+         value => attention.id,
          array => ticket.assignable_persons.all,
          value_method => 'pk1', label_method => 'name',
       });
    ELSE;
-      readonly_field({ label => 'Attention', name => 'ticket.reporter', value => attention.person.name, important => 1, double => 1 });
+      readonly_field({ label => 'Attention', name => 'attention', value => attention.person.name, important => 1, double => 1 });
    END %]
    </tr>
    <tr>
-   [% dt = ticket.due_date; due_date = dt;
+   [% 
+      dt = ticket.due_date; due_date = dt;
       IF dt.defined && dt.dt_marker.defined;
         link = c.uri_for_action('/calendar/root', dt.dt_marker.year, dt.dt_marker.month, { highlight => 'ticket', 'ticket' => ticket.id } );
         due_date = dt.dt_marker | date_long;
@@ -52,18 +54,18 @@ requestor = ticket.requestor;
       END;
       str_due_date = due_date;
       str_due_date = str_due_date | date_short;
-      readonly_field({ label => 'Date Due', name => 'ticket.date_due', type => 'date', value => str_due_date, link => link }); %]
+      readonly_field({ label => 'XX Date Due', name => 'date_due', type => 'date', value => str_due_date, link => link }); %]
    </tr>
    <tr>
     [% IF is_editable;
          select_field({
-             label => 'Priority', name => 'ticket.priority',
-             value => ticket.state.priority_pk1,
+             label => 'Priority', name => 'priority',
+             value => ticket.priority_pk1,
              array => ticket.assignable_priorities.all,
              value_method => 'pk1', label_method => 'name'
          });
      ELSE;
-         readonly_field({ label => 'Priority', name => 'ticket.priority', value => 'Normal' });
+         readonly_field({ label => 'Priority', name => 'priority', value => 'Normal' });
      END %]
    </tr>
    <tr>
@@ -78,4 +80,4 @@ requestor = ticket.requestor;
    [% END %]
   </tbody>
  </table>
-</form>
+[% IF is_editable %]</form>[% END %]

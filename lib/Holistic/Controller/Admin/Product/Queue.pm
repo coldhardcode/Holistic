@@ -68,6 +68,8 @@ sub post_update : Private {
     my ( $self, $c, $data, $object ) = @_;
 
     $object->group_links->delete;
+    $c->log->debug("Checking groups:");
+    $c->log->_dump( $data );
     if ( defined ( my $groups = $data->{groups} ) ) {
         $groups = [ $groups ] unless ref $groups eq 'ARRAY';
 

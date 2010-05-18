@@ -37,6 +37,67 @@ sub object_alias_setup : Chained('setup') PathPart('-') Args(2) {
     $c->detach('object');
 }
 
+sub attributes : Chained('object_setup') Args(0) ActionClass('REST') { }
+sub attributes_GET {
+    my ( $self, $c ) = @_;
+    $c->stash->{page}->{layout} = 'partial';
+    $c->stash->{template} = 'ticket/nav.tt';
+}
+
+sub attributes_POST {
+    my ( $self, $c ) = @_;
+    my $data = $c->req->data || $c->req->params;
+
+    # XX This needs to be refactored into the API Call.
+
+    my $ticket = $c->stash->{ $self->object_key };
+
+    my $priority = $data->{priority} ?
+        $c->model('Schema::Ticket::Priority')->find($data->{priority}) : undef;
+
+    $priority = undef if $priority->id == $ticket->priority_pk1;
+
+    my $owner;
+    if ( $data->{owner} ) {
+        $owner = $c->model('Schema::Person')->find( $data->{owner} );
+        $owner = undef if $owner->id == $ticket->owner->id;
+    }
+
+    my $attn;
+    if ( $data->{attention} ) {
+        $attn = $c->model('Schema::Person')->find( $data->{attention} );
+        $attn = undef if $ticket->needs_attention->find( $data->{attention} );
+    }
+    $ticket->update({ priority => $priority }) if $priority;
+    $ticket->owner( $owner ) if defined $owner;
+    $ticket->needs_attention( $attn ) if defined $attn;
+
+    my $changeset = time;
+    $ticket->add_to_changes({
+        changeset => $changeset,
+        name => 'owner',
+        value => $owner->name,
+        identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
+    }) if defined $owner;
+    $ticket->add_to_changes({
+        changeset => $changeset,
+        name => 'attention',
+        value => $attn->name,
+        identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
+    }) if defined $attn;
+    $ticket->add_to_changes({
+        changeset => $changeset,
+        name => 'priority',
+        value => $priority->name,
+        identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
+    }) if defined $priority;
+
+    if ( $c->req->looks_like_browser ) {
+        $c->message($c->loc("Ticket status has been updated"));
+        $c->res->redirect($c->uri_for_action('/ticket/object', [ $ticket->id ]));
+    }
+}
+
 sub advance : Chained('object_setup') Args(0) ActionClass('REST') { }
 sub advance_POST {
     my ( $self, $c ) = @_;
@@ -70,11 +131,15 @@ sub tag_POST {
         return;
     }
 
+    my $tag = $data->{tag};
+    $tag =~ s/^\s*|\s*$//g;
+
+
     my $ticket = $c->stash->{ $self->object_key };
-    my $tag = $c->model('Schema::Tag')->find_or_create({
-        name => $data->{tag}
+    my $obj = $c->model('Schema::Tag')->find_or_create({
+        name => $tag
     });
-    $ticket->ticket_tags->find_or_create({ tag_pk1 => $tag->id });
+    $ticket->ticket_tags->find_or_create({ tag_pk1 => $obj->id });
     $self->status_ok( $c, 
         entity => [ map { $_->get_columns } $ticket->tags->all ]
     );
@@ -104,7 +169,7 @@ sub assign_POST {
 sub create_form : Chained('setup') PathPart('create') Args(0) {
     my ( $self, $c ) = @_;
 
-    my $rs = $c->model('Schema::Queue')->search({}, { prefetch => [ 'type' ] });
+    my $rs = $c->model('Schema::Queue')->search({ 'me.queue_pk1' => 0 }, { prefetch => [ 'type' ], order_by => [ 'me.name' ] });
     $c->stash->{queue_rs} = $rs;
     if ( my $id = $c->req->params->{'queue_pk1'} ) {
         my $queue = $rs->search({ 'me.pk1' => $id })->first;
@@ -122,6 +187,12 @@ sub post_create : Private {
         # XX Need to parse this and validate
         $ticket->due_date( $data->{due_date} );
     }
+    $ticket->add_to_changes({
+        field => 'created',
+        identity_pk1 => ( $c->user_exists ?
+            $c->user->identity_pk1 : $ticket->identity_pk1 ),
+        value => ''
+    });
     if ( $data->{tags} ) {
         $ticket->tag(map { $_ =~ s/^\s*|\s*//g; $_; } split(/,/, $data->{tags}));
     }

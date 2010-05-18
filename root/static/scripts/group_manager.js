@@ -55,7 +55,7 @@ YUI().use("io-base", "json", "event-delegate", function(Y) {
         save_changes({ persons: group_config });
     }, '#user_groups', 'input[name="group_pk1"]');
 
-    Y.delegate('change', function(e) {
+    Y.delegate('click', function(e) {
         var li = e.currentTarget.get('parentNode').get('parentNode');
         if ( e.currentTarget.get('type').toUpperCase() === 'RADIO' )
             li.get('parentNode').get('children').removeClass('selected');

@@ -38,13 +38,13 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Name', name => 'name', hint => 'Name', required => 1, value => queue.name }); %]
+     [% text_field({ label => 'Name', name => 'queue.name', hint => 'Name', required => 1, value => queue.name }); %]
     </tr>
     <tr>
-     [% select_field({ label => 'Type', name => 'type_pk1', required => 1, array => types.all, label_method => 'name', value_method => 'id', value => queue.type_pk1 }); %]
+     [% select_field({ label => 'Type', name => 'queue.type_pk1', required => 1, array => types.all, label_method => 'name', value_method => 'id', value => queue.type_pk1 }); %]
     </tr>
     <tr>
-     [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8, value => queue.description }); %]
+     [% textarea_field({ label => 'Description', name => 'queue.description', hint => 'Explanation of Issue', required => 1, rows => 8, value => queue.description }); %]
     </tr>
     <tr>
         [% checkboxes_field({ label => 'Ownership Groups', name => 'groups', array => groups, value_method => 'id', label_method => 'name', selected => selected_groups }); %]
