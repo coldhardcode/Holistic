@@ -94,7 +94,7 @@ sub day : Chained('setup') PathPart('') Args(3) {
 
     $c->stash->{req_day} = $req_day;
 
-    my $states = $c->model('Schema::Ticket::State')->search(
+    my $states = $c->model('Schema::Ticket::Change')->search(
         {
             'me.dt_created' => { -between => [
                 $req_day->strftime('%F').' 00:00:00',
@@ -103,7 +103,7 @@ sub day : Chained('setup') PathPart('') Args(3) {
         }, {
             prefetch => 'ticket'
         });
-    $c->stash->{states} = [ $states->all ];
+    $c->stash->{changes} = [ $states->all ];
 }
 
 #no Moose;

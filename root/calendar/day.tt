@@ -4,12 +4,12 @@
 <p>[% c.loc('No work for this day.') %]</p>
 [% END %]
 <dl class="log">
- [% FOREACH state = states %]
+ [% FOREACH change = changes %]
  <dt>
-  <a href="[% c.uri_for_action('/ticket/object', [ state.ticket_pk1 ]) %]"> 
-   <time datetime="[% state.dt_created %]">[% state.dt_created | date_hour %]</time>
+  <a href="[% c.uri_for_action('/ticket/object', [ change.ticket_pk1 ]) %]"> 
+   <time datetime="[% state.dt_created %]">[% change.dt_created | date_hour %]</time>
    XX <img src="/static/images/actions/add.png">
-   Ticket: #[% state.ticket_pk1 %]: <strong>[% state.ticket.name %]</strong> was <strong>XX modified</strong> by XX gphat.
+   Ticket: #[% change.ticket_pk1 %]: <strong>[% change.ticket.name %]</strong> was <strong>XX modified</strong> by XX gphat.
   </a>
  </dt>
  <dd>
