@@ -3,6 +3,7 @@
 <ul>
  <li>param <tt>requestor</tt> is set, but not used.</li>
  <li>No other params are added to the Query object yet.</li>
+ <li>highlighting?</li>
  <li>Tag search?</li>
 </ul>
 [% IF pager.total_entries %]
