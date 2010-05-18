@@ -1,10 +1,10 @@
 [% page.title = c.loc('Activity Log') %]
 <h1>[% date_str = req_day | date_short; c.loc('Activity for [_1]', date_str) %]</h1>
-[% IF !states.size %]
+[% IF !results.items.size %]
 <p>[% c.loc('No work for this day.') %]</p>
 [% END %]
 <dl class="log">
- [% FOREACH change = changes %]
+ [% FOREACH change = results.items %]
  <dt>
   <a href="[% c.uri_for_action('/ticket/object', [ change.ticket_pk1 ]) %]"> 
    <time datetime="[% state.dt_created %]">[% change.dt_created | date_hour %]</time>

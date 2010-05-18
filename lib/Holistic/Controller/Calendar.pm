@@ -7,6 +7,9 @@ use parent 'Holistic::Base::Controller';
 use DateTime;
 use DateTime::Duration;
 
+use Data::SearchEngine::Holistic::Changes;
+use Data::SearchEngine::Holistic::Query;
+
 sub setup : Chained('.') PathPart('calendar') CaptureArgs(0) { }
 
 sub root : Chained('setup') PathPart('') Args() {
@@ -87,23 +90,36 @@ sub day : Chained('setup') PathPart('') Args(3) {
     my ($self, $c, $year, $month, $day) = @_;
 
     # Use ->{now} because it is timezone'd already.
-    my $req_day = $c->stash->{now}->clone;
-        $req_day->set_year($year);
-        $req_day->set_month($month);
-        $req_day->set_day($day);
+    # my $req_day = $c->stash->{now}->clone;
+    #     $req_day->set_year($year);
+    #     $req_day->set_month($month);
+    #     $req_day->set_day($day);
+    # 
+    # $c->stash->{req_day} = $req_day;
 
-    $c->stash->{req_day} = $req_day;
+    my $search = Data::SearchEngine::Holistic::Changes->new(
+        schema => $c->model('Schema')->schema
+    );
 
-    my $states = $c->model('Schema::Ticket::Change')->search(
-        {
-            'me.dt_created' => { -between => [
-                $req_day->strftime('%F').' 00:00:00',
-                $req_day->strftime('%F').' 23:59:59',
-            ] }
-        }, {
-            prefetch => 'ticket'
-        });
-    $c->stash->{changes} = [ $states->all ];
+    my $query = Data::SearchEngine::Holistic::Query->new(
+        original_query => '*:*',
+        query => '*:*',
+        page => $c->req->params->{page} || 1,
+        count => $c->req->params->{count} || 10,
+    );
+
+    $c->stash->{results} = $search->search($query);
+
+    # my $states = $c->model('Schema::Ticket::Change')->search(
+    #     {
+    #         'me.dt_created' => { -between => [
+    #             $req_day->strftime('%F').' 00:00:00',
+    #             $req_day->strftime('%F').' 23:59:59',
+    #         ] }
+    #     }, {
+    #         prefetch => 'ticket'
+    #     });
+    # $c->stash->{changes} = [ $states->all ];
 }
 
 #no Moose;
