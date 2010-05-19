@@ -118,7 +118,7 @@ sub make_ticket {
             identity_pk1 => $change_ident->id,
             name         => $change_row{field},
             value        => $change_row{newvalue} || '',
-            changeset    => join("", $tick->id, $change_row{time}, $change_row{field}),
+            changeset    => $change_row{time}
         }) unless $change_row{field} eq 'comment'; # Comments aren't changes
 
         # Comments
