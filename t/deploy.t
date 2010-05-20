@@ -6,7 +6,7 @@ $suite->run(
     with => [ qw/Schema/ ],
     config => {
         connect_info => [
-            "dbi:mysql:holistic", 'holistic', '',
+            "dbi:mysql:holistic", 'root', '',
             { quote_char => '`', name_sep => '.' }
         ]
     },
