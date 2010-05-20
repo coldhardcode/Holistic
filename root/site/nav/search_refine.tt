@@ -6,7 +6,7 @@
  <li>XX Broken for date_on</li>
 [% FOREACH fil = results.query.filter_names %]
  [% SET fval = results.query.get_filter(fil) %]
- <li>[% fil %]: <strong>[% fval %]</strong> <a class="remove" href="[% c.req.uri_with({ ${fil} => undef }) %]">x</a></li><br>
+ <li>[% fil %]: <strong>[% fval %]</strong> <a class="remove" href="[% c.req.uri_with({ ${fil} => undef }) %]">x</a></li>
 [% END %]
 </ul>
 [% END %]
