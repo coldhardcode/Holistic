@@ -118,7 +118,8 @@ sub make_ticket {
             identity_pk1 => $change_ident->id,
             name         => $change_row{field},
             value        => $change_row{newvalue} || '',
-            changeset    => $change_row{time}
+            changeset    => $change_row{time},
+            dt_created      => DateTime->from_epoch(epoch => $change_row{time}),
         }) unless $change_row{field} eq 'comment'; # Comments aren't changes
 
         # Comments
