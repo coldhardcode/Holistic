@@ -1,5 +1,12 @@
 <h3>[% c.loc('Refine') %]</h3>
 <ul>
+ <li>XX Broken for date_on</li>
+[% FOREACH fil = results.query.filter_names %]
+ [% SET fval = results.query.get_filter(fil) %]
+ <li>[% fil %]: [% fval %] <a href="[% c.req.uri_with({ ${fil} => undef }) %]">X</a></li>
+[% END %]
+</ul>
+<ul>
 [% SET products = results.facets.product %]
 [% IF products.size > 1 %]
  <li><strong>[% c.loc('Product') %]</strong>
@@ -17,6 +24,17 @@
    <ul>
    [% FOREACH status = s_things %]
     <li><a href="[% c.req.uri_with({ 'status' => status }) %]">[% c.loc('[_1] ([_2])', c.loc(status), statuses.${status}) %]</a></li>
+   [% END %]
+   </ul>
+ </li>
+[% END %]
+[% SET dates = results.facets.date %]
+[% IF dates.size > 1 %]
+ [% SET s_things = results.get_sorted_facet('date') %]
+ <li>[% c.loc('Date') %]
+   <ul>
+   [% FOREACH date = s_things %]
+    <li><a href="[% c.req.uri_with({ 'date_on' => date }) %]">[% c.loc('[_1] ([_2])', c.loc(date), dates.${date}) %]</a></li>
    [% END %]
    </ul>
  </li>

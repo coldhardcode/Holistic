@@ -1,22 +1,27 @@
 [% page.title = c.loc('Activity Log') %]
 <h1>[% date_str = req_day | date_short; c.loc('Activity for [_1]', date_str) %]</h1>
+[% SET pager = results.pager %]
 [% IF !results.items.size %]
 <p>[% c.loc('No work for this day.') %]</p>
 [% END %]
 <dl class="log">
  [% FOREACH change = results.items %]
  <dt>
-  <a href="[% c.uri_for_action('/ticket/object', [ change.ticket_pk1 ]) %]"> 
-   <time datetime="[% state.dt_created %]">[% change.dt_created | date_hour %]</time>
+  <a href="[% c.uri_for_action('/ticket/object', [ change.ticket.id ]) %]">
+   <time datetime="[% change.change.dt_created %]">[% change.change.dt_created | date_hour %]</time>
    XX <img src="/static/images/actions/add.png">
-   Ticket: #[% change.ticket_pk1 %]: <strong>[% change.ticket.name %]</strong> was <strong>XX modified</strong> by XX gphat.
+   Ticket: #[% change.ticket.id %]: <strong>[% change.ticket.name %]</strong> was <strong>XX modified</strong> by [% change.change.identity.person.token %].
   </a>
  </dt>
  <dd>
   XX Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
  </dd>
  [% END %]
- <h3>All below this is fake.  Just here for demonstrative purposes.</h3>
+</dl>
+ [% IF pager.total_entries > pager.entries_per_page; INCLUDE site/shared/pager.tt pager = pager; END %]
+ [% #INCLUDE site/shared/pager.tt pager = results.pager %]
+<h3>All below this is fake.  Just here for demonstrative purposes.</h3>
+<dl class="log">
  <dt>
   <a href="[% c.uri_for('/ticket') %]"> 
   <time datetime="2010-01-19T07:15Z">8:15 a.m.</time>

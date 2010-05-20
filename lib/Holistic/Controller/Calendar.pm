@@ -1,4 +1,5 @@
 package Holistic::Controller::Calendar;
+use strict;
 
 #use Moose;
 
@@ -17,9 +18,9 @@ sub root : Chained('setup') PathPart('') Args() {
 
     my $now = $c->stash->{now};
     if ( $year && $month ) {
-        $now->year($year);
-        $now->month($month);
-        $now->day(1);
+        $now->set_year($year);
+        $now->set_month($month);
+        $now->set_day(1);
     }
     $c->stash->{req_day} = $now;
 
@@ -90,12 +91,12 @@ sub day : Chained('setup') PathPart('') Args(3) {
     my ($self, $c, $year, $month, $day) = @_;
 
     # Use ->{now} because it is timezone'd already.
-    # my $req_day = $c->stash->{now}->clone;
-    #     $req_day->set_year($year);
-    #     $req_day->set_month($month);
-    #     $req_day->set_day($day);
-    # 
-    # $c->stash->{req_day} = $req_day;
+    my $req_day = $c->stash->{now}->clone;
+        $req_day->set_year($year);
+        $req_day->set_month($month);
+        $req_day->set_day($day);
+
+    $c->stash->{req_day} = $req_day;
 
     my $search = Data::SearchEngine::Holistic::Changes->new(
         schema => $c->model('Schema')->schema
@@ -106,20 +107,19 @@ sub day : Chained('setup') PathPart('') Args(3) {
         query => '*:*',
         page => $c->req->params->{page} || 1,
         count => $c->req->params->{count} || 10,
+        filters => {
+            date_on => $req_day->ymd
+        }
     );
 
-    $c->stash->{results} = $search->search($query);
+    my @filters = qw(owner);
+    foreach my $filter (@filters) {
+        if($c->req->params->{$filter}) {
+            $query->set_filter('owner', $c->req->params->{$filter});
+        }
+    }
 
-    # my $states = $c->model('Schema::Ticket::Change')->search(
-    #     {
-    #         'me.dt_created' => { -between => [
-    #             $req_day->strftime('%F').' 00:00:00',
-    #             $req_day->strftime('%F').' 23:59:59',
-    #         ] }
-    #     }, {
-    #         prefetch => 'ticket'
-    #     });
-    # $c->stash->{changes} = [ $states->all ];
+    $c->stash->{results} = $search->search($query);
 }
 
 #no Moose;

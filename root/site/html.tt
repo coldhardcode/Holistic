@@ -40,7 +40,6 @@ FOREACH stylesheet IN page.head.stylesheets;
 [%
 END;
 %]
-    <style type="text/css" id="styleoverrides"></style>
  </head>
     [% # Drop in the header if appropriate
     header %]

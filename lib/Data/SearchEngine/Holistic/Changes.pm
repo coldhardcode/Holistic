@@ -31,6 +31,11 @@ has fields => (
                 text => 1,
                 field => 'description',
             },
+            owner => {
+                alias => 'person',
+                text => 1,
+                field => 'token'
+            },
             priority => {
                 alias => 'priority',
                 text => 1,
@@ -82,10 +87,15 @@ sub search {
     my $start = time;
 
     my @items = ();
-    my $full_rs = $self->schema->resultset('Ticket::Change');
+    my $full_rs = $self->schema->resultset('Ticket::Change')->search(undef, {
+        prefetch => [ 'ticket' => { identity => 'person' }, { 'identity' => 'person' } ]
+    });
+
+    $full_rs = $self->_apply_filters($full_rs, $oquery);
 
     my $changes = $full_rs->search(undef, {
-        page => $oquery->page, rows => $oquery->count
+        page => $oquery->page, rows => $oquery->count,
+        order_by => { -desc => 'me.dt_created' },
     });
 
     my $pager = Data::SearchEngine::Paginator->new(
@@ -105,10 +115,12 @@ sub search {
     #     page => 1,
     #     rows => 5
     # });
-    # while(my $prod_facet = $prod_facets->next) {
-    #     $facets{product}->{$prod_facet->get_column('product_name')} = $prod_facet->get_column('product_count');
+
+    # while(my $change = $full_rs->next) {
+    #     $facets{owner}->{$change->identity->ident} = $prod_facet->get_column('product_count');
     # }
     # for(0..scalar(@tickets) - 1) {
+    while(my $change = $full_rs->next) {
         # my $tick = $tickets[$_];
 
         # my $products = $tick->products;
@@ -117,13 +129,13 @@ sub search {
         # }
         # 
         # $facets{status}->{$tick->status->name}++;
-        # $facets{owner}->{$tick->owner->person->token}++;
+        $facets{date_on}->{$change->dt_created->ymd}++;
+        $facets{owner}->{$change->identity->person->token}++;
         # $facets{priority}->{$tick->priority->name}++;
         # $facets{type}->{$tick->type->name}++;
+    }
 
-    print STDERR "### asdasda\n";
     while(my $change = $changes->next) {
-        print STDERR "asdasda\n";
         push(@items, Data::SearchEngine::Holistic::ChangeItem->new(
             id => $change->id,
             change => $change,
@@ -138,6 +150,23 @@ sub search {
         elapsed => time - $start,
         facets => \%facets
     );
+}
+
+sub _apply_filters {
+    my ($self, $rs, $oquery) = @_;
+
+    return $rs unless $oquery->has_filters;
+
+    foreach my $filter ($oquery->filter_names) {
+        if($filter eq 'date_on') {
+            my $date = $oquery->get_filter('date_on');
+            $rs = $rs->search({ 'me.dt_created' => { -between => [ $date.' 00:00:00', $date. ' 23:59:59' ] } });
+        } elsif($filter eq 'owner') {
+            $rs = $rs->search({ 'person.token' => $oquery->get_filter('owner') });
+        }
+    }
+
+    return $rs;
 }
 
 __PACKAGE__->meta->make_immutable;
