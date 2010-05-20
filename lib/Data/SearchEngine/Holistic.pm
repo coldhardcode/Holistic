@@ -41,11 +41,6 @@ has fields => (
                 text => 0,
                 field => 'queue_pk1'
             },
-            queue_name => {
-                alias => 'queue',
-                text => 1,
-                field => 'name'
-            },
             reporter => {
                 alias => 'me',
                 text => 1,
@@ -58,6 +53,11 @@ has fields => (
             },
             reporter_name => {
                 alias => 'person',
+                text => 1,
+                field => 'name'
+            },
+            status => {
+                alias => 'queue',
                 text => 1,
                 field => 'name'
             },
