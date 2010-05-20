@@ -95,6 +95,8 @@ sub search {
     my @items = ();
     my $full_rs = $self->create_resultset($oquery);
 
+    $full_rs = $self->_add_filters($full_rs, $oquery);
+
     my $tickets = $full_rs->search(undef, {
         page => $oquery->page, rows => $oquery->count
     });
@@ -107,30 +109,17 @@ sub search {
 
     my %facets = ();
 
-    my $prod_facets = $tickets->search(undef, {
-        group_by => 'product.pk1',
-        join => { 'queue' => { 'product_links' => 'product' } },
-        '+select' => [ \'product.name AS product_name', { count => 'product.pk1' } ],
-        '+as' => [ 'product_name', 'product_count' ],
-        order_by => \'product_count DESC',
-        page => 1,
-        rows => 5
-    });
-    while(my $prod_facet = $prod_facets->next) {
-        $facets{product}->{$prod_facet->get_column('product_name')} = $prod_facet->get_column('product_count');
-    }
-    # for(0..scalar(@tickets) - 1) {
-        # my $tick = $tickets[$_];
+    while(my $tick = $full_rs->next) {
 
-        # my $products = $tick->products;
-        # while(my $prod = $products->next) {
-        #     $facets{product}->{$prod->name}++;
-        # }
-        # 
-        # $facets{status}->{$tick->status->name}++;
+        my $products = $tick->products;
+        while(my $prod = $products->next) {
+            $facets{product}->{$prod->name}++;
+        }
+        $facets{status}->{$tick->status->name}++;
         # $facets{owner}->{$tick->owner->person->token}++;
-        # $facets{priority}->{$tick->priority->name}++;
-        # $facets{type}->{$tick->type->name}++;
+        $facets{priority}->{$tick->priority->name}++;
+        $facets{type}->{$tick->type->name}++;
+    }
 
     while(my $tick = $tickets->next) {
         push(@items, Data::SearchEngine::Holistic::Item->new(
@@ -252,6 +241,25 @@ sub add_conditions {
             }
         }
     }
+}
+
+sub _add_filters {
+    my ($self, $rs, $oquery) = @_;
+
+    return $rs unless $oquery->has_filters;
+
+    foreach my $filter ($oquery->filter_names) {
+
+        my $fdef = $self->fields->{$filter};
+
+        next unless defined($fdef);
+
+        $rs = $rs->search({
+            $fdef->{alias}.'.'.$fdef->{field} => $oquery->get_filter($filter)
+        });
+    }
+
+    return $rs;
 }
 
 __PACKAGE__->meta->make_immutable;

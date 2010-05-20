@@ -27,6 +27,13 @@ sub default : Chained('base') PathPart('') Args(0) {
         count => $c->req->params->{count} || 10,
     );
 
+    my @filters = qw(status priority type);
+    foreach my $filter (@filters) {
+        my $val = $c->req->params->{$filter};
+        next unless $val;
+        $query->set_filter($filter, $c->req->params->{$filter});
+    }
+
     $c->stash->{results} = $search->search($query);
     $c->stash->{template} = 'search/default.tt';
 }

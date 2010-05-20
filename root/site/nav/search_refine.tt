@@ -1,11 +1,17 @@
 <h3>[% c.loc('Refine') %]</h3>
-<ul>
+[% SET query = results.query %]
+[% IF query.has_filters %]
+<h4>[% c.loc('Filters') %]</h4>
+<ul class="fillist">
  <li>XX Broken for date_on</li>
 [% FOREACH fil = results.query.filter_names %]
  [% SET fval = results.query.get_filter(fil) %]
- <li>[% fil %]: [% fval %] <a href="[% c.req.uri_with({ ${fil} => undef }) %]">X</a></li>
+ <li>[% fil %]: <strong>[% fval %]</strong> <a class="remove" href="[% c.req.uri_with({ ${fil} => undef }) %]">x</a></li><br>
 [% END %]
 </ul>
+[% END %]
+[% IF results.facet_names.size %]
+<h4>Facets</h4>
 <ul>
 [% SET products = results.facets.product %]
 [% IF products.size > 1 %]
@@ -73,3 +79,4 @@
  </li>
 [% END %]
 </ul>
+[% END %]

@@ -1130,6 +1130,28 @@ ul.taglist li > input {
     margin: 1em 0 0 0;
     width: 9em;
 }
+
+ul.tfillist {
+    margin: 0; padding: 0;
+}
+ul.fillist li {
+    background: #e9eff9;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #85aed7;
+    list-style: none;
+    margin: 3px; padding: 0 3px;
+}
+ul.fillist li a {
+    color: #999;
+    font-weight: bold;
+    margin: 0;
+    text-decoration: none;
+}
+ul.fillist li a:hover {
+    color: #333;
+}
 span.type {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
