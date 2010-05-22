@@ -1,17 +1,11 @@
 [% SET pager = results.pager %]
-<h3>XX Some stuff that's broken</h3>
-<ul>
- <li>param <tt>requestor</tt> is set, but not used.</li>
- <li>No other params are added to the Query object yet.</li>
- <li>highlighting?</li>
- <li>Tag search?</li>
-</ul>
+<h2>[% c.loc('Results for search "[_1]"', results.query.original_query) %]</h2>
 [% IF pager.total_entries %]
   [% IF pager.total_entries > pager.entries_per_page; INCLUDE site/shared/pager.tt pager = results.pager; END %]
   [% INCLUDE site/shared/ticket_table.tt tickets = results.items %]
   [% IF pager.total_entries > pager.entries_per_page; INCLUDE site/shared/pager.tt pager = results.pager; END %]
 [% ELSE %]
 <section class="message">
- <aside class="omessage"><p>[% c.loc("Your search for '[_1]' returned no results.", results.query.original_query) %]</p></aside>
+ <aside class="omessage"><p>[% c.loc("No results.") %]</p></aside>
 </section>
 [% END %]

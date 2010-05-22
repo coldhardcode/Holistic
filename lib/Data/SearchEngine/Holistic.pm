@@ -111,10 +111,11 @@ sub search {
 
     while(my $tick = $full_rs->next) {
 
-        my $products = $tick->products;
-        while(my $prod = $products->next) {
-            $facets{product}->{$prod->name}++;
-        }
+        # XX Causes lots of queries
+        # my $products = $tick->products;
+        # while(my $prod = $products->next) {
+        #     $facets{product}->{$prod->name}++;
+        # }
         $facets{date_on}->{$tick->dt_created->ymd}++;
         $facets{status}->{$tick->status->name}++;
         # $facets{owner}->{$tick->owner->person->token}++;
@@ -160,12 +161,14 @@ sub create_resultset {
     my @ands = ();
 
     if(exists($q->{''}) && scalar(@{ $q->{''} })) {
-        my $ors = [];
-        $self->add_conditions($q->{''}, $ors);
-        $conds{'-or'} = $ors;
+        my $reqs = [];
+        $self->add_conditions($q->{''}, $reqs, 0, $oquery);
+        $conds{'-and'} = $reqs;
     }
     if(exists($q->{'+'}) && scalar(@{ $q->{'+'} })) {
-        $self->add_conditions($q->{'+'}, \@ands);
+        my $reqs = [];
+        $self->add_conditions($q->{'+'}, $reqs);
+        $conds{'-and'} = $reqs;
     }
     if(exists($q->{'-'}) && scalar(@{ $q->{'-'} })) {
         $self->add_conditions($q->{'-'}, \@ands, 1);
@@ -183,7 +186,7 @@ sub create_resultset {
 # array-ref in which to push conditions.  It is up to the caller to manage
 # which sub-set and array-ref is passed.
 sub add_conditions {
-    my ($self, $query, $conditions, $negate) = @_;
+    my ($self, $query, $conditions, $negate, $oquery) = @_;
 
     my $fields = $self->fields;
 
@@ -199,12 +202,21 @@ sub add_conditions {
         # An empty field defaults to using a LIKE on the name & description,
         # op is irrelevant cuz you can't put an op on nothing
         if($field eq '') {
-            push(@{ $conditions }, {
-                'me.name' => { -like => "\%$val\%" },
-            });
-            push(@{ $conditions }, {
-                'me.description' => { -like => "\%$val\%" },
-            });
+            if($negate) {
+                push(@{ $conditions }, {
+                    '-and' => [
+                        'me.name' => { -not_like => "\%$val\%" },
+                        'me.description' => { -not_like => "\%$val\%" },
+                    ]
+                });
+            } else {
+                push(@{ $conditions }, {
+                    '-or' => [
+                        'me.name' => { -like => "\%$val\%" },
+                        'me.description' => { -like => "\%$val\%" },
+                    ]
+                });
+            }
         } else {
             my $fdef = $fields->{$field};
             if($op eq ':' && !$fdef->{text}) {
@@ -215,11 +227,12 @@ sub add_conditions {
 
             # If we got here, there must be a field
 
-            # We can only do likes if it's text
-            if($op eq ':' && $fdef->{text}) {
+            # We can only do likes if it's text, but it's been handled for us
+            # above...
+            if($op eq ':') {
                 if($negate) {
                     push(@{ $conditions }, {
-                        $fdef->{alias}.'.'.$fdef->{field} => { '-not like' => "\%$val\%" }
+                        $fdef->{alias}.'.'.$fdef->{field} => { -not_like => "\%$val\%" }
                     });
                 } else {
                     push(@{ $conditions }, {
