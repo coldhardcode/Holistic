@@ -1,3 +1,4 @@
+<p>XX Doesn't actually hunt for anything being due on these days.</p>
 <h1>[% c.loc('Calendar') %]</h1>
 <table class="cal">
  <thead>
@@ -24,7 +25,7 @@
   <tr [% IF day.week_number == now.week_number && day.year == now.year %]class="current"[% END %]>
    [% END %]
    [% # XX Need to use config'ed 'day off' days to mark them in the cal, not just == 6 & 7 %]
-   <td class="[%~ IF req_day.month != day.month ~%]other[%~ END ~%][%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%] current[%~ ELSIF day.day_of_week == 6 || day.day_of_week == 7 ~%] do[%~ END ~%]"><a href="[% c.uri_for_action('/calendar/day', day.year, day.month, day.day) %]">[% day.day %]</a></td>
+   <td class="[%~ IF req_day.month != day.month ~%]other[%~ END ~%][%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%] current[%~ ELSIF day.day_of_week == 6 || day.day_of_week == 7 %] do[%~ END ~%]"><a href="[% c.uri_for_action('/calendar/day', [], { date_on => day.ymd }) %]">[% day.day %]</a></td>
    [% IF day.day_of_week == 6 %]
   </tr>
    [% END %]

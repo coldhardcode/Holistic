@@ -1,9 +1,30 @@
+[% MACRO show_facet(name, label, results) BLOCK; %]
+ [% SET facets = results.facets.${name} %]
+ [% IF facets.size > 1 %]
+ [% SET things = results.get_sorted_facet(name) %]
+ [% SET param = name _ '_all' %]
+ <li>[% c.loc(label) %]
+  <ul>
+   [% FOREACH facet = things %]
+   <li><a href="[% c.req.uri_with({ ${name} => facet }) %]">[% facet %] <meter>[% facets.${facet} %]</meter></a></li>
+   [% IF loop.count == 5 && !c.req.params.${param}; LAST; END %]
+   [% END %]
+   [% IF things.size > 5 %]
+    [% IF c.req.params.${param}; %]
+    <li><a href="[% c.req.uri_with({ ${param} => 0 })%]">Show Less</a></li>
+    [% ELSE %]
+    <li><a href="[% c.req.uri_with({ ${param} => 1 })%]">Show More</a></li>
+    [% END %]
+   [% END %]
+  </ul>
+ </li>
+ [% END %]
+[% END %]
 <h3>[% c.loc('Refine') %]</h3>
 [% SET query = results.query %]
 [% IF query.has_filters %]
 <h4>[% c.loc('Filters') %]</h4>
 <ul class="fillist">
- <li>XX Broken for date_on</li>
 [% FOREACH fil = results.query.filter_names %]
  [% SET fval = results.query.get_filter(fil) %]
  <li>[% fil %]: <strong>[% fval %]</strong> <a class="remove" href="[% c.req.uri_with({ ${fil} => undef }) %]">x</a></li>
@@ -13,70 +34,11 @@
 [% IF results.facet_names.size %]
 <h4>Facets</h4>
 <ul>
-[% SET products = results.facets.product %]
-[% IF products.size > 1 %]
- <li><strong>[% c.loc('Product') %]</strong>
-   <ul>
-   [% FOREACH prod = products.keys %]
-    <li><a href="[% c.req.uri_with({ product => prod }) %]">[% prod %] <meter>[% products.${prod} %]</meter></a></li>
-   [% END %]
-   </ul>
- </li>
-[% END %]
-[% SET statuses = results.facets.status %]
-[% IF statuses.size > 1 %]
- [% SET s_things = results.get_sorted_facet('status') %]
- <li>[% c.loc('Status') %]
-   <ul>
-   [% FOREACH status = s_things %]
-    <li><a href="[% c.req.uri_with({ 'status' => status }) %]">[% c.loc('[_1] ([_2])', c.loc(status), statuses.${status}) %]</a></li>
-   [% END %]
-   </ul>
- </li>
-[% END %]
-[% SET dates = results.facets.date %]
-[% IF dates.size > 1 %]
- [% SET s_things = results.get_sorted_facet('date') %]
- <li>[% c.loc('Date') %]
-   <ul>
-   [% FOREACH date = s_things %]
-    <li><a href="[% c.req.uri_with({ 'date_on' => date }) %]">[% c.loc('[_1] ([_2])', c.loc(date), dates.${date}) %]</a></li>
-   [% END %]
-   </ul>
- </li>
-[% END %]
-[% SET owners = results.facets.owner %]
-[% IF owners.size > 1 %]
- [% SET s_things = results.get_sorted_facet('owner') %]
- <li>[% c.loc('Owner') %]
-   <ul>
-   [% FOREACH owner = s_things %]
-    <li><a href="[% c.req.uri_with({ 'owner' => owner }) %]">[% c.loc('[_1] ([_2])', owner, owners.${owner}) %]</a></li>
-   [% END %]
-   </ul>
- </li>
-[% END %]
-[% SET priorities = results.facets.priority %]
-[% IF priorities.size > 1 %]
- [% SET s_things = results.get_sorted_facet('priority') %]
- <li>[% c.loc('Priority') %]
-   <ul>
-   [% FOREACH pri = s_things %]
-    <li><a href="[% c.req.uri_with({ 'priority' => pri }) %]">[% c.loc('[_1] ([_2])', pri, priorities.${pri}) %]</a></li>
-   [% END %]
-   </ul>
- </li>
-[% END %]
-[% SET types = results.facets.type %]
-[% IF types.size > 1 %]
- [% SET s_things = results.get_sorted_facet('type') %]
- <li>[% c.loc('Type') %]
-   <ul>
-   [% FOREACH type = s_things %]
-    <li><a href="[% c.req.uri_with({ 'type' => type }) %]">[% c.loc('[_1] ([_2])', type, types.${type}) %]</a></li>
-   [% END %]
-   </ul>
- </li>
-[% END %]
+[% show_facet('product', 'Product', results) %]
+[% show_facet('status', 'Status', results) %]
+[% show_facet('date_on', 'Date', results) %]
+[% show_facet('owner', 'Owner', results) %]
+[% show_facet('priority', 'Priority', results) %]
+[% show_facet('type', 'Type', results) %]
 </ul>
 [% END %]

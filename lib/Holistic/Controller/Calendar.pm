@@ -7,6 +7,7 @@ use parent 'Holistic::Base::Controller';
 
 use DateTime;
 use DateTime::Duration;
+use Try::Tiny;
 
 use Data::SearchEngine::Holistic::Changes;
 use Data::SearchEngine::Holistic::Query;
@@ -75,6 +76,7 @@ sub root : Chained('setup') PathPart('') Args() {
         }
     }
     $c->stash->{days} = \@days;
+    $c->stash->{template} = 'calendar/root.tt';
 }
 
 sub today : Chained('setup') PathPart('today') Args(0) {
@@ -87,14 +89,11 @@ sub today : Chained('setup') PathPart('today') Args(0) {
     $c->detach('day', [ $now->year, $now->month, $now->day ]);
 }
 
-sub day : Chained('setup') PathPart('') Args(3) {
-    my ($self, $c, $year, $month, $day) = @_;
+sub day : Chained('setup') PathPart('day') Args(0) {
+    my ($self, $c) = @_;
 
-    # Use ->{now} because it is timezone'd already.
-    my $req_day = $c->stash->{now}->clone;
-        $req_day->set_year($year);
-        $req_day->set_month($month);
-        $req_day->set_day($day);
+    my $req_day;
+    try { $req_day = DateTime::Format::DateParse->parse_datetime($c->req->params->{date_on}); };
 
     $c->stash->{req_day} = $req_day;
 
@@ -107,17 +106,16 @@ sub day : Chained('setup') PathPart('') Args(3) {
         query => '*:*',
         page => $c->req->params->{page} || 1,
         count => $c->req->params->{count} || 10,
-        filters => {
-            date_on => $req_day->ymd
-        }
     );
 
-    my @filters = qw(owner);
+    my @filters = qw(date_on owner);
     foreach my $filter (@filters) {
         if($c->req->params->{$filter}) {
-            $query->set_filter('owner', $c->req->params->{$filter});
+            $query->set_filter($filter, $c->req->params->{$filter});
         }
     }
+
+    $c->detach('root') unless $query->has_filters;
 
     $c->stash->{results} = $search->search($query);
 }

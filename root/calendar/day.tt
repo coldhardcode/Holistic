@@ -1,5 +1,5 @@
 [% page.title = c.loc('Activity Log') %]
-<h1>[% date_str = req_day | date_short; c.loc('Activity for [_1]', date_str) %]</h1>
+<h1>Ticket Changes</h1>
 [% SET pager = results.pager %]
 [% IF !results.items.size %]
 <p>[% c.loc('No work for this day.') %]</p>
