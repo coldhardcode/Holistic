@@ -115,6 +115,7 @@ sub search {
         while(my $prod = $products->next) {
             $facets{product}->{$prod->name}++;
         }
+        $facets{date_on}->{$tick->dt_created->ymd}++;
         $facets{status}->{$tick->status->name}++;
         # $facets{owner}->{$tick->owner->person->token}++;
         $facets{priority}->{$tick->priority->name}++;
