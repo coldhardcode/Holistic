@@ -62,7 +62,6 @@ requires 'DateTimeX::Easy';
 requires 'DateTime::Format::DBI';
 requires 'DateTime::Format::DateParse';
 requires 'DateTime::Format::SQLite';
-requires 'DateTime::Format::DateParse';
 requires 'MooseX::Types::DateTime';
 
 # DBIC Components
