@@ -32,8 +32,13 @@ The root page (/)
 
 =cut
 
-sub index :Path :Args(0) {
+sub index : Path('') Args(0) {
     my ( $self, $c ) = @_;
+
+    # This will act as the root for now.
+    $c->forward('setup');
+    $c->req->params->{date_on} = $c->stash->{now}->ymd;
+    $c->detach('/calendar/today');
 }
 
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
