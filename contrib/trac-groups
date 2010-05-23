@@ -36,9 +36,10 @@ while ( my $row = $rs->next ) {
         print "\t\t" . $person->name . "\n";
     }
     print "\t - Permissions\n";
-    my $perm_rs = $row->permissions;
-    while ( my $p = $perm_rs->next ) {
-        print "\t\t" . $p->name . "\n";
-    }
+    print Dumper( $row->inflate_permissions );
+    #my $perm_rs = $row->permissions;
+    #while ( my $p = $perm_rs->next ) {
+    #print "\t\t" . $p->name . "\n";
+    #}
 }
 

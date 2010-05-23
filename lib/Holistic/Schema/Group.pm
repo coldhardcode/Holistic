@@ -63,6 +63,13 @@ sub permissions {
     shift->permission_set->permissions;
 }
 
+sub inflate_permissions {
+    my ( $self ) = @_;
+
+    my $rs = $self->permissions;
+    return { map { $_->name => $_->id } $rs->all };
+}
+
 sub is_member {
     my ( $self, $person, $role ) = @_;
     my $rs = $self->membership( $person, $role );

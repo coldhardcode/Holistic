@@ -70,6 +70,8 @@ sub sqlt_deploy_hook {
     $sqlt_table->add_index( name => 'person_pk1_idx', fields => [ 'person_pk1' ]);
 }
 
+sub inflate_permissions { shift->person->inflate_permissions }
+
 sub needs_attention {
     my ( $self ) = @_;
 

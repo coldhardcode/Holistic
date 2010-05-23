@@ -44,6 +44,7 @@ sub index : Path('') Args(0) {
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ($self, $c) = @_;
 
+    $c->stash->{context}->{permissions} = {};
     $c->stash->{now} = DateTime->now;
     $c->stash->{browser_detect} = HTTP::BrowserDetect->new($c->req->user_agent);
 
@@ -93,11 +94,26 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                     level   => 'warn'
                 });
             }
-            $permissions = $ident->inflate_permissions;
+            my $permissions = $ident->inflate_permissions;
+            $permissions->resultset_class('DBIx::Class::ResultClass::HashRefInflator');
+            $c->log->_dump([ $permissions->all ]);
         } else {
             $c->log->fatal("Unable to establish identity of the user");
             $c->logout;
         }
+    } else {
+        my $group = $c->model('Schema::Group')->search(
+            { 'me.name' => 'anonymous' },
+            {
+                prefetch => [ 
+                    { 'permission_set' => 
+                        { 'permission_links' => 'permission' } 
+                    },
+                ]
+            }
+        )->first;
+        $c->stash->{context}->{groups}      = [ $group ];
+        $c->stash->{context}->{permissions} = $group->inflate_permissions;
     }
 
     if ( defined ( my $errors = $c->flash->{errors} ) ) {

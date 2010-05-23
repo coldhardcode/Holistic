@@ -18,6 +18,12 @@ $CLASS->resultset_class('Holistic::ResultSet::Person');
 $CLASS->add_columns(
     'pk1',
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
+    'permission_set_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1,
+        dynamic_default_on_create => sub {
+            shift->schema->resultset('Permission::Set')->create({})->id
+        }
+    },
     'token',
     { data_type => 'varchar', size => '255', is_nullable => 0 },
     'name',
@@ -79,7 +85,6 @@ sub connected_to_user {
     return 0 unless $user;
 }
 
-
 sub needs_attention {
     my ( $self ) = @_;
 
@@ -109,6 +114,27 @@ sub temporary_password {
         secret  => String::Random::random_string('......\d'),
         realm   => 'temporary'
     });
+}
+
+sub permissions {
+    my ( $self, @scope ) = @_;
+
+    if ( not @scope ) {
+        my $sets = [
+            $self->groups->get_column('permission_set_pk1')->all,
+            $self->permission_set_pk1
+        ];
+        return $self->resultset('Permission::Set')
+            ->search({ 'me.pk1' => $sets })
+            ->search_related('permission_links')
+            ->search_related('permission');
+    }
+}
+
+sub inflate_permissions {
+    my $self = shift;
+    my $rs = $self->permissions( @_ );
+    return { map { $_->name => $_->id } $rs->all };
 }
 
 # Data::Verify Code (from ::Verify role)

@@ -89,9 +89,61 @@ has 'field_name_maps' => (
     isa     => 'HashRef|ArrayRef'
 );
 
+has 'permissions' => (
+    is      => 'rw',
+    isa     => 'HashRef',
+    traits  => [ 'Hash' ],
+    default => sub { { } },
+    lazy    => 1,
+    handles => {
+        'get_permission_for_action' => 'get',
+        'has_permissions' => 'count',
+    }
+);
+
+has 'allow_by_default' => (
+    is      => 'rw',
+    isa     => 'Bool',
+    default => sub { 1; },
+    lazy    => 1,
+);
+
 sub setup : Chained('.') PathPart('') CaptureArgs(0) { 
     my ( $self, $c ) = @_;
+
+    my $action = $c->action->name;
+    $c->log->debug("Action here: $action");
+    $c->log->debug("Allow by default? " . $self->allow_by_default);
+    my $perm = $self->get_permission_for_action( $action );
+    if ( not defined $perm and not $self->allow_by_default ) {
+        $c->log->error("Action misconfiguration! allow_by_default is off but this action ($action) has no permissions configured");
+        $c->detach('permission_denied');
+    }
+    elsif ( defined $perm and
+            not grep { exists $c->stash->{context}->{permissions}->{$_} } @$perm
+    ) {
+        $c->log->info(
+            "Access denied for user: " . 
+            ( $c->user_exists ? $c->user->name : 'anonymous' ) .
+            ", require permissions @$perm, only has: " .
+            join(', ', keys %{ $c->stash->{context}->{permissions} } )
+        );
+        $c->detach('permission_denied');
+    }
+
     $c->stash->{ $self->rs_key } = $self->_fetch_rs( $c );
+}
+
+sub permission_denied : Private {
+    my ( $self, $c ) = @_;
+
+    $c->res->status(403);
+    if ( $c->req->looks_like_browser ) {
+        $c->stash->{template} = 'errors/403.tt';
+    } else {
+        $c->res->body("Permission denied to perform the requested action");
+    }
+    $c->detach;
 }
 
 sub _fetch_rs {

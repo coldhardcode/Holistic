@@ -5,7 +5,9 @@ use Test::More;
 use MooseX::MethodAttributes::Role;
 use Try::Tiny;
 
-with 'Holistic::Test::Schema'; # We require schema
+with 'Holistic::Test::Schema',
+     'Holistic::Test::Person',
+     'Holistic::Test::Group';
 
 =head1 Permission Tests
 
