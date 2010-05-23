@@ -43,8 +43,8 @@ sub index : Path('') Args(0) {
 
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ($self, $c) = @_;
-    $c->stash->{now} = DateTime->now;
 
+    $c->stash->{now} = DateTime->now;
     $c->stash->{browser_detect} = HTTP::BrowserDetect->new($c->req->user_agent);
 
     if ($c->debug) {
@@ -93,7 +93,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                     level   => 'warn'
                 });
             }
-
+            $permissions = $ident->inflate_permissions;
         } else {
             $c->log->fatal("Unable to establish identity of the user");
             $c->logout;

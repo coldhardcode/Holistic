@@ -1,4 +1,5 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+
 use strict;
 
 use Data::Dumper;
@@ -12,60 +13,53 @@ use Holistic::Conversion::Trac;
 
 my $conv = Holistic::Conversion::Trac->new_with_options;
 
-my $conf = LoadFile($conv->config);
-# die Dumper($conf->{'Model::Schema'}->{connect_info});
+$conv->import_users_and_groups;
 
-my $schema = Holistic::Schema->connect(@{ $conf->{'Model::Schema'}->{connect_info} });
-
-my $dbh = DBI->connect(
-    'DBI:mysql:database='.$conv->database.';host='.$conv->host.';port='.$conv->port,
-    $conv->username, $conv->password
-);
-
-my $trac_parser = Text::Trac->new(
-    trac_ticket_url => '/ticket/id/'
-);
-
-my $ticket_rs = $schema->resultset('Ticket');
+my $ticket_rs = $conv->resultset('Ticket');
 
 # XX Need some type map for our types
 my %ticket_type_cache;
-my $ticket_type_rs = $schema->resultset('Ticket::Type');
+my $ticket_type_rs = $conv->resultset('Ticket::Type');
 
 my %person_cache;
-my $person_rs = $schema->resultset('Person');
+my $person_rs = $conv->resultset('Person');
 
 my %identity_cache;
-my $identity_rs = $schema->resultset('Person::Identity');
+my $identity_rs = $conv->resultset('Person::Identity');
 
 my %queue_cache;
-my $queue_rs = $schema->resultset('Queue');
+my $queue_rs = $conv->resultset('Queue');
 # System queue?
 my $default_queue = 1; # XX Arbitrary, but everything has to have a queue
 
 my %product_cache;
-my $product_rs = $schema->resultset('Product');
+my $product_rs = $conv->resultset('Product');
 
 my %status_cache;
-my $status_rs = $schema->resultset('Ticket::Status');
+my $status_rs = $conv->resultset('Ticket::Status');
 
 my %priority_cache;
-my $priority_rs = $schema->resultset('Ticket::Priority');
+my $priority_rs = $conv->resultset('Ticket::Priority');
 
 my %tag_cache;
-my $tag_rs = $schema->resultset('Tag');
+my $tag_rs = $conv->resultset('Tag');
 
-my $tick_sth = $dbh->prepare('SELECT id, type, time, changetime, component, severity, priority, owner, reporter, cc, version, milestone, status, resolution, summary, description, keywords FROM ticket');
-my $mile_sth = $dbh->prepare('SELECT name, due, completed, description FROM milestone WHERE name=?');
-my $prod_sth = $dbh->prepare('SELECT name, owner, description FROM component WHERE name=?');
-my $change_sth = $dbh->prepare("SELECT author, field, time, newvalue FROM ticket_change WHERE ticket=? ORDER BY TIME ASC");
+my $mile_sth = $conv->prepare('SELECT name, due, completed, description FROM milestone WHERE name=?');
+my $prod_sth = $conv->prepare('SELECT name, owner, description FROM component WHERE name=?');
+my $change_sth = $conv->prepare("SELECT author, field, time, newvalue FROM ticket_change WHERE ticket=? ORDER BY TIME ASC");
 
-my $status_change_sth = $dbh->prepare("SELECT oldvalue,newvalue FROM ticket_change WHERE ticket=? AND field = 'status' ORDER BY TIME ASC");
+my $status_change_sth = $conv->prepare("SELECT oldvalue,newvalue FROM ticket_change WHERE ticket=? AND field = 'status' ORDER BY TIME ASC");
 
-my $worklog_type = $schema->resultset('Comment::Type')->find_or_create({ name => '@worklog' });
+my $worklog_type = $conv->resultset('Comment::Type')->find_or_create({ name => '@worklog' });
 
-#$tick_sth->execute('5.0.0');
-$tick_sth->execute();
+my $tick_sth;
+if ( $conv->has_milestone ) {
+    $tick_sth = $conv->prepare('SELECT id, type, time, changetime, component, severity, priority, owner, reporter, cc, version, milestone, status, resolution, summary, description, keywords FROM ticket WHERE milestone = ?');
+    $tick_sth->execute($conv->milestone);
+} else {
+    $tick_sth = $conv->prepare('SELECT id, type, time, changetime, component, severity, priority, owner, reporter, cc, version, milestone, status, resolution, summary, description, keywords FROM ticket');
+    $tick_sth->execute();
+}
 
 my %row;
 $tick_sth->bind_columns( \( @row{ @{$tick_sth->{NAME_lc} } } ));
@@ -210,7 +204,7 @@ sub find_person_and_identity {
         $identity = $person->add_to_identities({
             realm   => 'local',
             ident   => $email,
-            secret  => '', # XX, need a password?
+            secret  => ( $conv->has_default_password ? $conv->default_password : undef ),
             active  => 1
         });
         $identity_cache{$email} = $identity;
@@ -249,7 +243,7 @@ sub find_queue {
         my %row;
         $mile_sth->bind_columns( \( @row{ @{$mile_sth->{NAME_lc} } } ));
 
-        my $token = $schema->tokenize($name);
+        my $token = $conv->tokenize($name);
         # XX Need due date and completed!
         $queue = $queue_rs->create({
             name        => $name,

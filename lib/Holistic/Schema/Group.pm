@@ -17,6 +17,12 @@ $CLASS->table('groups');
 $CLASS->add_columns(
     'pk1',
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
+    'permission_set_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1,
+        dynamic_default_on_create => sub {
+            shift->schema->resultset('Permission::Set')->create({})->id
+        }
+    },
     'token',
     { data_type => 'varchar', size => '255', is_nullable => 0,
         dynamic_default_on_create => sub {
@@ -50,6 +56,12 @@ __PACKAGE__->many_to_many('persons' => 'person_links' => 'person' );
 
 __PACKAGE__->has_many('queue_links', 'Holistic::Schema::Queue::Group', 'group_pk1');
 __PACKAGE__->many_to_many('queues', => 'queue_links' => 'queue' );
+
+__PACKAGE__->belongs_to('permission_set' => 'Holistic::Schema::Permission::Set', 'permission_set_pk1' );
+
+sub permissions {
+    shift->permission_set->permissions;
+}
 
 sub is_member {
     my ( $self, $person, $role ) = @_;

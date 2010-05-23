@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+
+use strict;
+
+use Data::Dumper;
+use DateTime;
+use Holistic::Schema;
+use List::MoreUtils qw(uniq);
+use Text::Trac;
+use YAML qw(LoadFile);
+
+use Holistic::Conversion::Trac;
+
+my $conv = Holistic::Conversion::Trac->new_with_options;
+my $new_groups = $conv->import_users_and_groups();
+
+my $rs = $conv->resultset('Group')->search(
+    { 'me.name' => $new_groups },
+    {
+        prefetch => [
+            # Prefetching here explodes the results
+            #{ 'person_links' => 'person' },
+            { 'permission_set' => { 'permission_links' => 'permission' } },
+        ],
+        
+    }
+);
+
+print "Import Report\n";
+print "Groups created:\n";
+while ( my $row = $rs->next ) {
+    print "\t" . $row->name . "\n";
+    print "\t - Members\n";
+    my $person_rs = $row->persons;
+    while ( my $person = $person_rs->next ) {
+        print "\t\t" . $person->name . "\n";
+    }
+    print "\t - Permissions\n";
+    my $perm_rs = $row->permissions;
+    while ( my $p = $perm_rs->next ) {
+        print "\t\t" . $p->name . "\n";
+    }
+}
+
