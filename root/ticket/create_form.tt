@@ -21,7 +21,7 @@ stack      = stack;
   <table>
    <tfoot>
     <td colspan="4">
-      <a href="#" class="submit_button orange">Submit</a>
+      <button class="submit_button orange">Submit</button>
     </td>
    </tfoot>
    <tbody>

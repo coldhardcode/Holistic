@@ -115,6 +115,12 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     $c->log->debug("Action here: $action");
     $c->log->debug("Allow by default? " . $self->allow_by_default);
     my $perm = $self->get_permission_for_action( $action );
+    if ( $c->req->method ne 'GET' and not defined $perm ) {
+        # Not a GET request, so look up the $action_PUT style actions that
+        # Catalyst::Controller::REST uses.
+        $perm = $self->get_permission_for_action( $action . '_' . $c->req->method);
+        $c->log->debug("Nothing on top level, checking req method: $action, @$perm");
+    }
     if ( not defined $perm and not $self->allow_by_default ) {
         $c->log->error("Action misconfiguration! allow_by_default is off but this action ($action) has no permissions configured");
         $c->detach('permission_denied');
@@ -286,8 +292,7 @@ sub perform_search : Private {
     return $c->stash->{ $self->rs_key }->search( @args );
 }
 
-sub root_GET { }
-
+sub root_GET  { }
 sub root_POST {
     my ( $self, $c, $data ) = @_;
     $data ||= $c->req->data || $c->req->params;

@@ -17,6 +17,7 @@ __PACKAGE__->config(
     permissions => {
         'setup'       => [ 'TICKET_VIEW', 'TICKET_ADMIN', 'TICKET_CREATE' ],
         'create_form' => [ 'TICKET_ADMIN', 'TICKET_CREATE' ],
+        'root_POST'   => [ 'TICKET_ADMIN', 'TICKET_CREATE' ],
     }
 );
 
