@@ -121,8 +121,13 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
         $perm = $self->get_permission_for_action( $action . '_' . $c->req->method);
         $c->log->debug("Nothing on top level, checking req method: $action, @$perm");
     }
+    # Still don't have permissions, look at setup
+    if ( not defined $perm ) {
+        $perm = $self->get_permission_for_action( 'setup' );
+    }
+
     if ( not defined $perm and not $self->allow_by_default ) {
-        $c->log->error("Action misconfiguration! allow_by_default is off but this action ($action) has no permissions configured");
+        $c->log->error("Action misconfiguration! allow_by_default is off but this action ($action) has no permissions configured (nor a setup action)");
         $c->detach('permission_denied');
     }
     elsif ( defined $perm and

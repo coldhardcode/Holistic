@@ -2,39 +2,40 @@ package Holistic::Controller::Admin;
 
 use Moose;
 
-BEGIN { extends 'Holistic::Base::Controller' }
+BEGIN { extends 'Holistic::Base::Controller::REST'; }
+
+__PACKAGE__->config(
+    actions     => { 'setup' => { PathPart => 'admin' } },
+    permissions => {
+        # Just to get to this point in the chain, we require this:
+        'setup' => [ 'ADMIN' ]
+    },
+    allow_by_default => 0
+);
 
 =head1 NAME
 
-Holistic::Controller::Admin - Catalyst Controller
+Holistic::Controller::Admin - Controller for admin actions
 
 =head1 DESCRIPTION
 
-Catalyst Controller.
+This is mostly a stub controller used for just checking permissions.
 
 =head1 METHODS
 
 =cut
 
-
-sub setup : Chained('.') PathPart('admin') CaptureArgs(0) {
+after 'setup' => sub {
     my ($self, $c) = @_;
 
     push(@{ $c->stash->{page}->{crumbs} }, { 'Admin' => $c->uri_for_action('/admin/root')->as_string });
-}
+};
 
-sub root : Chained('setup') PathPart('') Args(0) {
-    my ($self, $c) = @_;
+sub root : Chained('setup') PathPart('') Args(0) { }
+sub object {} # We don't have objects, clobber what REST puts in
+sub _fetch_rs { undef; }
 
-    $c->stash->{holistic_version} = $Holistic::VERSION;
-    $c->stash->{template} = 'admin/root.tt';
-}
-
-sub settings : Chained('setup') PathPart('settings') Args(0) {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'admin/settings.tt';
-}
+sub settings : Chained('setup') Args(0) { }
 
 sub group   : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub person  : Chained('setup') PathPart('') CaptureArgs(0) { }

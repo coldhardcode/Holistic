@@ -15,9 +15,22 @@ __PACKAGE__->config(
     update_string => 'The ticket has been updated.',
     error_string  => 'There was an error processing your ticket, please try again.',
     permissions => {
-        'setup'       => [ 'TICKET_VIEW', 'TICKET_ADMIN', 'TICKET_CREATE' ],
-        'create_form' => [ 'TICKET_ADMIN', 'TICKET_CREATE' ],
-        'root_POST'   => [ 'TICKET_ADMIN', 'TICKET_CREATE' ],
+        # Just to get to this point in the chain, we require this:
+        'setup'         => [ 'TICKET_VIEW', 'TICKET_ADMIN', 'TICKET_CREATE' ],
+        # And to create we need admin or create:
+        'create_form'   => [ 'TICKET_ADMIN', 'TICKET_CREATE' ],
+        'root_POST'     => [ 'TICKET_ADMIN', 'TICKET_CREATE' ],
+        # To update a ticket:
+        'object_POST'     => [ 'TICKET_ADMIN', 'TICKET_MODIFY' ],
+        'attributes_POST' => [ 'TICKET_ADMIN', 'TICKET_MODIFY' ],
+        'advance_POST'    => [ 'TICKET_ADMIN', 'TICKET_MODIFY' ],
+        # To assign:
+        'assign_POST'   => [ 'TICKET_ADMIN', 'TICKET_MODIFY' ],
+        # To tag:
+        'tag_POST'      => [ 'TICKET_ADMIN', 'TICKET_MODIFY' ],
+        'tag_DELETE'    => [ 'TICKET_ADMIN', 'TICKET_MODIFY' ],
+        # To comment:
+        'comment_POST'  => [ 'TICKET_ADMIN', 'TICKET_MODIFY', 'TICKET_APPEND' ],
     }
 );
 

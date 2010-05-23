@@ -44,9 +44,11 @@ sub index : Path('') Args(0) {
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{context}->{permissions} = {};
     $c->stash->{now} = DateTime->now;
     $c->stash->{browser_detect} = HTTP::BrowserDetect->new($c->req->user_agent);
+
+    $c->stash->{holistic_version}       = $Holistic::VERSION;
+    $c->stash->{context}->{permissions} = {};
 
     if ($c->debug) {
         my $ql = DBIx::Class::QueryLog->new;
