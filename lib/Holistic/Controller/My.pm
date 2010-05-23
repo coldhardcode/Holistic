@@ -14,6 +14,7 @@ sub setup : Chained('.') PathPart('my') CaptureArgs(0) {
 
     unless ( $identity ) {
         $c->log->fatal("XX FIX ME, I JUST STUB THE FIRST PERSON XX");
+        # XX Also need pagination...
         $identity = $c->model('Schema::Person::Identity')->search({ 'realm' => 'local' }, { prefetch => [ 'person' ] })->first;
     }
 
