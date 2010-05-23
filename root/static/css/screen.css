@@ -823,6 +823,9 @@ dl.log dt {
     font-weight: normal;
 }
 dl.log a {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
     color: inherit;
     display: block;
     padding: 5px;
