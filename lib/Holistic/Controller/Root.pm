@@ -97,13 +97,14 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                 });
             }
             my $permissions = $ident->inflate_permissions;
-            $permissions->resultset_class('DBIx::Class::ResultClass::HashRefInflator');
-            $c->log->_dump([ $permissions->all ]);
+            $c->stash->{context}->{permissions} = $permissions;
         } else {
             $c->log->fatal("Unable to establish identity of the user");
             $c->logout;
         }
     } else {
+        # XX this should move into an RS method?
+        # $c->model('Schema::Group')->load('anonymous')->permissions;?
         my $group = $c->model('Schema::Group')->search(
             { 'me.name' => 'anonymous' },
             {
@@ -158,8 +159,8 @@ sub createticket : Local {
 
 sub default :Path {
     my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
     $c->response->status(404);
+    $c->stash->{template} = 'errors/404.tt';
 }
 
 sub guide : Local {

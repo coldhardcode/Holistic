@@ -112,14 +112,12 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
     my $action = $c->action->name;
-    $c->log->debug("Action here: $action");
-    $c->log->debug("Allow by default? " . $self->allow_by_default);
     my $perm = $self->get_permission_for_action( $action );
     if ( $c->req->method ne 'GET' and not defined $perm ) {
         # Not a GET request, so look up the $action_PUT style actions that
         # Catalyst::Controller::REST uses.
         $perm = $self->get_permission_for_action( $action . '_' . $c->req->method);
-        $c->log->debug("Nothing on top level, checking req method: $action, @$perm");
+        $c->log->debug("Nothing on top level, checking req method: $action, @$perm") if $c->debug;
     }
     # Still don't have permissions, look at setup
     if ( not defined $perm ) {

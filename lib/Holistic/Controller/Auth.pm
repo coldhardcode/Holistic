@@ -134,7 +134,7 @@ sub rpx : Chained('setup') PathPart('login/rpx') Args(0) {
         }
         if ( not $c->stash->{login}->{destination} ) {
             $c->stash->{login}->{destination} ||= 
-                $c->uri_for_action('/my/profile');
+                $c->uri_for_action('/my/root');
             # Our custom message plugin
             $c->message($c->loc('Thank you for logging in, here is your profile'));
         } else {
@@ -153,12 +153,12 @@ sub do_login : Private {
 
     $data ||= $c->req->body_params;
 
-    my $email = $data->{ident} || $data->{email} || '';
+    my $email = $data->{ident} || $data->{username} || '';
     $email =~ s/^\s*|\s*$//g;
 
     if ( $email and $data->{password} ) {
         $c->log->debug("Logging in with: $email") if $c->debug;
-        if ( $c->authenticate({ id => $email, secret => $data->{password}, active => 1 })) { 
+        if ( $c->authenticate({ ident => $email, secret => $data->{password}, active => 1 })) { 
             $c->user->person->identities({ realm => 'temp' })->delete;
             $c->log->debug("User $email logged in, yeeesir") if $c->debug;
             $c->message( $c->loc("You've logged in, welcome back!") );
@@ -180,7 +180,7 @@ sub do_login : Private {
     unless ( $data->{email} ) {
         $c->message({
             type => 'error',
-            message => $c->loc("Please enter your email to continue")
+            message => $c->loc("Please enter your email address to login.")
         });
         $c->stash->{template} = 'auth/login.tt';
         $c->detach;

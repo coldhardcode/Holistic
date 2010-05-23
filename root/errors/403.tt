@@ -1,0 +1,3 @@
+<h1>[% c.loc('Forbidden!') %]</h1>
+<p>[% c.loc('ACCESS DENIED') %]</p>
+

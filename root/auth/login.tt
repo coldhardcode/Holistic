@@ -5,16 +5,16 @@
    <tfoot>
     <tr>
      <td colspan="2'">
-      <a href="#" class="submit_button orange">Submit</a>
+      <button class="submit_button orange">Submit</button>
      </td>
     </tr>
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Username', name => 'auth.username', hint => 'Username', required => 1 }); %]
+     [% text_field({ label => 'Username', name => 'username', hint => 'Username', required => 1 }); %]
     </tr>
     <tr>
-      [% text_field({ label => 'Password', name => 'auth.password', type => 'password', required => 1 }); %]
+      [% text_field({ label => 'Password', name => 'password', type => 'password', required => 1 }); %]
     <tr>
    </tbody>
   </table>

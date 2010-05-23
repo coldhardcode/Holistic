@@ -1,0 +1,2 @@
+<h1>[% c.loc('Not Found') %]</h1>
+<p>[% c.loc('PAGE NOT FOUND') %]</p>

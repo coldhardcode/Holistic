@@ -58,7 +58,7 @@ __PACKAGE__->config(
         realms => {
             progressive => {
                 class => 'Progressive',
-                realms => [ 'temp', 'local', 'rpx' ],
+                realms => [ 'local', 'temp', 'rpx' ],
                 authinfo_munge => {
                     'local'     => { 'realm' => 'local' },
                     'temp'      => { 'realm' => 'temp' },
@@ -67,9 +67,9 @@ __PACKAGE__->config(
             },
             rpx => {
                 credential => {
-                    class           => 'Password',
-                    password_field  => 'secret',
-                    password_type   => 'hashed',
+                    class              => 'Password',
+                    password_field     => 'secret',
+                    password_type      => 'hashed',
                     password_hash_type => 'SHA-1',
                 },
                 store => {
@@ -78,11 +78,11 @@ __PACKAGE__->config(
                     id_field    => 'ident',
                 }
             }, 
-            local => {
+            'local' => {
                 credential => {
-                    class               => 'Password',
-                    password_field      => 'secret',
-                    self_check          => 1,
+                    class           => 'Password',
+                    password_field  => 'secret',
+                    password_type   => 'self_check',
                 },
                 store => {
                     class       => 'DBIx::Class',
@@ -92,12 +92,12 @@ __PACKAGE__->config(
             },
             temp => {
                 credential => {
-                    class => 'Password',
-                    password_field => 'secret',
-                    self_check          => 1,
+                    class           => 'Password',
+                    password_field  => 'secret',
+                    password_type   => 'self_check',
                 },
                 store => {
-                    class    => 'DBIx::Class',
+                    class      => 'DBIx::Class',
                     user_class => 'Schema::Person::Identity',
                     id_field   => 'ident',
                 }
