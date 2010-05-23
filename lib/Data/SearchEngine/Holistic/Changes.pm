@@ -95,7 +95,8 @@ sub search {
 
     my $changes = $full_rs->search(undef, {
         page => $oquery->page, rows => $oquery->count,
-        order_by => { -desc => 'me.dt_created' },
+        order_by => [ { -desc => 'me.dt_created' }, 'position' ],
+        group_by => 'changeset'
     });
 
     my $pager = Data::SearchEngine::Paginator->new(
