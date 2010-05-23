@@ -1,55 +1,30 @@
+[% USE HTML.Strip %]
 [% page.title = c.loc('Activity Log') %]
-<h1>Ticket Changes</h1>
+<h1>[% c.loc('Ticket Changes') %]</h1>
 [% SET pager = results.pager %]
 [% IF !results.items.size %]
 <p>[% c.loc('No work for this day.') %]</p>
 [% END %]
 <dl class="log">
  [% FOREACH change = results.items %]
+ [% SWITCH change.classification %]
+ [%  CASE 'closed' %]
+ [%    SET image = 'tick.png' %]
+ [%  CASE 'opened' %]
+ [%    SET image = 'add.png' %]
+ [%  CASE %]
+ [%    SET image = 'pencil.png' %]
+ [% END %]
  <dt>
   <a href="[% c.uri_for_action('/ticket/object', [ change.ticket.id ]) %]">
    <time datetime="[% change.change.dt_created %]">[% change.change.dt_created | date_hour %]</time>
-   XX <img src="/static/images/actions/add.png">
-   Ticket: #[% change.ticket.id %]: <strong>[% change.ticket.name %]</strong> was <strong>XX modified</strong> by [% change.change.identity.person.token %].
+   <img src="/static/images/actions/[% image %]">
+   Ticket: #[% change.ticket.id %]: <strong>[% change.ticket.name %]</strong> was <strong>[% change.classification %]</strong> by [% change.change.identity.person.token %].
   </a>
  </dt>
  <dd>
-  XX Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
+  [% change.ticket.description | truncate(120, '&hellip;') | html_strip %]
  </dd>
  [% END %]
 </dl>
  [% IF pager.total_entries > pager.entries_per_page; INCLUDE site/shared/pager.tt pager = pager; END %]
- [% #INCLUDE site/shared/pager.tt pager = results.pager %]
-<h3>All below this is fake.  Just here for demonstrative purposes.</h3>
-<dl class="log">
- <dt>
-  <a href="[% c.uri_for('/ticket') %]"> 
-  <time datetime="2010-01-19T07:15Z">8:15 a.m.</time>
-  <img src="/static/images/actions/pencil.png">
-  Ticket: #1234: This is a Long Ticket Title and Stuff was <strong>modified</strong> by gphat.
-  </a>
- </dt>
- <dd>
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
- </dd>
- <dt>
-  <a href="[% c.uri_for('/ticket') %]"> 
-  <time datetime="2010-01-19T07:15Z">8:15 a.m.</time>
-  <img src="/static/images/actions/add.png">
-  Ticket: #1235: This is a Long Ticket Title and Stuff was <strong>created</strong> by gphat.
-  </a>
- </dt>
- <dd>
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
- </dd>
- <dt>
-  <a href="[% c.uri_for('/ticket') %]"> 
-  <time datetime="2010-01-19T07:15Z">8:15 a.m.</time>
-  <img src="/static/images/actions/tick.png">
-  Ticket: #1234: This is a Long Ticket Title and Stuff was <strong>closed</strong> by gphat.
-  </a>
- </dt>
- <dd>
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore...
- </dd>
-</dl>

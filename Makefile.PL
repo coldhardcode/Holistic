@@ -22,6 +22,7 @@ requires 'Catalyst::Plugin::Cache';
 requires 'Cache::FastMmap';
 requires 'Net::API::RPX';
 
+requires 'Template::Plugin::HTML::Strip';
 requires 'Template::Plugin::Lingua::EN::Inflect';
 requires 'Template::Plugin::Number::Format';
 requires 'Template::Plugin::Time::Duration';
