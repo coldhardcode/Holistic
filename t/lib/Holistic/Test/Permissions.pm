@@ -51,6 +51,15 @@ sub shut_up_permissions : Plan(17) {
         ident => 'user_1'
     });
     my $person = $ident->person;
+
+    my $anon_group = $self->run_test('group_create',
+        {
+            name  => 'anonymous',
+            token => 'anonymous',
+            email => 'anonymous@holistic.coldhardcode.com' 
+        });
+    ok($anon_group, 'created anonymous group');
+
     my $all_group = $self->run_test('group_create',
         {
             name  => 'Registered Users',
@@ -104,92 +113,18 @@ sub shut_up_permissions : Plan(17) {
     $triage->product_links->create({ product_pk1 => $product->id });
     $queue->product_links->create({ product_pk1 => $product->id });
 
-    # Anybody can create (even not logged in), this is by default:
-    $product->permissions->allow('create ticket', $queue);
 
-    # But lets remove write  permissions
-    $product->permissions->prohibit('update');
-    $product->permissions->prohibit('comment');
-
-    $product->permissions->allow('update ticket', $all_group);
-
-    ok( $product->check_permission( undef, 'create ticket' ), 'anon can create' );
-    ok( !$product->check_permission( undef, 'update ticket' ), 'anon cannot update' );
-
-    # Check permissions, ->for returns a hash of permission names in that scope:
-    # If there are descendent blocks at a lower level
-    # (Product -> Queue -> Ticket) this check will *NOT* be accurate.  Always
-    # Check at the lowest scope, not highest.
-    # {
-    #    'create ticket' => $permission_id,
-    #    'update ticket' => $permission_id,
-    # },
-    use Data::Dumper;
-    diag( Dumper($product->fetch_permissions( person => $person ) ) );
-
+    my $pset = $anon_group->permission_set;
+    foreach my $perm ( qw/TICKET_VIEW FILE_VIEW LOG_VIEW MILESTONE_VIEW REPORT_VIEW ROADMAP_VIEW/ ) {
+        my $p = $self->resultset('Permission')->find_or_create({ name => $perm });
+        $pset->add_to_permissions( $p );
+    }
+    # XX this is a total bullshit test.
     is_deeply(
-        $product->permissions->for( group => $admin_group ),
-        $triage->permissions->for( group => $admin_group ),
-        'no special rules on triage'
+        [ sort keys %{ $anon_group->inflate_permissions } ],
+        [ sort qw/TICKET_VIEW FILE_VIEW LOG_VIEW MILESTONE_VIEW REPORT_VIEW ROADMAP_VIEW/ ],
+        'inflation test'
     );
-    is_deeply(
-        $product->permissions->for( user => $admin_group->persons->first ),
-        $product->permissions->for( user => $devel_group->persons->first ),
-        'same permissions regardless of users'
-    );
-
-    $triage->permissions->for( group => $devel_group );
-
-    # Anybody but people in the devel group would be able to update this:
-    $triage->permissions->prohibit('update ticket', group => $devel_group );
-    # Still the same
-    is_deeply(
-        $product->permissions->for( user => $admin_group->persons->first ),
-        $product->permissions->for( user => $devel_group->persons->first ),
-        'same permissions regardless of users'
-    );
-    # Admin is the same on both levels
-    is_deeply(
-        $product->permissions->for( user => $admin_group->persons->first ),
-        $triage->permissions->for( user => $admin_group->persons->first ),
-        'same permissions descendents'
-    );
-    # Devel is not, but admin has this still:
-    ok(
-        exists $triage->permissions->for( group => $admin_group )->{'update ticket'},
-        'descendents permissions on lower scope'
-    );
-
-    # Devel is not
-    ok(
-        not exists $triage->permissions->for( group => $devel_group )->{'update ticket'},
-        'descendents permissions on lower scope'
-    );
-
-
-    $admin_group->permissions->for( queue => $triage );
-
-    # Closed product, nobody can do anything.  Period.
-    $product2->permissions->prohibit_all;
-    ok( !$product2->check_permission( $person, 'create ticket' ), 'user cannot create' );
-    ok( !$product2->check_permission( $admin_group, 'create ticket' ), 'admin cannot create' );
-
-
-    # Admin group can create tickets
-    $admin_group->permissions->allow('create ticket', $product2 );
-    # Only managers can update tickets in triage (assign)
-    $mgr_group->permissions->allow('update ticket', $triage );
-
-    # Nobody can create tickets in this queue, they must be assigned
-    $queue->permissions->prohibit('create ticket');
-    # admin_group can, because they're awesome.
-    $admin_group->permissions->allow('create ticket', $queue );
-
-    $all_group->permissions->prohibit_all; # macro sets
-    $all_group->permissions->prohibit('update ticket');
-    $all_group->permissions->prohibit('create ticket', $triage);
-    $all_group->permissions->allow('assign ticket', $triage );
-
 }
 
 1;

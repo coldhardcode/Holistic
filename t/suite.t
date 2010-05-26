@@ -27,7 +27,7 @@ $suite->run(
         'ticket_dependencies',
         'ticket_profile',
         'do_search',
-        #'shut_up_permissions',
+        'shut_up_permissions',
     ]
 );
 
