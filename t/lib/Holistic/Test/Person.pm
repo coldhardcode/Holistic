@@ -27,12 +27,15 @@ sub person_create : Plan(1) {
     ok( $person, 'created person' );
     $self->person( $person );
 
-    $person->add_to_identities({
+    my $local = $person->add_to_identities({
         realm  => 'local',
         ident  => $person->token,
         secret => ( $data->{password} || 'test-script-generated' )
     });
 
+    ok( $local->check_password( $data->{password} || 'test-script-generated' ),
+        'password check'
+    );
     $person->add_to_identities( { realm => 'twitter', ident => $person->token } );
     $person->add_to_identities( { realm => 'irc', ident => $person->token } );
 
@@ -53,6 +56,21 @@ sub group_create : Plan(1) {
     ok( $group, 'created group' );
     $self->group( $group );
 
+    if ( $data->{permissions} ) {
+        my @perms = ref $data->{permissions} ?
+            @{ $data->{permissions} } : ( $data->{permissions} );
+        my $pset = $group->permission_set;
+        foreach my $perm ( @perms ) {
+            my $p = $self->resultset('Permission')->find_or_create({ name => $perm });
+            $pset->add_to_permissions( $p );
+        }
+        # XX this is a total bullshit test.
+        is_deeply(
+            [ sort keys %{ $group->inflate_permissions } ],
+            [ sort @perms ],
+            'inflation test'
+        );
+    }
     $group;
 }
 

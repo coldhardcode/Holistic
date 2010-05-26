@@ -1,5 +1,9 @@
 <h1>[% c.loc('Log In') %]</h1>
-<form id="auth" method="post">
+<form id="auth" method="post" action="[% c.uri_for_action('/auth/login') %]">
+[% IF destination %]
+<p>Destination: [% destination | html %]</p>
+ <input type="hidden" name="destination" value="[% destination | html %]">
+[% END %]
  <fieldset class="narrow">
   <table>
    <tfoot>

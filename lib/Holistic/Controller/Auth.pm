@@ -32,8 +32,8 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
         $uri = URI->new( $uri );
         $c->log->debug("Got $uri ( " . $uri->host . " eq " . $c->req->uri->host . ")") if $c->debug;
         $uri = undef unless ( $uri->host eq $c->req->uri->host );
-        $c->stash->{login}->{destination} = $uri if defined $uri;
-        $c->log->debug("Destination is: " . $c->stash->{login}->{destination})
+        $c->stash->{destination} = $uri if defined $uri;
+        $c->log->debug("Destination is: " . $c->stash->{destination})
             if $c->debug;
     }
 }
@@ -129,18 +129,19 @@ sub rpx : Chained('setup') PathPart('login/rpx') Args(0) {
                 my ( $person, $ident ) = $c->model('Schema::Person')
                     ->register( $data, $ident_data );
             }
-            $c->log->debug("Ok, done with RPX: " . $c->stash->{login}->{destination});
+            $c->log->debug("Ok, done with RPX: " . $c->stash->{destination})
+                if $c->debug;
             $c->authenticate({ id => $profile->{identifier}, secret => 'rpx' });
         }
-        if ( not $c->stash->{login}->{destination} ) {
-            $c->stash->{login}->{destination} ||= 
+        if ( not $c->stash->{destination} ) {
+            $c->stash->{destination} ||= 
                 $c->uri_for_action('/my/root');
             # Our custom message plugin
             $c->message($c->loc('Thank you for logging in, here is your profile'));
         } else {
             $c->message($c->loc('Thank you for logging in.'));
         }
-        $c->res->redirect( $c->stash->{login}->{destination} );
+        $c->res->redirect( $c->stash->{destination} );
         $c->detach;
     }
     $c->log->info("Invalid call to RPX endpoint, no token specified");
@@ -157,13 +158,13 @@ sub do_login : Private {
     $email =~ s/^\s*|\s*$//g;
 
     if ( $email and $data->{password} ) {
-        $c->log->debug("Logging in with: $email") if $c->debug;
+        $c->log->debug("Logging in with: $email/$data->{password}") if $c->debug;
         if ( $c->authenticate({ ident => $email, secret => $data->{password}, active => 1 })) { 
             $c->user->person->identities({ realm => 'temp' })->delete;
             $c->log->debug("User $email logged in, yeeesir") if $c->debug;
             $c->message( $c->loc("You've logged in, welcome back!") );
 
-            my $uri = $c->stash->{login}->{destination};
+            my $uri = $c->stash->{destination};
             $uri  ||= $c->uri_for_action( '/my/profile' );
             $c->res->redirect( $uri );
             $c->detach;
@@ -172,7 +173,12 @@ sub do_login : Private {
                 type => 'error',
                 message => $c->loc("Sorry, couldn't log you in.  Check your username and password and give it another try.")
             });
-            $c->res->redirect( $c->uri_for_action( '/auth/login' ), 303 );
+            
+            if ( $c->stash->{destination} ) {
+                $c->res->redirect( $c->uri_for_action( '/auth/login', { destination => $c->stash->{destination} } ), 303 );
+            } else {
+                $c->res->redirect( $c->uri_for_action( '/auth/login' ), 303 );
+            }
             $c->detach;
         }
     }

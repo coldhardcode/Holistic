@@ -104,6 +104,10 @@ sub trac_queue_create : Test {
     @steps = $steps[0]->next_step;
     diag("Next step: " . $steps[0]->path);
     is( $steps[0]->queue_pk1, $closed->id, 'right next step');
+
+    $self->queue( $queue );
+    $queue->discard_changes;
+    return $queue;
 }
 
 1;

@@ -43,7 +43,10 @@ $CLASS->add_columns(
 
 $CLASS->set_primary_key(qw/pk1/);
 
-$CLASS->belongs_to('person', 'Holistic::Schema::Person', 'person_pk1');
+$CLASS->belongs_to(
+    'person', 'Holistic::Schema::Person', 'person_pk1',
+    { proxy => [ qw/name/ ] }
+);
 
 $CLASS->has_many(
     'comments', 'Holistic::Schema::Comment', 

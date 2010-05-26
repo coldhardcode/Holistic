@@ -23,7 +23,7 @@ sub ticket_create : Plan(28) {
 
     my $queue = $self->queue;
     if ( not defined $queue ) {
-        $queue = $self->run_test('queue_create');
+        $queue = $self->run_test('trac_queue_create');
     }
 
     if ( $self->meta->does_role('Holistic::Test::Person') ) {
@@ -66,7 +66,7 @@ sub ticket_create : Plan(28) {
 
     $self->ticket( $ticket );
 
-    is( $ticket->status->name, 'Backlog', 'new ticket status' );
+    is( $ticket->status->name, 'New', 'new ticket status' );
     
     cmp_ok( $ticket->requestor->pk1, '==', $identity->person_pk1, 'requestor identity' );
     cmp_ok( $identity->tickets->count, '==', 1, 'ticket count on identity' );

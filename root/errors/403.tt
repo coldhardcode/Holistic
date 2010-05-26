@@ -1,3 +1,6 @@
 <h1>[% c.loc('Forbidden!') %]</h1>
 <p>[% c.loc('ACCESS DENIED') %]</p>
-
+[% IF !c.user_exists %]
+<p>XX Only for local login, we need to display a different page for other login mechanisms (HTTP, OpenID)</p>
+[% PROCESS "auth/login.tt", destination = c.req.uri %]
+[% END %]
