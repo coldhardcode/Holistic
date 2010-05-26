@@ -90,9 +90,10 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                 if $c->debug;
             $attn_count = 1; # XX Testing
             if ( $attn_count > 0 ) {
+                my $msg = $c->loc('NEEDS ATTENTION', [ $attn_count ]);
                 $c->message({
                     scope   => 'sidebar',
-                    message => $c->loc('NEEDS ATTENTION', [ $attn_count ]),
+                    message => qq{<a href="} . $c->uri_for_action('/my/tickets') . qq{">$msg</a>},
                     level   => 'warn'
                 });
             }

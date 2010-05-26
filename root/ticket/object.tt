@@ -37,7 +37,7 @@ ELSE; PROCESS"ticket/progress.tt"; END;
 [% IF attention %]
 <section class="message">
 [% FOREACH attn IN attention %]
-    <aside class="omessage"><p><a href="#comment">[% c.loc('This ticket is awaiting attention from <strong>[_1]</strong>!', [ attn.name ]) %]</a></p></aside>
+    <aside class="omessage"><p><a href="[% c.uri_for_action('/search/default', { search => "role:@attention person_token:${attn.token}" } ) %]">[% c.loc('This ticket is awaiting attention from <strong>[_1]</strong>!', [ attn.name ]) %]</a></p></aside>
 [% END %]
 </section>
 [% END %]

@@ -7,10 +7,7 @@ use Moose;
 use Data::SearchEngine::Holistic;
 use Data::SearchEngine::Holistic::Query;
 
-sub base : Chained('../search') PathPart('search') CaptureArgs(0) {
-    my ( $self, $c ) = @_;
-
-}
+sub base : Chained('.') PathPart('search') CaptureArgs(0) { }
 
 sub default : Chained('base') PathPart('') Args(0) {
     my ($self, $c) = @_;

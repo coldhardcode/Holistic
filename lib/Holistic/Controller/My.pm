@@ -28,6 +28,8 @@ sub root : Chained('setup') PathPart('') Args(0) {
 
 sub profile : Chained('setup') PathPart('') CaptureArgs(0) { }
 
+sub tickets : Chained('setup') Args(0) { }
+
 no Moose;
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 

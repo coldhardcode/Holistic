@@ -56,6 +56,16 @@ has fields => (
                 text => 1,
                 field => 'name'
             },
+            person_token => {
+                alias => 'person',
+                text => 1,
+                field => 'token'
+            },
+            role => {
+                alias => 'role',
+                text => 1,
+                field => 'name'
+            },
             status => {
                 alias => 'queue',
                 text => 1,
@@ -144,7 +154,7 @@ sub create_resultset {
     my ($self, $oquery) = @_;
 
     my $q = $self->query_parser->parse($oquery->query);
-
+use Data::Dumper; warn Dumper($q);
     my %conds = ();
 
     my %attrs = (

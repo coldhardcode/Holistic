@@ -16,8 +16,8 @@ sub root : Chained('setup') PathPart('') Args(0) {
 sub person : Chained('setup') PathPart('person') Args(1) {
     my ($self, $c, $id) = @_;
 
-    my $person = $c->model('Schema::Person')->find($id);
-
+    my $person = $c->model('Schema::Person')->find({ token => $id });
+    $person ||= $c->model('Schema::Person')->find($id);
     $c->stash->{person} = $person;
     $c->stash->{object} = 'person';
     $c->stash->{template} = 'what/object.tt';
