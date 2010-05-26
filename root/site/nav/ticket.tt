@@ -75,7 +75,7 @@ requestor = ticket.requestor;
    </tr>
    [% IF is_editable %]
    <tr class="submit">
-    <td colspan="4"><a href="#" class="submit_button orange">Save</a></td>
+    <td colspan="4"><button class="submit_button orange">Save</button></td>
    </tr>
    [% END %]
   </tbody>

@@ -88,7 +88,6 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
             my $attn_count = $ident->needs_attention->count;
             $c->log->debug("Tickets need attention: $attn_count")
                 if $c->debug;
-            $attn_count = 1; # XX Testing
             if ( $attn_count > 0 ) {
                 my $msg = $c->loc('NEEDS ATTENTION', [ $attn_count ]);
                 $c->message({

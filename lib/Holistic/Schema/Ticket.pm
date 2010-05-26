@@ -199,7 +199,7 @@ sub _get_person_rs_with_role {
         $self->resultset('Ticket::Role')->find_or_create({ name => $role });
 
     $self->ticket_persons(
-        { 'role.pk1' => $role_obj->id },
+        { 'role.pk1' => $role_obj->id, 'me.active' => 1 },
         { prefetch => [ 'person', 'role' ] }
     )->search_rs;
 }
@@ -265,7 +265,7 @@ sub owner {
 
     my $link = $self->_get_person_rs_with_role('@owner')->first;
     if ( $person and ( not $link or ( $link and $link->person_pk1 != $person->id ) ) ) {
-        my $old = $link->person;
+        my $old = $link->person if defined $link;
         $link->delete if defined $link;
         $link = $self->_create_person_with_role( $person, '@owner' );
     }

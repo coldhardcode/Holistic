@@ -70,6 +70,9 @@ sub attributes_POST {
 
     my $ticket = $c->stash->{ $self->object_key };
 
+    # Clear attention on the user, since they updated.
+    $ticket->clear_attention( $c->user ) if $c->user_exists;
+
     my $priority = $data->{priority} ?
         $c->model('Schema::Ticket::Priority')->find($data->{priority}) : undef;
 
@@ -77,8 +80,15 @@ sub attributes_POST {
 
     my $owner;
     if ( $data->{owner} ) {
-        $owner = $c->model('Schema::Person')->find( $data->{owner} );
-        $owner = undef if $owner->id == $ticket->owner->id;
+        try {
+            $owner = $c->model('Schema::Person')->find( $data->{owner} );
+            $owner = undef if $owner->id == $ticket->owner->id;
+        } catch {
+            # XX This is hacky, I admit.  If $ticket->owner returns undef
+            # then it throws an error... we need -?>
+            $c->log->debug("Failed setting owner, ticket unowned? $_")
+                if $c->debug;
+        };
     }
 
     my $attn;

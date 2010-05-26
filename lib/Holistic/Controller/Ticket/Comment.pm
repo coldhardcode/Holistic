@@ -36,6 +36,9 @@ sub _create : Private {
 
     $c->res->redirect( $c->uri_for_action('/ticket/object', [ $c->stash->{ticket}->id ] ) );
     $c->stash->{ticket}->add_comment($clean_data);
+    # Clear attention on a comment.
+    $c->stash->{ticket}->clear_attention( $c->user )
+        if $c->user_exists;
 }
 
 no Moose;

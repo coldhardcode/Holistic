@@ -78,7 +78,7 @@ sub inflate_permissions { shift->person->inflate_permissions }
 sub needs_attention {
     my ( $self ) = @_;
 
-    $self->ticket_persons({ 'role.name' => '@attention' }, { prefetch => [ 'role', 'ticket' ] })->search_related('ticket');
+    $self->ticket_persons({ 'me.active' => 1, 'role.name' => '@attention' }, { prefetch => [ 'role', 'ticket' ] })->search_related('ticket');
 
 }
 
