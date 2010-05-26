@@ -21,3 +21,6 @@ msgstr "Normal"
 
 msgid "@release"
 msgstr "Release"
+
+msgid "NEEDS ATTENTION"
+msgstr "%quant(%1, ticket needs, tickets need) your attention."
