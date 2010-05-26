@@ -1,4 +1,4 @@
-package Holistic::Schema::Queue::Type;
+package Holistic::Schema::Queue::Status;
 
 use Moose;
 
@@ -7,7 +7,7 @@ use Graphics::Color::RGB;
 
 extends 'Holistic::Base::DBIx::Class';
 
-__PACKAGE__->table('queue_types');
+__PACKAGE__->table('queue_statuses');
 
 __PACKAGE__->add_columns(
     'pk1',
@@ -16,12 +16,19 @@ __PACKAGE__->add_columns(
     { data_type => 'varchar', size => '255', is_nullable => 0, },
     'color',
     { data_type => 'char', size => '6', is_nullable => 0, default_value => '000000' },
+    'accept_tickets',
+    { data_type => 'tinyint', size => '1', is_nullable => 0, default_value => 1 },
+    'accept_worklog',
+    { data_type => 'tinyint', size => '1', is_nullable => 0, default_value => 1 },
+    'dt_created',
+    { data_type => 'datetime', is_nullable => 0, set_on_create => 1 },
+    'dt_updated',
+    { data_type => 'datetime', is_nullable => 0, set_on_create => 1, set_on_update => 1 },
 );
 
 __PACKAGE__->set_primary_key('pk1');
 
-__PACKAGE__->has_many('queues',  'Holistic::Schema::Queue', 'type_pk1');
-__PACKAGE__->has_many('tickets', 'Holistic::Schema::Ticket', 'type_pk1');
+__PACKAGE__->has_many('queues',  'Holistic::Schema::Queue', 'status_pk1');
 
 sub foreground_color {
     my ($self) = @_;

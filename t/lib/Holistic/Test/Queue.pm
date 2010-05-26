@@ -47,6 +47,7 @@ sub queue_create : Plan(3) {
     $queue->update;
     $queue->discard_changes;
 
+    is($queue->status->id, $analysis->status->id, 'same status on child queues');
     is($backlog->next_step->id, $analysis->id, 'next step');
     is($analysis->next_step->id, $code->id, 'next step');
     is($code->next_step->id, $review->id, 'next step');

@@ -46,6 +46,9 @@ __PACKAGE__->add_columns(
     'type_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1,
         dynamic_default_on_create => \&_default_type },
+    'status_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1,
+        dynamic_default_on_create => \&_default_status },
     'path',
     { data_type => 'varchar', size => '255', is_nullable => 0,
         dynamic_default_on_create => sub { shift->token } },
@@ -110,6 +113,12 @@ __PACKAGE__->belongs_to(
     'type', 'Holistic::Schema::Queue::Type',
     { 'foreign.pk1' => 'self.type_pk1' }
 );
+
+__PACKAGE__->belongs_to(
+    'status', 'Holistic::Schema::Queue::Status',
+    { 'foreign.pk1' => 'self.status_pk1' }
+);
+
 
 __PACKAGE__->belongs_to(
     'identity', 'Holistic::Schema::Person::Identity',
@@ -300,6 +309,26 @@ sub _default_type {
 
     return $self->result_source->schema->resultset('Queue::Type')->find_or_create({ name => 'Queue' })->id;
 }
+
+sub _default_status {
+    my ( $self ) = @_;
+
+    if ( $self->queue_pk1 ) {
+        my $parent = $self->schema->resultset('Queue')->find( $self->queue_pk1 );
+        # Return the same status as the parent, everything has to be this way
+        # for the time being.
+        return $parent->status->id;
+    }
+
+    my $status = $self->schema->resultset('Queue::Status')->find({ name => '@open' });
+    if ( not defined $status ) {
+        $status = $self->schema->resultset('Queue::Status')->create({
+            name => '@open'
+        });
+    }
+    return $status->id;
+}
+
 
 sub _default_system_user {
     my ( $self ) = @_;

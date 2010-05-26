@@ -6,8 +6,7 @@ use MooseX::MethodAttributes::Role;
 use Try::Tiny;
 
 with 'Holistic::Test::Schema',
-     'Holistic::Test::Person',
-     'Holistic::Test::Group';
+     'Holistic::Test::Person';
 
 =head1 Permission Tests
 

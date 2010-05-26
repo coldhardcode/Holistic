@@ -56,7 +56,6 @@ sub advance {
     if ( not defined $next ) {
         return undef;
     }
-    warn "Next step: $next\n";
     $next->add_ticket( $self );
 }
 
