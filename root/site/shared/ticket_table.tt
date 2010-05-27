@@ -22,7 +22,7 @@ tickets_total  = 0;
     classes = [];
     
     ticket_uri = c.uri_for_action('/ticket/object', [ ticket.id ]);
-    IF ticket.status.name == 'CLOSED';
+    IF ticket.status.name == '@closed';
         classes.push('closed');
         tickets_closed = tickets_closed + 1;
     ELSE;
@@ -42,8 +42,8 @@ tickets_total  = 0;
    <th class="link"><a href="[% ticket_uri %]">[% ticket.id %]</a></th>
    <td class="link"><a href="[% ticket_uri %]">[% ticket.name | html %]</a></td>
    <td><span class="type" style="background-color: #[% ticket.type.color %]; color: [% ticket.type.foreground_color %]">[% c.loc(ticket.type.name) %]</span></td>
-   <td>[% c.loc(ticket.final_state.status.name) %]</td>
-   <td>[% ticket.final_state.destination_identity.person.token | html %]</td>
+   <td>[% c.loc(ticket.status.name) %]</td>
+   <td>[% ticket.owner.name | html %]</td>
    <td>[% due_date = ticket.due_date; IF due_date; %]<time datetime="[% due_date.dt_marker %]">[% pretty_date(due_date.dt_marker); %]</time>[% ELSE; "&mdash;"; END %]</td>
    <td>[% c.loc(ticket.priority.name) %]</td>
   </tr>
