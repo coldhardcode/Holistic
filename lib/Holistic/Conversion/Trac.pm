@@ -211,6 +211,8 @@ sub _build_trac_groups {
 sub find_person_and_identity {
     my ($self, $email) = @_;
 
+    $email ||= 'unknown-user@unknown.unknown';
+
     my $person_rs = $self->resultset('Person');
 
     # Find a person
@@ -254,9 +256,9 @@ sub import_users_and_groups {
 
     my $group_perms = $self->trac_group_permissions;
 
-    #print Dumper( $self->trac_groups );
-    #print Dumper( $self->trac_group_permissions );
-    #print Dumper( $self->trac_user_permissions );
+    #warn Dumper( $self->trac_groups );
+    #warn Dumper( $self->trac_group_permissions );
+    #warn Dumper( $self->trac_user_permissions );
 
     foreach my $group ( keys %$groups ) {
         $h_groups{$group} = $group_rs->find_or_create({ name => $group });
@@ -266,6 +268,7 @@ sub import_users_and_groups {
         }
         my $pset = $h_groups{$group}->permission_set;
         foreach my $permission ( @{ $group_perms->{ $group } } ) {
+            $permission =~ s/^TRAC_//;
             my $p = $perm_rs->find_or_create({ name => $permission });
             $pset->add_to_permissions( $p );
         }
