@@ -81,11 +81,14 @@ sub make_ticket {
     }
 
     my ($rep_person, $rep_ident) = $conv->find_person_and_identity($row->{reporter});
+    my ($own_person, $own_ident) = $conv->find_person_and_identity($row->{owner});
+
     my $product = find_product($row->{$conv->product});
     my $queue   = find_queue($row->{$conv->queue}, $product, $row->{id});
     my $status  = find_status($queue, $row->{status} );
 
     my $desc = $conv->trac_parser->parse($row->{description});
+
     my $tick = $ticket_rs->create({
         pk1             => $row->{id},
         type_pk1        => $type->id,
@@ -98,6 +101,9 @@ sub make_ticket {
         dt_updated      => DateTime->from_epoch(epoch => $row->{changetime})
     });
 
+    $tick->requestor($rep_person);
+    $tick->owner($own_person);
+
     ############## TICKET CHANGES
     $change_sth->execute($row->{id});
     my %change_row;
@@ -107,13 +113,12 @@ sub make_ticket {
         # XX this only works if you use emails, should probably use token or whatever
         $change_row{author} = 'no-reply@coldhardcode.com' unless(defined($change_row{author}) && $change_row{author} ne '');
         my ($change_person, $change_ident) = $conv->find_person_and_identity($change_row{author});
-
         $tick->add_to_changes({
             identity_pk1 => $change_ident->id,
             name         => $change_row{field},
             value        => $change_row{newvalue} || '',
             changeset    => $change_row{time},
-            dt_created      => DateTime->from_epoch(epoch => $change_row{time}),
+            dt_created   => DateTime->from_epoch(epoch => $change_row{time}),
         }) unless $change_row{field} eq 'comment'; # Comments aren't changes
 
         # Comments
@@ -178,39 +183,6 @@ sub find_tag {
         $tag_cache{$name} = $tag;
     }
     return $tag;
-}
-
-sub find_person_and_identity {
-    my ($email) = @_;
-
-    # Find a person
-    my $person = $person_cache{$email};
-
-    unless(defined($person)) {
-        $person = $person_rs->create({
-            token   => $email,
-            name    => $email,
-            public  => 1,
-            email   => $email,
-            timezone => 'America/Chicago', # XX
-        });
-        $person_cache{$email} = $person;
-    }
-
-    # Find an identity
-    my $identity = $person->local_identity;
-
-    unless(defined($identity)) {
-        $identity = $person->add_to_identities({
-            realm   => 'local',
-            ident   => $email,
-            secret  => ( $conv->has_default_password ? $conv->default_password : undef ),
-            active  => 1
-        });
-        $identity_cache{$email} = $identity;
-    }
-
-    return ( $person, $identity );
 }
 
 sub find_product {
