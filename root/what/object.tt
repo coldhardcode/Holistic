@@ -1,12 +1,12 @@
 [% IF object == 'person' %]
 <h1>XX [% c.loc("What's [_1] doing?", person.name) %]</h1>
 [% ELSIF object == 'queue' %]
-<h1>[% c.loc("What's going on in [_1]?", queue.name) %]</h1>
+<h1>XX [% c.loc("What's going on in [_1]?", queue.name) %]</h1>
 [% END %]
 
 <ul class="roadmap status">
  <li>
-  <h3>XX[% c.loc('Recent') %]</h3>
+  <h3>[% c.loc('Recent') %]</h3>
    <table class="summary">
     <tfoot>
       <tr>
@@ -50,7 +50,7 @@
    </table>
  </li>
  <li class="now">
-  <h3>XX[% c.loc('Now') %]</h3>
+  <h3>[% c.loc('Now') %]</h3>
   <table class="summary">
    <tfoot>
      <tr>
@@ -94,7 +94,7 @@
   </table>
  </li>
  <li>
-  <h3>XX[% c.loc('Soon') %]</h3>
+  <h3>[% c.loc('Soon') %]</h3>
    <table class="summary">
     <tfoot>
       <tr>

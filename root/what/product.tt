@@ -2,14 +2,18 @@
 <section class="product">
  <ul id="perpetuity">
   <li>
-   <h4>XX Immediate</h4>
+   <h4>Immediate</h4>
    <time>Perpetual</time>
+   <ul>
+    <li>XX tickets in perpetual queue</li>
+   </ul>
   </li>
  </ul>
  <h3>Today</h3>
  <hr>
- <p>XX Today support</p>
+ <p>Today support (XX What is this?)</p>
  <ul id="future" [% IF 0 %]class="today"[% END %]>
+  <li>XX Need to be ordered by due date</li>
   [% FOREACH queue = product.queues_rs.all %]
   <li>
    <h4>[% queue.name %]</h4>
