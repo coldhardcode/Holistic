@@ -80,12 +80,12 @@ sub make_ticket {
         $ticket_type_cache{$row->{type}} = $type
     }
 
-    my ($rep_person, $rep_ident) = find_person_and_identity($row->{reporter});
+    my ($rep_person, $rep_ident) = $conv->find_person_and_identity($row->{reporter});
     my $product = find_product($row->{$conv->product});
     my $queue   = find_queue($row->{$conv->queue}, $product, $row->{id});
     my $status  = find_status($queue, $row->{status} );
 
-    my $desc = $trac_parser->parse($row->{description});
+    my $desc = $conv->trac_parser->parse($row->{description});
     my $tick = $ticket_rs->create({
         pk1             => $row->{id},
         type_pk1        => $type->id,
@@ -106,7 +106,7 @@ sub make_ticket {
         # Use the system user if there's no author
         # XX this only works if you use emails, should probably use token or whatever
         $change_row{author} = 'no-reply@coldhardcode.com' unless(defined($change_row{author}) && $change_row{author} ne '');
-        my ($change_person, $change_ident) = find_person_and_identity($change_row{author});
+        my ($change_person, $change_ident) = $conv->find_person_and_identity($change_row{author});
 
         $tick->add_to_changes({
             identity_pk1 => $change_ident->id,
@@ -121,7 +121,7 @@ sub make_ticket {
             # No reason to have empty ones
             next unless defined($change_row{newvalue}) && $change_row{newvalue} ne '';
 
-            my $html = $trac_parser->parse($change_row{newvalue});
+            my $html = $conv->trac_parser->parse($change_row{newvalue});
             next if !defined($html) || ($html eq '');
             my $is_worklog = 0;
             if ( $html =~ /changeset/ ) {
@@ -243,7 +243,7 @@ sub find_queue {
         my %row;
         $mile_sth->bind_columns( \( @row{ @{$mile_sth->{NAME_lc} } } ));
 
-        my $token = $conv->tokenize($name);
+        my $token = $conv->schema->tokenize($name);
         # XX Need due date and completed!
         $queue = $queue_rs->create({
             name        => $name,

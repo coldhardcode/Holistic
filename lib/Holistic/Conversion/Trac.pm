@@ -86,7 +86,7 @@ has 'schema' => (
     }
 );
 
-has 'parser' => (
+has 'trac_parser' => (
     is  => 'ro',
     isa => 'Text::Trac',
     lazy_build => 1,
@@ -158,7 +158,7 @@ sub _build_trac_dbh {
     );
 }
 
-sub _build_parser {
+sub _build_trac_parser {
     Text::Trac->new( trac_ticket_url => '/ticket/id/' );
 }
 
