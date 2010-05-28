@@ -107,20 +107,6 @@ sub search {
 
     my %facets = ();
 
-    # my $prod_facets = $tickets->search(undef, {
-    #     group_by => 'product.pk1',
-    #     join => { 'queue' => { 'product_links' => 'product' } },
-    #     '+select' => [ \'product.name AS product_name', { count => 'product.pk1' } ],
-    #     '+as' => [ 'product_name', 'product_count' ],
-    #     order_by => \'product_count DESC',
-    #     page => 1,
-    #     rows => 5
-    # });
-
-    # while(my $change = $full_rs->next) {
-    #     $facets{owner}->{$change->identity->ident} = $prod_facet->get_column('product_count');
-    # }
-    # for(0..scalar(@tickets) - 1) {
     while(my $change = $full_rs->next) {
         # my $tick = $tickets[$_];
 
