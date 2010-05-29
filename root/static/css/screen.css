@@ -762,6 +762,7 @@ table tbody tr.imp td label {
     background-color: #de691f;
     background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
     background: -moz-linear-gradient(top, #e3782f, #de691f);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='e3782f', endColorstr='#de691f');
     color: #000;
 }
 table tbody tr.imp td a {
@@ -921,7 +922,7 @@ table.cal thead a {
     text-decoration: none;
 }
 table.cal thead td {
-    background: #aaa;
+    background: #ccc;
     border: none;
     border-left: 1px solid #fff;
     padding: .4em;
@@ -931,9 +932,16 @@ table.cal thead td {
 table.cal thead td:first-child {
     border: none;
 }
-table.cal tbody tr td.current {
-    background-color: #ddd;
-    border: 2px solid #bbb;
+table.cal tbody tr td.current a {
+    background-color: #b31f1e;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ba3433), to(#b31f1e));
+    background: -moz-linear-gradient(top, #ba3433, #b31f1e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ba3433', endColorstr='#b31f1e');
+    color: #fff;
+}
+table.cal tbody tr td.current a span {
+    float: left;
+    margin: 0 0 0 5px;
 }
 table.cal tbody tr td.current a {
     margin: 0; padding: 5px 5px 5px 0;
@@ -942,6 +950,7 @@ table.cal tbody tr td.do {
     background-color: #d9d9c7;
 }
 table.cal tbody td {
+    background-color: #f0eee4;
     height: 5em;
     padding: 0; margin: 0;
 }
@@ -953,6 +962,7 @@ table.cal tbody td a {
     color: #353535;
     margin: 0; padding: 5px 5px 0 0;
     text-align: right;
+    text-decoration: none;
 }
 table.cal tbody td.other a {
     color: #999;
@@ -1004,6 +1014,7 @@ ul.status li table {
 ul.status li.now {
     background: -webkit-gradient(linear, left center, right center, from(#ffffff), to(#fefcf1));
     background: -moz-linear-gradient(right, #ffffff, #fefcf1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#fefcf1');
     border: 1px solid #353535;
     border-width: 1px 0 1px 1px;
 }
@@ -1032,6 +1043,7 @@ section.product > ul > li {
     background-color: #de691f;
     background: -webkit-gradient(linear, left top, left bottom, from(#b0b09a), to(#b0b09a));
     background: -moz-linear-gradient(top, #b0b09a, #b0b09a);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b0b09a', endColorstr='#b0b09a');
     border-radius: 5px;
     color: #353535;
     margin: 0 0 1em 0; padding: .5em;
@@ -1102,6 +1114,7 @@ section.product ul:nth-of-type(2) {
 #future > li:first-child {
     background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
     background: -moz-linear-gradient(top, #e3782f, #de691f);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e3782f', endColorstr='#de691f');
     color: #fff;
 }
 #future > li:first-child h4,
@@ -1290,6 +1303,7 @@ progress ol li.curr {
 progress ol li.future {
     background: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#909090));
     background: -moz-linear-gradient(top, #d4d4d4, #b0b0b0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dcdcdc', endColorstr='#909090');
     color: #777;
 }
 progress form button {
