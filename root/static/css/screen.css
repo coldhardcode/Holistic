@@ -189,6 +189,12 @@ table thead th {
     background-color: #ab0706;
     border-color: #fff;
     border: none;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     color: #fff;
     font-size: 2em;
     font-weight: bold;
@@ -902,7 +908,6 @@ article.group_man section.groups {
     float: left;
 }
 table.cal {
-    border: 1px solid #fff;
     width: 100%;
 }
 table.cal thead a {
@@ -916,10 +921,15 @@ table.cal thead a {
     text-decoration: none;
 }
 table.cal thead td {
+    background: #aaa;
     border: none;
+    border-left: 1px solid #fff;
     padding: .5em .5em 2px .5em;
     text-align: center;
     width: 14%;
+}
+table.cal thead td:first-child {
+    border: none;
 }
 table.cal tbody tr td.current {
     background-color: #ddd;
@@ -933,6 +943,9 @@ table.cal tbody tr td.do {
 table.cal tbody td {
     height: 5em;
     padding: 0; margin: 0;
+}
+table.cal tbody td:first-child {
+    border-left: none;
 }
 table.cal tbody td a {
     display: block;
