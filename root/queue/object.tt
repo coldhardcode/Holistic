@@ -2,9 +2,15 @@
 
 tickets = queue.all_tickets;
 type    = queue.type;
+status  = queue.status;
 
 ~%]
 <h1>[% system_localize(type.name) %] [% queue.name | html %]</h1>
+[% IF !queue.active %]
+    <p>[% c.loc('QUEUE INACTIVE', [ system_localize(type.name) ] ) %]</p>
+[% ELSE %]
+    <p><a href="[% c.uri_for_action('/ticket/create_form', { queue_pk1 = queue.id } ) %]">[% c.loc('Create Ticket') %]</a></p>
+[% END %]
 [%~
 IF type.name == '@release';
     PROCESS "queue/table.tt";

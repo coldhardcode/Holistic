@@ -353,5 +353,11 @@ sub all_tickets {
     );
 }
 
+sub active {
+    my ( $self ) = @_;
+    my $status = $self->status;
+    return $status->accept_tickets && $status->accept_worklog;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

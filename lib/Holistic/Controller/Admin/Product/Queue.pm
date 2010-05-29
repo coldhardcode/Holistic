@@ -58,6 +58,27 @@ sub _create : Private {
         $clean_data->{token} = $token;
 
         my $queue = $c->stash->{$self->rs_key}->create($clean_data);
+        # XX stupid hardcoding for now, this should really be part of
+        # create, as a rs method. ->setup_queue?
+        my @steps = ();
+        foreach my $name ( qw/@new @assigned @active @testing @closed/ ) {
+            push @steps, $queue->add_step({
+                name => $name
+            });
+        }
+        $queue->update({ closed_queue_pk1 => $steps[-1]->id });
+
+        my $qs = $c->model('Schema::Queue::Status')->find({name => '@closed'});
+        if ( not defined $qs ) {
+            $qs = $c->model('Schema::Queue::Status')->create({
+                name           => '@closed',
+                accept_tickets => 0,
+                accept_worklog => 0,
+            });
+        }
+        $steps[-1]->update({ status_pk1 => $qs->id });
+        # XX End of stupid code.
+        
         $c->stash->{product}->add_to_queues( $queue );
 
         return $queue;

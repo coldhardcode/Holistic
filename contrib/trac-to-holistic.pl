@@ -252,14 +252,31 @@ sub find_queue {
 
 sub find_status {
     my ($milestone, $name) = @_;
+    # We don't have reopened
+    # XX we should do something more special in this case.  Like bake a cake.
+    if ( $name eq 'reopened' ) {
+        $name = 'assigned';
+    }
     my $status_name = join(":", $milestone->id, $name);
     my $status = $status_cache{$status_name};
 
     unless(defined($status)) {
         $status = $milestone->add_step({
-            name        => $name,
+            name        => '@' . $name,
             description => ''
         });
+        if ( $name =~ /closed/ ) {
+            $milestone->update({ closed_queue_pk1 => $status->id });
+            my $qs = $conv->resultset('Queue::Status')->find({ name => '@closed' });
+            if ( not defined $qs ) {
+                $qs = $conv->resultset('Queue::Status')->create({
+                    name           => '@closed',
+                    accept_tickets => 0,
+                    accept_worklog => 0,
+                });
+            }
+            $status->update({ status_pk1 => $qs->id });
+        }
         $status_cache{$status_name} = $status;
     }
     return $status;
