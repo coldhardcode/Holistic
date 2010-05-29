@@ -27,7 +27,7 @@
       <dt>Total Queries:</dt>
       <dd>[% qcount %]</dd>
       [% IF qcount > 0 %]
-      <dt>Avg Statement Time:</dd>
+      <dt>Avg Statement Time:</dt>
       <dd>[% (querylog.time_elapsed / qcount) | format('%0.6f') %] seconds.</dd>
       [% END %]
       </dl>
