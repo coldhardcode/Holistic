@@ -35,5 +35,5 @@
    <dd><a href="[% c.uri_for('/todo') %]">TODO</a></dd>
   </dl>
  </nav>
- <p><b>Holistic</b> is a <a href="http://www.coldhardcode.com">Cold Hard Code</a> property. &copy; 2010 Cold Hard Code, LLC</p>
+ <p><strong>Holistic</strong> is a <a href="http://www.coldhardcode.com">Cold Hard Code</a> property. &copy; 2010 Cold Hard Code, LLC</p>
 </footer>
