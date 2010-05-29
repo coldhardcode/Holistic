@@ -1,4 +1,4 @@
-[%# USE HTML.Strip %]
+[% USE HTML.Strip %]
 [% page.title = c.loc('Activity Log') %]
 <h1>[% c.loc('Ticket Changes') %]</h1>
 [% SET pager = results.pager %]
@@ -23,7 +23,7 @@
   </a>
  </dt>
  <dd>
-  [% change.ticket.description | truncate(120, '&hellip;') #| html_strip %]
+  [% change.ticket.description | truncate(120, '&hellip;') | html_strip %]
  </dd>
  [% END %]
 </dl>
