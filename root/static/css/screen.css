@@ -933,6 +933,7 @@ table.cal thead td:first-child {
 }
 table.cal tbody tr td.current {
     background-color: #ddd;
+    border: 2px solid #bbb;
 }
 table.cal tbody tr td.current a {
     margin: 0; padding: 5px 5px 5px 0;

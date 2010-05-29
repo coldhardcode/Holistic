@@ -18,16 +18,17 @@ sub root : Chained('setup') PathPart('') Args() {
     my ($self, $c, $year, $month) = @_;
 
     my $now = $c->stash->{now};
+    my $req_day = $now->clone;
     if ( $year && $month ) {
-        $now->set_year($year);
-        $now->set_month($month);
-        $now->set_day(1);
+        $req_day->set_year($year);
+        $req_day->set_month($month);
+        $req_day->set_day(1);
     }
-    $c->stash->{req_day} = $now;
+    $c->stash->{req_day} = $req_day;
 
     my $ldom = DateTime->last_day_of_month(
-        month => $now->month,
-        year => $now->year
+        month => $req_day->month,
+        year => $req_day->year
     );
     my $fdom = $ldom->clone->subtract_duration(DateTime::Duration->new(
         months => 1
