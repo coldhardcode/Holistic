@@ -689,6 +689,7 @@ fieldset input[type="email"],
 fieldset input[type="text"],
 fieldset input[type="number"],
 fieldset input[type="range"],
+fieldset input[type="password"],
 fieldset select,
 fieldset textarea {
     resize: none;
@@ -700,6 +701,7 @@ fieldset input[type="email"].double,
 fieldset input[type="text"].double,
 fieldset input[type="number"].double,
 fieldset input[type="range"].double,
+fieldset input[type="password"].double,
 fieldset select.double,
 fieldset textarea.double {
     width: 32em;
