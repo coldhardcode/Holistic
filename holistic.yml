@@ -12,6 +12,7 @@ Model::Schema:
         -
             quote_char: '`'
             name_sep: .
+
 # Shortcut to the connect_info, for easier parsing into CLI apps
 connect_info: *1
 

@@ -1,0 +1,9 @@
+Model::Schema:
+    connect_info: &1
+        - "dbi:mysql:codepeek;host=db1.intra.coldhardcode.com"
+        - "holistic"
+        - "waffles"
+        -
+            quote_char: '`'
+            name_sep: .
+
