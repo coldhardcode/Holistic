@@ -229,6 +229,10 @@ sub post_create : Private {
 sub prepare_data {
     my ( $self, $c, $data ) = @_;
 
+    # XX We find the first step, this should probably be significantly cleaner
+    $data->{ticket}->{queue_pk1} = $c->model('Schema::Queue')
+        ->find($data->{ticket}->{queue_pk1})->initial_state->id;
+
     if ( $c->user_exists ) {
         $data->{ticket}->{identity} = $c->user->id;
         return $data;
@@ -243,7 +247,8 @@ sub prepare_data {
     if ( not defined $data->{ticket}->{identity} ) {
         $data->{ticket}->{identity} = $c->model('Schema')->schema->system_identity->id;
     }
-    $data;
+
+    return $data;
 }
 
 no Moose;

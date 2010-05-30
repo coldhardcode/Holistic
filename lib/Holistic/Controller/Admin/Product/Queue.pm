@@ -56,6 +56,8 @@ sub _create : Private {
         my $token = $c->model('Schema')->schema->tokenize( $clean_data->{name} ); 
         $clean_data->{path} = $token;
         $clean_data->{token} = $token;
+        # XX Hardcode to linear states for 0.01
+        $clean_data->{traversal_type} = 2;
 
         my $queue = $c->stash->{$self->rs_key}->create($clean_data);
         # XX stupid hardcoding for now, this should really be part of
