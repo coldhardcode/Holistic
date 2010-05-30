@@ -21,13 +21,13 @@ my_parents   = queue.parent_map;
         IF child.id != parent.id && my_parents.${child.id}.defined %]
             [%~ FOREACH p IN queue.all_parents.all;
                 NEXT IF p.id == parent.id ~%]
-                <li class="curr">[% p.name %]</li>
+                <li class="curr">[% system_localize(p.name) %]</li>
                 [%~ IF loop.last;
                     seen_progress.${next_step.id} = 1;
                     seen_progress.${queue.id} = 1;
                 ~%]
-                    <li class="curr last">[% queue.name %]</li>[%~ ~%]
-                    <li class="future">[% next_step.name %]</li>
+                    <li class="curr last">[% system_localize(queue.name) %]</li>[%~ ~%]
+                    <li class="future">[% system_localize(next_step.name) %]</li>
                     [%~ beyond_next = 1 ~%]
                 [%~ END ~%]
             [%~ END ~%]
@@ -35,20 +35,16 @@ my_parents   = queue.parent_map;
         <li class="[%~
                 IF child.id == queue.id; 'curr last';
                 ELSIF beyond_next; 'future'; END;
-            ~%]">[% child.name; %]</li>
+            ~%]">[% system_localize(child.name) %]</li>
         [%~ END ~%]
     [% END %]
  </ol>
  [% IF ticket.defined && ticket.is_open && next_step %]
     <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]">
         <button class="orange submit_button small">
-            [% c.loc('Advance to') %]
-            [% FOREACH step IN next_step %]
-                [% step.name %]
-            [% END %]    
-            &#x2192;'
+            [% c.loc('Advance to [_1]', [ system_localize(next_step.name) ] ) %]
+            &#x2192;
         </button>
     </form>
  [% END %]
-</progress>
-
+ </progress>

@@ -1,0 +1,10 @@
+#!/usr/bin/env perl
+
+use strict;
+
+use Holistic::Conversion::Trac;
+
+my $conv       = Holistic::Conversion::Trac->new_with_options;
+my $new_groups = $conv->import_users_and_groups;
+my $queues     = $conv->import_milestones;
+my $tickets    = $conv->import_tickets;

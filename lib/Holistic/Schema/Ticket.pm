@@ -303,11 +303,18 @@ sub tag {
     }
 }
 
+sub next_step {
+    return shift->queue->next_step;
+}
+
 sub advance {
-    my ( $self ) = @_;
-    my $step = $self->queue->next_step;
+    my ( $self, $opt ) = @_;
+    my @steps = $self->queue->next_step;
     die "Can't advance ticket, no steps defined\n"
-        unless defined $step;
+        unless defined $steps[0];
+    $opt = 0 unless defined $opt and defined $steps[int($opt)];
+    my $step = $steps[$opt];
+  
     $self->update({ queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1 });
 }
 

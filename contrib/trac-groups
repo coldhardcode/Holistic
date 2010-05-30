@@ -13,6 +13,7 @@ use Holistic::Conversion::Trac;
 
 my $conv = Holistic::Conversion::Trac->new_with_options;
 my $new_groups = $conv->import_users_and_groups();
+my $queues     = $conv->import_milestones();
 
 my $rs = $conv->resultset('Group')->search(
     { 'me.name' => $new_groups },

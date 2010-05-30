@@ -208,7 +208,9 @@ sub _build__next_step {
             my $aunt = $parent->next_sibling;
             return $aunt->next_step( $depth + 1 ) if defined $aunt;
             #my $sibling = $self->parent->next_sibling;
-            return undef;
+
+            # Finally, return the sibling if we got here.
+            return $sibling;
         };
     }
 }
@@ -236,7 +238,7 @@ sub add_step {
 
     $data->{token} ||= $self->schema->tokenize( $data->{name} );
     $data->{path}    = join($self->path_separator, $self->path, $data->{token});
-    $data->{queue_pk1} = $self->id;
+    $data->{queue_pk1}      = $self->id;
     $data->{traversal_type} = $self->traversal_type;
  
     my $row = $self->resultset('Queue')->create($data);
