@@ -447,6 +447,7 @@ sub create : Private {
                     $c->log->debug("Creating $scope...")
                         if $c->debug;
                     push @objects, $c->forward('_create', [ $clean_data ]);
+                    $c->forward('post_create', [ $data, $objects[-1] ]);
                     
                     $c->stash->{context}->{$scope} = $objects[-1];
 

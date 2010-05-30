@@ -211,18 +211,18 @@ sub create_form : Chained('setup') PathPart('create') Args(0) {
 sub post_create : Private {
     my ( $self, $c, $data, $ticket ) = @_;
 
-    if ( $data->{due_date} ) {
+    if ( $data->{'ticket.due_date'} ) {
         # XX Need to parse this and validate
-        $ticket->due_date( $data->{due_date} );
+        $ticket->due_date( $data->{'ticket.due_date'} );
     }
     $ticket->add_to_changes({
-        field => 'created',
+        name => 'created',
         identity_pk1 => ( $c->user_exists ?
-            $c->user->identity_pk1 : $ticket->identity_pk1 ),
+            $c->user->id : $ticket->owner->id ),
         value => ''
     });
-    if ( $data->{tags} ) {
-        $ticket->tag(map { $_ =~ s/^\s*|\s*//g; $_; } split(/,/, $data->{tags}));
+    if ( $data->{'ticket.tags'} ) {
+        $ticket->tag(map { $_ =~ s/^\s*|\s*//g; $_; } split(/,/, $data->{'ticket.tags'}));
     }
 }
 
