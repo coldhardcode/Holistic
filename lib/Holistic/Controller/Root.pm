@@ -115,8 +115,10 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                 ]
             }
         )->first;
-        $c->stash->{context}->{groups}      = [ $group ];
-        $c->stash->{context}->{permissions} = $group->inflate_permissions;
+        if ( defined $group ) {
+            $c->stash->{context}->{groups}      = [ $group ];
+            $c->stash->{context}->{permissions} = $group->inflate_permissions;
+        }
     }
 
     if ( defined ( my $errors = $c->flash->{errors} ) ) {
