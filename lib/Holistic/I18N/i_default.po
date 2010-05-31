@@ -16,6 +16,15 @@ msgstr ":"
 msgid "@due"
 msgstr "Due Date"
 
+msgid "@low"
+msgstr "Low"
+
+msgid "@medium"
+msgstr "Medium"
+
+msgid "@high"
+msgstr "High"
+
 msgid "@default priority"
 msgstr "Normal"
 
@@ -33,6 +42,9 @@ msgstr "New"
 
 msgid "@assigned"
 msgstr "Assigned"
+
+msgid "@active"
+msgstr "Active"
 
 msgid "@testing"
 msgstr "Testing"
