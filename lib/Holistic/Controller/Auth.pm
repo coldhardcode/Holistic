@@ -165,7 +165,7 @@ sub do_login : Private {
             $c->message( $c->loc("You've logged in, welcome back!") );
 
             my $uri = $c->stash->{destination};
-            $uri  ||= $c->uri_for_action( '/my/profile' );
+            $uri  ||= $c->uri_for_action( '/my/profile/root' );
             $c->res->redirect( $uri );
             $c->detach;
         } else {

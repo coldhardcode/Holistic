@@ -21,7 +21,7 @@ after 'setup' => sub {
             if $c->debug;
         $c->stash->{disable_password_change} = 1;
     } else {
-        $c->stash->{context}->{identity} = $c->user->obj;
+        $c->stash->{context}->{identity} = $c->user;
     }
 };
 
