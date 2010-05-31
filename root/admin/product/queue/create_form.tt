@@ -1,6 +1,11 @@
-[%~
-
-~%]
+[%
+name = product.name | html;
+page.crumbs.push(
+    { 'Products' => c.uri_for_action('/admin/product/root').as_string  },
+    { $name => c.uri_for_action('/admin/product/object', [ product.id ]).as_string },
+    { 'Add Queue' => '' }
+);
+%]
 [% IF type %]
 <h1>[% c.loc("[_1] : Setup [_2]", [ product.name, system_localize(type.name) ] ) %] </h1>
 [% ELSE %]
@@ -15,7 +20,7 @@
    <tfoot>
     <tr>
      <td colspan="2'">
-      <a href="#" class="submit_button orange">Submit</a>
+      <a href="#" class="submit_button orange">[% c.loc('Submit') %]</a>
      </td>
     </tr>
    </tfoot>

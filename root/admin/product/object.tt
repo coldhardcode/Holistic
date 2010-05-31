@@ -6,6 +6,7 @@ page.crumbs.push(
 );
 ~%]
 <h1>[% c.loc('Product: [_1]', [ product.name ]) %]</h1>
+<p><a href="[% c.uri_for_action("/admin/product/queue/root", [ product.id ] ) %]">Product Queues</a></p>
 <form id="product" method="post" action="[% c.uri_for_action('/admin/product/object', [ product.id ]) %]">
  <fieldset>
   <table>
@@ -30,5 +31,3 @@ page.crumbs.push(
   </table>
  </fieldset>
 </form>
-
-<p>XX <a href="[% c.uri_for_action("/admin/product/queue/root", [ product.id ] ) %]">Product Queues</a></p>

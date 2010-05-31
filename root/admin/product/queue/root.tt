@@ -9,7 +9,7 @@ queues = queue_rs.all;
 
 ~%]
 [% IF queues %]
-<h1>XX [% c.loc('[_1] Queues', [ product.name ] ) %]</h1>
+<h1>[% c.loc('[_1] Queues', [ product.name ] ) %]</h1>
     <ul>
     [% FOREACH queue IN queues %]
         <li><a href="[% c.uri_for_action('/admin/product/queue/object', [ product.id, queue.id ] ) %]">[% queue.name | html %]</a></li>

@@ -1,0 +1,39 @@
+[% SET tcount = c.model('Schema::Ticket').search_ordered.count %]
+[% IF !tcount %]
+<section class="message">
+ <aside class="gmessage">
+  <h3>[% c.loc('Welcome to Holistic!') %]</h3>
+  <p>[% c.loc("It looks like you've just setup Holistic.  Here are few steps to take to get things setup.") %]</p>
+  <ul>
+   [% IF c.user_exists %]
+   <li class="done">[% c.loc('Login') %]</li>
+   [% ELSE %]
+  <li><a href="[% c.uri_for_action('/auth/login') %]">[% c.loc('Login') %]</a></li>
+   [% END %]
+   [% IF c.model('Schema::Product').search_ordered.count %]
+   <li class="done">[% c.loc('Add A Product') %]</li>
+   [% ELSE %]
+   <li><a href="[% c.uri_for_action('/admin/product/create_form') %]">[% c.loc('Add A Product') %]</a></li>
+   [% END %]
+   [% IF c.model('Schema::Queue').search_ordered.count %]
+   <li class="done">[% c.loc('Add A Queue To A Product') %]</li>
+   [% ELSE %]
+   <li><a href="[% c.uri_for_action('/admin/product') %]">[% c.loc('Add A Queue To A Product') %]</a></li>
+   [% END %]
+   [% IF c.model('Schema::Ticket').search_ordered.count %]
+   <li class="done">[% c.loc('Add A Ticket') %]</li>
+   [% ELSE %]
+   <li><a href="[% c.uri_for_action('/ticket/create_form') %]">[% c.loc('Add A Ticket') %]</a></li>
+   [% END %]
+  </ul>
+ </aside>
+</section>
+[% ELSE %]
+<section class="message">
+ <aside class="gmessage">
+  <h3>[% c.loc('Congratulations!') %]</h3>
+  <p>[% c.loc("It looks like you've got everything set up!  We hope you enjoy using Holistic.") %]</p>
+  <p>XX Disable Link</p>
+ </aside>
+</section>
+[% END %]

@@ -437,6 +437,27 @@ body > header form fieldset {
 #sidebar table label {
     font-weight: bold;
 }
+#sidebar aside.gmessage h3 {
+    font-size: 21px;
+    line-height: 28px;
+    margin: 0; padding: .25em .5em;
+    text-shadow: #558342 0 -1px;
+}
+#sidebar aside.gmessage ul {
+    margin: .5em 0 0 1em;
+}
+#sidebar aside.gmessage ul li {
+    background: url('/static/images/nocheck.png') left no-repeat;
+    list-style: none;
+    margin: 0 0 .5em 0; padding: 0 0 0 1.5em;
+}
+#sidebar aside.gmessage ul li.done {
+    background: url('/static/images/check.png') left no-repeat;
+}
+#sidebar aside.gmessage ul li a {
+    padding: 0;
+    text-decoration: underline;
+}
 p.caption {
     color: #919191;
     font-size: 0.769em;
