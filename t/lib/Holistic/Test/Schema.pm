@@ -41,6 +41,10 @@ sub bootstrap : Test {
         foreach my $type ( '@feature', '@defect', '@support' ) {
             $self->schema->resultset('Ticket::Type')->create({ name => $type });
         }
+        foreach my $type ( '@low', '@medium', '@high' ) {
+            $self->schema->resultset('Ticket::Priority')->create({ name => $type });
+        }
+
         ok(1, 'bootstrapped dataset is done');
     });
 }
