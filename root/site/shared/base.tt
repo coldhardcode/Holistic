@@ -40,7 +40,7 @@ DEFAULT page.head.scripts     = [];
 DEFAULT page.body             = {};
 DEFAULT page.body.classes     = ['yui-skin-sam'];
 DEFAULT page.body.scripts     = [
-    'http://yui.yahooapis.com/combo?3.0.0/build/yui/yui-min.js',
+    'http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js',
     'global.js'
 ];
 DEFAULT page.crumbs           = [];

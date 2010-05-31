@@ -9,12 +9,28 @@ __PACKAGE__->config(
     class      => 'Schema::Product',
     rs_key     => 'time_markers_rs',
     object_key => 'time_marker',
+    scope      => 'timemarker',
+    create_string => 'The time marker has been created.',
+    update_string => 'The time marker has been updated.',
+    error_string  => 'There was an error processing your request, please try again.',
+
 );
 
 sub _fetch_rs {
     my ( $self, $c ) = @_;
 
     $c->stash->{queue}->time_markers;
+}
+
+sub prepare_data {
+    my ( $self, $c, $data ) = @_;
+    my $scope = $self->scope;
+    return { $scope => $data };
+}
+
+sub post_create : Private {
+    my ( $self, $c ) = @_;
+    $c->forward('post_action');
 }
 
 sub post_action : Private {

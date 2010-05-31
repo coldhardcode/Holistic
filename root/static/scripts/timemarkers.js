@@ -1,19 +1,17 @@
 YUI({
+/*
     insertBefore: 'styleoverrides',
-    modules: {
-        'yui2-yde': {
-            fullpath: "http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"
-         },
-         'yui2-calendar': {
-            fullpath: "http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js",
-            requires: ['yui2-yde', 'yui2-calendarcss']
-         },
-         'yui2-calendarcss': {
-            fullpath: "http://yui.yahooapis.com/2.8.0r4/build/calendar/assets/skins/sam/calendar.css",
-            type: 'css'
+*/    
+    groups: {
+        yui2: {
+            combine: true,
+            base: 'http://yui.yahooapis.com/2.8.0r4/build/',
+            comboBase: 'http://yui.yahooapis.com/combo?',
+            root: '2.8.0r4/build/',
+            modules:  { yui2_yde: { path: 'yahoo-dom-event/yahoo-dom-event.js' }, yui2_calendar: { path: 'calendar/calendar-min.js', requires: ['yui2_yde', 'yui2_calendarcss'] }, yui2_calendarcss: { path: 'calendar/assets/skins/sam/calendar.css', type: 'css' } }
         }
     }
-}).use('node', 'anim', 'io-base', 'json', 'event-delegate', function(Y) {
+}).use('json', 'node', 'anim', 'io-base', 'event-delegate', function(Y, result) {
     var form = Y.one('#time_markers');
     var labels       = form.one('select[name="name"]');
     labels.on('change', function() {
@@ -35,7 +33,7 @@ YUI({
         }
 
         var cal_node = calendar_pop.get('parentNode').append('<div id="cal1Cont"></div>');
-        Y.use('yui2-calendar', function(Y) {
+        Y.use('yui2_calendar', function(Y) {
             cal1 = new YAHOO.widget.Calendar('cal1', 'cal1Cont', { close: true })
             cal1.selectEvent.subscribe( function(type,args,obj) {
                 var dates = args[0];

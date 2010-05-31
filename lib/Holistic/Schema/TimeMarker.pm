@@ -7,6 +7,8 @@ use String::Random;
 
 extends 'Holistic::Base::DBIx::Class';
 
+with 'Holistic::Role::Verify';
+
 __PACKAGE__->table('timemarkers');
 
 __PACKAGE__->add_columns(
@@ -39,6 +41,26 @@ __PACKAGE__->has_many(
         'foreign.result_source' => 'self.result_source'
     }
 );
+
+sub _build_verify_scope { 'timemarker' }
+sub _build__verify_profile {
+    my ( $self ) = @_;
+    return {
+        'profile' => {
+            # XX This should be a valid, parsed time
+            'dt_marker' => {
+                'required' => 1,
+                'type' => 'Str',
+            },
+            'name' => {
+                'required'   => 1,
+                'type'       => 'Str',
+                'min_length' => 1
+            },
+        },
+        'filters' => [ 'trim' ]
+    };
+}
 
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
