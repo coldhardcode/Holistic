@@ -1,9 +1,9 @@
 [% page.crumbs.push({ 'Products' => '' }) %]
 <h1>[% c.loc('Products') %]</h1>
 <ul>
+    <li><a href="[% c.uri_for_action('/admin/product/create_form') %]">[% c.loc('Add Product') %]</a></li>
 [% FOREACH product IN c.model('Schema::Product').search_ordered.all %]
     <li><a href="[% c.uri_for_action('/admin/product/object', [ product.id ]) %]">[% product.name | html %]</a></li>
 [% END %]
-    <li><a href="[% c.uri_for_action('/admin/product/create_form') %]">[% c.loc('Add Product') %]</a></li>
 </ul>
 

@@ -5,7 +5,9 @@ use lib "$FindBin::Bin/../lib";
 
 use Holistic;
 
-my ( $name, $username, $password ) = @_;
+my ( $name, $username, $password ) = @ARGV;
+
+die "add_user.pl name username password\n" unless defined($name) && defined($username) && defined($password);
 
 my $person = Holistic->model('Schema::Person')
     ->create({ name => $name, token => $username });

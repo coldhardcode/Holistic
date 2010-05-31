@@ -12,12 +12,10 @@
    </tfoot>
    <tbody>
     <tr>
-     [% select_field({ label => 'Default Product', name => 'settings.default_product', array => [ 'Product 1', 'Product 2', 'Product 3' ], double => 1 }); %]
-     <p>[% c.loc("The Default Product will be used for new tickets when Holistic has no other hints as to what to use.") %]</p>
+     [% select_field({ label => 'Default Product', name => 'settings.default_product', array => [ 'Product 1', 'Product 2', 'Product 3' ], double => 1, extra => c.loc('The Default Product will be used for new tickets when Holistic has no other hints as to what to use.') }); %]
     </tr>
     <tr>
-     [% checkboxes_field({ label => 'Off-days', name => 'settings.offdays', array => [ c.loc('Monday'), c.loc('Tuesday'), c.loc('Wednesday'), c.loc('Thursday'), c.loc('Friday'), c.loc('Saturday'), c.loc('Sunday') ] }) %]
-     <p>[% c.loc("Holistic works better if you knows the days the team doesn't work.") %]</p>
+     [% checkboxes_field({ label => 'Off-days', name => 'settings.offdays', array => [ c.loc('Monday'), c.loc('Tuesday'), c.loc('Wednesday'), c.loc('Thursday'), c.loc('Friday'), c.loc('Saturday'), c.loc('Sunday') ], extra => c.loc("Holistic works better if you know the days the team doesn't work.") }) %]
     </tr>
    </tbody>
   </table>

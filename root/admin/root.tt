@@ -1,37 +1,41 @@
 <h1>[% c.loc('Administration') %]</h1>
-<ul>
- <li>[% c.loc('General') %]
+<article class="admin">
+ <section>
+  <h2>[% c.loc('General') %]</h2>
   <ul>
    <li><a href="[% c.uri_for('/admin/settings') %]">[% c.loc('Settings') %]</a></li>
   </ul>
- </li>
- <li>[% c.loc('Users') %]
-   <ul>
-    <li>Actions:
-     <ul>
-      <li><a href="[% c.uri_for_action('/admin/person/create_form') %]">[% c.loc('Add User') %]</a></li>
-     </ul>
-    </li>
-   </ul>
- </li>
- <li>[% c.loc('Groups') %]
+ </section>
+ <section>
+  <h2>[% c.loc('Users') %]</h2>
   <ul>
-  [% FOREACH group IN c.model('Schema::Group').search_ordered.all %]
-   <li><a href="[% c.uri_for_action('/admin/group/object', [ group.id ]) %]">[% group.name | html %]</a></li>
-  [% END %]
-   <li>Actions:
-    <ul>
-     <li><a href="[% c.uri_for_action('/admin/group/create_form') %]">[% c.loc('Add Group') %]</a></li>
-     <li><a href="[% c.uri_for_action('/admin/group/management') %]">[% c.loc('Group Management') %]</a></li>
-    </ul></li>
+   <li><a href="[% c.uri_for_action('/admin/person/create_form') %]">[% c.loc('Add User') %]</a></li>
   </ul>
- </li>
- <li><a href="[% c.uri_for_action('/admin/product/root') %]">[% c.loc('Products') %]</a>
-   <ul>
-    <li><a href="[% c.uri_for_action('/admin/product/create_form') %]">[% c.loc('Add Product') %]</a></li>
-   </ul>
- </li>
-</ul>
+ </section>
+ <section>
+  <h2>[% c.loc('Groups') %]</h2>
+  <ul>
+    <li><a href="[% c.uri_for_action('/admin/group/create_form') %]">[% c.loc('Add Group') %]</a></li>
+    <li><a href="[% c.uri_for_action('/admin/group/management') %]">[% c.loc('Group Management') %]</a></li>
+  </ul>
+  <ul class="sub">
+   [% FOREACH group IN c.model('Schema::Group').search_ordered.all %]
+   <li><a href="[% c.uri_for_action('/admin/group/object', [ group.id ]) %]">[% group.name | html %]</a></li>
+   [% END %]
+  </ul>
+ </section>
+ <section>
+  <h2>[% c.loc('Products') %]</h2>
+  <ul>
+   <li><a href="[% c.uri_for_action('/admin/product/create_form') %]">[% c.loc('Add Product') %]</a></li>
+  </ul>
+  <ul class="sub">
+   [% FOREACH product IN c.model('Schema::Product').search_ordered.all %]
+   <li><a href="[% c.uri_for_action('/admin/product/object', [ product.id ]) %]">[% product.name | html %]</a></li>
+   [% END %]
+  </ul>
+ </section>
+</article>
 <section class="message">
  <aside class="gmessage"><p>[% c.loc('This is Holistic v[_1].', holistic_version) %]</p></aside>
 </section>
