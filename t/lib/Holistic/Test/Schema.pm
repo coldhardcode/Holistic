@@ -32,6 +32,19 @@ sub deploy : Plan(2) {
     ok($self->schema->storage->connected, 'connected schema');
 }
 
+sub bootstrap : Test {
+    my ( $self ) = @_;
+    $self->schema->txn_do( sub {
+        foreach my $type ( '@release' ) {
+            $self->schema->resultset('Queue::Type')->create({ name => $type});
+        }
+        foreach my $type ( '@feature', '@defect', '@support' ) {
+            $self->schema->resultset('Ticket::Type')->create({ name => $type });
+        }
+        ok(1, 'bootstrapped dataset is done');
+    });
+}
+
 no Moose::Role;
 
 1;
