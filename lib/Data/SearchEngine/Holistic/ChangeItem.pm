@@ -18,7 +18,7 @@ has classification => (
 
         if($self->change->name eq 'resolution') {
             return 'closed';
-        } elsif($self->change->name eq 'status') {
+        } elsif($self->change->name eq 'created') {
             return 'created';
         }
         return 'modified';

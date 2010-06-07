@@ -10,7 +10,7 @@
  [% SWITCH change.classification %]
  [%  CASE 'closed' %]
  [%    SET image = 'tick.png' %]
- [%  CASE 'opened' %]
+ [%  CASE 'created' %]
  [%    SET image = 'add.png' %]
  [%  CASE %]
  [%    SET image = 'pencil.png' %]
