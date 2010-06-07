@@ -317,7 +317,7 @@ sub advance {
     $opt = 0 unless defined $opt and defined $steps[int($opt)];
     my $step = $steps[$opt];
 
-    $ticket->add_to_changes({
+    $self->add_to_changes({
         name           =>
             ( $step->id == $queue->closed_queue_pk1 ? 'closed' : 'advanced' ),
         value          => $step->name,
