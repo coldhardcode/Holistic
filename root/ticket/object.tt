@@ -59,7 +59,7 @@ ELSE; PROCESS"ticket/progress.tt"; END;
  </details>
 </header>
 
-<h3>[% c.loc('Description') %] (XX This is broken unless it has &lt;p&gt;s)</h3>
+<h3>[% c.loc('Description') %]</h3>
 <section class="description">
 [% ticket.description %]
 </section>

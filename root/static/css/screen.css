@@ -652,7 +652,10 @@ section.description {
     -moz-border-radius: 3px;
     border-radius: 3px;
     border: 1px solid #ddd;
-    padding: 1em 7px 0 7px;
+    padding: .7em 7px;
+}
+section.description p {
+	margin: 0; padding: 0;
 }
 fieldset {
     background-color: #eee;
