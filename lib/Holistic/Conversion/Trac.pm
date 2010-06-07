@@ -395,8 +395,8 @@ sub import_milestones {
             });
         }
         $cache{"$ms->{name}"} = $queue;
-        $queue->closed_queue($cache{"$ms->{name}.closed"});
-        $queue->update;
+        $queue->update({ closed_queue_pk1 => $cache{"$ms->{name}.closed"}->id });
+        $queue->all_children->update({ closed_queue_pk1 => $cache{"$ms->{name}.closed"}->id });
     }
     $self->milestone_cache(\%cache);
 }

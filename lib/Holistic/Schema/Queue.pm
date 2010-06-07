@@ -238,9 +238,11 @@ sub add_step {
 
     $data->{token} ||= $self->schema->tokenize( $data->{name} );
     $data->{path}    = join($self->path_separator, $self->path, $data->{token});
-    $data->{queue_pk1}      = $self->id;
-    $data->{traversal_type} = $self->traversal_type;
- 
+    $data->{queue_pk1}         = $self->id;
+    $data->{closed_queue_pk1}  = $self->closed_queue_pk1;
+    $data->{stalled_queue_pk1} = $self->stalled_queue_pk1;
+    $data->{traversal_type}    = $self->traversal_type;
+warn "Adding step: closed: $data->{closed_queue_pk1}\n"; 
     my $row = $self->resultset('Queue')->create($data);
     $row->discard_changes;
     return $row;
