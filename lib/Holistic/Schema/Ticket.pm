@@ -308,14 +308,24 @@ sub next_step {
 }
 
 sub advance {
-    my ( $self, $opt ) = @_;
-    my @steps = $self->queue->next_step;
+    my ( $self, $opt, $user ) = @_;
+
+    my $queue = $self->queue;
+    my @steps = $queue->next_step;
     die "Can't advance ticket, no steps defined\n"
         unless defined $steps[0];
     $opt = 0 unless defined $opt and defined $steps[int($opt)];
     my $step = $steps[$opt];
-  
-    $self->update({ queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1 });
+
+    $ticket->add_to_changes({
+        name           =>
+            ( $step->id == $queue->closed_queue_pk1 ? 'closed' : 'advanced' ),
+        value          => $step->name,
+        oldvalue       => $queue->name,
+        ( identity_pk1 => ( defined $user ? $user->id : undef ) ),
+    });
+ 
+    $self->update({queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1});
 }
 
 sub is_open { return !shift->is_closed; }

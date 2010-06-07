@@ -23,7 +23,6 @@ has conf => (
     lazy_build => 1,
 );
 
-
 has database => (
     is => 'rw',
     isa => 'Str',
@@ -243,7 +242,7 @@ sub _build_trac_milestones {
         $self->prepare('SELECT * FROM milestone');
 
     my %row;
-    $sth->execute( $self->milestone );
+    $self->has_milestone ? $sth->execute( $self->milestone ) : $sth->execute;
     $sth->bind_columns( \( @row{ @{$sth->{NAME_lc} } } ));
 
     my @list;
@@ -410,7 +409,7 @@ sub import_tickets {
         $sth = $self->prepare('SELECT * FROM ticket WHERE milestone = ?');
         $sth->execute( $self->milestone );
     } else {
-        $self->prepare('SELECT * FROM ticket');
+        $sth = $self->prepare('SELECT * FROM ticket');
         $sth->execute;
     }
 
@@ -426,10 +425,11 @@ sub import_tickets {
         my $milestone = $self->milestone_cache->{$row{milestone}};
         my $state     = $row{status};
            $state     = 'new' if $state eq 'reopened';
-
+        $row{milestone} ||= 'X';
         my $status    = $self->milestone_cache->{join('.', $row{milestone}, $row{status})};
         my ($rep_person, $rep_ident) = $self->find_person_and_identity($row{reporter});
         my ($own_person, $own_ident) = $self->find_person_and_identity($row{owner});
+
         my $desc = $self->trac_parser->parse($row{description});
         my $tick = $rs->create({
             pk1             => $row{id},

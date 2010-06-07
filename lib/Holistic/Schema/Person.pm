@@ -64,6 +64,32 @@ __PACKAGE__->many_to_many('comments' => 'identities' => 'comments' );
 __PACKAGE__->has_many('group_links', 'Holistic::Schema::Person::Group', 'person_pk1');
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
 
+__PACKAGE__->has_many(
+    'metadata', 'Holistic::Schema::Person::Meta', 'person_pk1'
+);
+
+has 'metadata' => (
+    is => 'rw',
+    isa => 'HashRef',
+    lazy_build => 1,
+);
+
+sub _build_metadata {
+    my ( $self ) = @_;
+    return { map { $_->name => $_->value } $self->metadata->all };
+}
+
+sub save_metadata {
+    my ( $self ) = @_;
+
+    $self->metadata->delete;
+    my $m = $self->metadata;
+
+    foreach my $key ( keys %$m ) {
+        $self->metadata->create({ name => $key, value => $m->{$key} });
+    }
+}
+
 =head2 connected_to_user($user)
 
 Is this user connected to another user?  This basically just is a check for
