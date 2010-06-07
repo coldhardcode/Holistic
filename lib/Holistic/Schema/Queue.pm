@@ -242,7 +242,6 @@ sub add_step {
     $data->{closed_queue_pk1}  = $self->closed_queue_pk1;
     $data->{stalled_queue_pk1} = $self->stalled_queue_pk1;
     $data->{traversal_type}    = $self->traversal_type;
-warn "Adding step: closed: $data->{closed_queue_pk1}\n"; 
     my $row = $self->resultset('Queue')->create($data);
     $row->discard_changes;
     return $row;
