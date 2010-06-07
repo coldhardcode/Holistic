@@ -131,7 +131,7 @@ sub advance_POST {
     my ( $self, $c ) = @_;
 
     try {
-        $c->stash->{ticket}->advance;
+        $c->stash->{ticket}->advance( undef, $c->user );
     } catch {
         $c->message({ type => 'error', message => $c->loc($_) });
     };

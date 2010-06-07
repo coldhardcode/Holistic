@@ -1,0 +1,6 @@
+<h1>[% c.loc('Tickets Needing Attention') %]</h1>
+<p>
+XX How can we take a search URL and display the outputs into a ticket table?<br>
+Search URI: <a href="[% c.uri_for_action('/search/default', { search => "role:@attention person_token:${person.token}" }) %]">
+    [% c.uri_for_action('/search/default', { search => "role:@attention person_token:${person.token}" }) %]</a>
+</p>
