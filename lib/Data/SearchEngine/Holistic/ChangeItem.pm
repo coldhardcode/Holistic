@@ -18,9 +18,13 @@ has classification => (
 
         if($self->change->name eq 'resolution') {
             return 'closed';
+	    } elsif($self->change->name eq 'advanced') {
+	        return 'advanced';
         } elsif($self->change->name eq 'created') {
             return 'created';
-        }
+        } elsif($self->change->name eq 'closed') {
+			return 'closed';
+		}
         return 'modified';
     }
 );
