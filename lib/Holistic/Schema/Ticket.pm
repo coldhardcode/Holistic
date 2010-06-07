@@ -321,7 +321,7 @@ sub advance {
         name           =>
             ( $step->id == $queue->closed_queue_pk1 ? 'closed' : 'advanced' ),
         value          => $step->name,
-        oldvalue       => $queue->name,
+        old_value      => $queue->name,
         ( identity_pk1 => ( defined $user ? $user->id : undef ) ),
     });
  

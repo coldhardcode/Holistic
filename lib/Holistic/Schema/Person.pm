@@ -65,7 +65,7 @@ __PACKAGE__->has_many('group_links', 'Holistic::Schema::Person::Group', 'person_
 __PACKAGE__->many_to_many('groups' => 'group_links' => 'group' );
 
 __PACKAGE__->has_many(
-    'metadata', 'Holistic::Schema::Person::Meta', 'person_pk1'
+    'metas', 'Holistic::Schema::Person::Meta', 'person_pk1'
 );
 
 has 'metadata' => (
@@ -76,17 +76,17 @@ has 'metadata' => (
 
 sub _build_metadata {
     my ( $self ) = @_;
-    return { map { $_->name => $_->value } $self->metadata->all };
+    return { map { $_->name => $_->value } $self->metas->all };
 }
 
 sub save_metadata {
     my ( $self ) = @_;
 
-    $self->metadata->delete;
+    $self->metas->delete;
     my $m = $self->metadata;
 
     foreach my $key ( keys %$m ) {
-        $self->metadata->create({ name => $key, value => $m->{$key} });
+        $self->metas->create({ name => $key, value => $m->{$key} });
     }
 }
 
