@@ -80,14 +80,20 @@ sub _build_metadata {
 }
 
 sub save_metadata {
-    my ( $self ) = @_;
+    my ( $self, $merge ) = @_;
 
     $self->metas->delete;
     my $m = $self->metadata;
+    if ( defined $merge ) {
+        $m = Hash::Merge::merge( $m, $merge )
+    }
 
     foreach my $key ( keys %$m ) {
         $self->metas->create({ name => $key, value => $m->{$key} });
     }
+    $self->clear_metadata;
+
+    $m;
 }
 
 =head2 connected_to_user($user)

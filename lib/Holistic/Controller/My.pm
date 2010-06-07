@@ -28,6 +28,26 @@ sub root : Chained('setup') PathPart('') Args(0) {
 
 sub profile : Chained('setup') PathPart('') CaptureArgs(0) { }
 
+sub preferences : Chained('setup') Args(0) ActionClass('REST') { }
+
+sub preferences_GET  { }
+sub preferences_POST { 
+    my ( $self, $c ) = @_;
+
+    my $data = $c->req->data || $c->req->params;
+    $c->stash->{person}->save_metadata( $data );
+
+    if ( $c->req->looks_like_browser ) {
+        $c->message($c->loc("Your preferences have been updated"));
+        $c->res->redirect($c->uri_for_action('/my/root'));
+    }
+    elsif ( $c->req->header('x-requested-with') =~ /XMLHttpRequest/ ) {
+        $c->stash->{partial} = 1;
+        $c->res->body(' ');
+    }
+}
+
+
 sub tickets : Chained('setup') Args(0) { }
 
 no Moose;

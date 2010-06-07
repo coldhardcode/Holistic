@@ -1,7 +1,32 @@
-YUI().use("event-delegate", "node", function(Y) {
+YUI().use("event-delegate", "io-form", "node", function(Y) {
     Y.delegate('click',
         function(e) { e.target.ancestor('form').submit(); },
-        document.body, 'form .submit_button'
+        document.body, 'form a.submit_button'
+    );
+
+    Y.delegate('submit',
+        function(e) {
+            Y.log('Wee');
+            e.halt();
+
+            var form = e.target;
+            Y.io(
+                form.get('action'),
+                {
+                    method: 'POST',
+                    form: {
+                        id: form
+                    },
+                    on: {
+                        success: function(id, o) {
+                            form.setContent( o.responseText );
+                        },
+                        failure: function() { Y.log("Oh no"); }
+                    }
+                }
+            );
+        },
+        document.body, 'form.rest'
     );
 
     // webkit has native placeholder support
