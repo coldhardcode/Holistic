@@ -328,11 +328,13 @@ sub advance {
     $self->update({queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1});
 }
 
+sub top_queue { shift->queue->top_parent; }
+
 sub is_open { return !shift->is_closed; }
 
 sub is_closed { 
     my ( $self ) = @_;
-    my $closed = $self->queue->top_parent->closed_queue;
+    my $closed = $self->queue->closed_queue;
     return ( defined $closed && $self->queue_pk1 == $closed->id );
 }
 
