@@ -1341,7 +1341,7 @@ table.queue {
 }
 table.queue td {
     border: none;
-    padding: 0;
+    padding: .5em;
 }
 table.queue tr.root > td {
     border: 1px solid #ab0706;

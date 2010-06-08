@@ -19,7 +19,7 @@ SET children = q.direct_children.all;
             END;
         END;
     ELSE %]
-        <a href="[% c.uri_for_action('/queue/object', [ q.id ]) %]">[% name | html %]</a>
+        <h4><a href="[% c.uri_for_action('/queue/object', [ q.id ]) %]">[% system_localize(name) | html %]</a></h4>
         [% FOREACH ticket IN q.tickets %]
             [% IF loop.first %]<ul>[% END %]
             [% IF loop.last %]</ul>[% END %]
