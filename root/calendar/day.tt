@@ -21,7 +21,7 @@
   <a href="[% c.uri_for_action('/ticket/object', [ change.ticket.id ]) %]">
    <time datetime="[% change.change.dt_created %]">[% change.change.dt_created | date_hour %]</time>
    <img src="/static/images/actions/[% image %]">
-   Ticket: #[% change.ticket.id %]: <strong>[% change.ticket.name %]</strong> was <strong>[% change.classification %]</strong> by [% change.change.identity.person.token %].
+   Ticket: #[% change.ticket.id %]: <strong>[% change.ticket.name %]</strong> was <strong>[% change.classification %]</strong> by [% change.change.identity.person.name %].
   </a>
  </dt>
  <dd>
