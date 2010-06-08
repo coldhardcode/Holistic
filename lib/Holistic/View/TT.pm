@@ -21,9 +21,9 @@ __PACKAGE__->config({
             iso     => '%F',
             date    => '%x',
             short   => '%b %e, %G',
-            medium  => '%b %e, %G %I:%M %p',
+            medium  => '%b %e, %G %l:%M %p',
             long    => '%X %x',
-            hour    => '%I:%M %p'
+            hour    => '%l:%M %p'
         }
     }
 });
