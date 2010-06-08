@@ -52,7 +52,7 @@ ELSE; PROCESS "ticket/progress.tt"; END;
  <details class="muted">
   <dl>
    <dt>[% c.loc('Opened:') %]</dt>
-   <dd><time id="date_created" datetime="[% ticket.dt_created %]">[% ticket.dt_created | date_medium %]</time> by <strong>XX [% requestor.person.name %]</strong></dd>
+   <dd><time id="date_created" datetime="[% ticket.dt_created %]">[% ticket.dt_created | date_medium %]</time> by <strong><a href="[% c.uri_for_action('/person/object', [ requestor.id ] ) %]">[% requestor.name %]</a></strong></dd>
    <dt>[% c.loc('Last Changed:') %]</dt>
    <dd><time id="date_changed" datetime="[% ticket.dt_created %]">[% ticket.dt_created | date_medium %]</time></dd>
   </dl>
