@@ -41,6 +41,16 @@ has fields => (
                 text => 0,
                 field => 'queue_pk1'
             },
+            queue => {
+                alias => 'me',
+                text => 0,
+                field => 'queue_pk1'
+            },
+			queue_name => {
+				alias => 'queue',
+				text => 1,
+				field => 'path'
+			},
             reporter => {
                 alias => 'me',
                 text => 1,
@@ -154,11 +164,10 @@ sub create_resultset {
     my ($self, $oquery) = @_;
 
     my $q = $self->query_parser->parse($oquery->query);
-use Data::Dumper; warn Dumper($q);
     my %conds = ();
 
     my %attrs = (
-        prefetch => [
+        join => [
             'type', 'priority', 'queue',
             {
                 'ticket_persons' => [ 'person', 'role' ],
