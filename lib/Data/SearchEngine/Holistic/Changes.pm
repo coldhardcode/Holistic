@@ -34,7 +34,7 @@ has fields => (
             owner => {
                 alias => 'person',
                 text => 1,
-                field => 'token'
+                field => 'name'
             },
             priority => {
                 alias => 'priority',
@@ -88,7 +88,10 @@ sub search {
 
     my @items = ();
     my $full_rs = $self->schema->resultset('Ticket::Change')->search(undef, {
-        prefetch => [ 'ticket' => { identity => 'person' }, { 'identity' => 'person' } ]
+        join => {
+			ticket => [ 'queue', { identity => 'person' } ],
+			identity => 'person'
+		}
     });
 
     $full_rs = $self->_apply_filters($full_rs, $oquery);
@@ -109,6 +112,7 @@ sub search {
 
     while(my $change = $full_rs->next) {
         # my $tick = $tickets[$_];
+		my $ticket = $change->ticket;
 
         # my $products = $tick->products;
         # while(my $prod = $products->next) {
@@ -117,7 +121,8 @@ sub search {
         # 
         # $facets{status}->{$tick->status->name}++;
         $facets{date_on}->{$change->dt_created->ymd}++;
-        $facets{owner}->{$change->identity->person->token}++;
+        $facets{owner}->{$change->identity->person->name}++;
+		$facets{queue_name}->{$ticket->top_queue->name}++;
         # $facets{priority}->{$tick->priority->name}++;
         # $facets{type}->{$tick->type->name}++;
     }
