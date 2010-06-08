@@ -12,7 +12,7 @@ next_step    = queue.next_step;
 my_parents   = queue.parent_map;
 
 ~%]
-<progress>
+<div class="progress">
 <ol>[%~
     FOREACH child IN parent.direct_children.all;
         IF child.id == queue.id;
@@ -47,4 +47,4 @@ my_parents   = queue.parent_map;
         </button>
     </form>
  [% END %]
- </progress>
+ </div>
