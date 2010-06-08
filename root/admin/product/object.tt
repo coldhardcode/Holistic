@@ -5,7 +5,7 @@ page.crumbs.push(
     { $name => '' }
 );
 ~%]
-<h1>[% c.loc('Product: [_1]', [ product.name ]) %]</h1>
+<h1>[% c.loc('Edit Product: [_1]', [ product.name ]) %]</h1>
 <p><a href="[% c.uri_for_action("/admin/product/queue/root", [ product.id ] ) %]">Product Queues</a></p>
 <form id="product" method="post" action="[% c.uri_for_action('/admin/product/object', [ product.id ]) %]">
  <fieldset>
@@ -23,9 +23,6 @@ page.crumbs.push(
     </tr>
     <tr>
      [% textarea_field({ label => 'Description', name => 'description', hint => 'Explanation of Issue', required => 1, rows => 8, value => product.description }); %]
-    </tr>
-    <tr>
-     [% select_field({ label => 'XX Owner', name => 'identity_pk1', required => 1, array => [ { 'People' => [ 'gphat', 'jshirley' ] }, { 'Groups' => [ 'Group A', 'Group B' ] } ], double => 1 }); %]
     </tr>
    </tbody>
   </table>
