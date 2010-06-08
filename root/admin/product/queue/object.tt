@@ -18,7 +18,7 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
 <ul>
     <li><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% c.loc('View Tickets') %]</a></li>
     <li><a href="[% c.uri_for_action('/ticket/create_form', { queue_pk1 => queue.id }) %]">[% c.loc('Create Ticket') %]</a></li>
-[%~ IF parent.defined %]
+[%~ IF 0 %]
     <li>XX <a href="[% c.uri_for_action('/admin/product/queue/object', [ product.id, parent.id ]) %]">[% c.loc('Parent: [_1]', [ parent.name ]) %]</a></li>
 [% END %]
 </ul>
