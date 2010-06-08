@@ -9,9 +9,6 @@
     [% readonly_field({ label => c.loc('Type'), value => system_localize(ticket.type.name) }) %]
    </tr>
    <tr>
-     [% readonly_field({ label => c.loc('Requestor'), value => requestor.name, link => c.uri_for_action('/person/object', [ requestor.id ] ) }) %]
-   </tr>
-   <tr>
    [% top = ticket.queue.top_parent;
        readonly_field({ label => 'Queue', value => top.name, link => c.uri_for_action('/queue/object', [ top.id ]) }) %]
    </tr>
