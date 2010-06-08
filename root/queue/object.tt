@@ -11,7 +11,7 @@ status  = queue.status;
 [% ELSE %]
     <p><a href="[% c.uri_for_action('/ticket/create_form', { queue_pk1 = queue.id } ) %]">[% c.loc('Create Ticket') %]</a></p>
 [% END %]
-<div>[% queue.description %]</div>
+<section class="description">[% queue.description %]</section>
 [%~
 IF type.name == '@release';
     PROCESS "queue/table.tt";
