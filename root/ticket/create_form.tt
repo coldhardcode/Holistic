@@ -6,6 +6,9 @@ stack      = stack;
 
 ~%]
 <h1>[% c.loc('Create Ticket') %]</h1>
+<ul>
+ <li>XX Add Product</li>
+</ul>
 [% IF stack.has_scope(scope) %]
 <section class="message">
  <aside class="rmessage"><p>[% c.loc('Please correct the errors below.') %]</p></aside>
