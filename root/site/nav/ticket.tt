@@ -3,7 +3,7 @@
 requestor = ticket.requestor;
 
 ~%]
-<h3>[% c.loc('Ticket #[_1]', ticket.id) %]</a></h3>
+<h3>[% c.loc('Ticket #[_1]', ticket.id) %]</h3>
 [% IF is_editable %]<form method="post" action="[% c.uri_for_action('/ticket/attributes', [ ticket.id ] ) %]">[% END %]
  <table class="ticket">
   <tbody>
