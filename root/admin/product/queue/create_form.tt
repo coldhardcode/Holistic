@@ -11,6 +11,7 @@ page.crumbs.push(
 [% ELSE %]
 <h1>[% c.loc('[_1] : Setup Queue', [ product.name ] ) %] </h1>
 [% END %]
+<p>XX this needs to have an identity associated with it to have the owner of the queue</p>
 <form id="queue" method="post" action="[% c.uri_for_action('/admin/product/queue/root', [ product.id ]) %]">
  <fieldset>
 [% IF type %]
