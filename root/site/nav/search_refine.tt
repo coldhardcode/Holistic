@@ -40,5 +40,6 @@
 [% show_facet('owner', 'Owner', results) %]
 [% show_facet('priority', 'Priority', results) %]
 [% show_facet('type', 'Type', results) %]
+[% show_facet('queue_name', 'Queue XX Cant filter', results) %]
 </ul>
 [% END %]
