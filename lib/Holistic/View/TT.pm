@@ -18,6 +18,7 @@ __PACKAGE__->config({
     default_locale      => 'en_US',
     formats             => {
         date => {
+            iso     => '%F',
             date    => '%x',
             short   => '%b %e, %G',
             medium  => '%b %e, %G %I:%M %p',
