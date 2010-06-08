@@ -1,3 +1,4 @@
+<p>XX Fix this to be a tr with th's for each queue</p>
 [%~
 MACRO queue_row(q) BLOCK; 
 SET name     = q.name;
