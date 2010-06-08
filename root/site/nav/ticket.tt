@@ -41,7 +41,7 @@
    <tr>
    [% 
       dt = ticket.due_date; due_date = dt;
-      IF dt.defined && dt.dt_marker.defined;
+      IF dt && dt.dt_marker;
         link = c.uri_for_action('/calendar/root', dt.dt_marker.year, dt.dt_marker.month, { highlight => 'ticket', 'ticket' => ticket.id } );
         due_date = dt.dt_marker | date_long;
       ELSE;
@@ -49,7 +49,7 @@
       END;
       str_due_date = due_date;
       str_due_date = str_due_date | date_short;
-      readonly_field({ label => 'XX Date Due', name => 'date_due', type => 'date', value => str_due_date, link => link }); %]
+      readonly_field({ label => 'Due Date', name => 'date_due', type => 'date', value => str_due_date, link => link }); %]
    </tr>
    <tr>
     [% IF is_editable;
