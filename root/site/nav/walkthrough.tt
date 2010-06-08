@@ -4,7 +4,7 @@
 <section class="message">
  <aside class="gmessage">
   <h3>[% c.loc('Welcome to Holistic!') %]</h3>
-  <p>[% c.loc("It looks like you've just setup Holistic.  Here are few steps to take to get things setup.") %]</p>
+  <p>[% c.loc("It looks like you've just setup Holistic.  Here are few steps to take to get things running:") %]</p>
   <ul>
    [% IF c.user_exists %]
    <li class="done">[% c.loc('Login') %]</li>
