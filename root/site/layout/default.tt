@@ -12,8 +12,7 @@
  </ul>
 </nav>
 [% END %]
-<article id="content">
- <div id="main" class="clearfix">
+<article id="content" class="clearfix">
  [% PROCESS site/messages.tt %]
 [%~ 
 # Nothing fancy here.  Just dump the content.
@@ -24,5 +23,4 @@ content
   [% PROCESS site/instrumentation/querylog.tt %]
  </section>
  [% END %]
- </div>
 </article>

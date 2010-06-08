@@ -39,6 +39,8 @@ YUI({
                 var dates = args[0];
                 var date = dates[0];
                 var year = date[0], month = date[1], day = date[2];
+                if ( parseInt(month) < 10 ) month = "0" + month;
+                if ( parseInt(day) < 10 ) day = "0" + day;
                 dt_marker.set('value', year + '-' + month + '-' + day);
                 dt_marker.removeClass('placeholder');
                 cal1.hide();

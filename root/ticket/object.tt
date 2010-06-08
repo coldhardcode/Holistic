@@ -31,7 +31,7 @@ END;
 
 [%~
 IF queue.traversal_type == 1; PROCESS "ticket/progress_kanban.tt";
-ELSE; PROCESS"ticket/progress.tt"; END;
+ELSE; PROCESS "ticket/progress.tt"; END;
 ~%]
 
 [% IF attention %]
