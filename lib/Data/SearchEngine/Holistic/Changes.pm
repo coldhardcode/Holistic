@@ -11,71 +11,6 @@ use Data::SearchEngine::Holistic::Results;
 use Hash::Merge qw(merge);
 use Search::QueryParser;
 
-has fields => (
-    is => 'ro',
-    isa => 'HashRef',
-    default => sub {
-        {
-            name => {
-                alias => 'me',
-                text => 1,
-                field => 'name'
-            },
-            date_created => {
-                alias => 'me',
-                field => 'dt_created',
-                text => 0
-            },
-            description => {
-                alias => 'me',
-                text => 1,
-                field => 'description',
-            },
-            owner => {
-                alias => 'person',
-                text => 1,
-                field => 'name'
-            },
-            priority => {
-                alias => 'priority',
-                text => 1,
-                field => 'name'
-            },
-            queue => {
-                alias => 'me',
-                text => 0,
-                field => 'queue_pk1'
-            },
-            queue_name => {
-                alias => 'queue',
-                text => 1,
-                field => 'name'
-            },
-            reporter => {
-                alias => 'me',
-                text => 1,
-                field => 'identity_pk1'
-            },
-            reporter_email => {
-                alias => 'person',
-                text => 1,
-                field => 'email'
-            },
-            reporter_name => {
-                alias => 'person',
-                text => 1,
-                field => 'name'
-            },
-            type => {
-                alias => 'type',
-                text => 1,
-                field => 'name'
-            }
-        }
-    },
-    lazy => 1
-);
-
 has schema => (
     is => 'ro',
     required => 1
@@ -155,7 +90,15 @@ sub _apply_filters {
             $rs = $rs->search({ 'me.dt_created' => { -between => [ $date.' 00:00:00', $date. ' 23:59:59' ] } });
         } elsif($filter eq 'owner') {
             $rs = $rs->search({ 'person.token' => $oquery->get_filter('owner') });
-        }
+        } elsif($filter eq 'queue_name') {
+			my $path = $oquery->get_filter('queue_name');
+			# Convert dots to underscores for paths.
+			$path =~ s/\./_/;
+			# Not the dot added in front of the path.  That makes it less
+			# likely that this will accidentally pick something up since the
+			# path elements are separated by dots.
+			$rs = $rs->search({ 'queue.path' => { -like => "\%.$path\%" } });
+		}
     }
 
     return $rs;

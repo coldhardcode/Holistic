@@ -109,7 +109,7 @@ sub day : Chained('setup') PathPart('day') Args(0) {
         count => $c->req->params->{count} || 10,
     );
 
-    my @filters = qw(date_on owner);
+    my @filters = qw(date_on owner queue_name);
     foreach my $filter (@filters) {
         if($c->req->params->{$filter}) {
             $query->set_filter($filter, $c->req->params->{$filter});

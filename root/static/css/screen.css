@@ -870,6 +870,7 @@ ul.comments li.visitor p {
 }
 dl.log dt {
     font-weight: normal;
+	padding: 0;
 }
 dl.log a {
     -webkit-border-radius: 5px;
@@ -894,7 +895,7 @@ dl.log time {
 dl.log dd {
     color: #78766f;
     font-size: 12px;
-    margin: 0 0 0 8em; padding: 5px 0;
+    margin: 0 0 0 8em; padding: 5px 0 0 0;
 }
 ul.roadmap {
     margin: 0; padding: 0;
@@ -1215,12 +1216,16 @@ ul.fillist li {
     border: 1px solid #85aed7;
     list-style: none;
     margin: 3px; padding: 0 3px;
+	position: relative;
 }
 ul.fillist li a {
     color: #999;
+	position: absolute;
     font-weight: bold;
     margin: 0;
     text-decoration: none;
+	top: -5px;
+	right: 0;
 }
 ul.fillist li a:hover {
     color: #333;
