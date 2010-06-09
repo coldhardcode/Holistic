@@ -1,0 +1,2 @@
+<h1>[% c.loc('Have fun!') %]</h1>
+<p>[% c.loc('Take a look at the <a href="[_1]">admin settings</a> to see all options.', [ c.uri_for_action('/admin/settings') ]) %]</p>
