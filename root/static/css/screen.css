@@ -236,8 +236,6 @@ table tbody th {
     padding: 7px;
 }
 table tbody td {
-    border: 1px solid #fff;
-    border-right-width: 0;
     padding: 7px;
     vertical-align: top;
 }
@@ -252,12 +250,6 @@ table tbody td > a:only-child {
 }
 table tbody tr.odd {
     background-color: #eee;
-}
-table tbody tr th {
-    border-bottom: 1px solid #fff;
-}
-table tbody tr:nth-child(2) th {
-    border-top: 1px solid #fff;
 }
 table tbody tr:last-child td:first-of-type {
     -moz-border-radius-bottomleft: 7px;
