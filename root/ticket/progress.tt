@@ -13,6 +13,9 @@ my_parents   = queue.parent_map;
 
 ~%]
 <div class="progress">
+ <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]">
+  <button style="float: left" class="submit_button orange small">[% c.loc('Take Ticket') %]</button>
+ </form>
 <ol>[%~
     FOREACH child IN parent.direct_children.all;
         IF child.id == queue.id;

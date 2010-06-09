@@ -1291,7 +1291,15 @@ span.type {
     background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }
-
+.inactive {
+    color: #707070;
+    border: solid 1px #555;
+    background-color: #ccc;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#888));
+    background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+    text-shadow: #eee 0 -1px;
+}
 div.progress {
     background: none;
     background-color: #eee;
@@ -1352,7 +1360,14 @@ div.progress ol li.future {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dcdcdc', endColorstr='#909090');
     color: #777;
 }
-div.progress form button {
+div.progress form:first-child button {
+/*    position: absolute;
+    left: 7px;
+    top: 6px;
+*/
+	margin: 6px 2em 0 7px;
+}
+div.progress form:last-child button {
     position: absolute;
     right: 7px;
     top: 6px;
