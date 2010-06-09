@@ -349,9 +349,13 @@ sub all_tickets {
         {
             prefetch => [
                 { 'ticket_persons' => [ 'role', 'person' ] },
-                'priority', 'queue'
+                'priority', 'queue', 'time_markers'
             ],
-            group_by => [ 'me.pk1' ]
+            group_by => [ 'me.pk1' ],
+			order_by => [
+				{ '-desc' => 'time_markers.dt_marker' },
+				{ '-desc' => 'priority.position' }
+			]
         }
     );
 }
