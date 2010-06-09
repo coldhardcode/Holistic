@@ -35,7 +35,32 @@ sub root : Chained('setup') PathPart('') Args(0) { }
 sub object {} # We don't have objects, clobber what REST puts in
 sub _fetch_rs { undef; }
 
-sub settings : Chained('setup') Args(0) { }
+sub settings : Chained('setup') Args(0) ActionClass('REST') { }
+
+sub settings_GET {
+    my ( $self, $c ) = @_;
+
+    my $person = $c->model('Schema')->schema->system_identity->person;
+    $c->stash->{system}->{configuration} = $person->metadata;
+}
+
+sub settings_POST { 
+    my ( $self, $c ) = @_;
+
+    my $person = $c->model('Schema')->schema->system_identity->person;
+
+    my $data = $c->req->data || $c->req->params;
+    $person->save_metadata( $data );
+
+    if ( $c->req->looks_like_browser ) {
+        $c->message($c->loc("System preferences have been updated"));
+        $c->res->redirect($c->uri_for_action('/admin/root'));
+    }
+    elsif ( $c->req->header('x-requested-with') =~ /XMLHttpRequest/i ) {
+        $c->stash->{partial} = 1;
+        $c->stash->{system}->{configuration} = $person->metadata;
+    }
+}
 
 sub group   : Chained('setup') PathPart('') CaptureArgs(0) { }
 sub person  : Chained('setup') PathPart('') CaptureArgs(0) { }

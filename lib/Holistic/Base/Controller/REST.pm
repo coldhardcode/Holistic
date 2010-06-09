@@ -34,14 +34,16 @@ has 'access_check' => (
 
 has 'order_by' => (
     is  => 'rw',
-    isa => 'Str',
-    default => ''
+    isa => 'Str|ArrayRef|HashRef',
+    default => '',
+    predicate => 'has_order_by',
 );
 
 has 'prefetch' => (
     is  => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] }
+    isa => 'ArrayRef|HashRef',
+    default => sub { [] },
+    predicate => 'has_prefetch'
 );
 
 has 'create_string' => (
@@ -158,7 +160,14 @@ sub permission_denied : Private {
 sub _fetch_rs {
     my ( $self, $c ) = @_;
 
-    my $rs = $c->model($self->class)->search({}, { prefetch => $self->prefetch });
+    my $extra = {};
+    if ( $self->has_prefetch ) {
+        $extra->{prefetch} = $self->prefetch;
+    }
+    if ( $self->has_order_by ) {
+        $extra->{order_by} = $self->order_by;
+    }
+    my $rs = $c->model($self->class)->search({}, $extra);
 
     unless ( $rs and $rs->isa('DBIx::Class::ResultSet') ) {
         die "Invalid configuration, asked for " . 
@@ -239,11 +248,14 @@ sub search_GET {
         }
     }
 
+    $c->stash->{search} = $search;
+    
     my $sort_by = $data->{sort} || $self->order_by;
     my $dir     = uc($data->{dir}) eq 'ASC' ? 'asc' : 'desc';
-    $c->stash->{search} = $search;
-    # Hacky:
-    $sort_by    = "me.$sort_by" if $sort_by and $sort_by !~ /\./;
+    if ( not ref $sort_by ) {
+        # Hacky:
+        $sort_by    = "me.$sort_by" if $sort_by and $sort_by !~ /\./;
+    }
 
     my $paged = 1;
     my $extra = { 

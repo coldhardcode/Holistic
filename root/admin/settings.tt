@@ -11,6 +11,11 @@
     </tr>
    </tfoot>
    <tbody>
+[% FOREACH setting IN system.settings.keys %]
+    <tr>
+        [% text_field({ label => setting, name => setting, value => system.settings.${setting} }) %]
+    </tr>
+[% END %]
     <tr>
      [% select_field({ label => 'Default Product', name => 'settings.default_product', array => [ 'Product 1', 'Product 2', 'Product 3' ], double => 1, extra => c.loc('The Default Product will be used for new tickets when Holistic has no other hints as to what to use.') }); %]
     </tr>

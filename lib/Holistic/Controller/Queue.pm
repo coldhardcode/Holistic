@@ -9,6 +9,8 @@ __PACKAGE__->config(
     class      => 'Schema::Queue',
     rs_key     => 'queue_rs',
     object_key => 'queue',
+    prefetch   => [ { 'identity' => 'person' }, 'time_markers', 'type', 'status' ],
+    order_by   => { '-desc' => 'time_markers.dt_marker' },
 );
 
 =head1 NAME
