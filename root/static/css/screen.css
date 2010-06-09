@@ -460,6 +460,20 @@ body > header form fieldset {
     padding: 0;
     text-decoration: underline;
 }
+#sidebar aside button {
+	background: none;
+	border: none;
+	color: #fff;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: bold;
+	padding: .75em 0;
+	text-decoration: underline;
+	text-shadow: #558342 0 -1px;
+}
+#sidebar aside a {
+	display: inline;
+}
 p.caption {
     color: #919191;
     font-size: 0.769em;
