@@ -288,7 +288,13 @@ sub activity {
         )->search_rs;
 }
 
-
+sub all_comments {
+    my ( $self ) = @_;
+    $self
+        ->comments(
+            { 'type.name' => { '!=', '@worklog' } }, { prefetch => [ 'type' ] }
+        )->search_rs;
+}
 
 sub tag {
     my ( $self, @tags ) = @_;

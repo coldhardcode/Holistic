@@ -13,7 +13,7 @@ requestor = ticket.requestor;
 owner     = ticket.owner;
 attention = ticket.needs_attention.all;
 dependencies = ticket.dependencies_rs;
-activity_log = ticket.comments({ }, { prefetch => [ 'type' ] });
+comments     = ticket.all_comments;
 
 persons = {};
 
@@ -64,7 +64,7 @@ ELSE; PROCESS "ticket/progress.tt"; END;
 <div class="tabs" id="tabview-1">
  <nav class="tabs">
   <ul>
-   <li class="yui-tab yui-tab-selected first"><a href="#comments">[% c.loc('Comments ([_1])', activity_log.size) %]</a></li>
+   <li class="yui-tab yui-tab-selected first"><a href="#comments">[% c.loc('Comments ([_1])', [ comments.count ] ) %]</a></li>
    <li class="yui-tab"><a href="#worklog">[% c.loc('Worklog') %]</a></li>
    <li class="yui-tab last"><a href="#dependencies">[% c.loc('Dependencies ([_1])', dependencies.count) %]</a></li>
   </ul>
@@ -72,7 +72,7 @@ ELSE; PROCESS "ticket/progress.tt"; END;
  <div class="panels">
   <section class="tab yui-tabpanel yui-tabpanel-selected" id="comments">
    <ul class="comments">
-    [% FOREACH message IN activity_log.reverse %]
+    [% FOREACH message IN comments.all.reverse %]
     <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
      <a name="[% message.id %]"></a>
      <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
