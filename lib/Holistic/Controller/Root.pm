@@ -87,9 +87,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
             # XX Throw up a notice to complete their profile?
         }
         if ( defined $ident ) {
-            # Clobbering time.
             $c->user( $ident );
-            $c->stash->{now}->set_time_zone( $ident->person->timezone );
             my $attn_count = $ident->needs_attention->count;
             $c->log->debug("Tickets need attention: $attn_count")
                 if $c->debug;
