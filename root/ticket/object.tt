@@ -102,7 +102,7 @@ ELSE; PROCESS "ticket/progress.tt"; END;
      <table>
       <tfoot>
        <tr><td colspan="4">
-        <a href="#" class="submit_button orange">Submit</a>
+        <button class="submit_button orange">Submit</button>
        </td></tr>
       </tfoot>
       <tbody>
