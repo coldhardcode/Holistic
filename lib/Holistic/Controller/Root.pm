@@ -50,6 +50,11 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     $c->stash->{holistic_version}       = $Holistic::VERSION;
     $c->stash->{context}->{permissions} = {};
 
+    $c->stash->{system}->{identity} =
+        $c->model('Schema')->schema->system_identity;
+    $c->stash->{system}->{settings} =
+        $c->stash->{system}->{identity}->person->metadata;
+
     if ($c->debug) {
         my $ql = DBIx::Class::QueryLog->new;
         my $schema = $c->model('Schema')->schema;

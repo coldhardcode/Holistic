@@ -85,7 +85,7 @@ sub save_metadata {
     $self->metas->delete;
     my $m = $self->metadata;
     if ( defined $merge ) {
-        $m = Hash::Merge::merge( $m, $merge )
+        $m = Hash::Merge::merge( $merge, $m )
     }
 
     foreach my $key ( keys %$m ) {

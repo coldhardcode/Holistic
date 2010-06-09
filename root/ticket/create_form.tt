@@ -4,6 +4,8 @@ page.title = 'Create Ticket';
 results    = errors.${scope};
 stack      = stack;
 
+products   = [];
+
 ~%]
 <h1>[% c.loc('Create Ticket') %]</h1>
 <ul>
@@ -16,8 +18,8 @@ stack      = stack;
 [% END %]
 <form id="ticket" method="post" action="[% c.uri_for_action('/ticket/root') %]">
  <fieldset>
-[% IF queue.id %]
-    <legend>[% c.loc("Add to [_2] [_1]", [ queue.name, system_localize(queue.type.name) ]) %]</legend>
+[% IF queue.id; products = queue.products_rs.all; %]
+    <legend>[% c.loc("Create Ticket in [_2] <a href=\"[_3]\">[_1]</a>", [ queue.name, system_localize(queue.type.name), c.uri_for_action('/queue/object', [ queue.id ]) ]) %]</legend>
     <input type="hidden" name="ticket.queue_pk1" value="[% queue.pk1 %]">
 [% END %]
 
@@ -37,6 +39,9 @@ stack      = stack;
     <tr>
      [% select_field({ label => 'Queue', name => 'ticket.queue_pk1', required => 1, double => 1, error => stack.for_subject('queue_pk1').first_message.id, value => results.get_original_value('queue_pk1'), array => queue_rs.all, label_method => 'name', value_method => 'id' }) %]
     </tr>
+[% END %]
+[% IF products %]
+     [% checkboxes_field({ label => 'Products', name => 'ticket.product_pk1', required => 0, double => 1, error => stack.for_subject('product_pk1').first_message.id, value => results.get_original_value('product_pk1'), array => products, label_method => 'name', value_method => 'id' }) %]
 [% END %]
     <tr>
      [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1, error => stack.for_subject('name').first_message.id, value => results.get_value('name') }); %]

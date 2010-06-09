@@ -1,5 +1,4 @@
-<form method="post" class="rest replace" action="[% c.uri_for_action('/my/preferences', { walkthrough => 0 } ) %]">
-<fieldset>
+<form method="post" class="rest replace" action="[% c.uri_for_action('/admin/settings', { walkthrough => 0 } ) %]">
 [% SET tcount = c.model('Schema::Ticket').search_ordered.count %]
 [% IF !tcount %]
 <section class="message">
@@ -39,5 +38,4 @@
 </section>
 [% END %]
   <p><button class="submit_button">[% c.loc('Hide') %]</button></p>
-</fieldset>
 </form>

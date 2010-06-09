@@ -16,7 +16,7 @@ END;
 IF messages.for_scope('sidebar').has_messages;
     PROCESS "site/messages.tt", message_scope => 'sidebar';
 END;
-IF 1;
+IF system.settings.walkthrough != 0 && context.permissions.ADMIN;
   PROCESS site/nav/walkthrough.tt;
 END;
 IF results;

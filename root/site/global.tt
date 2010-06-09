@@ -5,7 +5,8 @@
 END %]
 [% MACRO pretty_date(dt) BLOCK;
     SET now_secs  = now.epoch;
-    SET then_secs = dt.epoch;
+    SET then_secs = dt.epoch || now_secs;
+
     IF(now_secs > then_secs);
       time_dir.ago(now_secs - then_secs);
     ELSE;

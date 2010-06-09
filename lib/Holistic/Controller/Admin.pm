@@ -37,28 +37,28 @@ sub _fetch_rs { undef; }
 
 sub settings : Chained('setup') Args(0) ActionClass('REST') { }
 
-sub settings_GET {
-    my ( $self, $c ) = @_;
-
-    my $person = $c->model('Schema')->schema->system_identity->person;
-    $c->stash->{system}->{configuration} = $person->metadata;
-}
+sub settings_GET { }
 
 sub settings_POST { 
     my ( $self, $c ) = @_;
 
-    my $person = $c->model('Schema')->schema->system_identity->person;
+    my $person = $c->stash->{system}->{identity}->person;
 
     my $data = $c->req->data || $c->req->params;
+$c->log->_dump( $data );
     $person->save_metadata( $data );
+$c->log->_dump( $person->metadata );
 
     if ( $c->req->looks_like_browser ) {
         $c->message($c->loc("System preferences have been updated"));
         $c->res->redirect($c->uri_for_action('/admin/root'));
     }
     elsif ( $c->req->header('x-requested-with') =~ /XMLHttpRequest/i ) {
-        $c->stash->{partial} = 1;
-        $c->stash->{system}->{configuration} = $person->metadata;
+        $c->stash->{page}->{layout} = 'partial';
+        $c->stash->{system}->{settings} = $person->metadata;
+        if ( $data->{walkthrough} eq "0" ) {
+            $c->stash->{template} = 'site/nav/post-walkthrough.tt';
+        }
     }
 }
 

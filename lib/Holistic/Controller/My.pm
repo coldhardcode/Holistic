@@ -42,7 +42,7 @@ sub preferences_POST {
         $c->res->redirect($c->uri_for_action('/my/root'));
     }
     elsif ( $c->req->header('x-requested-with') =~ /XMLHttpRequest/ ) {
-        $c->stash->{partial} = 1;
+        $c->stash->{page}->{layout} = 'partial';
         $c->res->body(' ');
     }
 }
