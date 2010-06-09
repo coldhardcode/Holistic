@@ -1,6 +1,6 @@
 [%~
 
-USE Number.Format;
+USE Number.Format(DECIMAL_DIGITS = 0);
 
 tickets_open   = 0;
 tickets_closed = 0;
