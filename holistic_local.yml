@@ -6,4 +6,4 @@ Model::Schema:
         -
             quote_char: '`'
             name_sep: .
-
+            mysql_enable_utf8: 1

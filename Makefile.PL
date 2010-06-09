@@ -13,7 +13,7 @@ requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Plugin::Session::State::Cookie';
-requires 'Catalyst::Plugin::Unicode';
+requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Plugin::I18N';
 requires 'Catalyst::Plugin::Params::Nested';
 

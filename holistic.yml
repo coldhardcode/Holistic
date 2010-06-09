@@ -12,6 +12,7 @@ Model::Schema:
         -
             quote_char: '`'
             name_sep: .
+            mysql_enable_utf8: 1
 
 # Shortcut to the connect_info, for easier parsing into CLI apps
 connect_info: *1

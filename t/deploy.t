@@ -7,7 +7,7 @@ $suite->run(
     config => {
         connect_info => [
             "dbi:mysql:holistic", 'root', '',
-            { quote_char => '`', name_sep => '.' }
+            { quote_char => '`', name_sep => '.', 'mysql_enable_utf8' => 1 }
         ]
     },
     tests => [ 'deploy' ]

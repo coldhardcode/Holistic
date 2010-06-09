@@ -16,7 +16,8 @@ use Catalyst::Runtime 5.80;
 use Catalyst qw/
     ConfigLoader Params::Nested
 
-    I18N Unicode
+    I18N
+    Unicode::Encoding
     Static::Simple
 
     Authentication
