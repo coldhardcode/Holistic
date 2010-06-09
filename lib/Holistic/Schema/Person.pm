@@ -197,6 +197,8 @@ use URI::Escape qw(uri_escape);
 sub gravatar_url {
     my ( $self, $size ) = @_;
     my $email = $self->email;
+    return '#' unless $email;
+
     my $default = uri_escape('http://static.coldhardcode.com/images/gravatar.jpg');
     $size = int($size || 40);
     $size = 40 if $size < 1;
