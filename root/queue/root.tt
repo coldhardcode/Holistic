@@ -21,8 +21,7 @@ top_rs = queue_rs.search_rs({'me.queue_pk1' => '0' });
 <p>XX Couple things to do here...</p>
 <ul>
  <li>Perpetual up top</li>
- <li>Due dates (and other dates)</li>
- <li>looks like a parent queue shows all it's child queue's tickets</li>
+ <li>other dates</li>
 </ul>
 <ul class="roadmap">
 [% queue_children(top_rs) %]
