@@ -349,7 +349,7 @@ sub all_tickets {
         {
             prefetch => [
                 { 'ticket_persons' => [ 'role', 'person' ] },
-                'priority', 'queue', 'time_markers'
+                'priority', 'queue', 'time_markers', 'type'
             ],
             group_by => [ 'me.pk1' ],
 			order_by => [
