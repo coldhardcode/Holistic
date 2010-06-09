@@ -10,7 +10,7 @@ top_rs = queue_rs.search_rs({'me.queue_pk1' => '0' });
         owner    = queue.identity.person;
 %]
  <li>
-  <h3><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% queue.name %]</a> <small>XX Localize Owned by <a href="#">[% owner.name %]</a>[% IF due_date %], due <time date="[% due_date | date_iso %]">[% pretty_date(due_date) %]</time>[% END %].</small></h3>
+  <h3><a href="[% c.uri_for_action('/queue/object', [ queue.id ]) %]">[% queue.name %]</a> <small>Owned by <a href="#">[% owner.name %]</a>[% IF due_date %], due <time date="[% due_date | date_iso %]">[% pretty_date(due_date) %]</time>[% END %].</small></h3>
   [%# PROCESS site/shared/ticket_table.tt tickets = queue.all_tickets.all %]
   [%# queue_children(queue.children_rs) %]
  </li>
