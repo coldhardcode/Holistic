@@ -27,13 +27,9 @@ IF c.user_exists && c.user.person_pk1 == attention.person_pk1;
     needs_my_attention = 1;
 END;
 
-~%]
-
-[%~
 IF queue.traversal_type == 1; PROCESS "ticket/progress_kanban.tt";
 ELSE; PROCESS "ticket/progress.tt"; END;
 ~%]
-
 [% IF attention %]
 <section class="message">
 [% FOREACH attn IN attention %]
