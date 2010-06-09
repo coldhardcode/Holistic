@@ -84,6 +84,7 @@ h5, h6 {
 }
 a {
     color: #3470a9;
+	text-decoration: none;
 }
 a[name] {
     color: #353535;
@@ -893,7 +894,7 @@ ul.roadmap h3 {
     margin: 0 0 .5em 0; padding: 0;
 }
 ul.roadmap table {
-    margin: 0 0 2.5em 1em;
+    margin: 0 0 2.5em 0;
 }
 table.summary tbody td a {
     display: block;
