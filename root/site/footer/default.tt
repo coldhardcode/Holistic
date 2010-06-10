@@ -30,9 +30,10 @@
   </dl>
   <dl>
    <dt>[% c.loc('Other') %]</dt>
-   <dd><a href="[% c.uri_for('/guide') %]">Guide</a></dd>
-   <dd><a href="[% c.uri_for_action('/ticket/root') %]">Ticket</a></dd>
-   <dd><a href="[% c.uri_for('/todo') %]">TODO</a></dd>
+   [% IF c.user_exists %]
+   <dd><a href="[% c.uri_for_action('/my/profile/root') %]">[% c.loc('Profile') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/auth/logout') %]">[% c.loc('Logout') %]</a></dd>
+   [% END %]
   </dl>
  </nav>
  <p><strong>Holistic</strong> is a <a href="http://www.coldhardcode.com">Cold Hard Code</a> property. &copy; 2010 Cold Hard Code, LLC</p>
