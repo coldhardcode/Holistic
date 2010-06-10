@@ -76,6 +76,26 @@ sub root : Chained('setup') PathPart('') Args() {
             ));
         }
     }
+
+	my $markers = $c->model('Schema::TimeMarker')->search(
+		{
+			dt_marker => { between => [ $fdom->ymd.' 00:00:00', $ldom->ymd.' 23:59:59' ]}
+		}, {
+			# This doesn't work at all...
+			#prefetch => [ 'ticket', 'queue' ]
+			order_by => 'rel_source', 'dt_marker',
+		}
+	);
+
+	my %mark_days;
+	while(my $marker = $markers->next) {
+		my $ymd = $marker->dt_marker->ymd;
+		$mark_days{$ymd} = [] unless defined($mark_days{$ymd});
+		push(@{ $mark_days{$ymd} }, $marker);
+		last if(scalar(@{ $mark_days{$ymd} }) >= 3);
+	}
+
+	$c->stash->{markers} = \%mark_days;
     $c->stash->{days} = \@days;
     $c->stash->{template} = 'calendar/root.tt';
 }

@@ -1019,8 +1019,8 @@ table.cal tbody tr td.current a span {
     float: left;
     margin: 0 0 0 5px;
 }
-table.cal tbody tr td.current a {
-    margin: 0; padding: 5px 5px 5px 0;
+table.cal tbody tr td a {
+    margin: 0 0 5px 0; padding: 5px 5px 5px 0;
 }
 table.cal tbody tr td.do {
     background-color: #d9d9c7;
@@ -1054,11 +1054,25 @@ table.cal tbody td ul li {
 }
 table.cal tbody td ul li a {
     background-color: #55aa2a;
+    background: -webkit-gradient(linear, left top, left bottom, from(#72b94f), to(#55aa2a));
+    background: -moz-linear-gradient(top, #72b94f, #55aa2a);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ab94f', endColorstr='#55aa2a');
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
     color: #fff;
     display: block;
     font-size: 12px;
-    margin: 0; padding: 0 5px;
+    margin: 0 2px 3px 2px; padding: 0 5px;
     text-decoration: none;
+    text-shadow: #558342 0 -1px;
+}
+table.cal tbody td ul li a.queue {
+    background-color: #de691f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
+    background: -moz-linear-gradient(top, #e3782f, #de691f);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e3782f', endColorstr='#de691f');
+    text-shadow: #95582d 0 -1px;
 }
 table.cal tbody td ul li a:hover {
     text-decoration: underline;

@@ -1,3 +1,4 @@
+<p>XX Show time markers for this day here.</p>
 [% USE HTML.Strip %]
 [% page.title = c.loc('Activity Log') %]
 <h1>[% c.loc('Ticket Changes') %]</h1>

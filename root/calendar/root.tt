@@ -1,4 +1,3 @@
-<p>XX Doesn't actually hunt for anything being due on these days.</p>
 <h1>[% c.loc('Calendar') %]</h1>
 <table class="cal">
  <thead>
@@ -21,11 +20,24 @@
  </thead>
  <tbody>
   [% FOREACH day = days %]
+   [% SET ymd = day.ymd %]
    [% IF day.day_of_week == 7 %]
   <tr [% IF day.week_number == now.week_number && day.year == now.year %]class="current"[% END %]>
    [% END %]
    [% # XX Need to use config'ed 'day off' days to mark them in the cal, not just == 6 & 7 %]
-   <td class="[%~ IF req_day.month != day.month ~%]other[%~ END ~%][%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%] current[%~ ELSIF day.day_of_week == 6 || day.day_of_week == 7 %] do[%~ END ~%]"><a href="[% c.uri_for_action('/calendar/day', [], { date_on => day.ymd }) %]">[%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%]<span>[% c.loc('Today') %]</span>[% END %][% day.day %]</a></td>
+   <td class="[%~ IF req_day.month != day.month ~%]other[%~ END ~%][%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%] current[%~ ELSIF day.day_of_week == 6 || day.day_of_week == 7 %] do[%~ END ~%]"><a href="[% c.uri_for_action('/calendar/day', [], { date_on => day.ymd }) %]">[%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%]<span>[% c.loc('Today') %]</span>[% END %][% day.day %]</a>
+   [% IF markers.exists(ymd) %]
+   <ul>
+    [% FOREACH marker = markers.$ymd %]
+	 [% IF marker.rel_source == 'tickets' %]
+      <li><a class="queue" href="[% c.uri_for_action('/ticket/object', [ marker.foreign_pk1 ]) %]">Ticket [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
+	 [% ELSIF marker.rel_source == 'queues' %]
+      <li><a href="[% c.uri_for_action('/queue/object', [ marker.foreign_pk1 ]) %]">Queue [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
+     [% END %]
+    [% END %]
+   </ul>
+   [% END %]
+   </td>
    [% IF day.day_of_week == 6 %]
   </tr>
    [% END %]

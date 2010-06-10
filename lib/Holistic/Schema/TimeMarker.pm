@@ -26,19 +26,19 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key('pk1');
 
-__PACKAGE__->has_many(
-    'queues', 'Holistic::Schema::Queue',
+__PACKAGE__->belongs_to(
+    'queue', 'Holistic::Schema::Queue',
     {
         'foreign.pk1'        => 'self.foreign_pk1',
         'foreign.rel_source' => 'self.rel_source'
     }
 );
 
-__PACKAGE__->has_many(
-    'tickets', 'Holistic::Schema::Ticket',
+__PACKAGE__->belongs_to(
+    'ticket', 'Holistic::Schema::Ticket',
     {
         'foreign.pk1'           => 'self.foreign_pk1',
-        'foreign.result_source' => 'self.result_source'
+        'foreign.rel_source' => 'self.rel_source'
     }
 );
 

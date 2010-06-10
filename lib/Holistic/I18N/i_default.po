@@ -14,7 +14,7 @@ msgid "CRUMBS_SEP"
 msgstr ":"
 
 msgid "@due"
-msgstr "Due Date"
+msgstr "Due"
 
 msgid "@low"
 msgstr "Low"
