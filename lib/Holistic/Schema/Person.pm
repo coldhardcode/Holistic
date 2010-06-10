@@ -25,7 +25,12 @@ $CLASS->add_columns(
         }
     },
     'token',
-    { data_type => 'varchar', size => '255', is_nullable => 0 },
+    { data_type => 'varchar', size => '255', is_nullable => 0,
+        dynamic_default_on_create => sub {
+            my ( $self ) = @_;
+            $self->schema->tokenize( $self->name );
+        }
+    },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0,
         token_field => 'token' },
