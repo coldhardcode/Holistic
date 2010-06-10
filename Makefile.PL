@@ -38,7 +38,6 @@ requires 'Catalyst::Model::Adaptor';
 requires 'Catalyst::Model::DBIC::Schema';
 
 requires 'Catalyst::View::TT';
-requires 'Catalyst::View::Graphics::Primitive';
 
 # Moose
 requires 'Moose';
@@ -74,7 +73,6 @@ requires 'DBIx::Class::EncodedColumn';
 requires 'DBIx::Class::Tree';
 
 # Pretty baubels
-requires 'Chart::Clicker';
 requires 'Graphics::Color';
 requires 'HTTP::BrowserDetect';
 
