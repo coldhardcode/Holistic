@@ -195,12 +195,6 @@ sub ticketlive : Local {
     $c->stash->{template} = 'ticket-data.tt';
 }
 
-sub todo : Local {
-    my ($self, $c) = @_;
-
-    $c->stash->{template} = 'todo.tt';
-}
-
 sub wizard : Local {
     my ($self, $c) = @_;
 
