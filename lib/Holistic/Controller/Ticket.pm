@@ -65,6 +65,7 @@ sub attributes_GET {
 sub attributes_POST {
     my ( $self, $c ) = @_;
     my $data = $c->req->data || $c->req->params;
+    my $blank = delete $data->{blank};
 
     # XX This needs to be refactored into the API Call.
 
@@ -76,9 +77,11 @@ sub attributes_POST {
     my $priority = $data->{priority} ?
         $c->model('Schema::Ticket::Priority')->find($data->{priority}) : undef;
 
-    $priority = undef if $priority->id == $ticket->priority_pk1;
+    $priority = undef if not $priority or $priority->id == $ticket->priority_pk1;
 
+    my $owner_str = '';
     my $owner;
+
     if ( $data->{owner} ) {
         try {
             $owner = $c->model('Schema::Person')->find( $data->{owner} );
@@ -97,7 +100,15 @@ sub attributes_POST {
         $attn = undef if $ticket->needs_attention->find( $data->{attention} );
     }
     $ticket->update({ priority => $priority }) if $priority;
-    $ticket->owner( $owner ) if defined $owner;
+    if ( defined $owner ) {
+        $ticket->owner( $owner );
+        $owner_str = "  " . (
+            ( $c->stash->{context}->{person} and $owner->id == $c->stash->{context}->{person}->id ) ?
+            $c->loc("You are now the owner.") :
+            $c->loc("The owner is now <a href=\"[_2]\">[_1]</a>.",
+                [ $owner->name, $c->uri_for_action('/person/object', [ $owner->id ]) ])
+        );
+    }
     $ticket->needs_attention( $attn ) if defined $attn;
 
     my $changeset = time;
@@ -119,10 +130,13 @@ sub attributes_POST {
         value => $priority->name,
         identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
     }) if defined $priority;
-
     if ( $c->req->looks_like_browser ) {
-        $c->message($c->loc("Ticket status has been updated"));
+        $c->message($c->loc("Ticket status has been updated.").$owner_str);
         $c->res->redirect($c->uri_for_action('/ticket/object', [ $ticket->id ]));
+        return;
+    }
+    if ( $blank ) {
+        return '';
     }
 }
 

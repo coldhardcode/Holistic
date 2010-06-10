@@ -13,9 +13,12 @@ my_parents   = queue.parent_map;
 
 ~%]
 <div class="progress">
- <form method="post" action="[% c.uri_for_action('/ticket/advance', [ ticket.id ]) %]">
+[% IF context.person && ticket.can_assign_to( context.person ) && owner.id != context.person.id %]
+ <form method="post" action="[% c.uri_for_action('/ticket/attributes', [ ticket.id ]) %]">
+  <input type="hidden" name="owner" value="[% c.user.person_pk1 %]">
   <button style="float: left" class="submit_button orange small">[% c.loc('Take Ticket') %]</button>
  </form>
+[% END %]
 <ol>[%~
     FOREACH child IN parent.direct_children.all;
         IF child.id == queue.id;

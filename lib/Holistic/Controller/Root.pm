@@ -86,6 +86,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
             });
             # XX Throw up a notice to complete their profile?
         }
+       $c->stash->{context}->{person} = $ident->person;
         if ( defined $ident ) {
             $c->user( $ident );
             my $attn_count = $ident->needs_attention->count;

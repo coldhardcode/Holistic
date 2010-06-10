@@ -289,6 +289,11 @@ sub assignable_persons {
         )->search_rs( @_ );
 }
 
+sub can_assign_to {
+    my ( $self, $person ) = @_;
+    $self->assignable_persons->search({ 'person.pk1' => $person->id })->count;
+}
+
 __PACKAGE__->has_many('product_links', 'Holistic::Schema::Product::Queue', 'queue_pk1');
 __PACKAGE__->many_to_many('products' => 'product_links' => 'product');
 
