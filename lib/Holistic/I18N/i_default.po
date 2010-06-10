@@ -34,6 +34,9 @@ msgstr "Release"
 msgid "NEEDS ATTENTION"
 msgstr "%quant(%1, ticket needs, tickets need) your attention."
 
+msgid "TICKET STATUS COUNT"
+msgstr "%1 %2"
+
 msgid "QUEUE INACTIVE"
 msgstr "This %1 is closed, and no additional tickets may be opened here."
 

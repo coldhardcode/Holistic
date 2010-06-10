@@ -2,10 +2,6 @@
 
 USE Number.Format(DECIMAL_DIGITS = 0);
 
-tickets_open   = 0;
-tickets_closed = 0;
-tickets_total  = 0;
-
 ~%]
 <table class="summary">
  <tbody>
@@ -18,15 +14,17 @@ tickets_total  = 0;
    <th>[% c.loc('Date Due') %]</th>
    <th>[% c.loc('Priority') %]</th>
   </tr>
+[% SET statuses = {}; %]
+[% SET tickets_total = 0 %]
+[% SET tickets_closed = 0 %]
 [% FOREACH ticket IN tickets;
     classes = [];
-    
+
+
     ticket_uri = c.uri_for_action('/ticket/object', [ ticket.id ]);
     IF ticket.status.name == '@closed';
         classes.push('closed');
         tickets_closed = tickets_closed + 1;
-    ELSE;
-        tickets_open = tickets_open + 1;
     END;
     IF ticket.needs_attention.count;
         classes.push('imp');
@@ -35,7 +33,7 @@ tickets_total  = 0;
         classes.push('odd');
     END;
 
-    tickets_total  = tickets_total + 1;
+    tickets_total = tickets_total + 1;
 
 ~%]
   <tr class="[% classes.join(' ') %]">
@@ -47,6 +45,7 @@ tickets_total  = 0;
    <td>[% due_date = ticket.due_date; IF due_date; %]<time datetime="[% due_date.dt_marker %]">[% pretty_date(due_date.dt_marker); %]</time>[% ELSE; "&mdash;"; END %]</td>
    <td>[% c.loc(ticket.priority.name) %]</td>
   </tr>
+  [% statuses.${ticket.status.name} = 1 + statuses.${ticket.status.name} %]
 [% END %]
  </tbody>
 [% IF tickets_total %]
@@ -59,7 +58,12 @@ tickets_total  = 0;
 	 [% ELSE %]
 	 <div class="cmpl"><div style="width: [% complete_percent | format_number %]px">[% complete_percent | format_number %]%</div></div>
 	 [% END %]
-     <details><a href="#">[% c.loc('[_1] Closed', [ tickets_closed ]) %]</a> + <a href="#">[% c.loc('[_1] Open', [ tickets_open ] ) %]</a> = <a href="#">[% c.loc('[_1] Total', [ tickets_total ] ) %]</a></details>
+     <details>
+	 [% FOREACH status = statuses.keys %]
+	   [% IF loop.count > 1 %]+ [% END %][% c.loc('TICKET STATUS COUNT', [ statuses.${status}, system_localize(status) ] ) %]
+	 [% END %]
+     = [% c.loc('[_1] Total', [ tickets_total ] ) %]</details>
+	 </details>
     </td>
    </tr>
  </tfoot>
