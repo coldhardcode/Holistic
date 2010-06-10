@@ -112,6 +112,22 @@ sub attributes_POST {
     $ticket->needs_attention( $attn ) if defined $attn;
 
     my $changeset = time;
+
+    if ( $data->{due_date} ) {
+        my $due = $ticket->due_date;
+        $due = defined $due ? $due->dt_marker->strftime('%F') : '';
+        unless ( $due eq $data->{due_date} ) {
+            $ticket->due_date( $data->{'due_date'} );
+            $ticket->add_to_changes({
+                changeset => $changeset,
+                name => 'due_date',
+                value => $data->{due_date},
+                old_value => $due,
+                identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
+            });
+        }
+    }
+
     $ticket->add_to_changes({
         changeset => $changeset,
         name => 'owner',

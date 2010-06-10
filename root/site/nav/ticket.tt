@@ -48,8 +48,12 @@
         due_date = c.loc('Unscheduled');
       END;
       str_due_date = due_date;
-      str_due_date = str_due_date | date_short;
-      readonly_field({ label => 'Due Date', name => 'date_due', type => 'date', value => str_due_date, link => link }); %]
+      str_due_date = str_due_date | date_iso;
+      IF is_editable;
+        text_field({ label => 'Due Date', name => 'due_date', type => 'date', value => str_due_date, link => link });
+      ELSE;
+        readonly_field({ label => 'Due Date', name => 'due_date', type => 'date', value => str_due_date, link => link });
+      END; %]
    </tr>
    <tr>
     [% IF is_editable;
