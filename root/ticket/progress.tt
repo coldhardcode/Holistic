@@ -51,6 +51,7 @@ my_parents   = queue.parent_map;
             [% c.loc('Advance to [_1]', [ system_localize(next_step.name) ] ) %]
             &#x2192;
         </button>
+    </form>
  [% END %]
  </div>
 
