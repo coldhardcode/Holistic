@@ -229,6 +229,8 @@ sub post_create : Private {
         # XX Need to parse this and validate
         $ticket->due_date( $data->{'ticket.due_date'} );
     }
+    $ticket->requestor( $c->stash->{context}->{person} || $c->model('Schema')->schema->system_identity );
+
     $ticket->add_to_changes({
         name => 'created',
         identity_pk1 => ( $c->user_exists ?
