@@ -1,7 +1,5 @@
 [%~
-
 changes = ticket.changes;
-
 ~%]
 <ul class="worklog">
 [% FOREACH change IN changes; person = change.identity.person %]
