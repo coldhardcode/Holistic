@@ -1419,3 +1419,31 @@ article.admin section ul.sub li {
     list-style: disc;
     margin: 0 0 0 .5em; padding: 0;
 }
+div.cmpl {
+	-moz-box-shadow: inset #999 0 5px 5px;
+	-webkit-box-shadow: inset #999 0 5px 5px;
+	box-shadow: inset #999 0 5px 5px;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#bbb));
+    background: -moz-linear-gradient(top left, #ccc, #bbb);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccc', endColorstr='#bbb');
+	border: 1px solid #ccc;
+	coloR: #777;
+	float: left;
+	font-size: 14px;
+	height: 18px;
+	padding: 0;
+	text-align: center;
+	width: 112px;
+}
+div.cmpl div {
+    color: #fef4e9;
+    border: solid 1px #da7c0c;
+    background-color: #de691f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+    background: -moz-linear-gradient(top, #faa51a, #f47a20);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+	height: 16px;
+	padding: 0 5px;
+	text-align: center;
+    text-shadow: #95582d 0 -1px;
+}

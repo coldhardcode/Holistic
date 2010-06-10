@@ -54,14 +54,11 @@ tickets_total  = 0;
    <tr>
     [%= SET complete_percent = ( tickets_closed / tickets_total ) * 100 ~%]
     <td colspan="7">
-     <meter>
-      [% IF complete_percent == 100 %]
-      <img src="/static/images/actions/tick.png">
-      [% ELSIF complete_percent > 0 %]
-      <img src="[% c.uri_for('/chart/completion_pie', complete_percent) %]">
-      [% END %]
-      [% complete_percent | format_number %]% Complete
-     </meter>[%~ =%]
+	 [% IF complete_percent == 0 %]
+	 <div class="cmpl">0%</div>
+	 [% ELSE %]
+	 <div class="cmpl"><div style="width: [% complete_percent | format_number %]px">[% complete_percent | format_number %]%</div></div>
+	 [% END %]
      <details><a href="#">[% c.loc('[_1] Closed', [ tickets_closed ]) %]</a> + <a href="#">[% c.loc('[_1] Open', [ tickets_open ] ) %]</a> = <a href="#">[% c.loc('[_1] Total', [ tickets_total ] ) %]</a></details>
     </td>
    </tr>
