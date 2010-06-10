@@ -7,6 +7,6 @@
     <aside class="rmessage" [% UNLESS gerr %]style="display: none"[% END %]><p>[% c.loc(gerr.id || gerr.text) %]</p></aside>
  [% END %]
  [% FOREACH gwarn IN messages.for_scope(message_scope).for_level('warning').messages %]
- <aside class="omessage" [% UNLESS gwarn %]style="display: none"[% END %]><p>[% c.loc(gwarn.id || gwarn.text) %]</p></aside>
+ 	<aside class="omessage" [% UNLESS gwarn %]style="display: none"[% END %]><p>[% c.loc(gwarn.id || gwarn.text) %]</p></aside>
  [% END %]
 </section>
