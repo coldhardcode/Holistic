@@ -6,24 +6,23 @@ changes = ticket.changes;
 <ul class="worklog">
 [% FOREACH change IN changes; person = change.identity.person %]
     <li>
-     <a name="[% message.changeset %]"></a>
-     <time datetime="[% change.dt_created %]">[% pretty_date(change.dt_created) %] via
+     <a href="#[% message.changeset %]" name="[% message.changeset %]">
+     <time datetime="[% change.dt_created %]">by [% person.name %] [% pretty_date(change.dt_created) %] via
      [%=
        IF change.identity.realm == 'git';
          "<a href=\"#\">git</a>";
        ELSE;
-        "the web (${change.identity.id})";
+        "the web";
        END;
      ~%]
      </time>
      <cite>
          <img src="[% person.gravatar_url %]">
-         [% person.name %]
      </cite>
+     </a>
      <blockquote>
-      [% change.name %] set to [% change.value %]
+      [% change.name %] set to [% system_localize(change.value) %]
      </blockquote>
-     <a href="#[% message.changeset %]">#</a>
     </li>
 [% END %]
 </ul>
