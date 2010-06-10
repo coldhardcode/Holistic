@@ -25,7 +25,11 @@
   </a>
  </dt>
  <dd>
-  [% change.ticket.description | truncate(120, '&hellip;') | html_strip %]
+  [% IF change.classification == 'modified' %]
+	[% c.loc('Changed <strong>[_1]</strong> to &#8220;[_2]&#8221;.', change.change.name, change.change.value) %]
+  [% ELSE %]
+  	[% change.ticket.description | truncate(120, '&hellip;') | html_strip %]
+  [% END %]
  </dd>
  [% END %]
 </dl>
