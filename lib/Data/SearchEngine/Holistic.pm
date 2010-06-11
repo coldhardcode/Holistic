@@ -174,6 +174,7 @@ sub create_resultset {
                 'ticket_tags'    => 'tag'
             },
         ],
+		group_by => 'me.pk1'
     );
 
     # Create a list of ANDs that we can fiddle with later
