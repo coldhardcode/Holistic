@@ -1069,7 +1069,7 @@ table.cal tbody td ul li a {
 }
 table.cal tbody td ul li a.queue {
     background-color: #de691f;
-    background: -webkit-gradient(linear, left top, left bottom, from(#e3782f), to(#de691f));
+    background: -webkit-gradient(linear, left top, left bottom, from(#719bc3), to(#3470a9));
     background: -moz-linear-gradient(top, #e3782f, #de691f);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e3782f', endColorstr='#de691f');
     text-shadow: #95582d 0 -1px;
