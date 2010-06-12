@@ -306,6 +306,15 @@ sub set_priority {
     $self->priority( $priority );
 }
 
+sub set_status {
+    my ( $self, $status ) = @_;
+    unless ( blessed $status ) {
+        $status = $self->schema->resultset('Ticket::Status')->find({ name => $status });
+    }
+    confess "Ticket status specified isn't found\n" unless defined $status;
+    $self->status( $status );
+}
+
 sub set_tag { shift->tag( @{$_[0]} ); }
 
 sub tag {
@@ -413,6 +422,10 @@ sub _modify {
                 $errors = 1;
             };
         }
+        # Now verify based on our columns, make sure everything is still legit
+        $self->schema->data_manager
+            ->verify( $self->scope, { $self->get_columns });
+
         if ( $errors or not $self->schema->data_manager->success ) {
             # Abort out of the transaction
             die "ERRORS";
@@ -480,21 +493,13 @@ sub is_member {
 sub _build_verify_scope { 'ticket' }
 sub _build__verify_profile {
     my ( $self ) = @_;
-    my $rs = $self->schema->resultset('Person::Identity');
+    my $queue_rs     = $self->schema->resultset('Queue');
+    my $ident_rs     = $self->schema->resultset('Person::Identity');
+    my $priority_rs  = $self->schema->resultset('Ticket::Priority');
+    my $type_rs      = $self->schema->resultset('Ticket::Type');
+    my $status_rs    = $self->schema->resultset('Ticket::Status');
     return {
         'profile' => {
-            'queue_pk1' => {
-                'required' => 1,
-                'type' => 'Int'
-            },
-            'priority_pk1' => {
-                'required' => 1,
-                'type' => 'Int'
-            },
-            'type_pk1' => {
-                'required' => 1,
-                'type' => 'Int'
-            },
             'name' => {
                 'required' => 1,
                 'type' => 'Str',
@@ -511,7 +516,39 @@ sub _build__verify_profile {
                 'type'       => 'Holistic::Schema::Person::Identity',
                 'coercion'   => Data::Verifier::coercion(
                     from => 'Int',
-                    via  => sub { $rs->find( $_ ); }
+                    via  => sub { $ident_rs->find( $_ ); }
+                )
+            },
+            'priority' => {
+                'required'   => 1,
+                'type'       => 'Holistic::Schema::Ticket::Priority',
+                'coercion'   => Data::Verifier::coercion(
+                    from => 'Int',
+                    via  => sub { $priority_rs->find( $_ ); }
+                )
+            },
+           'type' => {
+                'required'   => 1,
+                'type'       => 'Holistic::Schema::Ticket::Type',
+                'coercion'   => Data::Verifier::coercion(
+                    from => 'Int',
+                    via  => sub { $type_rs->find( $_ ); }
+                )
+            },
+           'status' => {
+                'required'   => 0,
+                'type'       => 'Holistic::Schema::Ticket::Status',
+                'coercion'   => Data::Verifier::coercion(
+                    from => 'Int',
+                    via  => sub { $status_rs->find( $_ ); }
+                )
+            },
+           'queue' => {
+                'required'   => 1,
+                'type'       => 'Holistic::Schema::Queue',
+                'coercion'   => Data::Verifier::coercion(
+                    from => 'Int',
+                    via  => sub { $queue_rs->find( $_ ); }
                 )
             },
         },

@@ -130,7 +130,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
 
         foreach my $scope ( keys %{ $errors } ) {
             $c->log->debug("Fetching errors for scope: $scope");
-            $c->stash->{errors}->{$scope} = $errors->{$scope};
+            $c->stash->{results}->{$scope} = $errors->{$scope};
             Message::Stack::DataVerifier->parse( $stack, $scope, $errors->{$scope} );
         }
         $c->stash->{stack}      = $stack;

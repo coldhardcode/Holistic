@@ -261,10 +261,6 @@ sub post_create : Private {
 sub prepare_data {
     my ( $self, $c, $data ) = @_;
 
-    # XX We find the first step, this should probably be significantly cleaner
-    $data->{ticket}->{queue_pk1} = $c->model('Schema::Queue')
-        ->find($data->{ticket}->{queue_pk1})->initial_state->id;
-
     if ( $c->user_exists ) {
         $data->{ticket}->{identity} = $c->user->id;
         return $data;
@@ -281,6 +277,14 @@ sub prepare_data {
     }
 
     return $data;
+}
+
+sub _create : Private {
+    my ( $self, $c, $clean_data ) = @_;
+
+    $clean_data->{queue} = $clean_data->{queue}->initial_state;
+    $c->log->debug("Set initial state: " . $clean_data->{queue});
+    $c->stash->{$self->rs_key}->create($clean_data);
 }
 
 no Moose;

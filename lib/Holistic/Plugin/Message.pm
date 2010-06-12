@@ -70,7 +70,7 @@ Called without any arguments, it simply returns the current message stack
 sub message {
     my ( $c, $message ) = @_;
 
-    my $default   = $c->config->{'Plugin::Message'}->{default_type} || 'warning';
+    my $default   = $c->config->{'Plugin::Message'}->{default_type} || 'success';
     my $stash_key = $c->config->{'Plugin::Message'}->{stash_key} || 'messages';
     $c->stash->{$stash_key} ||= Message::Stack->new;
     my $stash = $c->stash->{$stash_key};

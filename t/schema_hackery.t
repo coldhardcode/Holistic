@@ -32,6 +32,7 @@ $suite->run(
 
             $ticket->modify({ priority => 'Urgent' });
 
+            $ticket->modify({ priority => 'Urgent' });
         }
     ]
 );

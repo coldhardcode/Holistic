@@ -1,15 +1,15 @@
 [%~
 
 page.title = 'Create Ticket';
-results    = errors.${c.controller.scope};
 
 products   = [];
 
 ~%]
-<h1>[% c.loc('Create Ticket') %]</h1>
-<ul>
- <li>XX Add Product</li>
-</ul>
+[% IF queue.id %]
+    <h1>[% c.loc("Create Ticket in [_2] <a href=\"[_3]\">[_1]</a>", [ queue.name, system_localize(queue.type.name), c.uri_for_action('/queue/object', [ queue.id ]) ]) %]</h1>
+[% ELSE %]
+    <h1>[% c.loc('Create Ticket') %]</h1>
+[% END %]
 [% IF stack.has_scope(scope) %]
 <section class="message">
  <aside class="rmessage"><p>[% c.loc('Please correct the errors below.') %]</p></aside>
@@ -17,11 +17,10 @@ products   = [];
 [% END %]
 <form id="ticket" method="post" action="[% c.uri_for_action('/ticket/root') %]">
  <fieldset>
-[% IF queue.id; products = queue.products_rs.all; %]
-    <legend>[% c.loc("Create Ticket in [_2] <a href=\"[_3]\">[_1]</a>", [ queue.name, system_localize(queue.type.name), c.uri_for_action('/queue/object', [ queue.id ]) ]) %]</legend>
-    <input type="hidden" name="ticket.queue_pk1" value="[% queue.pk1 %]">
+[% IF queue.id;
+    products = queue.products_rs.all; %]
+    <input type="hidden" name="ticket.queue" value="[% queue.pk1 %]">
 [% END %]
-
   <table>
    <tfoot>
     <td colspan="4">
@@ -31,26 +30,26 @@ products   = [];
    <tbody>
 [% IF !c.user_exists %]
     <tr>
-     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Holistic username, (eg., gphat)', required => 1, double => 1, error => stack.for_subject('reporter').first_message.id, value => results.get_original_value('reporter') }); %]
+     [% text_field({ label => 'Reporter', name => 'ticket.reporter', hint => 'Holistic username, (eg., gphat)', required => 1, double => 1 }); %]
     </tr>
 [% END %]
 [% IF !queue.id %]
     <tr>
-     [% select_field({ label => 'Queue', name => 'ticket.queue_pk1', required => 1, double => 1, error => stack.for_subject('queue_pk1').first_message.id, value => results.get_original_value('queue_pk1'), array => queue_rs.all, label_method => 'name', value_method => 'id' }) %]
+     [% select_field({ label => 'Queue', name => 'ticket.queue', required => 1, double => 1, array => queue_rs.all, label_method => 'name', value_method => 'id' }) %]
     </tr>
 [% END %]
 [% IF products %]
-     [% checkboxes_field({ label => 'Products', name => 'ticket.product_pk1', required => 0, double => 1, error => stack.for_subject('product_pk1').first_message.id, value => results.get_original_value('product_pk1'), array => products, label_method => 'name', value_method => 'id' }) %]
+     [% checkboxes_field({ label => 'Products', name => 'ticket.product_pk1', required => 0, double => 1, array => products, label_method => 'name', value_method => 'id' }) %]
 [% END %]
     <tr>
-     [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1, error => stack.for_subject('name').first_message.id, value => results.get_value('name') }); %]
+     [% text_field({ label => 'Summary', name => 'ticket.name', hint => 'Short Summary of Issue', required => 1, double => 1 }); %]
     </tr>
     <tr>
-     [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', error => stack.for_subject('description').first_message.id, required => 1, rows => 12, double => 1 }); %]
+     [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
     </tr>
     <tr>
-     [% select_field({ label => 'Type', name => 'ticket.type_pk1', required => 1, array => c.model('Schema::Ticket::Type').all, value_method => 'id', label_method => 'name' }); %]
-     [% select_field({ label => 'Priority', name => 'ticket.priority_pk1', required => 1, array => c.model('Schema::Ticket::Priority').all, value_method => 'id', label_method => 'name' }); %]
+     [% select_field({ label => 'Type', name => 'ticket.type', required => 1, array => c.model('Schema::Ticket::Type').all, value_method => 'id', label_method => 'name' }); %]
+     [% select_field({ label => 'Priority', name => 'ticket.priority', required => 1, array => c.model('Schema::Ticket::Priority').all, value_method => 'id', label_method => 'name' }); %]
     </tr>
     <tr>
      [% text_field({ label => 'Date Due', name => 'ticket.due_date', type => 'date', hint => 'YYYY-MM-DD' }); %]

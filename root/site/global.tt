@@ -14,10 +14,14 @@ END %]
     END;
 END %]
 
-[% MACRO label_field(info) BLOCK %]
- [% IF !info.error && messages && messages.count %]
-  [% info.error = c.loc(messages.for_subject(info.name).for_level('error').first_message.id) %]
- [% END %]
+[% MACRO label_field(info) BLOCK;
+    IF !info.error && stack && stack.count;
+        error_name = info.name;
+        IF context.scope;
+            error_name = error_name.replace("${context.scope}.", "");
+        END;
+        info.error = c.loc( stack.for_subject(error_name).for_level('error').first_message.id );
+ END %]
  <td [% IF info.error %]class="error"[% END %]>
   [% IF info.important %]<strong>[% END %]
   <label id="form_[% info.name %]_label" for="form_[% info.name %]">[% c.loc(info.label) ~%]
@@ -43,8 +47,14 @@ END %]
 </td>
 [% END; %]
 
-[% MACRO select_field(info) BLOCK; %]
- [%~ IF info.dynamic_array =%]<script type="text/javascript">if ( typeof dynamic_forms === 'undefined' ) dynamic_forms = {}; dynamic_forms['[% info.value_from %]'] = { 'source': '[% info.dynamic_array %]', 'update': '[% info.name %]', 'value': "[% info.value || html %]" };</script>[% IF info.array.size == 0; info.array.push(c.loc('Please select [_1]', [ info.value_from ] ) ); END; END %]
+[% MACRO select_field(info) BLOCK;
+    IF !info.value && results.${context.scope};
+        value_name = info.name;
+        IF context.scope; value_name = value_name.replace("${context.scope}.", ""); END;
+        info.value = results.${context.scope}.get_original_value(value_name);
+    END;
+%]
+[%~ IF info.dynamic_array =%]<script type="text/javascript">if ( typeof dynamic_forms === 'undefined' ) dynamic_forms = {}; dynamic_forms['[% info.value_from %]'] = { 'source': '[% info.dynamic_array %]', 'update': '[% info.name %]', 'value': "[% info.value || html %]" };</script>[% IF info.array.size == 0; info.array.push(c.loc('Please select [_1]', [ info.value_from ] ) ); END; END %]
  [% label_field(info) %]
  <td class="[%~ IF info.extra || info.error ~%]message[%~ END ~%][%~ IF info.error %] error [%~ END ~%]"[% IF info.double %] colspan="3"[% END %]>
   <select id="form_[% info.name %]" name="[% info.name %]">
@@ -89,7 +99,13 @@ END %]
  </td>
 [% END; %]
 
-[% MACRO text_field(info) BLOCK %]
+[% MACRO text_field(info) BLOCK;
+    IF !info.value && results.${context.scope};
+        value_name = info.name;
+        IF context.scope; value_name = value_name.replace("${context.scope}.", ""); END;
+        info.value = results.${context.scope}.get_original_value(value_name);
+    END;
+ %]
  [% label_field(info) %]
  <td class="[%~ IF info.extra || info.error ~%]message[%~ END ~%][%~ IF info.error %] error[%~ END ~%]"[% IF info.double %] colspan="3"[% END %]>
   <input[% IF info.double %] class="double"[% END %] type="[% info.type || 'text' %]" id="form_[% info.name %]" name="[% info.name %]" [% IF info.hint %] placeholder="[% c.loc(info.hint) %]"[% END %] value="[% info.value | html %]"
@@ -105,7 +121,13 @@ END %]
  </td>
 [% END; %]
 
-[% MACRO textarea_field(info) BLOCK; %]
+[% MACRO textarea_field(info) BLOCK;
+    IF !info.value && results.${context.scope};
+        value_name = info.name;
+        IF context.scope; value_name = value_name.replace("${context.scope}.", ""); END;
+        info.value = results.${context.scope}.get_original_value(value_name);
+    END;
+%]
 [% label_field(info) %] 
 <td class="[%~ IF info.extra || info.error ~%]message[% END %][%~ IF info.error %] error[% END %]" [% IF info.double %] colspan="3"[% END %]>
  <textarea [%= ~%]

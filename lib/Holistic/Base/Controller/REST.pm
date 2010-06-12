@@ -23,7 +23,6 @@ has 'scope' => (
     is => 'ro',
     isa => 'Str',
     predicate => 'has_default_scope'
-
 );
 
 has 'access_check' => (
@@ -112,6 +111,9 @@ has 'allow_by_default' => (
 
 sub setup : Chained('.') PathPart('') CaptureArgs(0) { 
     my ( $self, $c ) = @_;
+
+    $c->stash->{context}->{scope} = $self->scope
+        if $self->has_default_scope;
 
     my $action = $c->action->name;
     my $perm = $self->get_permission_for_action( $action );

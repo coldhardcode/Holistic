@@ -23,14 +23,17 @@ my $schema = Holistic->model('Schema')->schema;
 
 $schema->txn_do( sub {
     my $role = $schema->resultset('Role')->find_or_create({ name => '@member' });
-    my $admin = $schema->resultset('Person')->create({
+    my $admin = $schema->resultset('Person')->find_or_create({
         name => $um->username
     });
-    $admin->add_to_identities({
-        realm => 'local',
-        ident => $um->username,
-        secret => $um->password
-    });
+    try {
+        $admin->add_to_identities({
+            realm => 'local',
+            ident => $um->username,
+            secret => $um->password
+        });
+    }
+    catch { warn $_; };
 
     my $prs = $schema->resultset('Permission');
     my $authenticated = $schema->resultset('Group')->find_or_create({
