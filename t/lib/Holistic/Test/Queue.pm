@@ -106,6 +106,10 @@ sub trac_queue_create : Test {
     is( $steps[0]->queue_pk1, $closed->id, 'right next step');
 
     $self->queue( $queue );
+
+    $queue->update({ closed_queue_pk1 => $closed->id });
+    $queue->all_children->update({ closed_queue_pk1 => $closed->id });
+
     $queue->discard_changes;
     return $queue;
 }

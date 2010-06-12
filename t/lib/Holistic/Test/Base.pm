@@ -47,7 +47,19 @@ sub run {
 
 sub run_test {
     my ( $self, $method, $call_args ) = @_;
-    
+
+    my $ret   = undef;
+
+    if ( ref $method eq 'CODE' ) {
+        $self->use_plan(0);
+        try {
+            $ret = $method->( $self, $call_args );
+        } catch {
+            confess $_;
+        };
+        return $ret;
+    }
+
     my $m = $self->meta->get_method($method);
     unless ( defined $m ) {
         confess "Unknown method name: $method, check test plan.";
@@ -55,7 +67,6 @@ sub run_test {
 
     warn "$method does not define a test plan" unless $m->can('attributes');
     my $attrs = $m->attributes;
-    my $ret   = undef;
     if ( $attrs and ref $attrs eq 'ARRAY' ) {
         foreach my $attr ( @$attrs ) {
             diag(" --> Running " . $m->original_package_name . "->$method");

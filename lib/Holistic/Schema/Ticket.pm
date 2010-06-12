@@ -117,6 +117,7 @@ use Moose;
 
 use Carp;
 use Scalar::Util 'blessed';
+use Try::Tiny;
 
 extends 'Holistic::Schema::Queue';
 
@@ -296,6 +297,17 @@ sub all_comments {
         )->search_rs;
 }
 
+sub set_priority {
+    my ( $self, $priority ) = @_;
+    unless ( blessed $priority ) {
+        $priority = $self->schema->resultset('Ticket::Priority')->find({ name => $priority });
+    }
+    confess "Priority specified isn't found\n" unless defined $priority;
+    $self->priority( $priority );
+}
+
+sub set_tag { shift->tag( @{$_[0]} ); }
+
 sub tag {
     my ( $self, @tags ) = @_;
 
@@ -314,24 +326,101 @@ sub next_step {
 }
 
 sub advance {
-    my ( $self, $opt, $user ) = @_;
+    my ( $self, $opt, $args ) = @_;
 
+    my $user  = $args->{user};
     my $queue = $self->queue;
     my @steps = $queue->next_step;
     die "Can't advance ticket, no steps defined\n"
         unless defined $steps[0];
-    $opt = 0 unless defined $opt and defined $steps[int($opt)];
-    my $step = $steps[$opt];
+    my $step;
+
+    if ( $opt ) {
+        ( $step ) = grep { $_->name eq $opt } @steps;
+        # Invalid step, need to figure out proper action.
+        # XX die here?
+        $opt = 0 if not defined $step;
+    }
+    $step ||= $steps[ int($opt) ];
+    if ( not defined $step ) {
+        die "Unable to advance ticket, no further steps\n";
+    }
+
+    if ( not defined $user ) {
+        $user = $self->schema->system_identity;
+    }
+    elsif ( $user and $user->isa('Holistic::Schema::Person') ) {
+        $user = $user->identities({ realm => 'local', active => 1 })->first;
+    }
 
     $self->add_to_changes({
-        name           =>
+        name            =>
             ( $step->id == $queue->closed_queue_pk1 ? 'closed' : 'advanced' ),
-        value          => $step->name,
-        old_value      => $queue->name,
-        ( identity_pk1 => ( defined $user ? $user->id : undef ) ),
+        value           => $step->name,
+        old_value       => $queue->name,
+        identity_pk1    => $user->id
     });
  
     $self->update({queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1});
+}
+
+sub modify {
+    my ( $self, @args ) = @_;
+    if ( $args[0] and ref $args[0] eq 'HASH' ) {
+        $self->_modify( $args[0] );
+    } elsif ( @args == 1 ) {
+        $self->_modify({ $args[0] => undef });
+    } elsif ( @args % 2 == 0 and @args > 0 ) {
+        $self->_modify({ @args });
+    } else {
+        croak "Invalid call to \$ticket->modify, pass in a hash ref or single action\n";
+    }
+}
+
+sub _modify {
+    my ( $self, $args ) = @_;
+    croak "Invalid call to \$ticket->modify private method, must pass a hash ref\n" unless defined $args and ref $args eq 'HASH';
+
+    my $modify_txn = sub {
+        my $errors = 0;
+        foreach my $arg ( keys %$args ) {
+            my $method;
+            $method ||= $self->can("set_$arg");
+            $method ||= $self->can("$arg");
+
+            next unless defined $method;
+            try {
+                # If the method fails, it will either just throw a simple
+                # error or a Data::Verifier::Results object that we'll
+                # mix into our Data::Manager object.
+                $method->( $self, $args->{$arg}, $args );
+            } catch {
+                # This isn't writing to $schema->data_manager, so we 
+                # will manually put things in here.
+                if ( ref $_ eq 'Data::Verifier::Results' ) {
+                    $self->data_manager->set_results($arg, $_);
+                }
+                carp $_;
+                $errors = 1;
+            };
+        }
+        if ( $errors ) {
+            # Abort out of the transaction
+            die "ERRORS";
+        }
+        $self->update;
+    };
+
+    try { $self->result_source->schema->txn_do( $modify_txn ); }
+    catch {
+        if ( $_ eq 'ERRORS' ) {
+            # Intercept this, die with the Data::Manager?
+            carp $_;
+        } else {
+            # Rethrow
+            die $_;
+        }
+    };
 }
 
 sub top_queue { shift->queue->top_parent; }

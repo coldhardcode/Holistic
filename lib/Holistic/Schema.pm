@@ -13,6 +13,35 @@ __PACKAGE__->load_namespaces(
     default_resultset_class => '+Holistic::Base::ResultSet'
 );
 
+has 'data_manager' => (
+    is  => 'rw',
+    isa => 'Holistic::DataManager',
+    lazy_build => 1,
+    handles => {
+        'resultsource_for_scope' => 'resultsource_for_scope',
+        'data_for_scope'         => 'data_for_scope',
+    }
+);
+
+sub _build_data_manager {
+    my ( $self ) = @_;
+
+    my $verifiers = {};
+    my $scopes    = {};
+    foreach my $name ( $self->sources ) {
+        my $source = $self->resultset($name)->new_result({});
+        next unless $source->can('meta');
+        next unless $source->meta->does_role('Holistic::Role::Verify');
+        $verifiers->{$source->verify_scope} = $source->verifier;
+        $scopes->{ $source->verify_scope }  = "Schema::$name";
+    }
+
+    Holistic::DataManager->new(
+        verifiers             => $verifiers,
+        scope_to_resultsource => $scopes
+    );
+}
+
 use Text::xSV;
 
 sub deploy {
