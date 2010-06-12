@@ -314,9 +314,9 @@ sub tag {
     $self->ticket_tags->delete;
 
     foreach my $tag ( @tags ) {
-        my $tag = $self->result_source->schema->resultset('Tag')->find_or_create({
-            name => $tag
-        });
+        $tag =~ s/^\s*|\s$//g;
+        my $tag = $self->result_source->schema->resultset('Tag')
+            ->find_or_create({ name => lc($tag) });
         $self->add_to_tags($tag);
     }
 }
