@@ -15,5 +15,7 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many( 'tickets', 'ticket_links' => 'ticket' );
 
+sub _build_verify_scope { 'tag' }
+
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

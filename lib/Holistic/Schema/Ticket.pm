@@ -314,12 +314,12 @@ sub tag {
     $self->ticket_tags->delete;
 
     foreach my $tag ( @tags ) {
-        $tag =~ s/^\s*|\s$//g;
-        # XX Should we include other filtering for other characters, have 
-        # validation and limits on the tags?
-        # Something like 25 chars?
+        my $results = $self->schema->data_manager
+            ->verify( 'tag', { name => $tag } );
+        next unless $results->success;
+
         my $tag = $self->result_source->schema->resultset('Tag')
-            ->find_or_create({ name => lc($tag) });
+            ->find_or_create({ name => $results->get_value('name') });
         $self->add_to_tags($tag);
     }
 }
@@ -384,6 +384,12 @@ sub _modify {
     my ( $self, $args ) = @_;
     croak "Invalid call to \$ticket->modify private method, must pass a hash ref\n" unless defined $args and ref $args eq 'HASH';
 
+    # Clear the Data::Manager object.  Ideally, *each* transaction should have
+    # its own Data::Manager object, but we'll do it here by hand and just
+    # pretend it's good enough for now.
+    # XX
+    $self->schema->clear_data_manager;
+
     my $modify_txn = sub {
         my $errors = 0;
         foreach my $arg ( keys %$args ) {
@@ -401,21 +407,22 @@ sub _modify {
                 # This isn't writing to $schema->data_manager, so we 
                 # will manually put things in here.
                 if ( ref $_ eq 'Data::Verifier::Results' ) {
-                    $self->data_manager->set_results($arg, $_);
+                    $self->schema->data_manager->set_results($arg, $_);
                 }
                 carp $_;
                 $errors = 1;
             };
         }
-        if ( $errors ) {
+        if ( $errors or not $self->schema->data_manager->success ) {
             # Abort out of the transaction
             die "ERRORS";
         }
         $self->update;
     };
 
-    try { $self->result_source->schema->txn_do( $modify_txn ); }
-    catch {
+    try {
+        $self->result_source->schema->txn_do( $modify_txn );
+    } catch {
         if ( $_ eq 'ERRORS' ) {
             # Intercept this, die with the Data::Manager?
             carp $_;

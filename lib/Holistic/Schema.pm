@@ -6,6 +6,8 @@ extends 'DBIx::Class::Schema';
 
 use Carp;
 
+use Holistic::DataManager;
+
 our $VERSION = '0.01';
 
 __PACKAGE__->load_namespaces(
@@ -23,9 +25,14 @@ has 'data_manager' => (
     }
 );
 
-sub _build_data_manager {
-    my ( $self ) = @_;
+has [ '_verifiers', '_scopes' ] => (
+    is  => 'rw',
+    isa => 'HashRef',
+    lazy_build => 1,
+);
 
+sub _build__verifiers {
+    my ( $self ) = @_;
     my $verifiers = {};
     my $scopes    = {};
     foreach my $name ( $self->sources ) {
@@ -35,10 +42,16 @@ sub _build_data_manager {
         $verifiers->{$source->verify_scope} = $source->verifier;
         $scopes->{ $source->verify_scope }  = "Schema::$name";
     }
+    $self->_scopes( $scopes );
+    return $verifiers;
+}
+
+sub _build_data_manager {
+    my ( $self ) = @_;
 
     Holistic::DataManager->new(
-        verifiers             => $verifiers,
-        scope_to_resultsource => $scopes
+        verifiers             => $self->_verifiers,
+        scope_to_resultsource => $self->_scopes
     );
 }
 
