@@ -315,6 +315,9 @@ sub tag {
 
     foreach my $tag ( @tags ) {
         $tag =~ s/^\s*|\s$//g;
+        # XX Should we include other filtering for other characters, have 
+        # validation and limits on the tags?
+        # Something like 25 chars?
         my $tag = $self->result_source->schema->resultset('Tag')
             ->find_or_create({ name => lc($tag) });
         $self->add_to_tags($tag);
