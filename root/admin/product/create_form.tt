@@ -1,4 +1,8 @@
-[% page.crumbs.push({ 'Add Product' => '' }) %]
+[%~
+page.crumbs.push({ 'Add Product' => '' });
+
+results    = errors.${c.controller.scope};
+~%]
 <h1>[% c.loc('Add Product') %]</h1>
 <form id="product" method="post" action="[% c.uri_for_action('/admin/product/root') %]">
  <fieldset>
@@ -12,10 +16,10 @@
    </tfoot>
    <tbody>
     <tr>
-     [% text_field({ label => 'Name', name => 'product.name', hint => 'Name', required => 1 }); %]
+     [% text_field({ label => 'Name', name => 'product.name', hint => 'Name', required => 1, error => stack.for_subject('name').first_message.id, value => results.get_original_value('name') }); %]
     </tr>
     <tr>
-     [% textarea_field({ label => 'Description', name => 'product.description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
+     [% textarea_field({ label => 'Description', name => 'product.description', hint => 'Explanation of Issue', required => 1, rows => 8, error => stack.for_subject('description').first_message.id, value => results.get_original_value('description') }); %]
     </tr>
    </tbody>
   </table>

@@ -60,3 +60,10 @@ msgstr "Bug"
 
 msgid "@feature"
 msgstr "Feature"
+
+msgid "missing_description"
+msgstr "Please enter a description"
+
+msgid "missing_name"
+msgstr "Please enter a valid name"
+

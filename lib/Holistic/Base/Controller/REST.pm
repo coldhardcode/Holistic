@@ -187,7 +187,7 @@ sub create_form : Chained('setup') PathPart('create') Args(0) {
             $c->detach('access_denied');
         };
     }
-    $c->stash->{scope} = 'create';
+    $c->stash->{scope}    = 'create';
     $c->stash->{template} = $c->action->namespace . "/create_form.tt";
 }
 
@@ -394,6 +394,7 @@ sub update : Private {
 
                     $no_fails = 1;
                     $c->stash->{form}->{valids} = $c->model('DataManager')->data_for_scope( $scope );
+                    $c->flash->{errors}->{$scope} = $results;
                 }
             }
             if ( $no_fails ) {
@@ -470,13 +471,14 @@ sub create : Private {
                     if ( $c->debug ) {
                         $c->log->debug("No success verifying scope $scope");
                         $c->log->_dump({
-                            missing => [ $results->missings ],
+                            missing  => [ $results->missings ],
                             invalids => [ $results->missings ],
                         });
                     }
 
                     $no_fails = 1;
-                    $c->stash->{form}->{valids} = $c->model('DataManager')->data_for_scope( $scope );
+                    $c->flash->{errors}->{$scope} = $results;
+                    $c->stash->{form}->{valids}   = $c->model('DataManager')->data_for_scope( $scope );
                 }
             }
             if ( $no_fails ) {
@@ -486,7 +488,9 @@ sub create : Private {
             return @objects;
         } );
     } catch {
-        $c->log->error("Caught error: $_");
+        $c->log->error("Caught error on create: $_");
+
+        #$c->log->_dump({ dm => $c->model('DataManager')->results });
         $c->message({
             type    => 'error',
             message => $self->error_string

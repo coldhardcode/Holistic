@@ -13,7 +13,6 @@ __PACKAGE__->config(
     create_string => 'The product has been created.',
     update_string => 'The product has been updated.',
     error_string  => 'There was an error processing your request, please try again.',
-
 );
 
 sub queue : Chained('object_setup') PathPart('') CaptureArgs(0) { }

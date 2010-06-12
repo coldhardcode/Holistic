@@ -1,8 +1,7 @@
 [%~
 
 page.title = 'Create Ticket';
-results    = errors.${scope};
-stack      = stack;
+results    = errors.${c.controller.scope};
 
 products   = [];
 
