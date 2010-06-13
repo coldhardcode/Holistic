@@ -5,6 +5,7 @@ use base 'Catalyst::Model::DBIC::Schema';
 
 __PACKAGE__->config(
     schema_class => 'Holistic::Schema',
+    #traits => [ '+Holistic::Role::TraitFor::DataManagerFromContext' ]
 );
 
 =head1 NAME

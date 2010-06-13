@@ -25,10 +25,13 @@ has 'scope_to_resultsource' => (
 sub build_per_context_instance {
     my ( $self, $c ) = @_;
 
-    Holistic::DataManager->new(
+    my $dm = Holistic::DataManager->new(
         verifiers             => $self->verifiers,
         scope_to_resultsource => $self->scope_to_resultsource
     );
+    $c->model('Schema')->schema->data_manager($dm);
+
+    $dm;
 }
 
 sub _build_verifiers {

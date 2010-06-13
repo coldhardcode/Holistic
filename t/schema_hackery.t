@@ -33,6 +33,18 @@ $suite->run(
             $ticket->modify({ priority => 'Urgent' });
 
             $ticket->modify({ priority => 'Urgent' });
+
+            # Some data_manager
+            $self->data_manager;
+
+            $self->schema->txn_do( sub {
+                # this is a different data_manager
+                $self->data_manager;
+            } );
+
+            # And now back to the original, pre-transaction data manager?
+            $self->data_manager;
+            $self->last_data_manager;
         }
     ]
 );

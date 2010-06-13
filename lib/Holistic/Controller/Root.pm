@@ -50,6 +50,17 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     $c->stash->{holistic_version}       = $Holistic::VERSION;
     $c->stash->{context}->{permissions} = {};
 
+    # XX
+    # This is a huge hack to call this here, but it has to be in here so 
+    # don't take it out. DataManager must inspect the schema to create all the
+    # verifiers, and subsequently store them in the underlying Data::Manager
+    # object.  That underlying object is then passed into the schema every
+    # context instance.
+    # Doing this in the model in ACCEPT_CONTEXT on schema causes 
+    # infinite recursion (since DataManager create instance per context has to
+    # look at schema... which to get a schema, would set the DataManager)
+
+    $c->stash->{context}->{data_manager} = $c->model('DataManager');
     $c->stash->{system}->{identity} =
         $c->model('Schema')->schema->system_identity;
     $c->stash->{system}->{settings} =

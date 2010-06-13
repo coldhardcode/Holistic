@@ -396,8 +396,13 @@ sub _modify {
     # Clear the Data::Manager object.  Ideally, *each* transaction should have
     # its own Data::Manager object, but we'll do it here by hand and just
     # pretend it's good enough for now.
-    # XX
-    $self->schema->clear_data_manager;
+    # XX, this won't work in context, because then we lose what Catalyst::Model
+    # sends us... so, have to clear this by hand in what you use, which is
+    # lame to have to do:
+    # $ticket->schema->clear_data_manager;
+    # $ticket->modify(...);
+    # But... fuck it!
+    #$self->schema->clear_data_manager;
 
     my $modify_txn = sub {
         my $errors = 0;
