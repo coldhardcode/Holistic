@@ -31,7 +31,7 @@ __PACKAGE__->add_columns(
     'color',
     { data_type => 'char', size => '6', is_nullable => 0, default_value => '000000' },
     'rel_source',
-    { data_type => 'varchar', size => '255', is_nullable => 0,
+    { data_type => 'varchar', size => '255', is_nullable => 0, is_foreign_key => 1,
         dynamic_default_on_create => sub { shift->result_source->name } },
     'token',
     { data_type => 'varchar', size => '255', is_nullable => 0,
@@ -115,7 +115,7 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->belongs_to(
-    'status', 'Holistic::Schema::Queue::Status',
+    'status', 'Holistic::Schema::Status',
     { 'foreign.pk1' => 'self.status_pk1' }
 );
 
@@ -328,9 +328,9 @@ sub _default_status {
         return $parent->status->id;
     }
 
-    my $status = $self->schema->resultset('Queue::Status')->find({ name => '@open' });
+    my $status = $self->schema->resultset('Status')->find({ name => '@open' });
     if ( not defined $status ) {
-        $status = $self->schema->resultset('Queue::Status')->create({
+        $status = $self->schema->resultset('Status')->create({
             name => '@open'
         });
     }

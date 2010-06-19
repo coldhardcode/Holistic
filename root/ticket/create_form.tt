@@ -19,7 +19,7 @@ products   = [];
  <fieldset>
 [% IF queue.id;
     products = queue.products_rs.all; %]
-    <input type="hidden" name="ticket.queue" value="[% queue.pk1 %]">
+    <input type="hidden" name="ticket.queue_pk1" value="[% queue.pk1 %]">
 [% END %]
   <table>
    <tfoot>
@@ -35,10 +35,10 @@ products   = [];
 [% END %]
 [% IF !queue.id %]
     <tr>
-     [% select_field({ label => 'Queue', name => 'ticket.queue', required => 1, double => 1, array => queue_rs.all, label_method => 'name', value_method => 'id' }) %]
+     [% select_field({ label => 'Queue', name => 'ticket.queue_pk1', required => 1, double => 1, array => queue_rs.all, label_method => 'name', value_method => 'id' }) %]
     </tr>
 [% END %]
-[% IF products %]
+[% IF products.size %]
      [% checkboxes_field({ label => 'Products', name => 'ticket.product_pk1', required => 0, double => 1, array => products, label_method => 'name', value_method => 'id' }) %]
 [% END %]
     <tr>
@@ -48,8 +48,8 @@ products   = [];
      [% textarea_field({ label => 'Description', name => 'ticket.description', hint => 'Explanation of Issue', required => 1, rows => 12, double => 1 }); %]
     </tr>
     <tr>
-     [% select_field({ label => 'Type', name => 'ticket.type', required => 1, array => c.model('Schema::Ticket::Type').all, value_method => 'id', label_method => 'name' }); %]
-     [% select_field({ label => 'Priority', name => 'ticket.priority', required => 1, array => c.model('Schema::Ticket::Priority').all, value_method => 'id', label_method => 'name' }); %]
+     [% select_field({ label => 'Type', name => 'ticket.type_pk1', required => 1, array => c.model('Schema::Ticket::Type').all, value_method => 'id', label_method => 'name' }); %]
+     [% select_field({ label => 'Priority', name => 'ticket.priority_pk1', required => 1, array => c.model('Schema::Ticket::Priority').all, value_method => 'id', label_method => 'name' }); %]
     </tr>
     <tr>
      [% text_field({ label => 'Date Due', name => 'ticket.due_date', type => 'date', hint => 'YYYY-MM-DD' }); %]

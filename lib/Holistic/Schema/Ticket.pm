@@ -152,6 +152,14 @@ __PACKAGE__->belongs_to(
     { 'foreign.pk1' => 'self.last_queue_pk1' }
 );
 
+__PACKAGE__->has_many(
+    'time_markers', 'Holistic::Schema::TimeMarker',
+    {
+        'foreign.foreign_pk1' => 'self.pk1',
+        'foreign.rel_source'  => 'self.rel_source'
+    }
+);
+
 # Convenience
 sub status { shift->queue(@_) }
 
@@ -160,7 +168,8 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->has_many(
-    'changes', 'Holistic::Schema::Ticket::Change', 'ticket_pk1'
+    'changes', 'Holistic::Schema::Ticket::Change',
+    { 'foreign.ticket_pk1' => 'self.pk1' }
 );
 
 sub get_metadata {
@@ -171,6 +180,11 @@ sub get_metadata {
 __PACKAGE__->belongs_to(
     'type', 'Holistic::Schema::Ticket::Type',
     { 'foreign.pk1' => 'self.type_pk1' }
+);
+
+__PACKAGE__->belongs_to(
+    'status', 'Holistic::Schema::Status',
+    { 'foreign.pk1' => 'self.status_pk1' }
 );
 
 __PACKAGE__->has_many(
@@ -309,7 +323,7 @@ sub set_priority {
 sub set_status {
     my ( $self, $status ) = @_;
     unless ( blessed $status ) {
-        $status = $self->schema->resultset('Ticket::Status')->find({ name => $status });
+        $status = $self->schema->resultset('Status')->find({ name => $status });
     }
     confess "Ticket status specified isn't found\n" unless defined $status;
     $self->status( $status );
@@ -365,7 +379,7 @@ sub advance {
         $user = $user->identities({ realm => 'local', active => 1 })->first;
     }
 
-    $self->add_to_changes({
+    my $change = $self->add_to_changes({
         name            =>
             ( $step->id == $queue->closed_queue_pk1 ? 'closed' : 'advanced' ),
         value           => $step->name,
@@ -374,6 +388,8 @@ sub advance {
     });
  
     $self->update({queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1});
+
+    return $change;
 }
 
 sub modify {
@@ -405,7 +421,10 @@ sub _modify {
     #$self->schema->clear_data_manager;
 
     my $modify_txn = sub {
-        my $errors = 0;
+        my @errors  = ();
+        my @changes = ();
+        my $system_user = $self->schema->system_identity;
+
         foreach my $arg ( keys %$args ) {
             my $method;
             $method ||= $self->can("set_$arg");
@@ -416,24 +435,55 @@ sub _modify {
                 # If the method fails, it will either just throw a simple
                 # error or a Data::Verifier::Results object that we'll
                 # mix into our Data::Manager object.
-                $method->( $self, $args->{$arg}, $args );
+                my $value = $method->( $self, $args->{$arg}, $args );
+
+                unless ( blessed $value and $value->isa('Holistic::Schema::Ticket::Change') ) {
+                    push @changes, {
+                        name         => $arg,
+                        value        => $value || $args->{$arg},
+                        identity_pk1 => ( $args->{user} ? $args->{user}->id : $system_user->id )
+                    }
+                }
             } catch {
                 # This isn't writing to $schema->data_manager, so we 
                 # will manually put things in here.
                 if ( ref $_ eq 'Data::Verifier::Results' ) {
+                    warn "\n\n** Setting verifier results for $arg: $_\n\n";
                     $self->schema->data_manager->set_results($arg, $_);
+                } else {
+                    carp $_;
                 }
-                carp $_;
-                $errors = 1;
+                push @errors, $arg;
             };
         }
-        # Now verify based on our columns, make sure everything is still legit
-        $self->schema->data_manager
-            ->verify( $self->scope, { $self->get_columns });
+        # We've recorded changes, so now record them to the DB
+        if ( @changes ) {
+            use Digest::MD5 'md5_hex';
+            # The first is to get the signature, which is the timestamp
+            # and then the name/value of each change.  This lets you
+            # validate that the change is not tampered with... you know,
+            # in case you care.  I sure as hell don't, but you may.
+            my $changeset   = md5_hex(
+                join('', time,
+                    map { ( $_->{name}, $_->{value} ) } @changes
+                )
+            );
+            foreach my $change ( @changes ) {
+                $self->add_to_changes( $change );
+            }
+        }
 
-        if ( $errors or not $self->schema->data_manager->success ) {
+        my $dm = $self->schema->data_manager;
+        # Now verify based on our columns, make sure everything is still legit
+        $dm->verify( $self->verify_scope, { $self->get_columns });
+
+        if ( @errors or not $dm->success ) {
             # Abort out of the transaction
-            die "ERRORS";
+            use Data::Dumper;
+            die Dumper({
+                errored => \@errors,
+                invalid_fields => $dm->bad_fields 
+            });
         }
         $self->update;
     };
@@ -502,7 +552,7 @@ sub _build__verify_profile {
     my $ident_rs     = $self->schema->resultset('Person::Identity');
     my $priority_rs  = $self->schema->resultset('Ticket::Priority');
     my $type_rs      = $self->schema->resultset('Ticket::Type');
-    my $status_rs    = $self->schema->resultset('Ticket::Status');
+    my $status_rs    = $self->schema->resultset('Status');
     return {
         'profile' => {
             'name' => {
@@ -516,7 +566,7 @@ sub _build__verify_profile {
                 'type'       => 'Str',
                 'min_length' => 1
             },
-            'identity' => {
+            'identity_pk1' => {
                 'required'   => 1,
                 'type'       => 'Holistic::Schema::Person::Identity',
                 'coercion'   => Data::Verifier::coercion(
@@ -524,7 +574,7 @@ sub _build__verify_profile {
                     via  => sub { $ident_rs->find( $_ ); }
                 )
             },
-            'priority' => {
+            'priority_pk1' => {
                 'required'   => 1,
                 'type'       => 'Holistic::Schema::Ticket::Priority',
                 'coercion'   => Data::Verifier::coercion(
@@ -532,7 +582,7 @@ sub _build__verify_profile {
                     via  => sub { $priority_rs->find( $_ ); }
                 )
             },
-           'type' => {
+           'type_pk1' => {
                 'required'   => 1,
                 'type'       => 'Holistic::Schema::Ticket::Type',
                 'coercion'   => Data::Verifier::coercion(
@@ -540,15 +590,15 @@ sub _build__verify_profile {
                     via  => sub { $type_rs->find( $_ ); }
                 )
             },
-           'status' => {
+           'status_pk1' => {
                 'required'   => 0,
-                'type'       => 'Holistic::Schema::Ticket::Status',
+                'type'       => 'Holistic::Schema::Status',
                 'coercion'   => Data::Verifier::coercion(
                     from => 'Int',
                     via  => sub { $status_rs->find( $_ ); }
                 )
             },
-           'queue' => {
+           'queue_pk1' => {
                 'required'   => 1,
                 'type'       => 'Holistic::Schema::Queue',
                 'coercion'   => Data::Verifier::coercion(

@@ -25,6 +25,27 @@ sub data_for_scope {
     };
 };
 
+sub unsuccessful_scopes {
+    my ( $self ) = @_;
+    my $results = $self->results || {};
+    [ grep { not $results->{$_}->success } keys %$results ];
+}
+
+sub bad_fields {
+    my ( $self ) = @_;
+    my $results = $self->results || {};
+    my $ret = {};
+    foreach my $result ( keys %$results ) {
+        next if $results->{$result}->success;
+        $ret->{$result} = [
+            $results->{$result}->invalids,
+            $results->{$result}->missings
+        ];
+    }
+
+    $ret;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 

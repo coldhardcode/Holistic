@@ -159,7 +159,7 @@ sub system_identity {
 sub get_status {
     my ( $self, $id ) = @_;
 
-    $self->resultset('Ticket::Status')->find_or_create({ name => $id });
+    $self->resultset('Status')->find_or_create({ name => $id });
 }
 
 sub get_role {

@@ -66,7 +66,7 @@ sub ticket_create : Plan(28) {
 
     $self->ticket( $ticket );
 
-    is( $ticket->status->name, 'New', 'new ticket status' );
+    is( $ticket->status->name, '@open', 'new ticket status' );
     
     cmp_ok( $ticket->requestor->pk1, '==', $identity->person_pk1, 'requestor identity' );
     cmp_ok( $identity->tickets->count, '==', 1, 'ticket count on identity' );

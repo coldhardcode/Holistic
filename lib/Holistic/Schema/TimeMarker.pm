@@ -15,9 +15,9 @@ __PACKAGE__->add_columns(
     'pk1',
     { data_type => 'integer', size => '16', is_auto_increment => 1 },
     'foreign_pk1',
-    { data_type => 'integer', size => '16', is_foreign_key => 1 },
+    { data_type => 'integer', size => '16' },
     'rel_source',
-    { data_type => 'varchar', size => '255', is_foreign_key => 1 },
+    { data_type => 'varchar', size => '255' },
     'name',
     { data_type => 'varchar', size => '255', is_nullable => 0 },
     'dt_marker',
@@ -26,20 +26,22 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key('pk1');
 
-__PACKAGE__->belongs_to(
+__PACKAGE__->add_relationship(
     'queue', 'Holistic::Schema::Queue',
     {
         'foreign.pk1'        => 'self.foreign_pk1',
         'foreign.rel_source' => 'self.rel_source'
-    }
+    },
+    { accessor => 'single', join_type => 'LEFT', is_foreign_key_constraint => 0 },
 );
 
-__PACKAGE__->belongs_to(
+__PACKAGE__->add_relationship(
     'ticket', 'Holistic::Schema::Ticket',
     {
-        'foreign.pk1'           => 'self.foreign_pk1',
+        'foreign.pk1'        => 'self.foreign_pk1',
         'foreign.rel_source' => 'self.rel_source'
-    }
+    },
+    { accessor => 'single', join_type => 'LEFT', is_foreign_key_constraint => 0 },
 );
 
 sub _build_verify_scope { 'timemarker' }
