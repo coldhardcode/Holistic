@@ -262,18 +262,18 @@ sub prepare_data {
     my ( $self, $c, $data ) = @_;
 
     if ( $c->user_exists ) {
-        $data->{ticket}->{identity} = $c->user->id;
+        $data->{ticket}->{identity_pk1} = $c->user->id;
         return $data;
     }
 
     if ( defined ( my $reporter = $data->{ticket}->{reporter} ) ) {
         my $identity = $c->model('Schema::Person::Identity')->search({ realm => 'local', ident => lc($reporter) })->first;
         if ( defined $identity ) {
-            $data->{ticket}->{identity} = $identity->pk1;
+            $data->{ticket}->{identity_pk1} = $identity->pk1;
         }
     }
-    if ( not defined $data->{ticket}->{identity} ) {
-        $data->{ticket}->{identity} = $c->model('Schema')->schema->system_identity->id;
+    if ( not defined $data->{ticket}->{identity_pk1} ) {
+        $data->{ticket}->{identity_pk1} = $c->model('Schema')->schema->system_identity->id;
     }
 
     return $data;
@@ -282,8 +282,16 @@ sub prepare_data {
 sub _create : Private {
     my ( $self, $c, $clean_data ) = @_;
 
-    $clean_data->{queue} = $clean_data->{queue}->initial_state;
-    $c->log->debug("Set initial state: " . $clean_data->{queue});
+    $clean_data->{queue_pk1} = $clean_data->{queue_pk1}->initial_state->id;
+    $c->log->debug("Set initial state: " . $clean_data->{queue_pk1})
+        if $c->debug;
+    # Collapse the values, this should probably be on a DBIC deflator
+    # for columns though. (XX)
+    foreach my $key ( keys %{ $clean_data } ) {
+        if ( blessed $clean_data->{$key} && $clean_data->{$key}->can('id') ) {
+            $clean_data->{$key} = $clean_data->{$key}->id;
+        }
+    }
     $c->stash->{$self->rs_key}->create($clean_data);
 }
 
