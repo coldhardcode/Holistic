@@ -26,9 +26,11 @@ $suite->run(
 
             $ticket->modify({ 'advance' => 1, user => $self->person });
             cmp_ok( $ticket->changes->count, '==', 1, 'change log count' );
+            is($ticket->queue->path, 'trac.wip.assigned');
 
-            $ticket->modify('advance' => 'Accepted', user => $self->person );
+            $ticket->modify('advance' => 'Wontfix', user => $self->person );
             cmp_ok( $ticket->changes->count, '==', 2, 'change log count' );
+            is($ticket->queue->path, 'trac.closed.wontfix');
 
             $ticket->modify({ owner => $self->person, user => $self->person });
             cmp_ok( $ticket->changes->count, '==', 3, 'change log count' );
@@ -52,10 +54,6 @@ $suite->run(
             $ticket->modify({ due_date => $now, user => $self->person });
             cmp_ok( $ticket->changes->count, '==', 8, 'change log count' );
             is_deeply( [ $ticket->due_date->dt_marker ], [ $now ], 'right due date' );
-            # advanced until closed
-            #$ticket->modify('advance' => 'Closed', user => $self->person );
-            #cmp_ok( $ticket->changes->count, '==', 9, 'change log count' );
-
             if ( 0 ) {
                 # Some data_manager
                 $self->data_manager;

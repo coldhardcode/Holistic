@@ -105,6 +105,9 @@ sub trac_queue_create : Test {
     diag("Next step: " . $steps[0]->path);
     is( $steps[0]->queue_pk1, $closed->id, 'right next step');
 
+    @steps = $accepted->next_step;
+    is( $steps[0]->id, $fixed->id, 'accepted to fixed');
+
     $self->queue( $queue );
 
     $queue->update({ closed_queue_pk1 => $closed->id });

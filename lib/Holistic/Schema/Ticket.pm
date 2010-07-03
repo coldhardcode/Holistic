@@ -390,17 +390,24 @@ sub advance {
     elsif ( $user and $user->isa('Holistic::Schema::Person') ) {
         $user = $user->identities({ realm => 'local', active => 1 })->first;
     }
-
+    my $action = 'advanced';
+    my $closed_path = $queue->closed_queue->path;
+    if ( $step->path =~ /^$closed_path/ ) {
+        $action = 'closed';
+    }
     my $change = $self->add_to_changes({
-        name            =>
-            ( $step->id == $queue->closed_queue_pk1 ? 'closed' : 'advanced' ),
+        name            => $action,
         value           => $step->name,
         old_value       => $queue->name,
         identity_pk1    => $user->id
     });
+    $self->update({
+        queue_pk1      => $step->id,
+        last_queue_pk1 => $self->queue_pk1
+    });
+    $self->queue( $step );
+    $self->discard_changes;
  
-    $self->update({queue_pk1 => $step->id, last_queue_pk1 => $self->queue_pk1});
-
     return $change;
 }
 
