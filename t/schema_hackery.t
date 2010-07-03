@@ -32,12 +32,29 @@ $suite->run(
 
             $ticket->modify({ owner => $self->person, user => $self->person });
             cmp_ok( $ticket->changes->count, '==', 3, 'change log count' );
+            
+            $ticket->modify({ attention => $self->person, user => $self->person });
+            cmp_ok( $ticket->changes->count, '==', 4, '- change log count' );
+            diag($ticket->needs_attention->first);
+            cmp_ok(
+                $ticket->needs_attention->first->id , '==',
+                $self->person->id, 
+                'attention ok'
+            );
 
             $ticket->modify({ tag => [ 'tags', 'are', 'good' ] });
-            cmp_ok( $ticket->changes->count, '==', 4, 'change log count' );
+            cmp_ok( $ticket->changes->count, '==', 5, 'change log count' );
 
             $ticket->modify({ priority => 'Urgent', tag => [ 'weee' ] });
-            cmp_ok( $ticket->changes->count, '==', 6, 'change log count' );
+            cmp_ok( $ticket->changes->count, '==', 7, 'change log count' );
+
+            my $now = DateTime->now;
+            $ticket->modify({ due_date => $now, user => $self->person });
+            cmp_ok( $ticket->changes->count, '==', 8, 'change log count' );
+            is_deeply( [ $ticket->due_date->dt_marker ], [ $now ], 'right due date' );
+            # advanced until closed
+            #$ticket->modify('advance' => 'Closed', user => $self->person );
+            #cmp_ok( $ticket->changes->count, '==', 9, 'change log count' );
 
             if ( 0 ) {
                 # Some data_manager

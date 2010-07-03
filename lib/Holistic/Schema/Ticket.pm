@@ -243,6 +243,14 @@ sub add_person {
     $self->_create_person_with_role( $person, $role );
 }
 
+sub set_attention {
+    my ( $self, $person ) = @_;
+    $self->needs_attention( $person );
+    
+    return $person->name;
+}
+
+
 sub needs_attention {
     my ( $self, $identity ) = @_;
 
@@ -329,13 +337,16 @@ sub set_status {
     $self->status( $status );
 }
 
-sub set_tag { shift->tag( @{$_[0]} ); }
+sub set_tag {
+    shift->tag( @{$_[0]} );
+}
 
 sub tag {
     my ( $self, @tags ) = @_;
 
     $self->ticket_tags->delete;
 
+    my @valid_tags = ();
     foreach my $tag ( @tags ) {
         my $results = $self->schema->data_manager
             ->verify( 'tag', { name => $tag } );
@@ -344,7 +355,9 @@ sub tag {
         my $tag = $self->result_source->schema->resultset('Tag')
             ->find_or_create({ name => $results->get_value('name') });
         $self->add_to_tags($tag);
+        push @valid_tags, $tag->name;
     }
+    return @valid_tags;
 }
 
 sub next_step {
@@ -360,7 +373,6 @@ sub advance {
     die "Can't advance ticket, no steps defined\n"
         unless defined $steps[0];
     my $step;
-
     if ( $opt ) {
         ( $step ) = grep { $_->name eq $opt } @steps;
         # Invalid step, need to figure out proper action.
@@ -423,6 +435,7 @@ sub _modify {
     my $modify_txn = sub {
         my @errors  = ();
         my @changes = ();
+        my @saved_changes = ();
         my $system_user = $self->schema->system_identity;
 
         foreach my $arg ( keys %$args ) {
@@ -437,12 +450,22 @@ sub _modify {
                 # mix into our Data::Manager object.
                 my $value = $method->( $self, $args->{$arg}, $args );
 
-                unless ( blessed $value and $value->isa('Holistic::Schema::Ticket::Change') ) {
+                if ( blessed $value and $value->isa('Holistic::Schema::Ticket::Change') ) {
+                    push @saved_changes, $value;
+                } else {
+                    if ( blessed $value ) {
+                        if ( $value->can('changelog_string') ) {
+                            $value = $value->changelog_string;
+                        }
+                        elsif ($value->can('name') ) {
+                            $value = $value->name;
+                        }
+                    }
                     push @changes, {
                         name         => $arg,
                         value        => $value || $args->{$arg},
                         identity_pk1 => ( $args->{user} ? $args->{user}->id : $system_user->id )
-                    }
+                    };
                 }
             } catch {
                 # This isn't writing to $schema->data_manager, so we 
@@ -457,19 +480,25 @@ sub _modify {
             };
         }
         # We've recorded changes, so now record them to the DB
-        if ( @changes ) {
+        if ( @changes or @saved_changes ) {
             use Digest::MD5 'md5_hex';
             # The first is to get the signature, which is the timestamp
             # and then the name/value of each change.  This lets you
             # validate that the change is not tampered with... you know,
             # in case you care.  I sure as hell don't, but you may.
-            my $changeset   = md5_hex(
+            my $changeset = md5_hex(
                 join('', time,
-                    map { ( $_->{name}, $_->{value} ) } @changes
+                    ( map { ( $_->{name}, $_->{value} ) } @changes ),
+                    ( map { ( $_->name, $_->value ) } @saved_changes )
                 )
             );
             foreach my $change ( @changes ) {
+                $change->{changeset} = $changeset;
                 $self->add_to_changes( $change );
+            }
+            # And lets clobber the default
+            foreach my $change ( @saved_changes ) {
+                $change->update({ changeset => $changeset });
             }
         }
 

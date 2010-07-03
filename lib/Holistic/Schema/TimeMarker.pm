@@ -64,5 +64,11 @@ sub _build__verify_profile {
     };
 }
 
+# ±X This really breaks down.
+sub changelog_string {
+    my ( $self ) = @_;
+    return $self->dt_marker;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

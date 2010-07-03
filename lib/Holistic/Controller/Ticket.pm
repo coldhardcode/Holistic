@@ -64,88 +64,49 @@ sub attributes_GET {
 
 sub attributes_POST {
     my ( $self, $c ) = @_;
+
     my $data = $c->req->data || $c->req->params;
     my $blank = delete $data->{blank};
-
-    # XX This needs to be refactored into the API Call.
 
     my $ticket = $c->stash->{ $self->object_key };
 
     # Clear attention on the user, since they updated.
     $ticket->clear_attention( $c->user ) if $c->user_exists;
 
+
+    my $modifications = {};
+
     my $priority = $data->{priority} ?
         $c->model('Schema::Ticket::Priority')->find($data->{priority}) : undef;
-
-    $priority = undef if not $priority or $priority->id == $ticket->priority_pk1;
+    $modifications->{priority} = $priority if defined $priority;
 
     my $owner_str = '';
-    my $owner;
 
     if ( $data->{owner} ) {
-        try {
-            $owner = $c->model('Schema::Person')->find( $data->{owner} );
-            $owner = undef if $owner->id == $ticket->owner->id;
-        } catch {
-            # XX This is hacky, I admit.  If $ticket->owner returns undef
-            # then it throws an error... we need -?>
-            $c->log->debug("Failed setting owner, ticket unowned? $_")
-                if $c->debug;
-        };
-    }
-
-    my $attn;
-    if ( $data->{attention} ) {
-        $attn = $c->model('Schema::Person')->find( $data->{attention} );
-        $attn = undef if $ticket->needs_attention->find( $data->{attention} );
-    }
-    $ticket->update({ priority => $priority }) if $priority;
-    if ( defined $owner ) {
-        $ticket->owner( $owner );
-        $owner_str = "  " . (
-            ( $c->stash->{context}->{person} and $owner->id == $c->stash->{context}->{person}->id ) ?
-            $c->loc("You are now the owner.") :
-            $c->loc("The owner is now <a href=\"[_2]\">[_1]</a>.",
-                [ $owner->name, $c->uri_for_action('/person/object', [ $owner->id ]) ])
-        );
-    }
-    $ticket->needs_attention( $attn ) if defined $attn;
-
-    my $changeset = time;
-
-    if ( $data->{due_date} ) {
-        my $due = $ticket->due_date;
-        $due = defined $due ? $due->dt_marker->strftime('%F') : '';
-        unless ( $due eq $data->{due_date} ) {
-            $ticket->due_date( $data->{'due_date'} );
-            $ticket->add_to_changes({
-                changeset => $changeset,
-                name => 'due_date',
-                value => $data->{due_date},
-                old_value => $due,
-                identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
-            });
+        my $owner = $c->model('Schema::Person')->find( $data->{owner} );
+        if ( defined $owner ) {
+            $modifications->{owner} = $owner;
+            $owner_str = "  " . (
+                ( $c->stash->{context}->{person} and $owner->id == $c->stash->{context}->{person}->id ) ?
+                $c->loc("You are now the owner.") :
+                $c->loc("The owner is now <a href=\"[_2]\">[_1]</a>.",
+                    [ $owner->name, $c->uri_for_action('/person/object', [ $owner->id ]) ])
+            );
         }
     }
 
-    $ticket->add_to_changes({
-        changeset => $changeset,
-        name => 'owner',
-        value => $owner->name,
-        identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
-    }) if defined $owner;
-    $ticket->add_to_changes({
-        changeset => $changeset,
-        name => 'attention',
-        value => $attn->name,
-        identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
-    }) if defined $attn;
-    $ticket->add_to_changes({
-        changeset => $changeset,
-        name => 'priority',
-        value => $priority->name,
-        identity_pk1 => ( $c->user_exists ? $c->user->id : 1 ), # XX
-    }) if defined $priority;
+    if ( $data->{attention} ) {
+        my $attn = $c->model('Schema::Person')->find( $data->{attention} );
+        $modifications->{attention} = $attn if defined $attn;
+    }
+
+    if ( $data->{due_date} ) {
+        $modifications->{due_date} = $data->{due_date};
+    }
+
+    if ( %$modifications ) {
+        $ticket->modify({ %$modifications, user => $c->user->person });
+    }
     if ( $c->req->looks_like_browser ) {
         $c->message($c->loc("Ticket status has been updated.").$owner_str);
         $c->res->redirect($c->uri_for_action('/ticket/object', [ $ticket->id ]));
