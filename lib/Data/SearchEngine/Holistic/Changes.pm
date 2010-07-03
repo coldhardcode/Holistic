@@ -43,24 +43,12 @@ sub search {
         total_entries => $full_rs->count
     );
 
-    my %facets = ();
+    my $faceter = DBIx::Class::ResultSet::Faceter->new;
+    $faceter->add_facet('Column', { name => 'date_on', column => 'dt_created.ymd' });
+    $faceter->add_facet('Column', { name => 'owner', column => 'identity.person.name' });
+    $faceter->add_facet('Column', { name => 'queue_name', column => 'top_queue.name' });
 
-    while(my $change = $full_rs->next) {
-        # my $tick = $tickets[$_];
-		my $ticket = $change->ticket;
-
-        # my $products = $tick->products;
-        # while(my $prod = $products->next) {
-        #     $facets{product}->{$prod->name}++;
-        # }
-        # 
-        # $facets{status}->{$tick->status->name}++;
-        $facets{date_on}->{$change->dt_created->ymd}++;
-        $facets{owner}->{$change->identity->person->name}++;
-		$facets{queue_name}->{$ticket->top_queue->name}++;
-        # $facets{priority}->{$tick->priority->name}++;
-        # $facets{type}->{$tick->type->name}++;
-    }
+    my $fac_res = $faceter->facet($full_rs);
 
     while(my $change = $changes->next) {
         push(@items, Data::SearchEngine::Holistic::ChangeItem->new(
@@ -75,7 +63,7 @@ sub search {
         pager => $pager,
         items => \@items,
         elapsed => time - $start,
-        facets => \%facets
+        facets => $fac_res->facets
     );
 }
 

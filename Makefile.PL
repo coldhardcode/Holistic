@@ -66,6 +66,7 @@ requires 'MooseX::Types::DateTime';
 
 # DBIC Components
 requires 'DBIx::Class' => '0.08119';
+requires 'DBIx::Class::ResultSet::Faceter';
 requires 'DBIx::Class::TimeStamp';
 requires 'DBIx::Class::DynamicDefault';
 requires 'DBIx::Class::Ordered';

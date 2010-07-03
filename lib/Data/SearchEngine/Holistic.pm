@@ -10,6 +10,7 @@ use Data::SearchEngine::Paginator;
 use Data::SearchEngine::Holistic::Results;
 use Hash::Merge qw(merge);
 use Search::QueryParser;
+use DBIx::Class::ResultSet::Faceter;
 
 has fields => (
     is => 'ro',
@@ -127,21 +128,13 @@ sub search {
         total_entries => $full_rs->count
     );
 
-    my %facets = ();
+    my $faceter = DBIx::Class::ResultSet::Faceter->new;
+    $faceter->add_facet('Column', { name => 'date_on', column => 'dt_created.ymd' });
+    $faceter->add_facet('Column', { name => 'status', column => 'status.name' });
+    $faceter->add_facet('Column', { name => 'priority', column => 'priority.name' });
+    $faceter->add_facet('Column', { name => 'type', column => 'type.name' });
 
-    while(my $tick = $full_rs->next) {
-
-        # XX Causes lots of queries
-        # my $products = $tick->products;
-        # while(my $prod = $products->next) {
-        #     $facets{product}->{$prod->name}++;
-        # }
-        $facets{date_on}->{$tick->dt_created->ymd}++;
-        $facets{status}->{$tick->status->name}++;
-        # $facets{owner}->{$tick->owner->person->token}++;
-        $facets{priority}->{$tick->priority->name}++;
-        $facets{type}->{$tick->type->name}++;
-    }
+    my $fac_res = $faceter->facet($full_rs);
 
     while(my $tick = $tickets->next) {
         push(@items, Data::SearchEngine::Holistic::Item->new(
@@ -156,7 +149,7 @@ sub search {
         pager => $pager,
         items => \@items,
         elapsed => time - $start,
-        facets => \%facets
+        facets => $fac_res->facets
     );
 }
 

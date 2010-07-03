@@ -1,15 +1,14 @@
 [% MACRO show_facet(name, label, results) BLOCK; %]
  [% SET facets = results.facets.${name} %]
  [% IF facets.size > 1 %]
- [% SET things = results.get_sorted_facet(name) %]
  [% SET param = name _ '_all' %]
  <li>[% c.loc(label) %]
   <ul>
-   [% FOREACH facet = things %]
-   <li><a href="[% c.req.uri_with({ ${name} => facet }) %]">[% facet %] <meter>[% facets.${facet} %]</meter></a></li>
+   [% FOREACH facet = facets %]
+   <li><a href="[% c.req.uri_with({ ${name} => facet.keys.0 }) %]">[% facet.keys.0 %] <meter>[% facet.values.0 %]</meter></a></li>
    [% IF loop.count == 5 && !c.req.params.${param}; LAST; END %]
    [% END %]
-   [% IF things.size > 5 %]
+   [% IF facets.size > 5 %]
     [% IF c.req.params.${param}; %]
     <li><a href="[% c.req.uri_with({ ${param} => 0 })%]">Show Less</a></li>
     [% ELSE %]
