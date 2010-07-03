@@ -122,7 +122,7 @@ sub advance_POST {
     my ( $self, $c ) = @_;
 
     try {
-        $c->stash->{ticket}->advance( undef, $c->user );
+        $c->stash->{ticket}->modify({ advance => 1, user => $c->user });
     } catch {
         $c->message({ type => 'error', message => $c->loc($_) });
     };
@@ -150,15 +150,8 @@ sub tag_POST {
         return;
     }
 
-    my $tag = $data->{tag};
-    $tag =~ s/^\s*|\s*$//g;
-
-
     my $ticket = $c->stash->{ $self->object_key };
-    my $obj = $c->model('Schema::Tag')->find_or_create({
-        name => $tag
-    });
-    $ticket->ticket_tags->find_or_create({ tag_pk1 => $obj->id });
+    $ticket->modify({ add_tag => $data->{tag} });
     $self->status_ok( $c, 
         entity => [ map { $_->get_columns } $ticket->tags->all ]
     );
@@ -167,7 +160,7 @@ sub tag_POST {
 sub tag_DELETE {
     my ( $self, $c ) = @_;
     my $ticket = $c->stash->{ $self->object_key };
-    $ticket->ticket_tags({ tag_pk1 => $c->stash->{tag} })->delete;
+    $ticket->modify({ remove_tag => $data->{tag} });
     $self->status_ok( $c, 
         entity => [ map { $_->get_columns } $ticket->tags->all ]
     );

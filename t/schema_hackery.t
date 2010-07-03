@@ -47,12 +47,17 @@ $suite->run(
             $ticket->modify({ tag => [ 'tags', 'are', 'good' ] });
             cmp_ok( $ticket->changes->count, '==', 5, 'change log count' );
 
-            $ticket->modify({ priority => 'Urgent', tag => [ 'weee' ] });
+            $ticket->modify({ priority => 'Urgent', add_tag => [ 'weee' ] });
             cmp_ok( $ticket->changes->count, '==', 7, 'change log count' );
+            cmp_ok( $ticket->tags->count, '==', 4, 'ticket tags appended' );
+
+            $ticket->modify({ remove_tag => [ 'weee' ] });
+            cmp_ok( $ticket->changes->count, '==', 8, 'change log count' );
+            cmp_ok( $ticket->tags->count, '==', 3, 'ticket tags removed' );
 
             my $now = DateTime->now;
             $ticket->modify({ due_date => $now, user => $self->person });
-            cmp_ok( $ticket->changes->count, '==', 8, 'change log count' );
+            cmp_ok( $ticket->changes->count, '==', 9, 'change log count' );
             is_deeply( [ $ticket->due_date->dt_marker ], [ $now ], 'right due date' );
             if ( 0 ) {
                 # Some data_manager

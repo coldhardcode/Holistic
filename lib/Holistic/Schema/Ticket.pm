@@ -337,6 +337,37 @@ sub set_status {
     $self->status( $status );
 }
 
+sub add_tag {
+    my ( $self, $tag_args ) = @_;
+    my @new_tags = ref $tag_args ? @$tag_args : $tag_args;
+
+    my @tags = $self->tags->get_column('name')->all;
+    push @tags, @new_tags;
+    my %full_tags = map { $_ => $_ } $self->tag( @tags );
+    # Return the newly created tags
+    return grep { exists $full_tags{ lc($_) } } @new_tags;
+}
+
+sub remove_tag {
+    my ( $self, $tag_args ) = @_;
+    my @rem_tags = ref $tag_args ? @$tag_args : $tag_args;
+
+    my %tags_to_remove = map {
+        my $name = lc($_);
+        $name    =~ s/^\s*|\s*$//g;
+        $name => $name;
+    } @rem_tags;
+
+    my @tags =
+        # Remove all the tags that are marked for deletion
+        grep { not exists $tags_to_remove{$_} }
+        $self->tags->get_column('name')->all;
+    my %full_tags = map { $_ => $_ } $self->tag( @tags );
+    # Return the tags removed.
+    # XX, this should actually tag the ones removed...
+    return keys %tags_to_remove;
+}
+
 sub set_tag {
     shift->tag( @{$_[0]} );
 }
@@ -455,7 +486,7 @@ sub _modify {
                 # If the method fails, it will either just throw a simple
                 # error or a Data::Verifier::Results object that we'll
                 # mix into our Data::Manager object.
-                my $value = $method->( $self, $args->{$arg}, $args );
+                my ( $value ) = $method->( $self, $args->{$arg}, $args );
 
                 if ( blessed $value and $value->isa('Holistic::Schema::Ticket::Change') ) {
                     push @saved_changes, $value;
