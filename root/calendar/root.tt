@@ -25,7 +25,7 @@
   <tr [% IF day.week_number == now.week_number && day.year == now.year %]class="current"[% END %]>
    [% END %]
    [% # XX Need to use config'ed 'day off' days to mark them in the cal, not just == 6 & 7 %]
-   <td class="[%~ IF req_day.month != day.month ~%]other[%~ END ~%][%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%] current[%~ ELSIF day.day_of_week == 6 || day.day_of_week == 7 %] do[%~ END ~%]"><a href="[% c.uri_for_action('/calendar/day', [], { date_on => day.ymd }) %]">[%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%]<span>[% c.loc('Today') %]</span>[% END %][% day.day %]</a>
+   <td class="[%~ IF req_day.month != day.month ~%]other[%~ END ~%][%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%] current[%~ END ~%][%~ IF day.day_of_week == 6 || day.day_of_week == 7 %] do[%~ END ~%]"><a href="[% c.uri_for_action('/calendar/day', [], { date_on => day.ymd }) %]">[%~ IF day.day == now.day && day.month == now.month && day.year == now.year ~%]<span>[% c.loc('Today') %]</span>[% END %][% day.day %]</a>
    [% IF markers.exists(ymd) %]
    <ul>
     [% FOREACH marker = markers.$ymd %]
