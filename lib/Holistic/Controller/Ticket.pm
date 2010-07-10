@@ -159,6 +159,8 @@ sub tag_POST {
 
 sub tag_DELETE {
     my ( $self, $c ) = @_;
+
+    my $data = $c->req->data || $c->req->params;
     my $ticket = $c->stash->{ $self->object_key };
     $ticket->modify({ remove_tag => $data->{tag} });
     $self->status_ok( $c, 
