@@ -59,6 +59,10 @@ $suite->run(
             $ticket->modify({ due_date => $now, user => $self->person });
             cmp_ok( $ticket->changes->count, '==', 9, 'change log count' );
             is_deeply( [ $ticket->due_date->dt_marker ], [ $now ], 'right due date' );
+            my $date_string = '2010-10-05';
+            $ticket->modify({ due_date => $date_string, user => $self->person });
+            is( $ticket->due_date->dt_marker, '2010-10-05T00:00:00', 'right due date from string' );
+
             if ( 0 ) {
                 # Some data_manager
                 $self->data_manager;

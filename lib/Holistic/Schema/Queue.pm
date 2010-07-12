@@ -301,11 +301,19 @@ sub due_date {
     my ( $self, $date ) = @_;
     my $marker = $self->time_markers({ name => '@due' })->first;
     if ( defined $date ) {
+        my $results = $self->schema->data_manager
+            ->verify( 'timemarker', { dt_marker => "$date", name => '@due' } );
+        unless ( $results->success ) {
+            warn "\n\nOH NOES\n\n";
+            use Data::Dumper; warn Dumper($results);
+            die $results;
+        }
+
         if ( $marker ) {
-            $marker->update({ dt_marker => $date });
+            $marker->update({ dt_marker => $results->get_value('dt_marker') });
         } else {
             $marker = $self
-                ->add_to_time_markers({ dt_marker => $date, name => '@due' });
+                ->add_to_time_markers({ dt_marker => $results->get_value('dt_marker'), name => '@due' });
         }
     }
 

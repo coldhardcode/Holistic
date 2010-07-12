@@ -514,7 +514,7 @@ sub _modify {
                 } else {
                     carp $_;
                 }
-                push @errors, $arg;
+                push @errors, { arg => $arg, exception => $_ };
             };
         }
         # We've recorded changes, so now record them to the DB
@@ -548,8 +548,9 @@ sub _modify {
             # Abort out of the transaction
             use Data::Dumper;
             die Dumper({
-                errored => \@errors,
-                invalid_fields => $dm->bad_fields 
+                errored         => \@errors,
+                invalid_fields  => $dm->bad_fields,
+                validation      => $dm->success
             });
         }
         $self->update;

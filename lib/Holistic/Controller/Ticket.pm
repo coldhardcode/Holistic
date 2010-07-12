@@ -103,9 +103,19 @@ sub attributes_POST {
     if ( $data->{due_date} ) {
         $modifications->{due_date} = $data->{due_date};
     }
-
     if ( %$modifications ) {
-        $ticket->modify({ %$modifications, user => $c->stash->{context}->{person} });
+        try {
+            $ticket->modify({ %$modifications, user => $c->stash->{context}->{person} });
+        } catch {
+            if ( blessed $_ and $_->isa('Data::Verifier::Results') ) {
+
+            } else {
+                $c->log->fatal("Unexpected error from ticket modify");
+                $c->log->_dump({ keys => [ keys %$modifications ] });
+                $c->log->fatal("Exception: $_");
+                die $_; # Rethrow, unexpected error
+            }
+        };
     }
     if ( $c->req->looks_like_browser ) {
         $c->message($c->loc("Ticket status has been updated.").$owner_str);

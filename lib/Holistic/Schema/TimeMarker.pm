@@ -47,12 +47,18 @@ __PACKAGE__->add_relationship(
 sub _build_verify_scope { 'timemarker' }
 sub _build__verify_profile {
     my ( $self ) = @_;
+
+    use DateTimeX::Easy;
     return {
         'profile' => {
             # XX This should be a valid, parsed time
             'dt_marker' => {
                 'required' => 1,
-                'type' => 'Str',
+                'type'     => 'DateTime',
+                coercion   => Data::Verifier::coercion(
+                    from => 'Str',
+                    via  => sub { DateTimeX::Easy->parse( $_ ); }
+                )
             },
             'name' => {
                 'required'   => 1,
