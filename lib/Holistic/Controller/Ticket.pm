@@ -105,7 +105,7 @@ sub attributes_POST {
     }
 
     if ( %$modifications ) {
-        $ticket->modify({ %$modifications, user => $c->user->person });
+        $ticket->modify({ %$modifications, user => $c->stash->{context}->{person} });
     }
     if ( $c->req->looks_like_browser ) {
         $c->message($c->loc("Ticket status has been updated.").$owner_str);
@@ -122,7 +122,7 @@ sub advance_POST {
     my ( $self, $c ) = @_;
 
     try {
-        $c->stash->{ticket}->modify({ advance => 1, user => $c->user });
+        $c->stash->{ticket}->modify({ advance => 1, user => $c->stash->{context}->{person} });
     } catch {
         $c->message({ type => 'error', message => $c->loc($_) });
     };
@@ -134,6 +134,7 @@ sub tag : Chained('object_setup')  Args(1) ActionClass('REST') {
     my ( $self, $c, $tag_id ) = @_;
     $c->stash->{tag} = $tag_id;
 }
+
 sub tag_GET {
     my ( $self, $c ) = @_;
 
@@ -151,7 +152,7 @@ sub tag_POST {
     }
 
     my $ticket = $c->stash->{ $self->object_key };
-    $ticket->modify({ add_tag => $data->{tag} });
+    $ticket->modify({ add_tag => $data->{tag}, user => $c->stash->{context}->{person} });
     $self->status_ok( $c, 
         entity => [ map { $_->get_columns } $ticket->tags->all ]
     );
@@ -160,9 +161,12 @@ sub tag_POST {
 sub tag_DELETE {
     my ( $self, $c ) = @_;
 
-    my $data = $c->req->data || $c->req->params;
+    my $data   = $c->req->data || $c->req->params;
     my $ticket = $c->stash->{ $self->object_key };
-    $ticket->modify({ remove_tag => $data->{tag} });
+    my $tag    = $ticket->tags->find( $c->stash->{tag} );
+    if ( defined $tag ) {
+        $ticket->modify({ remove_tag => $tag->name, user => $c->stash->{context}->{person} });
+    }
     $self->status_ok( $c, 
         entity => [ map { $_->get_columns } $ticket->tags->all ]
     );

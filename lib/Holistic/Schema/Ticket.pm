@@ -352,19 +352,22 @@ sub remove_tag {
     my ( $self, $tag_args ) = @_;
     my @rem_tags = ref $tag_args ? @$tag_args : $tag_args;
 
+warn "Removing:: " . join(", ", @rem_tags);
     my %tags_to_remove = map {
         my $name = lc($_);
         $name    =~ s/^\s*|\s*$//g;
         $name => $name;
     } @rem_tags;
+warn "Removing:: " . join(", ", keys %tags_to_remove);
 
     my @tags =
         # Remove all the tags that are marked for deletion
         grep { not exists $tags_to_remove{$_} }
         $self->tags->get_column('name')->all;
     my %full_tags = map { $_ => $_ } $self->tag( @tags );
+warn "Removing:: " . join(", ", keys %tags_to_remove);
     # Return the tags removed.
-    # XX, this should actually tag the ones removed...
+    # XX, this should actually tag the ones removed and remove all those...
     return keys %tags_to_remove;
 }
 
