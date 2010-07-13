@@ -19,72 +19,72 @@ has fields => (
         {
             name => {
                 alias => 'me',
-                text => 1,
+                type => 'text',
                 field => 'name'
             },
-            date_created => {
+            date_on => {
                 alias => 'me',
                 field => 'dt_created',
-                text => 0
+                type => 'date'
             },
             description => {
                 alias => 'me',
-                text => 1,
+                type => 'text',
                 field => 'description',
             },
             priority => {
                 alias => 'priority',
-                text => 1,
+                type => 'text',
                 field => 'name'
             },
             queue => {
                 alias => 'me',
-                text => 0,
+                type => 'num',
                 field => 'queue_pk1'
             },
             queue => {
                 alias => 'me',
-                text => 0,
+                type => 'text',
                 field => 'queue_pk1'
             },
 			queue_name => {
 				alias => 'queue',
-				text => 1,
+                type => 'text',
 				field => 'path'
 			},
             reporter => {
                 alias => 'me',
-                text => 1,
+                type => 'text',
                 field => 'identity_pk1'
             },
             reporter_email => {
                 alias => 'person',
-                text => 1,
+                type => 'text',
                 field => 'email'
             },
             reporter_name => {
                 alias => 'person',
-                text => 1,
+                type => 'text',
                 field => 'name'
             },
             person_token => {
                 alias => 'person',
-                text => 1,
+                type => 'text',
                 field => 'token'
             },
             role => {
                 alias => 'role',
-                text => 1,
+                type => 'text',
                 field => 'name'
             },
             status => {
                 alias => 'queue',
-                text => 1,
+                type => 'text',
                 field => 'name'
             },
             type => {
                 alias => 'type',
-                text => 1,
+                type => 'text',
                 field => 'name'
             }
         }
@@ -232,7 +232,7 @@ sub add_conditions {
             }
         } else {
             my $fdef = $fields->{$field};
-            if($op eq ':' && !$fdef->{text}) {
+            if($op eq ':' && $fdef->{type} ne 'text') {
                 # :s are basically LIKEs.  If we are not dealing with a text
                 # field then convert the op to a =
                 $op = '=';
@@ -257,11 +257,11 @@ sub add_conditions {
                     $fdef->{alias}.'.'.$fdef->{field} => $val
                 });
             # Can't be text for > and <
-            } elsif(($op eq '>') && !$fdef->{text}) {
+            } elsif(($op eq '>') && $fdef->{type} ne 'text') {
                 push(@{ $conditions }, {
                     $fdef->{alias}.'.'.$fdef->{field} => { '>' =>  $val }
                 });
-            } elsif(($op eq '<') && !$fdef->{text}) {
+            } elsif(($op eq '<') && $fdef->{type} ne 'text') {
                 push(@{ $conditions }, {
                     $fdef->{alias}.'.'.$fdef->{field} => { '<' =>  $val }
                 });
@@ -281,9 +281,16 @@ sub _add_filters {
 
         next unless defined($fdef);
 
-        $rs = $rs->search({
-            $fdef->{alias}.'.'.$fdef->{field} => $oquery->get_filter($filter)
-        });
+        if($fdef->{type} eq 'date') {
+            my $dt = $oquery->get_filter($filter);
+            $rs = $rs->search({
+                $fdef->{alias}.'.'.$fdef->{field} => { -between => [ "$dt 00:00:00", "$dt 23:59:59" ] }
+            });
+        } else {
+            $rs = $rs->search({
+                $fdef->{alias}.'.'.$fdef->{field} => $oquery->get_filter($filter)
+            });
+        }
     }
 
     return $rs;
