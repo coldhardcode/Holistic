@@ -46,7 +46,7 @@ sub search {
     my $faceter = DBIx::Class::ResultSet::Faceter->new;
     $faceter->add_facet('Column', { name => 'date_on', column => 'dt_created.ymd' });
     $faceter->add_facet('Column', { name => 'owner', column => 'identity.person.name' });
-    $faceter->add_facet('Column', { name => 'queue_name', column => 'top_queue.name' });
+    $faceter->add_facet('Column', { name => 'queue_name', column => 'ticket.top_queue.name' });
 
     my $fac_res = $faceter->facet($full_rs);
 
