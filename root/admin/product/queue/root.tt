@@ -8,19 +8,27 @@ page.crumbs.push(
 queues = queue_rs.all;
 
 ~%]
+
+<article class="admin more">
+ <section>
+  <h2>[% c.loc('Other Actions') %]</h2>
+  <ul>
+  [% FOREACH type IN c.model('Schema::Queue::Type').search_ordered.all %]
+    <li><a href="[% c.uri_for_action("/admin/product/queue/create_form", [ product.id ], { type_pk1 => type.id } ) %]">[% c.loc('Add a [_1]', [ system_localize(type.name) ] ) %]</a></li>
+  [% END %]
+  </ul>
+ </section>
+</article>
+
 [% IF queues %]
 <h1>[% c.loc('[_1] Queues', [ product.name ] ) %]</h1>
     <ul>
     [% FOREACH queue IN queues %]
         <li><a href="[% c.uri_for_action('/admin/product/queue/object', [ product.id, queue.id ] ) %]">[% queue.name | html %]</a></li>
     [% END %] 
-    <ul>
+    </ul>
 [% ELSE %]
 <h1>[% c.loc('Setup [_1] Queues') %]</h1>
 <p>A queue is simply a top-level container for tickets.  After creating a queue, you decide which states belong in that queue.</p>
 [% END %]
-<ul>
-[% FOREACH type IN c.model('Schema::Queue::Type').search_ordered.all %]
-    <li><a href="[% c.uri_for_action("/admin/product/queue/create_form", [ product.id ], { type_pk1 => type.id } ) %]">[% c.loc('Add [_1]', [ system_localize(type.name) ] ) %]</a></li>
-[% END %] 
-</ul>
+

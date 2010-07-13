@@ -6,7 +6,14 @@ page.crumbs.push(
 );
 ~%]
 <h1>[% c.loc('Edit Product: [_1]', [ product.name ]) %]</h1>
-<p><a href="[% c.uri_for_action("/admin/product/queue/root", [ product.id ] ) %]">Product Queues</a></p>
+<article class="admin more">
+ <section>
+  <h2>[% c.loc('Other Actions') %]</h2>
+  <ul>
+    <li><a href="[% c.uri_for_action("/admin/product/queue/root", [ product.id ] ) %]">[% c.loc('List this product\'s queues.') %]</a></li>
+  </ul>
+ </section>
+</article>
 <form id="product" method="post" action="[% c.uri_for_action('/admin/product/object', [ product.id ]) %]">
  <fieldset>
   <table>

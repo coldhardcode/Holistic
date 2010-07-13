@@ -1458,9 +1458,13 @@ article.admin section {
     -moz-border-radius: 5px;
     border-radius: 5px;
     border: 3px solid white;
+    margin: 0 1em 1em 0; padding: .5em;
     clear: none;
     float: left;
-    margin: 0 1em 1em 0; padding: .5em;
+}
+article.more section {
+    clear: left;
+    float: none;
 }
 article.admin section ul {
     margin: 0; padding: 0;
