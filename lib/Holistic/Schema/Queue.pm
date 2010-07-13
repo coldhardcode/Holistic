@@ -336,9 +336,9 @@ sub _default_status {
         return $parent->status->id;
     }
 
-    my $status = $self->schema->resultset('Status')->find({ name => '@open' });
+    my $status = $self->schema->resultset('Queue::Status')->find({ name => '@open' });
     if ( not defined $status ) {
-        $status = $self->schema->resultset('Status')->create({
+        $status = $self->schema->resultset('Queue::Status')->create({
             name => '@open'
         });
     }
