@@ -3,6 +3,9 @@ package Holistic::Controller::Auth;
 use parent 'Catalyst::Controller';
 
 use Moose;
+
+=head1 IGNORE THIS RPX SHIT
+
 use Net::API::RPX;
 
 __PACKAGE__->config(
@@ -24,6 +27,8 @@ sub _build_rpx_client {
     my ( $self ) = @_;
     Net::API::RPX->new({ api_key => $self->rpx_api_key });
 }
+
+=cut
 
 sub setup : Chained('.') PathPart('') CaptureArgs(0) {
     my ( $self, $c ) = @_;
@@ -88,6 +93,8 @@ sub logout : Chained('setup') Args(0) {
     #$c->detach;
 }
 
+=head1 IGNORE THIS RPX SHIT
+
 sub rpx : Chained('setup') PathPart('login/rpx') Args(0) {
     my ( $self, $c ) = @_;
 
@@ -148,6 +155,8 @@ sub rpx : Chained('setup') PathPart('login/rpx') Args(0) {
     $c->res->redirect( $c->uri_for_action('/auth/login') );
     $c->detach;
 }
+
+=cut
 
 sub do_login : Private {
     my ( $self, $c, $data ) = @_;

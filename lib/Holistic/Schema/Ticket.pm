@@ -509,7 +509,6 @@ sub _modify {
                 # This isn't writing to $schema->data_manager, so we 
                 # will manually put things in here.
                 if ( ref $_ eq 'Data::Verifier::Results' ) {
-                    warn "\n\n** Setting verifier results for $arg: $_\n\n";
                     $self->schema->data_manager->set_results($arg, $_);
                 } else {
                     carp $_;
