@@ -35,7 +35,7 @@ page.crumbs.push(
     </tr>
 [% END %]
     <tr>
-     [% textarea_field({ label => 'Description', name => 'queue.description', hint => 'Explanation of Issue', required => 1, rows => 8 }); %]
+     [% textarea_field({ label => 'Description', name => 'queue.description', hint => 'Queue Description', required => 1, rows => 8 }); %]
     </tr>
    </tbody>
   </table>

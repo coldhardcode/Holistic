@@ -19,7 +19,7 @@ results    = errors.${c.controller.scope};
      [% text_field({ label => 'Name', name => 'product.name', hint => 'Name', required => 1, error => stack.for_subject('name').first_message.id, value => results.get_original_value('name') }); %]
     </tr>
     <tr>
-     [% textarea_field({ label => 'Description', name => 'product.description', hint => 'Explanation of Issue', required => 1, rows => 8, error => stack.for_subject('description').first_message.id, value => results.get_original_value('description') }); %]
+     [% textarea_field({ label => 'Description', name => 'product.description', hint => 'Product Description', required => 1, rows => 8, error => stack.for_subject('description').first_message.id, value => results.get_original_value('description') }); %]
     </tr>
    </tbody>
   </table>
