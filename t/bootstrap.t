@@ -14,7 +14,7 @@ $suite->run(
         'deploy',
         'bootstrap',
         { 'person_create' => { name => 'Cory Watson', ident => 'gphat', email => 'gphat@coldhardcode.com', password => 'test' } },
-        { 'group_create' => { name => 'Developers', permissions => [ qw/TICKET_ADMIN TICKET_VIEW/ ] } },
+        { 'group_create' => { name => 'Developers', permissions => [ qw/TICKET_ADMIN TICKET_VIEW ADMIN/ ] } },
         { 'group_join' => { ident => 'gphat' } },
     ]
 );
