@@ -369,8 +369,8 @@ sub import_milestones {
 
     my $rs = $self->resultset('Queue');
 
-    my $open     = $self->resultset('Status')->find_or_create({ name => '@open', accept_tickets => 1, accept_worklog => 1 });
-    my $complete = $self->resultset('Status')->find_or_create({ name => '@completed', accept_tickets => 0, accept_worklog => 0 });
+    my $open     = $self->resultset('Queue::Status')->find_or_create({ name => '@open', accept_tickets => 1, accept_worklog => 1 });
+    my $complete = $self->resultset('Queue::Status')->find_or_create({ name => '@completed', accept_tickets => 0, accept_worklog => 0 });
 
     foreach my $ms ( @$milestones ) {
         my $token = $self->schema->tokenize($ms->{name});

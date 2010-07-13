@@ -128,6 +128,9 @@ __PACKAGE__->table('tickets');
 
 # See Holistic::Schema::Queue for base columns
 __PACKAGE__->add_columns(
+    'status_pk1',
+    { data_type => 'integer', size => '16', is_foreign_key => 1,
+        dynamic_default_on_create => \&_default_status },
     'queue_pk1',
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
     'last_queue_pk1',
@@ -136,6 +139,14 @@ __PACKAGE__->add_columns(
     { data_type => 'integer', size => '16', is_foreign_key => 1 },
 );
 __PACKAGE__->set_primary_key('pk1');
+
+sub _default_status {
+    my ( $self ) = @_;
+
+    my $status = $self->schema->resultset('Status')
+        ->find_or_create({ name => '@new' });
+    $status->id;
+}
 
 __PACKAGE__->belongs_to(
     'priority', 'Holistic::Schema::Ticket::Priority', 

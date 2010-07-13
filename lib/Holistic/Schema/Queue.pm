@@ -115,7 +115,7 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->belongs_to(
-    'status', 'Holistic::Schema::Status',
+    'status', 'Holistic::Schema::Queue::Status',
     { 'foreign.pk1' => 'self.status_pk1' }
 );
 

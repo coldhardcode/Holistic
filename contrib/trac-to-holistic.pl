@@ -267,9 +267,9 @@ sub find_status {
         });
         if ( $name =~ /closed/ ) {
             $milestone->update({ closed_queue_pk1 => $status->id });
-            my $qs = $conv->resultset('Status')->find({ name => '@closed' });
+            my $qs = $conv->resultset('Queue::Status')->find({ name => '@closed' });
             if ( not defined $qs ) {
-                $qs = $conv->resultset('Status')->create({
+                $qs = $conv->resultset('Queue::Status')->create({
                     name           => '@closed',
                     accept_tickets => 0,
                     accept_worklog => 0,
