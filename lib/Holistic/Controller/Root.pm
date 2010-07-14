@@ -97,7 +97,8 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
             });
             # XX Throw up a notice to complete their profile?
         }
-       $c->stash->{context}->{person} = $ident->person;
+        $c->stash->{context}->{person} = $ident->person;
+        $c->stash->{now}->set_time_zone($c->stash->{context}->{person}->timezone);
         if ( defined $ident ) {
             $c->user( $ident );
             my $attn_count = $ident->needs_attention->count;
