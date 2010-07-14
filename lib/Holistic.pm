@@ -5,6 +5,8 @@ use Scalar::Util 'blessed';
 
 use Catalyst::Runtime 5.80;
 
+BEGIN { $ENV{TZ} = 'UTC'; }
+
 # Set flags and add plugins for the application
 #
 #         -Debug: activates the debug mode for very useful log messages
