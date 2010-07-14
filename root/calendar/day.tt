@@ -1,4 +1,16 @@
-<p>XX Show time markers for this day here.</p>
+[% IF markers.size %]
+<article class="boxes wide">
+ <section>
+  <h2>[% c.loc('Things Requiring Attention Today') %]</h2>
+  <ul>
+   [% FOREACH marker = markers %]
+   <li><a href="[% c.uri_for_action('/queue/object', [ marker.foreign_pk1 ]) %]">XX Queue [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
+   [% END %]
+  </ul>
+ </section>
+</article>
+[% END %]
+
 [% USE HTML.Strip %]
 [% page.title = c.loc('Activity Log') %]
 <h1>[% c.loc('Ticket Changes') %]</h1>

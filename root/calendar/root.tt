@@ -30,9 +30,9 @@
    <ul>
     [% FOREACH marker = markers.$ymd %]
 	 [% IF marker.rel_source == 'tickets' %]
-      <li><a class="queue" href="[% c.uri_for_action('/ticket/object', [ marker.foreign_pk1 ]) %]">Ticket [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
+      <li><a class="queue" href="[% c.uri_for_action('/ticket/object', [ marker.foreign_pk1 ]) %]">XX Ticket [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
 	 [% ELSIF marker.rel_source == 'queues' %]
-      <li><a href="[% c.uri_for_action('/queue/object', [ marker.foreign_pk1 ]) %]">Queue [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
+      <li><a href="[% c.uri_for_action('/queue/object', [ marker.foreign_pk1 ]) %]">XX Queue [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
      [% END %]
     [% END %]
    </ul>

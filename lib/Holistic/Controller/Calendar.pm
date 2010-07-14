@@ -107,7 +107,7 @@ sub today : Chained('setup') PathPart('today') Args(0) {
 
     $c->stash->{template} = 'calendar/day.tt';
 
-    $c->detach('day', [ $now->year, $now->month, $now->day ]);
+    $c->detach('day');
 }
 
 sub day : Chained('setup') PathPart('day') Args(0) {
@@ -117,6 +117,19 @@ sub day : Chained('setup') PathPart('day') Args(0) {
     try { $req_day = DateTime::Format::DateParse->parse_datetime($c->req->params->{date_on}); };
 
     $c->stash->{req_day} = $req_day;
+
+    my $markers = $c->model('Schema::TimeMarker')->search(
+      {
+          dt_marker => { between => [ $req_day->ymd.' 00:00:00', $req_day->ymd.' 23:59:59' ]}
+      }, {
+          # This doesn't work at all...
+    #       #prefetch => [ 'ticket', 'queue' ]
+          order_by => 'rel_source', 'dt_marker',
+      }
+    );
+
+    $c->stash->{markers} = [ $markers->all ];
+
 
     my $search = Data::SearchEngine::Holistic::Changes->new(
         schema => $c->model('Schema')->schema
