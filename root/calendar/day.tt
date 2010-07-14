@@ -1,3 +1,4 @@
+[% page.layout = 'wide' %]
 [% IF markers.size %]
 <article class="boxes wide">
  <section>

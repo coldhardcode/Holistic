@@ -12,7 +12,7 @@
  </ul>
 </nav>
 [% END %]
-<article id="widecontent" class="clearfix">
+<article id="content" class="clearfix">
  [% PROCESS site/messages.tt %]
 [%~ 
 # Nothing fancy here.  Just dump the content.

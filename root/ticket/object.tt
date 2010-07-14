@@ -1,6 +1,7 @@
 [%~
 USE Number.Format;
 
+page.layout = 'wide';
 page.body.scripts.push('tabview.js');
 page.title = ticket.name;
 

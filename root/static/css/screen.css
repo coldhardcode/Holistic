@@ -1,7 +1,8 @@
 @charset "utf-8";
 * { margin: 0; padding: 0 ;}
 html, body {
-    background: #fefcf1 url('/static/images/back.png') repeat-y;
+/*    background: #fefcf1 url('/static/images/back.png') repeat-y;*/
+    background: #fefcf;
     color: #353535;
     font-family: 'HelveticaNueue-Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -18,11 +19,12 @@ html body > header {
     background: #e5e5d4 url('/static/images/header_back.png');
     height: 72px;
 }
-html, body, #content, #tickcontent {
+html, body, #content, #tickcontent, #widecontent {
     height: 100%;
 }
 body > #content,
-body > #tickcontent {
+body > #tickcontent,
+body > #widecontent {
     height: auto; min-height: 100%;
     padding-bottom: 150px;
 }
@@ -373,7 +375,6 @@ body > header form fieldset {
     font-size: 14px;
     left: 0;
     margin: 12px 1em 1em 1em; padding: 0;
-/*    overflow: hidden;*/
     position: absolute;
     text-align: left;
     top: 72px;
@@ -499,6 +500,9 @@ p.subdued {
 }
 #content {
     padding: 12px 1.5em 0 300px;
+}
+#widecontent {
+    padding: 2em 1.5em 0 2em;
 }
 #main > header {
     margin: 0 0 1.5em 0; padding: 0;

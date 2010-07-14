@@ -1,3 +1,4 @@
+[% page.layout = 'wide' %]
 [% SET pager = results.pager %]
 <h2>[% c.loc('Results for search "[_1]"', results.query.original_query) %]</h2>
 [% IF pager.total_entries %]

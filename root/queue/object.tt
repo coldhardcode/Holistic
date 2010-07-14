@@ -1,5 +1,6 @@
 [%~
 
+page.layout = 'wide';
 tickets = queue.all_tickets;
 type    = queue.type;
 status  = queue.status;
