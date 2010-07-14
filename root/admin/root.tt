@@ -1,5 +1,5 @@
 <h1>[% c.loc('Administration') %]</h1>
-<article class="admin">
+<article class="boxes">
  <section>
   <h2>[% c.loc('General') %]</h2>
   <ul>

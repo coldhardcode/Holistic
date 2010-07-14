@@ -9,7 +9,7 @@ queues = queue_rs.all;
 
 ~%]
 
-<article class="admin more">
+<article class="boxes wide">
  <section>
   <h2>[% c.loc('Other Actions') %]</h2>
   <ul>

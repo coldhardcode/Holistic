@@ -54,6 +54,7 @@ footer {
 }
 h1, h2, h3, h4, h5, h6, legend {
 /*    font-family: 'Yanone Kaffeesatz', arial, serif;*/
+    clear: both;
     font-family: 'Droid Sans', arial, serif;
     font-weight: bold;
     margin: 0 0 14px 0; padding: 0;
@@ -1452,7 +1453,7 @@ table.queue ul li {
     list-style: none;
     margin: 7px 5px; padding: 5px;
 }
-article.admin section {
+article.boxes section {
     background-color: #f0eee4;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -1462,21 +1463,21 @@ article.admin section {
     clear: none;
     float: left;
 }
-article.more section {
+article.wide section {
     clear: left;
     float: none;
 }
-article.admin section ul {
+article.boxes section ul {
     margin: 0; padding: 0;
 }
-article.admin section ul li {
+article.boxes section ul li {
     list-style: none;
     margin: 0; padding: 0 0 .25em 0;
 }
-article.admin section ul.sub {
+article.boxes section ul.sub {
     margin: 1em 0 0 1em; padding: 0;
 }
-article.admin section ul.sub li {
+article.boxes section ul.sub li {
     list-style: disc;
     margin: 0 0 0 .5em; padding: 0;
 }

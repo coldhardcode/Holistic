@@ -15,7 +15,7 @@ time_markers = queue.time_markers_rs.search_ordered('dt_marker').all;
 
 ~%]
 <h1>[% c.loc('[_2] [_1]', [ system_localize(queue.type.name), queue.name ] ) %]</h1>
-<article class="admin more">
+<article class="boxes wide">
  <section>
   <h2>[% c.loc('Other Actions') %]</h2>
   <ul>

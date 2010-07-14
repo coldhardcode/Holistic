@@ -6,7 +6,7 @@ page.crumbs.push(
 );
 ~%]
 <h1>[% c.loc('Edit Product: [_1]', [ product.name ]) %]</h1>
-<article class="admin more">
+<article class="boxes wide">
  <section>
   <h2>[% c.loc('Other Actions') %]</h2>
   <ul>
