@@ -18,8 +18,8 @@ sub default : Chained('base') PathPart('') Args(0) {
 
     my $q = $c->req->params->{search};
     my $query = Data::SearchEngine::Holistic::Query->new(
-        original_query => $q,
-        query => $q,
+        original_query => $q || '',
+        query => $q || '',
         page => $c->req->params->{page} || 1,
         count => $c->req->params->{count} || 10,
     );
