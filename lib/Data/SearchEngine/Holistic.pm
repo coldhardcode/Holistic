@@ -114,7 +114,7 @@ sub search {
     $full_rs = $self->_add_filters($full_rs, $oquery);
 
     my $tickets = $full_rs->search(undef, {
-        page => $oquery->page, rows => $oquery->count
+        page => $oquery->page, rows => $oquery->count,
     });
 
     my $pager = Data::SearchEngine::Paginator->new(
@@ -129,6 +129,8 @@ sub search {
     $faceter->add_facet('Column', { name => 'priority', column => 'priority.name' });
     $faceter->add_facet('Column', { name => 'type', column => 'type.name' });
     $faceter->add_facet('Column', { name => 'owner', column => 'owner.token' });
+    # Doesn't work because there can be > 1 product
+    # $faceter->add_facet('Column', { name => 'product', column => 'queue.products.first' });
 
     my $fac_res = $faceter->facet($full_rs);
 

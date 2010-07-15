@@ -37,7 +37,7 @@ USE Number.Format(DECIMAL_DIGITS = 0);
 
 ~%]
   <tr class="[% classes.join(' ') %]">
-   <th class="link"><a href="[% ticket_uri %]">[% ticket.id %]</a></th>
+   <th class="num link"><a href="[% ticket_uri %]">[% ticket.id %]</a></th>
    <td class="link"><a href="[% ticket_uri %]">[% ticket.name | html %]</a></td>
    <td><span class="type" style="background-color: #[% ticket.type.color %]; color: [% ticket.type.foreground_color %]">[% system_localize(ticket.type.name) %]</span></td>
    <td>[% c.loc(ticket.status.name) %]</td>

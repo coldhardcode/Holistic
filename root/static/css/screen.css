@@ -250,6 +250,10 @@ table tbody th.link,
 table tbody td.link {
     margin: 0; padding: 0;
 }
+table tbody th.num,
+table tbody td.num {
+    text-align: left;
+}
 table tbody th > a:only-child,
 table tbody td > a:only-child {
     display: block;
