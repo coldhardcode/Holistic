@@ -68,7 +68,11 @@ sub _create : Private {
                 name => $name
             });
         }
+
         $queue->update({ closed_queue_pk1 => $steps[-1]->id });
+        foreach my $step ( @steps ) { 
+            $step->update({ closed_queue_pk1 => $steps[-1]->id });
+        }
 
         my $qs = $c->model('Schema::Queue::Status')->find({name => '@closed'});
         if ( not defined $qs ) {
