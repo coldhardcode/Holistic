@@ -24,7 +24,7 @@ sub default : Chained('base') PathPart('') Args(0) {
         count => $c->req->params->{count} || 10,
     );
 
-    my @filters = qw(status priority type date_on);
+    my @filters = qw(status priority type date_on owner);
     foreach my $filter (@filters) {
         my $val = $c->req->params->{$filter};
         next unless $val;

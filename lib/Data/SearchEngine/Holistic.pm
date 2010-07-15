@@ -32,6 +32,11 @@ has fields => (
                 type => 'text',
                 field => 'description',
             },
+            owner => {
+                alias => 'person',
+                type => 'text',
+                field => 'token'
+            },
             priority => {
                 alias => 'priority',
                 type => 'text',
@@ -40,11 +45,6 @@ has fields => (
             queue => {
                 alias => 'me',
                 type => 'num',
-                field => 'queue_pk1'
-            },
-            queue => {
-                alias => 'me',
-                type => 'text',
                 field => 'queue_pk1'
             },
 			queue_name => {
@@ -66,11 +66,6 @@ has fields => (
                 alias => 'person',
                 type => 'text',
                 field => 'name'
-            },
-            person_token => {
-                alias => 'person',
-                type => 'text',
-                field => 'token'
             },
             role => {
                 alias => 'role',
@@ -133,6 +128,7 @@ sub search {
     $faceter->add_facet('Column', { name => 'status', column => 'status.name' });
     $faceter->add_facet('Column', { name => 'priority', column => 'priority.name' });
     $faceter->add_facet('Column', { name => 'type', column => 'type.name' });
+    $faceter->add_facet('Column', { name => 'owner', column => 'owner.token' });
 
     my $fac_res = $faceter->facet($full_rs);
 
