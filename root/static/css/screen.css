@@ -641,8 +641,8 @@ div.tabs nav ul li.last {
     -webkit-border-top-left-radius: 0;
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topright: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
     border-width: 1px 1px 0 0;
 }
 div.tabs nav ul li.yui-tab-selected {
@@ -1166,7 +1166,7 @@ section.product > ul > li > ul > li {
     padding: .25em;
 }
 section.product > ul > li > ul > li:first-child {
-    border-bottom: 1px sold #9c9c81;;
+    border-bottom: 1px solid #9c9c81;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius-bottomleft: 0;
