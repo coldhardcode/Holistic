@@ -23,6 +23,7 @@ sub search {
 
     my @items = ();
     my $full_rs = $self->schema->resultset('Ticket::Change')->search(undef, {
+        prefetch => [ 'ticket', { 'identity' => 'person' } ],
         join => {
 			ticket => [ 'queue', { identity => 'person' } ],
 			identity => 'person'
