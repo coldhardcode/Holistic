@@ -32,7 +32,7 @@ msgid "@release"
 msgstr "Release"
 
 msgid "NEEDS ATTENTION"
-msgstr "%quant(%1, ticket needs, tickets need) your attention."
+msgstr "%quant(%1,ticket needs,tickets need) your attention."
 
 msgid "TICKET STATUS COUNT"
 msgstr "%1 %2"
