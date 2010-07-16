@@ -1,8 +1,7 @@
 @charset "utf-8";
 * { margin: 0; padding: 0 ;}
 html, body {
-/*    background: #fefcf1 url('/static/images/back.png') repeat-y;*/
-    background: #fefcf1;
+    background: #fefcf1 url('/static/images/back.png') repeat-y;
     color: #353535;
     font-family: 'HelveticaNueue-Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -505,9 +504,6 @@ p.subdued {
 #content {
     padding: 12px 1.5em 0 300px;
 }
-#widecontent {
-    padding: 2em 1.5em 0 2em;
-}
 #main > header {
     margin: 0 0 1.5em 0; padding: 0;
 }
@@ -662,7 +658,12 @@ div.tabs nav ul li a:hover {
     background-color: #eee;
 }
 #crumbs ul {
-    margin: 1em 0 0 290px; padding: 0;
+    background-color: #fff;
+    border: 3px solid #f0eee4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin: 1em 0 0 1.5em; padding: 0;
 }
 #crumbs ul li {
     display: inline;

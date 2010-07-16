@@ -1,6 +1,7 @@
-[% page.layout = 'wide' %]
 [% SET pager = results.pager %]
+[% IF results.query.original_query %]
 <h2>[% c.loc('Results for search "[_1]"', results.query.original_query) %]</h2>
+[% END %]
 [% IF pager.total_entries %]
   [% IF pager.total_entries > pager.entries_per_page; INCLUDE site/shared/pager.tt pager = results.pager; END %]
   [% INCLUDE site/shared/ticket_table.tt tickets = results.items %]
