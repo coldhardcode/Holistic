@@ -8,8 +8,7 @@ page.crumbs.push(
 persons = group.persons_rs.all;
 %]
 <h1>[% c.loc('Group: [_1]', [ group.name ]) %]</h1>
-<p>XX</p>
-<h2>[% c.loc('Group Members') %]</h2>
+<h2>[% c.loc('Members') %]</h2>
 [% IF persons %]
     <ul>
     [% FOREACH person IN persons %]
@@ -17,6 +16,6 @@ persons = group.persons_rs.all;
     [% END %]
     </ul>
 [% ELSE %]
-<p>XX No members</p>
+<p>[% c.loc('No members.') %]</p>
 [% END %]
 

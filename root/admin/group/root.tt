@@ -1,13 +1,17 @@
 [% page.crumbs.push({ 'Groups' => '' }) %]
 <h1>[% c.loc('Groups') %]</h1>
+<article class="boxes wide">
+ <section>
+  <h2>[% c.loc('Other Actions') %]</h2>
+  <ul>
+   <li><a href="[% c.uri_for_action('/admin/group/create_form') %]">[% c.loc('Add Group') %]</a></li>
+   <li><a href="[% c.uri_for_action('/admin/group/management') %]">[% c.loc('Group Management') %]</a></li>
+  </ul>
+ </section>
+</article>
 <ul>
   [% FOREACH group IN group_rs.all %]
    <li><a href="[% c.uri_for_action('/admin/group/object', [ group.id ]) %]">[% group.name | html %]</a></li>
   [% END %]
-   <li>Actions:
-    <ul>
-     <li><a href="[% c.uri_for_action('/admin/group/create_form') %]">[% c.loc('Add Group') %]</a></li>
-     <li><a href="[% c.uri_for_action('/admin/group/management') %]">[% c.loc('Group Management') %]</a></li>
-    </ul></li>
-  </ul>
+</ul>
 
