@@ -24,6 +24,9 @@ sub setup : Chained('.') PathPart('my') CaptureArgs(0) {
 
 sub root : Chained('setup') PathPart('') Args(0) {
     my ( $self, $c ) = @_;
+
+    $c->req->params->{owner} = $c->user->person->token;
+    $c->detach('/search/default');
 }
 
 sub profile : Chained('setup') PathPart('') CaptureArgs(0) { }
@@ -46,9 +49,6 @@ sub preferences_POST {
         $c->res->body(' ');
     }
 }
-
-
-sub tickets : Chained('setup') Args(0) { }
 
 no Moose;
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
