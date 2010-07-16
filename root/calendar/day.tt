@@ -1,11 +1,14 @@
-[% page.layout = 'wide' %]
 [% IF markers.size %]
 <article class="boxes wide">
  <section>
   <h2>[% c.loc('Things Requiring Attention Today') %]</h2>
   <ul>
    [% FOREACH marker = markers %]
-   <li><a href="[% c.uri_for_action('/queue/object', [ marker.foreign_pk1 ]) %]">XX Queue [% marker.foreign_pk1 %] [% system_localize(marker.name) %]</a></li>
+   [% IF marker.rel_source == 'tickets' %]
+    <li><a href="[% c.uri_for_action('/ticket/object', [ marker.foreign_pk1 ]) %]">[% c.loc("Ticket #[_1] [_2]", marker.foreign_pk1, system_localize(marker.name)) %]</a></li>
+   [% ELSIF marker.rel_source == 'queues' %]
+    <li><a href="[% c.uri_for_action('/queue/object', [ marker.foreign_pk1 ]) %]">[% c.loc("Queue '[_1]' [_2]", marker.queue.name, system_localize(marker.name)) %]</a></li>
+   [% END %]
    [% END %]
   </ul>
  </section>
