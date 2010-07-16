@@ -165,6 +165,7 @@ sub create_resultset {
                 'ticket_tags'    => 'tag'
             },
         ],
+        prefetch => [ 'type', 'priority', 'queue', 'status' ],
 		group_by => 'me.pk1'
     );
 
