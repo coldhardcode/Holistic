@@ -129,6 +129,7 @@ sub search {
     $faceter->add_facet('Column', { name => 'priority', column => 'priority.name' });
     $faceter->add_facet('Column', { name => 'type', column => 'type.name' });
     $faceter->add_facet('Column', { name => 'owner', column => 'owner.token' });
+    $faceter->add_facet('Column', { name => 'queue_name', column => 'queue.path' });
     # Doesn't work because there can be > 1 product
     # $faceter->add_facet('Column', { name => 'product', column => 'queue.products.first' });
 
