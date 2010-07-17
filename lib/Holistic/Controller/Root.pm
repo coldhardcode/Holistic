@@ -109,7 +109,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
                 $c->message({
                     scope   => 'sidebar',
                     message => qq{<a href="} . $c->uri_for_action('/my') . qq{">$msg</a>},
-                    level   => 'warn'
+                    type   => 'warning'
                 });
             }
             my $permissions = $ident->inflate_permissions;
