@@ -830,56 +830,28 @@ table.ticket tr.submit td {
 table.ticket tr.submit td a {
     display: inline-block;
 }
-ul.comments {
-    margin: 0; padding: 0 5px 0 5px;
-}
-ul.comments li {
-    list-style: none;
-    margin: 0 0 1.5em 0; padding: 0;
-}
-ul.comments li time {
-    color: #78766f;
-    display: block;
-    font-size: 12px;
-}
-ul.comments li cite {
-    float: left;
-    width: 24px;
-    margin: 2px .5em 0 0;
-}
-ul.comments li blockquote {
-    background: #fff;
-    border: 1px solid #ddd;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    margin: 0 0 0 30px; padding: .5em;
-    text-align: left;
-}
-ul.comments li.system time {
-    margin: 0 0 0 9.5em;
-}
-ul.comments li.system p {
-    background-color: #ededed;
-    margin: 0 2em 0 8em;
-}
+ul.comments,
 ul.worklog {
     margin: 0; padding: 0 5px 0 5px;
 }
+ul.comments li,
 ul.worklog li {
     list-style: none;
-    margin: 0 6em 1.5em 0; padding: 0;
+    margin: 0 0 1.5em 0; padding: 0;
 }
+ul.comments li time,
 ul.worklog li time {
     color: #78766f;
     display: block;
     font-size: 12px;
 }
+ul.comments li cite,
 ul.worklog li cite {
     float: left;
-    width: 20px;
-    margin: 1px .5em 0 0;
+    width: 24px;
+    margin: 2px .5em 0 0;
 }
+ul.comments li blockquote,
 ul.worklog li blockquote {
     background: #fff;
     border: 1px solid #ddd;
@@ -889,9 +861,11 @@ ul.worklog li blockquote {
     margin: 0 0 0 45px; padding: .5em;
     text-align: left;
 }
+ul.comments li.system time,
 ul.worklog li.system time {
     margin: 0 0 0 9.5em;
 }
+ul.comments li.system p,
 ul.worklog li.system p {
     background-color: #ededed;
     margin: 0 2em 0 8em;

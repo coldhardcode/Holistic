@@ -85,7 +85,7 @@ ELSE; PROCESS "ticket/progress.tt"; END;
      ~%]
      </time>
 	 </a>
-     <cite><img src="[% message.identity.person.gravatar_url(24) %]"></cite>
+     <cite><img src="[% message.identity.person.gravatar_url %]"></cite>
      <blockquote>
       [% message.body %]
      </blockquote>
