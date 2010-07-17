@@ -1163,9 +1163,9 @@ section.product > ul > li > ul > li:first-child {
     -webkit-border-bottom-left-radius: 0;
     -moz-border-radius-bottomright: 0;
     -webkit-border-bottom-right-radius: 0;
+    border-radius: 3px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-    border-radius: 7px;
 }
 section.product > ul > li > ul > li:last-child {
     border: none;
