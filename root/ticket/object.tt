@@ -73,7 +73,7 @@ ELSE; PROCESS "ticket/progress.tt"; END;
   <section class="tab yui-tabpanel yui-tabpanel-selected" id="comments">
    <ul class="comments">
     [% FOREACH message IN comments.all.reverse %]
-    <li class="[% ticket.is_member(message.identity) ? '' : 'visitor' %]">
+    <li>
      <a href="#[% message.id %]" name="[% message.id %]">
      <time datetime="[% message.dt_created %]">[% pretty_date(message.dt_created) %] via
      [%=
@@ -85,7 +85,7 @@ ELSE; PROCESS "ticket/progress.tt"; END;
      ~%]
      </time>
 	 </a>
-     <cite><img src="[% message.identity.person.gravatar_url(16) %]"></cite>
+     <cite><img src="[% message.identity.person.gravatar_url(24) %]"></cite>
      <blockquote>
       [% message.body %]
      </blockquote>

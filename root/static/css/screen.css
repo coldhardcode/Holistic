@@ -835,7 +835,7 @@ ul.comments {
 }
 ul.comments li {
     list-style: none;
-    margin: 0 6em 1.5em 0; padding: 0;
+    margin: 0 0 1.5em 0; padding: 0;
 }
 ul.comments li time {
     color: #78766f;
@@ -844,8 +844,8 @@ ul.comments li time {
 }
 ul.comments li cite {
     float: left;
-    width: 20px;
-    margin: .5em .5em 0 0;
+    width: 24px;
+    margin: 2px .5em 0 0;
 }
 ul.comments li blockquote {
     background: #fff;
@@ -853,7 +853,7 @@ ul.comments li blockquote {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    margin: 0 0 0 45px; padding: .5em;
+    margin: 0 0 0 30px; padding: .5em;
     text-align: left;
 }
 ul.comments li.system time {
@@ -863,20 +863,6 @@ ul.comments li.system p {
     background-color: #ededed;
     margin: 0 2em 0 8em;
 }
-ul.comments li.visitor {
-    margin: 0 0 1em 0;
-}
-ul.comments li.visitor time {
-    text-align: right;
-}
-ul.comments li.visitor cite {
-    float: right;
-    margin: .5em 0 0 .5em;
-}
-ul.comments li.visitor p {
-    margin: 0 45px 0 6em;
-}
-
 ul.worklog {
     margin: 0; padding: 0 5px 0 5px;
 }
