@@ -267,16 +267,6 @@ table tbody tr th {
 table tbody tr:nth-child(2) th {
     border-top: 1px solid #fff;
 }
-table tbody tr:last-child td:first-of-type {
-    -moz-border-radius-bottomleft: 7px;
-    -webkit-border-bottom-left-radius: 7px;
-    border-bottom-left-radius: 7px;
-}
-table tbody tr:last-child td:last-of-type {
-    -moz-border-radius-bottomright: 7px;
-    -webkit-border-bottom-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-}
 table tfoot td {
     -moz-border-radius-bottomleft: 7px;
     -webkit-border-bottom-left-radius: 7px;
