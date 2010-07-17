@@ -1076,11 +1076,11 @@ table.cal tbody td ul li a {
     text-shadow: #558342 0 -1px;
 }
 table.cal tbody td ul li a.queue {
-    background-color: #de691f;
+    background-color: #719bc3;
     background: -webkit-gradient(linear, left top, left bottom, from(#719bc3), to(#3470a9));
-    background: -moz-linear-gradient(top, #e3782f, #de691f);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e3782f', endColorstr='#de691f');
-    text-shadow: #95582d 0 -1px;
+    background: -moz-linear-gradient(top, #719bc3, #3470a9);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#719bc3', endColorstr='#3470a9');
+    text-shadow: #295b85 0 -1px;
 }
 table.cal tbody td ul li a:hover {
     text-decoration: underline;
