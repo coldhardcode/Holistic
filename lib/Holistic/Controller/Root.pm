@@ -4,7 +4,7 @@ use namespace::autoclean;
 
 use HTTP::BrowserDetect;
 use Message::Stack;
-use Message::Stack::DataVerifier;
+use Message::Stack::Parser::DataVerifier;
 use DBIx::Class::QueryLog;
 use DBIx::Class::QueryLog::Analyzer;
 
@@ -143,7 +143,7 @@ sub setup : Chained('.') PathPart('') CaptureArgs(0) {
         foreach my $scope ( keys %{ $errors } ) {
             $c->log->debug("Fetching errors for scope: $scope");
             $c->stash->{results}->{$scope} = $errors->{$scope};
-            Message::Stack::DataVerifier->parse( $stack, $scope, $errors->{$scope} );
+            Message::Stack::Parser::DataVerifier->parse( $stack, $scope, $errors->{$scope} );
         }
         $c->stash->{stack}      = $stack;
         $c->stash->{messages} ||= $stack;
