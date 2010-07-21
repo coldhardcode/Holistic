@@ -21,19 +21,10 @@
    <ul>
     [% time_markers = queue.time_markers_rs.search_ordered('dt_marker').all; %]
     [% FOREACH marker IN time_markers %]
-    <li>[% marker.name | html %] <time datetime="[% marker.dt_marker %]">[% marker.dt_marker | date_short %]</time></li>
+    <li>[% system_localize(marker.name) %] <time datetime="[% marker.dt_marker %]">[% marker.dt_marker | date_short %]</time></li>
     [% END %]
    </ul>
   </li>
   [% END %]
-  <li>
-    <h4>XX Version 3.0</h4>
-    <time datetime="">2010-03-10</time>
-    <ul>
-     <li>Proof of Concept <time>2010-03-10</time></li>
-     <li>Code Freeze <time>2010-03-10</time></li>
-     <li>Due Date <time>2010-03-10</time></li>
-   </ul>
-  </li>
  </ul>
  </section>
