@@ -1,4 +1,4 @@
-<h1>[% c.loc('Calendar') %]</h1>
+<h1>[% c.loc('Calendar') %]<a href="[% c.uri_for_action('/calendar/ical') %]"><img src="/static/images/icons/date.png" alt="iCal"></a></h1>
 <table class="cal">
  <thead>
   <tr>

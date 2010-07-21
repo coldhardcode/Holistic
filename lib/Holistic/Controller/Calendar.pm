@@ -7,12 +7,57 @@ use parent 'Holistic::Base::Controller';
 
 use DateTime;
 use DateTime::Duration;
+use DateTime::Format::ICal;
 use Try::Tiny;
 
+use Data::ICal;
+use Data::ICal::Entry::Event;
 use Data::SearchEngine::Holistic::Changes;
 use Data::SearchEngine::Holistic::Query;
 
 sub setup : Chained('.') PathPart('calendar') CaptureArgs(0) { }
+
+sub ical : Chained('setup') PathPart('ical') Args(0) {
+    my ($self, $c) = @_;
+
+    my $markers = $c->model('Schema::TimeMarker')->search(
+        {
+            dt_marker => { '>' => \'NOW()' }
+        }, {
+            order_by => 'dt_marker',
+        }
+    );
+
+    my $cal = Data::ICal->new;
+    while(my $marker = $markers->next) {
+
+        # Customize the name and whatnot for the different objects we could
+        # be talking about.
+        my ($summ, $url, $desc);
+        if($marker->rel_source eq 'queues') {
+            $summ = $c->loc("Queue '[_1]' [_2]", $marker->queue->name, $c->system_localize($marker->name));
+            $url = $c->uri_for_action('/queue/object', [ $marker->foreign_pk1 ]);
+            $desc = $marker->queue->description;
+        } else {
+            $summ = $c->loc("Ticket #[_1] [_2]", $marker->foreign_pk1, $c->system_localize($marker->name));
+            $url = $c->uri_for_action('/ticket/object', [ $marker->foreign_pk1 ]);
+            $desc = $marker->ticket->name;
+        }
+
+        my $todo = Data::ICal::Entry::Event->new;
+        $todo->add_properties(
+            summary => $summ,
+            url => $url,
+            description => $desc,
+            dtstart => DateTime::Format::ICal->format_datetime($marker->dt_marker)
+        );
+        $cal->add_entry($todo);
+    }
+
+    $c->res->headers->header('Content-type: text/calendar"');
+    $c->res->headers->header('Content-Disposition: attachment; filename="Holistic Schedule.pdf"');
+    $c->res->body($cal->as_string);
+}
 
 sub root : Chained('setup') PathPart('') Args() {
     my ($self, $c, $year, $month) = @_;

@@ -24,6 +24,7 @@
   <dl>
    <dt>[% c.loc('Strategic') %]</dt>
    <dd><a href="[% c.uri_for_action('/calendar/root') %]">[% c.loc('Calendar') %]</a></dd>
+   <dd><a href="[% c.uri_for_action('/calendar/ical') %]">[% c.loc('Calendar iCal') %]</a></dd>
    <dd><a href="[% c.uri_for_action('/queue/root') %]">[% c.loc('Roadmap') %]</a></dd>
    <dd><a href="[% c.uri_for('/milestone') %]">[% c.loc('Milestone') %]</a></dd>
    <dd><a href="[% c.uri_for_action('/what/product', 1) %]">Product</a></dd>

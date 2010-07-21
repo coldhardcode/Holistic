@@ -116,6 +116,15 @@ sub tt_ref { my ( $c, $item ) = @_; ref($item); }
 sub tt_isa { my ( $c, $item, $isa ) = @_; blessed $item && $item->isa($item); }
 sub tt_blessed { my ( $c, $item ) = @_; blessed $item; }
 
+sub system_localize {
+    my ($self, $str) = @_;
+    if($str =~ /^\@/) {
+        return $self->loc($str);
+    }
+    return $str;
+}
+
+
 =head1 NAME
 
 Holistic - Catalyst based application

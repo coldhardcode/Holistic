@@ -63,6 +63,8 @@ requires 'DateTime::Format::DBI';
 requires 'DateTime::Format::DateParse';
 requires 'DateTime::Format::SQLite';
 requires 'MooseX::Types::DateTime';
+requires 'Data::ICal';
+requires 'DateTime::Format::ICal';
 
 # DBIC Components
 requires 'DBIx::Class' => '0.08119';
