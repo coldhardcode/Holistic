@@ -79,7 +79,7 @@ requires 'HTTP::BrowserDetect';
 
 # Random Stuff
 requires 'Lingua::EN::Words2Nums';
-
+requires 'Text::xSV';
 requires 'Time::HiRes';
 
 requires 'YAML';
